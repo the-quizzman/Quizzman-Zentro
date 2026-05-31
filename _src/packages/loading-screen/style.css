@@ -1,0 +1,210 @@
+/* @qmf/loading-screen – Fullscreen loading splash */
+
+/* ─── Base ─────────────────────────────────────────────── */
+
+.qmf-loading {
+  position: fixed;
+  inset: 0;
+  z-index: var(--qmf-z-max, 9999);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--qmf-font-sans, system-ui, sans-serif);
+  transition: opacity 500ms ease;
+  overflow: hidden;
+}
+
+.qmf-loading--hiding {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── Light Theme ──────────────────────────────────────── */
+
+.qmf-loading--light {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+  color: #1f2937;
+}
+
+.qmf-loading--light .qmf-loading__particle {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+/* ─── Dark Theme ───────────────────────────────────────── */
+
+.qmf-loading--dark {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0c1222 100%);
+  color: #f9fafb;
+}
+
+.qmf-loading--dark .qmf-loading__particle {
+  background: rgba(165, 180, 252, 0.12);
+}
+
+/* ─── Particles ────────────────────────────────────────── */
+
+.qmf-loading__particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.qmf-loading__particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: qmf-particle-float linear infinite;
+}
+
+@keyframes qmf-particle-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-40px) translateX(20px) scale(1.2);
+  }
+  90% {
+    opacity: 1;
+  }
+}
+
+/* ─── Center Content ───────────────────────────────────── */
+
+.qmf-loading__center {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--qmf-spacing-4, 16px);
+  text-align: center;
+  padding: var(--qmf-spacing-6, 24px);
+}
+
+/* ─── Q Logo ───────────────────────────────────────────── */
+
+.qmf-loading__logo-wrap {
+  animation: qmf-logo-pulse 2s ease-in-out infinite;
+}
+
+.qmf-loading__logo {
+  height: 80px;
+  width: auto;
+}
+
+.qmf-loading__q-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--qmf-color-primary, #6366f1), var(--qmf-color-secondary, #06b6d4));
+  color: #fff;
+  font-size: 48px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+}
+
+@keyframes qmf-logo-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ─── Brand ────────────────────────────────────────────── */
+
+.qmf-loading__brand {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--qmf-color-primary, #6366f1), var(--qmf-color-secondary, #06b6d4));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.qmf-loading__tagline {
+  font-size: var(--qmf-text-sm, 14px);
+  opacity: 0.7;
+  max-width: 300px;
+}
+
+/* ─── Progress Bar ─────────────────────────────────────── */
+
+.qmf-loading__progress {
+  width: 240px;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: var(--qmf-spacing-2, 8px);
+}
+
+.qmf-loading--light .qmf-loading__progress {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.qmf-loading--dark .qmf-loading__progress {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.qmf-loading__progress-bar {
+  height: 100%;
+  width: 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--qmf-color-primary, #6366f1), var(--qmf-color-secondary, #06b6d4));
+  transition: width 400ms ease;
+  position: relative;
+}
+
+.qmf-loading__progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+  animation: qmf-progress-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes qmf-progress-glow {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* ─── Stage Text ───────────────────────────────────────── */
+
+.qmf-loading__stage {
+  font-size: var(--qmf-text-xs, 12px);
+  opacity: 0.6;
+  min-height: 1.2em;
+  transition: opacity 200ms;
+}
+
+/* ─── Responsive ───────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .qmf-loading__q-logo {
+    width: 60px;
+    height: 60px;
+    font-size: 36px;
+    border-radius: 18px;
+  }
+
+  .qmf-loading__brand {
+    font-size: 22px;
+  }
+
+  .qmf-loading__progress {
+    width: 180px;
+  }
+}

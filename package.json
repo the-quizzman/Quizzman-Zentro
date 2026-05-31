@@ -1,0 +1,51 @@
+{
+  "name": "@qmf/monorepo",
+  "version": "3.0.0",
+  "private": true,
+  "description": "QMF - QuizzMan Frontend Framework",
+  "author": "QuizzMan Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@9.1.0",
+  "scripts": {
+    "prebuild": "node scripts/generate-logo-variants.mjs --write",
+    "build": "turbo run build",
+    "build:packages": "turbo run build --filter='./packages/*'",
+    "build:dist": "node scripts/build-dist.mjs",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:unit": "vitest run",
+    "clean": "node scripts/clean.mjs",
+    "assets:logos": "node scripts/generate-logo-variants.mjs --write",
+    "assets:logos:check": "node scripts/generate-logo-variants.mjs",
+    "verify": "node scripts/verify.mjs",
+    "release": "node scripts/release.mjs",
+    "deploy": "node scripts/deploy.mjs",
+    "deploy:cdn": "node scripts/deploy.mjs --target cdn",
+    "deploy:npm": "node scripts/deploy.mjs --target npm",
+    "changeset": "changeset",
+    "format": "prettier --write \"packages/*/src/**/*.{ts,js,css}\"",
+    "bundle:check": "node scripts/bundle-size-check.mjs",
+    "playground": "turbo run dev --filter=@qmf/playground",
+    "docs": "turbo run dev --filter=@qmf/docs"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.0",
+    "@types/node": "^20.11.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.2.0",
+    "tsup": "^8.0.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0",
+    "postcss": "^8.4.35",
+    "cssnano": "^7.0.0",
+    "lightningcss": "^1.24.0",
+    "zod": "^3.22.0"
+  }
+}

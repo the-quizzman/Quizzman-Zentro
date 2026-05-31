@@ -1,0 +1,240 @@
+/* @qmf/header – Unified 3-zone header */
+
+.qmf-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--qmf-z-header, 1000);
+  width: 100%;
+  height: var(--qmf-header-height, 56px);
+  background: var(--qmf-color-surface, #fff);
+  border-bottom: 1px solid var(--qmf-color-border, #e5e7eb);
+  box-shadow: var(--qmf-shadow-sm);
+  font-family: var(--qmf-font-sans, system-ui, sans-serif);
+}
+
+.qmf-header__inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 var(--qmf-spacing-4, 16px);
+  gap: var(--qmf-spacing-3, 12px);
+}
+
+/* ─── Clusters ─────────────────────────────────────────── */
+
+.qmf-header__cluster {
+  display: flex;
+  align-items: center;
+  gap: var(--qmf-spacing-2, 8px);
+}
+
+.qmf-header__cluster--left {
+  justify-content: flex-start;
+}
+
+.qmf-header__cluster--center {
+  justify-content: center;
+}
+
+.qmf-header__cluster--right {
+  justify-content: flex-end;
+}
+
+/* ─── Brand (LEFT) ─────────────────────────────────────── */
+
+.qmf-header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--qmf-spacing-2, 8px);
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.qmf-header__logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.qmf-header__brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.qmf-header__brand-name {
+  font-size: var(--qmf-text-lg, 18px);
+  font-weight: var(--qmf-font-bold, 700);
+  background: linear-gradient(135deg, var(--qmf-color-primary, #6366f1), var(--qmf-color-secondary, #06b6d4));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
+
+.qmf-header__page-title {
+  font-size: var(--qmf-text-xs, 11px);
+  color: var(--qmf-color-muted, #9ca3af);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* ─── Main Logo (CENTER) ───────────────────────────────── */
+
+.qmf-header__main-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--qmf-spacing-2, 8px);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--qmf-transition-fast, 150ms);
+}
+
+.qmf-header__main-logo:hover {
+  opacity: 0.85;
+}
+
+.qmf-header__logo-img {
+  height: 28px;
+  width: auto;
+}
+
+.qmf-header__main-name {
+  font-weight: var(--qmf-font-semibold, 600);
+  font-size: var(--qmf-text-base, 16px);
+  color: var(--qmf-color-text, #1f2937);
+}
+
+/* ─── Buttons (RIGHT) ──────────────────────────────────── */
+
+.qmf-header__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--qmf-radius-full, 9999px);
+  background: transparent;
+  color: var(--qmf-color-text-secondary, #6b7280);
+  cursor: pointer;
+  transition: background var(--qmf-transition-fast, 150ms), color var(--qmf-transition-fast, 150ms);
+}
+
+.qmf-header__btn:hover {
+  background: var(--qmf-color-hover, rgba(0, 0, 0, 0.06));
+  color: var(--qmf-color-text, #1f2937);
+}
+
+.qmf-header__btn:active {
+  background: var(--qmf-color-active, rgba(0, 0, 0, 0.1));
+}
+
+.qmf-header__btn i {
+  font-size: 16px;
+}
+
+.qmf-header__hamburger {
+  display: none;
+}
+
+/* ─── Login Button ─────────────────────────────────────── */
+
+.qmf-header__login-btn {
+  flex-shrink: 0;
+}
+
+/* ─── User Dropdown (RIGHT) ────────────────────────────── */
+
+.qmf-header__user {
+  position: relative;
+}
+
+.qmf-header__user-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--qmf-spacing-2, 8px);
+  padding: var(--qmf-spacing-1, 4px) var(--qmf-spacing-2, 8px);
+  border: none;
+  border-radius: var(--qmf-radius-full, 9999px);
+  background: transparent;
+  cursor: pointer;
+  color: var(--qmf-color-text, #1f2937);
+  transition: background var(--qmf-transition-fast, 150ms);
+}
+
+.qmf-header__user-toggle:hover {
+  background: var(--qmf-color-hover, rgba(0, 0, 0, 0.06));
+}
+
+.qmf-header__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--qmf-color-surface-alt, #f3f4f6);
+}
+
+.qmf-header__user-name {
+  font-size: var(--qmf-text-sm, 14px);
+  font-weight: var(--qmf-font-medium, 500);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qmf-header__user-toggle .fa-chevron-down {
+  font-size: 10px;
+  color: var(--qmf-color-muted, #9ca3af);
+  transition: transform var(--qmf-transition-fast, 150ms);
+}
+
+/* ─── Responsive ───────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .qmf-header__inner {
+    grid-template-columns: auto 1fr auto;
+    padding: 0 var(--qmf-spacing-3, 12px);
+  }
+
+  .qmf-header__hamburger {
+    display: inline-flex;
+  }
+
+  .qmf-header__brand-text {
+    display: none;
+  }
+
+  .qmf-header__main-name {
+    display: none;
+  }
+
+  .qmf-header__user-name {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .qmf-header__cluster--center {
+    display: none;
+  }
+
+  .qmf-header__inner {
+    grid-template-columns: auto 1fr;
+  }
+}
+
+/* ─── Dark theme ───────────────────────────────────────── */
+
+[data-theme="dark"] .qmf-header {
+  background: var(--qmf-color-surface, #1f2937);
+  border-bottom-color: var(--qmf-color-border, #374151);
+}

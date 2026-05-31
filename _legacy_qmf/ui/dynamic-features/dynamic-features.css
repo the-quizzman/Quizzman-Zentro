@@ -1,0 +1,293 @@
+/**
+ * QuizzMan Dynamic Features CSS
+ * Host: ui.quizzman.com/qmf/ui/dynamic/
+ */
+
+/* ============================================
+   Dynamic Island
+   ============================================ */
+.qmf-dynamic-island {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 12px 24px;
+    z-index: 99999;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    pointer-events: none;
+    min-width: 300px;
+    max-width: 400px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.qmf-dynamic-island.active {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.qmf-dynamic-island.expanded {
+    border-radius: 20px;
+    padding: 16px 24px;
+    min-height: 80px;
+}
+
+/* Compact View */
+.qmf-island-compact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.qmf-island-compact.hidden {
+    display: none;
+}
+
+.qmf-island-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 12px;
+    color: white;
+}
+
+.qmf-island-text {
+    flex: 1;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+}
+
+/* Expanded View */
+.qmf-island-expand {
+    display: none;
+    opacity: 0;
+    animation: qmf-fadeIn 0.3s ease 0.2s both;
+}
+
+.qmf-island-expand.active {
+    display: block;
+}
+
+.qmf-island-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.qmf-island-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qmf-island-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.2s ease;
+}
+
+.qmf-island-close:hover {
+    color: white;
+}
+
+.qmf-island-message {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+}
+
+.qmf-island-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.qmf-island-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.qmf-island-btn-primary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.qmf-island-btn-primary:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Priority Styles */
+.qmf-dynamic-island.priority-critical {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.qmf-dynamic-island.priority-high {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border-color: rgba(255, 107, 107, 0.5);
+}
+
+.qmf-dynamic-island.priority-medium {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    border-color: rgba(79, 172, 254, 0.5);
+}
+
+.qmf-dynamic-island.priority-low {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    border-color: rgba(67, 233, 123, 0.5);
+}
+
+.qmf-dynamic-island.priority-info {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: rgba(102, 126, 234, 0.5);
+}
+
+/* ============================================
+   Dynamic Banner
+   ============================================ */
+.qmf-dynamic-banner {
+    width: 100%;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.qmf-banner-track {
+    display: flex;
+    gap: 40px;
+    animation: qmf-banner-scroll 20s linear infinite;
+    width: max-content;
+}
+
+.qmf-banner-track:hover {
+    animation-play-state: paused;
+}
+
+.qmf-banner-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.qmf-banner-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.qmf-banner-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 14px;
+    color: white;
+}
+
+.qmf-banner-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.qmf-banner-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+}
+
+.qmf-banner-desc {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Animations */
+@keyframes qmf-fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes qmf-banner-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    .qmf-dynamic-island {
+        top: 10px;
+        min-width: 280px;
+        max-width: 320px;
+        padding: 10px 20px;
+    }
+
+    .qmf-dynamic-island.expanded {
+        padding: 14px 20px;
+        min-height: 70px;
+    }
+
+    .qmf-island-text {
+        font-size: 0.8rem;
+    }
+
+    .qmf-island-title {
+        font-size: 0.85rem;
+    }
+
+    .qmf-island-message {
+        font-size: 0.75rem;
+    }
+
+    .qmf-banner-item {
+        padding: 4px 12px;
+    }
+
+    .qmf-banner-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .qmf-banner-title {
+        font-size: 0.75rem;
+    }
+
+    .qmf-banner-desc {
+        display: none;
+    }
+}

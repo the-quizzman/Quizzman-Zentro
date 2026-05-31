@@ -1,0 +1,32 @@
+# Node
+node_modules/
+.pnp.*
+yarn.lock
+npm-debug.log*
+pnpm-debug.log*
+.package-lock.json
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Environment
+.env
+.env.*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Other
+logs/
+*.log

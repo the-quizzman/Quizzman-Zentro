@@ -1,0 +1,37 @@
+{
+  "name": "@qmf/auth-shell",
+  "version": "3.0.1",
+  "description": "QMF Auth Shell - Authentication scaffolding with token resolution and user state",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@qmf/core": "^3.0.0",
+    "@qmf/utils": "^3.0.0"
+  },
+  "devDependencies": {
+    "@qmf/core": "^3.0.0",
+    "@qmf/utils": "^3.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  }
+}

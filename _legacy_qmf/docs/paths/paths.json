@@ -1,0 +1,152 @@
+{
+  "baseUrl": "https://ui.quizzman.com",
+  "version": "3.0.0",
+  "lastUpdated": "2026-02-04",
+  "paths": {
+    "core": {
+      "css": {
+        "latest": "/qmf/dist/qmf.css",
+        "v3.0.0": "/qmf/dist/v3.0.0/qmf.css",
+        "v2.2.1": "/qmf/dist/v2.2.1/qmf.css"
+      },
+      "js": {
+        "latest": "/qmf/dist/qmf.js",
+        "v3.0.0": "/qmf/dist/v3.0.0/qmf.js",
+        "v2.2.1": "/qmf/dist/v2.2.1/qmf.js",
+        "loader": "/qmf/dist/qmf-loader.js"
+      }
+    },
+    "auth": {
+      "css": "/qmf/dist/qmf-auth.css"
+    },
+    "theme": {
+      "tokens": "/qmf/theme/tokens.css",
+      "typography": "/qmf/theme/typography.css",
+      "dark": "/qmf/theme/dark.css",
+      "motion": "/qmf/theme/motion.css"
+    },
+    "plugins": {
+      "header": {
+        "js": "/qmf/plugins/header/index.js",
+        "css": "/qmf/plugins/header/header.css"
+      },
+      "footer": {
+        "js": "/qmf/plugins/footer/index.js",
+        "css": "/qmf/dist/qmf-footer.css"
+      },
+      "sidebar": {
+        "js": "/qmf/plugins/sidebar/index.js"
+      },
+      "commandPalette": {
+        "js": "/qmf/plugins/command-palette/index.js"
+      },
+      "notificationCenter": {
+        "js": "/qmf/plugins/notification-center/index.js"
+      },
+      "chat": {
+        "js": "/qmf/plugins/chat/chat-panel.js",
+        "css": "/qmf/plugins/chat/chat-panel.css"
+      },
+      "notification": {
+        "js": "/qmf/plugins/notification/notification-panel.js",
+        "css": "/qmf/plugins/notification/notification-panel.css"
+      }
+    },
+    "ui": {
+      "button": "/qmf/ui/button/index.js",
+      "modal": "/qmf/ui/modal/index.js",
+      "dropdown": "/qmf/ui/dropdown/index.js",
+      "overlay": "/qmf/ui/overlay/index.js",
+      "loadingScreen": {
+        "js": "/qmf/ui/loading-screen/index.js",
+        "css": "/qmf/ui/loading-screen/loading-screen.css"
+      }
+    },
+    "services": {
+      "auth": "/qmf/services/auth/index.js",
+      "graphql": {
+        "client": "/qmf/services/graphql/client.js",
+        "utils": "/qmf/services/graphql/utils.js",
+        "index": "/qmf/services/graphql/index.js"
+      },
+      "realtime": "/qmf/services/realtime/index.js",
+      "notification": "/qmf/services/notification/index.js",
+      "chat": "/qmf/services/chat/index.js"
+    },
+    "kernel": {
+      "runtime": "/qmf/kernel/runtime.js",
+      "router": "/qmf/kernel/router.js",
+      "eventBus": "/qmf/kernel/event-bus.js",
+      "http": "/qmf/kernel/http.js",
+      "state": "/qmf/kernel/state.js",
+      "core": "/qmf/kernel/core.js",
+      "context": "/qmf/kernel/context.js",
+      "lifecycle": "/qmf/kernel/lifecycle.js",
+      "moduleLoader": "/qmf/kernel/module-loader.js",
+      "guard": "/qmf/kernel/guard.js"
+    },
+    "layout": {
+      "shell": "/qmf/layout/shell.js",
+      "regions": "/qmf/layout/regions.js",
+      "mount": "/qmf/layout/mount.js"
+    },
+    "navigation": {
+      "router": "/qmf/navigation/router.js",
+      "menuRegistry": "/qmf/navigation/menu-registry.js",
+      "breadcrumb": "/qmf/navigation/breadcrumb.js"
+    },
+    "platform": {
+      "device": "/qmf/platform/device.js",
+      "viewport": "/qmf/platform/viewport.js",
+      "capability": "/qmf/platform/capability.js",
+      "performance": "/qmf/platform/performance.js"
+    },
+    "feedback": {
+      "toast": "/qmf/feedback/toast.js",
+      "loading": "/qmf/feedback/loading.js",
+      "dialog": "/qmf/feedback/dialog.js"
+    },
+    "assets": {
+      "logo": {
+        "classroom": "/qmf/assets/logo/classroom/",
+        "lms": "/qmf/assets/logo/lms/",
+        "webmail": "/qmf/assets/logo/webmail/",
+        "helper": "/qmf/assets/logo/logo-helper.js"
+      },
+      "icons": {
+        "loader": "/qmf/assets/icons/icon-loader.js",
+        "folder": "/qmf/assets/icons/"
+      },
+      "images": "/qmf/assets/images/",
+      "sounds": "/qmf/assets/sounds/"
+    },
+    "apps": {
+      "admin": "/qmf/apps/admin.js",
+      "lms": "/qmf/apps/lms.js",
+      "play": "/qmf/apps/play.js",
+      "dict": "/qmf/apps/dict.js"
+    },
+    "mail": {
+      "layouts": "/mail/layouts/",
+      "partials": "/mail/partials/",
+      "themes": "/mail/themes/",
+      "i18n": "/mail/i18n/"
+    },
+    "config": "/qmf/config/qmf.config.js",
+    "publicApi": "/qmf/public-api.js"
+  },
+  "cdn": {
+    "note": "All paths can be prefixed with the baseUrl to create full CDN URLs",
+    "example": "https://ui.quizzman.com/qmf/dist/qmf.css"
+  },
+  "usage": {
+    "html": [
+      "<link rel=\"stylesheet\" href=\"https://ui.quizzman.com/qmf/dist/qmf.css\">",
+      "<script src=\"https://ui.quizzman.com/qmf/dist/qmf.js\"></script>"
+    ],
+    "esm": [
+      "import QMF from 'https://ui.quizzman.com/qmf/public-api.js';",
+      "import { router } from 'https://ui.quizzman.com/qmf/kernel/router.js';"
+    ]
+  }
+}

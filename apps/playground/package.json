@@ -1,0 +1,28 @@
+{
+  "name": "@qmf/playground",
+  "version": "3.0.0",
+  "private": true,
+  "description": "QMF Interactive Playground — demo all modules",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@qmf/core": "workspace:*",
+    "@qmf/tokens": "workspace:*",
+    "@qmf/utils": "workspace:*",
+    "@qmf/ui": "workspace:*",
+    "@qmf/auth-shell": "workspace:*",
+    "@qmf/header": "workspace:*",
+    "@qmf/footer": "workspace:*",
+    "@qmf/chat-embed": "workspace:*",
+    "@qmf/noti-embed": "workspace:*",
+    "@qmf/loading-screen": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vite": "^5.0.0"
+  }
+}

@@ -1,0 +1,154 @@
+/* ===================================
+   QMF Footer - Shared Footer Component
+   Version: 1.0.0
+   Purpose: Universal footer for all QuizzMan sites
+   =================================== */
+
+/* ============================================
+   QMF FOOTER BASE STYLES
+   ============================================ */
+.qmf-footer {
+    background: var(--qmf-footer-bg, rgba(15, 12, 41, 0.95));
+    border-top: 1px solid var(--qmf-footer-border, rgba(255, 255, 255, 0.08));
+    padding: var(--qmf-space-4, 1rem) var(--qmf-space-6, 1.5rem);
+    font-family: var(--qmf-font-family, 'Inter', system-ui, sans-serif);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.qmf-footer--dark {
+    --qmf-footer-bg: rgba(15, 12, 41, 0.95);
+    --qmf-footer-border: rgba(255, 255, 255, 0.08);
+    --qmf-footer-text: rgba(255, 255, 255, 0.7);
+    --qmf-footer-text-hover: #ffffff;
+    --qmf-footer-link: rgba(255, 255, 255, 0.6);
+    --qmf-footer-link-hover: #667eea;
+}
+
+.qmf-footer--light {
+    --qmf-footer-bg: var(--qmf-color-bg-alt, #f9fafb);
+    --qmf-footer-border: var(--qmf-color-border, #e5e7eb);
+    --qmf-footer-text: var(--qmf-color-text-muted, #6b7280);
+    --qmf-footer-text-hover: var(--qmf-color-text, #1f2937);
+    --qmf-footer-link: var(--qmf-color-text-muted, #6b7280);
+    --qmf-footer-link-hover: var(--qmf-color-primary, #3b82f6);
+}
+
+/* Footer Container */
+.qmf-footer__container {
+    max-width: var(--qmf-container-max, 1200px);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--qmf-space-2, 0.5rem) var(--qmf-space-4, 1rem);
+}
+
+/* Compact Layout */
+.qmf-footer--compact .qmf-footer__container {
+    padding: 0;
+}
+
+/* Copyright */
+.qmf-footer__copyright {
+    font-size: 0.75rem;
+    color: var(--qmf-footer-text, rgba(255, 255, 255, 0.7));
+    white-space: nowrap;
+}
+
+/* Separator */
+.qmf-footer__sep {
+    color: var(--qmf-footer-border, rgba(255, 255, 255, 0.2));
+    font-size: 0.625rem;
+    user-select: none;
+}
+
+/* Links */
+.qmf-footer__links {
+    display: flex;
+    align-items: center;
+    gap: var(--qmf-space-1, 0.25rem);
+    flex-wrap: wrap;
+}
+
+.qmf-footer__link {
+    font-size: 0.75rem;
+    color: var(--qmf-footer-link, rgba(255, 255, 255, 0.6));
+    text-decoration: none;
+    padding: var(--qmf-space-1, 0.25rem) var(--qmf-space-2, 0.5rem);
+    border-radius: var(--qmf-radius-sm, 4px);
+    transition: all var(--qmf-transition-fast, 0.15s ease);
+    white-space: nowrap;
+}
+
+.qmf-footer__link:hover {
+    color: var(--qmf-footer-link-hover, #667eea);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* DMCA Badge */
+.qmf-footer__dmca {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--qmf-space-1, 0.25rem);
+    border-radius: var(--qmf-radius-sm, 4px);
+    transition: all var(--qmf-transition-fast, 0.15s ease);
+    opacity: 0.7;
+}
+
+.qmf-footer__dmca:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.qmf-footer__dmca img {
+    height: 14px;
+    width: auto;
+    display: block;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 640px) {
+    .qmf-footer {
+        padding: var(--qmf-space-3, 0.75rem) var(--qmf-space-4, 1rem);
+    }
+    
+    .qmf-footer__container {
+        flex-direction: column;
+        gap: var(--qmf-space-2, 0.5rem);
+    }
+    
+    .qmf-footer__sep {
+        display: none;
+    }
+    
+    .qmf-footer__links {
+        justify-content: center;
+    }
+    
+    .qmf-footer__link {
+        font-size: 0.6875rem;
+        padding: var(--qmf-space-1, 0.25rem) var(--qmf-space-2, 0.5rem);
+    }
+    
+    .qmf-footer__copyright {
+        font-size: 0.6875rem;
+        order: 1;
+    }
+}
+
+/* ============================================
+   DARK MODE AUTO
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+    .qmf-footer:not(.qmf-footer--light) {
+        --qmf-footer-bg: rgba(15, 12, 41, 0.95);
+        --qmf-footer-border: rgba(255, 255, 255, 0.08);
+        --qmf-footer-text: rgba(255, 255, 255, 0.7);
+        --qmf-footer-link: rgba(255, 255, 255, 0.6);
+        --qmf-footer-link-hover: #667eea;
+    }
+}

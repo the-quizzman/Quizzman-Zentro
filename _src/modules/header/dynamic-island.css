@@ -1,0 +1,373 @@
+/**
+ * QMF Dynamic Island — Standard Styles
+ * Companion CSS for dynamic-island.js (QMFDynamicIsland)
+ *
+ * Layout: Fixed pill at top-center, compact by default.
+ * Expands on hover/click to show notification details.
+ *
+ * @version 1.0.0
+ * CDN: https://ui.quizzman.com/qmf/dist/modules/header/dynamic-island.css
+ */
+
+/* ============================================
+   CSS Variables
+   ============================================ */
+:root {
+  --qmf-island-bg: rgba(15, 15, 30, 0.92);
+  --qmf-island-border: rgba(255, 255, 255, 0.1);
+  --qmf-island-text: #ffffff;
+  --qmf-island-text-muted: rgba(255, 255, 255, 0.7);
+  --qmf-island-radius: 28px;
+  --qmf-island-radius-expanded: 20px;
+  --qmf-island-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --qmf-island-z: 10000;
+  --qmf-island-transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Priority colors */
+  --qmf-island-info: #4facfe;
+  --qmf-island-success: #43e97b;
+  --qmf-island-warning: #f5b942;
+  --qmf-island-error: #ff6b6b;
+  --qmf-island-promo: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Light theme overrides */
+[data-theme="light"] {
+  --qmf-island-bg: rgba(255, 255, 255, 0.95);
+  --qmf-island-border: rgba(0, 0, 0, 0.1);
+  --qmf-island-text: #1f2937;
+  --qmf-island-text-muted: rgba(0, 0, 0, 0.6);
+  --qmf-island-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================
+   Base Container
+   ============================================ */
+.qmf-island {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  z-index: var(--qmf-island-z);
+
+  background: var(--qmf-island-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--qmf-island-border);
+  border-radius: var(--qmf-island-radius);
+  box-shadow: var(--qmf-island-shadow);
+
+  min-width: 200px;
+  max-width: 420px;
+  padding: 10px 20px;
+  opacity: 0;
+  pointer-events: none;
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: all var(--qmf-island-transition);
+  cursor: default;
+}
+
+/* ============================================
+   States
+   ============================================ */
+.qmf-island--visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.qmf-island--expanded {
+  border-radius: var(--qmf-island-radius-expanded);
+  padding: 16px 20px;
+  min-width: 320px;
+}
+
+/* ============================================
+   Compact View (pill)
+   ============================================ */
+.qmf-island__compact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.qmf-island--expanded .qmf-island__compact {
+  display: none;
+}
+
+/* Icon */
+.qmf-island__icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+  color: #fff;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.qmf-island__icon--info    { background: var(--qmf-island-info); }
+.qmf-island__icon--success { background: var(--qmf-island-success); }
+.qmf-island__icon--warning { background: var(--qmf-island-warning); }
+.qmf-island__icon--error   { background: var(--qmf-island-error); }
+.qmf-island__icon--promo   { background: var(--qmf-island-promo); }
+
+/* Label */
+.qmf-island__label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--qmf-island-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+/* Queue indicator dot */
+.qmf-island__dot {
+  display: none;
+}
+
+.qmf-island--has-queue .qmf-island__dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--qmf-island-info);
+  flex-shrink: 0;
+  animation: qmfIslandPulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   Expanded Body
+   ============================================ */
+.qmf-island__body {
+  display: none;
+}
+
+.qmf-island--expanded .qmf-island__body {
+  display: block;
+  animation: qmfIslandFadeIn 0.3s ease 0.1s both;
+}
+
+/* Head row */
+.qmf-island__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.qmf-island__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--qmf-island-text);
+}
+
+.qmf-island__title i {
+  font-size: 14px;
+  color: var(--qmf-island-info);
+}
+
+/* Close button */
+.qmf-island__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: var(--qmf-island-text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 14px;
+}
+
+.qmf-island__close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--qmf-island-text);
+}
+
+[data-theme="light"] .qmf-island__close:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Message */
+.qmf-island__message {
+  font-size: 0.82rem;
+  color: var(--qmf-island-text-muted);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+/* ============================================
+   Actions
+   ============================================ */
+.qmf-island__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.qmf-island__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid var(--qmf-island-border);
+  background: transparent;
+  color: var(--qmf-island-text);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.qmf-island__action:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .qmf-island__action:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.qmf-island__action--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.qmf-island__action--primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   Queue Dots
+   ============================================ */
+.qmf-island__queue {
+  display: none;
+}
+
+.qmf-island--has-queue .qmf-island__queue {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding-top: 8px;
+}
+
+.qmf-island__queue-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .qmf-island__queue-dot {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.qmf-island__queue-dot--active {
+  background: var(--qmf-island-info);
+  width: 14px;
+  border-radius: 3px;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+@keyframes qmfIslandFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes qmfIslandPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+  .qmf-island {
+    min-width: 180px;
+    max-width: 340px;
+    padding: 8px 16px;
+    top: 8px;
+  }
+
+  .qmf-island--expanded {
+    padding: 14px 16px;
+    min-width: 280px;
+  }
+
+  .qmf-island__label {
+    font-size: 0.8rem;
+    max-width: 200px;
+  }
+
+  .qmf-island__title {
+    font-size: 0.85rem;
+  }
+
+  .qmf-island__message {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .qmf-island {
+    max-width: 300px;
+  }
+
+  .qmf-island--expanded {
+    min-width: 260px;
+  }
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .qmf-island {
+    transition: opacity 0.2s ease;
+  }
+
+  .qmf-island--visible {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .qmf-island__queue-dot,
+  .qmf-island--has-queue .qmf-island__dot {
+    animation: none;
+  }
+
+  .qmf-island--expanded .qmf-island__body {
+    animation: none;
+    opacity: 1;
+  }
+}

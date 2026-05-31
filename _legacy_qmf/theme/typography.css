@@ -1,0 +1,342 @@
+/**
+ * QMF Typography
+ * Typography system & text utilities
+ * @version 1.0.0
+ */
+
+/* ============================================
+   HEADING STYLES
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6,
+.qmf-h1, .qmf-h2, .qmf-h3, .qmf-h4, .qmf-h5, .qmf-h6 {
+    margin-top: 0;
+    margin-bottom: var(--qmf-space-4);
+    font-family: var(--qmf-font-family-heading);
+    font-weight: var(--qmf-font-weight-semibold);
+    line-height: var(--qmf-line-height-tight);
+    color: var(--qmf-color-text);
+}
+
+h1, .qmf-h1 {
+    font-size: var(--qmf-font-size-4xl);
+    letter-spacing: var(--qmf-letter-spacing-tight);
+}
+
+h2, .qmf-h2 {
+    font-size: var(--qmf-font-size-3xl);
+    letter-spacing: var(--qmf-letter-spacing-tight);
+}
+
+h3, .qmf-h3 {
+    font-size: var(--qmf-font-size-2xl);
+}
+
+h4, .qmf-h4 {
+    font-size: var(--qmf-font-size-xl);
+}
+
+h5, .qmf-h5 {
+    font-size: var(--qmf-font-size-lg);
+}
+
+h6, .qmf-h6 {
+    font-size: var(--qmf-font-size-base);
+}
+
+/* Display headings */
+.qmf-display-1 {
+    font-size: var(--qmf-font-size-5xl);
+    font-weight: var(--qmf-font-weight-bold);
+    line-height: 1.1;
+}
+
+.qmf-display-2 {
+    font-size: var(--qmf-font-size-4xl);
+    font-weight: var(--qmf-font-weight-bold);
+    line-height: 1.2;
+}
+
+/* ============================================
+   PARAGRAPH & BODY TEXT
+   ============================================ */
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--qmf-space-4);
+}
+
+.qmf-lead {
+    font-size: var(--qmf-font-size-lg);
+    font-weight: var(--qmf-font-weight-normal);
+    line-height: var(--qmf-line-height-relaxed);
+    color: var(--qmf-color-text-secondary);
+}
+
+.qmf-small, small {
+    font-size: var(--qmf-font-size-sm);
+}
+
+.qmf-tiny {
+    font-size: var(--qmf-font-size-xs);
+}
+
+/* ============================================
+   LINKS
+   ============================================ */
+
+a {
+    color: var(--qmf-color-text-link);
+    text-decoration: none;
+    transition: color var(--qmf-duration-fast) var(--qmf-easing-default);
+}
+
+a:hover {
+    color: var(--qmf-color-primary-hover);
+    text-decoration: underline;
+}
+
+a:active {
+    color: var(--qmf-color-primary-active);
+}
+
+.qmf-link-muted {
+    color: var(--qmf-color-text-secondary);
+}
+
+.qmf-link-muted:hover {
+    color: var(--qmf-color-text);
+}
+
+.qmf-link-subtle {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* ============================================
+   TEXT UTILITIES
+   ============================================ */
+
+/* Font sizes */
+.qmf-text-xs { font-size: var(--qmf-font-size-xs); }
+.qmf-text-sm { font-size: var(--qmf-font-size-sm); }
+.qmf-text-base { font-size: var(--qmf-font-size-base); }
+.qmf-text-lg { font-size: var(--qmf-font-size-lg); }
+.qmf-text-xl { font-size: var(--qmf-font-size-xl); }
+.qmf-text-2xl { font-size: var(--qmf-font-size-2xl); }
+.qmf-text-3xl { font-size: var(--qmf-font-size-3xl); }
+.qmf-text-4xl { font-size: var(--qmf-font-size-4xl); }
+
+/* Font weights */
+.qmf-font-light { font-weight: var(--qmf-font-weight-light); }
+.qmf-font-normal { font-weight: var(--qmf-font-weight-normal); }
+.qmf-font-medium { font-weight: var(--qmf-font-weight-medium); }
+.qmf-font-semibold { font-weight: var(--qmf-font-weight-semibold); }
+.qmf-font-bold { font-weight: var(--qmf-font-weight-bold); }
+
+/* Text colors */
+.qmf-text-primary { color: var(--qmf-color-primary); }
+.qmf-text-secondary { color: var(--qmf-color-text-secondary); }
+.qmf-text-tertiary { color: var(--qmf-color-text-tertiary); }
+.qmf-text-muted { color: var(--qmf-color-text-disabled); }
+.qmf-text-success { color: var(--qmf-color-success); }
+.qmf-text-warning { color: var(--qmf-color-warning); }
+.qmf-text-danger { color: var(--qmf-color-danger); }
+.qmf-text-info { color: var(--qmf-color-info); }
+
+/* Text alignment */
+.qmf-text-left { text-align: left; }
+.qmf-text-center { text-align: center; }
+.qmf-text-right { text-align: right; }
+.qmf-text-justify { text-align: justify; }
+
+/* Text transform */
+.qmf-uppercase { text-transform: uppercase; }
+.qmf-lowercase { text-transform: lowercase; }
+.qmf-capitalize { text-transform: capitalize; }
+.qmf-normal-case { text-transform: none; }
+
+/* Text decoration */
+.qmf-underline { text-decoration: underline; }
+.qmf-line-through { text-decoration: line-through; }
+.qmf-no-underline { text-decoration: none; }
+
+/* Text overflow */
+.qmf-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.qmf-line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.qmf-line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.qmf-line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Whitespace */
+.qmf-whitespace-normal { white-space: normal; }
+.qmf-whitespace-nowrap { white-space: nowrap; }
+.qmf-whitespace-pre { white-space: pre; }
+.qmf-whitespace-pre-line { white-space: pre-line; }
+.qmf-whitespace-pre-wrap { white-space: pre-wrap; }
+
+/* Word break */
+.qmf-break-normal { word-break: normal; overflow-wrap: normal; }
+.qmf-break-words { overflow-wrap: break-word; }
+.qmf-break-all { word-break: break-all; }
+
+/* ============================================
+   LISTS
+   ============================================ */
+
+ul, ol {
+    margin-top: 0;
+    margin-bottom: var(--qmf-space-4);
+    padding-left: var(--qmf-space-6);
+}
+
+ul ul, ul ol, ol ul, ol ol {
+    margin-bottom: 0;
+}
+
+li {
+    margin-bottom: var(--qmf-space-1);
+}
+
+.qmf-list-none {
+    list-style: none;
+    padding-left: 0;
+}
+
+.qmf-list-disc {
+    list-style-type: disc;
+}
+
+.qmf-list-decimal {
+    list-style-type: decimal;
+}
+
+/* ============================================
+   BLOCKQUOTE
+   ============================================ */
+
+blockquote, .qmf-blockquote {
+    margin: var(--qmf-space-4) 0;
+    padding: var(--qmf-space-4) var(--qmf-space-6);
+    border-left: 4px solid var(--qmf-color-primary);
+    background-color: var(--qmf-color-bg-secondary);
+    font-style: italic;
+}
+
+blockquote cite {
+    display: block;
+    margin-top: var(--qmf-space-2);
+    font-size: var(--qmf-font-size-sm);
+    font-style: normal;
+    color: var(--qmf-color-text-secondary);
+}
+
+/* ============================================
+   CODE & PREFORMATTED
+   ============================================ */
+
+code, kbd, pre, samp {
+    font-family: var(--qmf-font-family-mono);
+    font-size: 0.875em;
+}
+
+code {
+    padding: 0.125em 0.375em;
+    background-color: var(--qmf-color-bg-tertiary);
+    border-radius: var(--qmf-radius-sm);
+    color: var(--qmf-color-danger);
+}
+
+pre {
+    margin: var(--qmf-space-4) 0;
+    padding: var(--qmf-space-4);
+    background-color: var(--qmf-color-bg-tertiary);
+    border-radius: var(--qmf-radius);
+    overflow-x: auto;
+}
+
+pre code {
+    padding: 0;
+    background: none;
+    color: inherit;
+}
+
+kbd {
+    padding: 0.125em 0.5em;
+    background-color: var(--qmf-color-gray-100);
+    border: 1px solid var(--qmf-color-border);
+    border-radius: var(--qmf-radius-sm);
+    box-shadow: inset 0 -1px 0 var(--qmf-color-border);
+}
+
+/* ============================================
+   HORIZONTAL RULE
+   ============================================ */
+
+hr {
+    margin: var(--qmf-space-8) 0;
+    border: 0;
+    border-top: 1px solid var(--qmf-color-border);
+}
+
+/* ============================================
+   MARK & SELECTION
+   ============================================ */
+
+mark, .qmf-mark {
+    padding: 0.125em 0.25em;
+    background-color: var(--qmf-color-warning-100);
+    border-radius: var(--qmf-radius-sm);
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+   ============================================ */
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+    
+    h1, .qmf-h1 {
+        font-size: var(--qmf-font-size-3xl);
+    }
+    
+    h2, .qmf-h2 {
+        font-size: var(--qmf-font-size-2xl);
+    }
+    
+    h3, .qmf-h3 {
+        font-size: var(--qmf-font-size-xl);
+    }
+    
+    .qmf-display-1 {
+        font-size: var(--qmf-font-size-4xl);
+    }
+    
+    .qmf-display-2 {
+        font-size: var(--qmf-font-size-3xl);
+    }
+}

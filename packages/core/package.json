@@ -1,0 +1,60 @@
+{
+  "name": "@qmf/core",
+  "version": "3.0.1",
+  "description": "QMF Core - Event bus, state, lifecycle, config, HTTP, plugin loader",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./event-bus": {
+      "import": "./dist/event-bus.js",
+      "require": "./dist/event-bus.cjs"
+    },
+    "./state": {
+      "import": "./dist/state.js",
+      "require": "./dist/state.cjs"
+    },
+    "./lifecycle": {
+      "import": "./dist/lifecycle.js",
+      "require": "./dist/lifecycle.cjs"
+    },
+    "./di": {
+      "import": "./dist/di.js",
+      "require": "./dist/di.cjs"
+    },
+    "./error-boundary": {
+      "import": "./dist/error-boundary.js",
+      "require": "./dist/error-boundary.cjs"
+    },
+    "./event-tracer": {
+      "import": "./dist/event-tracer.js",
+      "require": "./dist/event-tracer.cjs"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "zod": "^3.22.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}

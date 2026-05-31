@@ -1,0 +1,333 @@
+/* QMF Loading Screen Styles
+ * @version 1.0.0
+ * Can be used standalone without JavaScript
+ */
+
+/* ===== BASE LOADING SCREEN ===== */
+.qmf-loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0d0d1f 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.qmf-loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.qmf-loading-screen.fade-out {
+    animation: qmfLoaderFadeOut 0.6s ease forwards;
+}
+
+@keyframes qmfLoaderFadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
+/* ===== LOGO SECTION ===== */
+.qmf-loading-logo {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.qmf-loading-logo h1 {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #c4b5fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.qmf-loading-subtitle {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-top: 0.5rem;
+    letter-spacing: 0.1em;
+}
+
+/* ===== BLOCKS ANIMATION ===== */
+.qmf-loading-blocks {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 2rem;
+}
+
+.qmf-loading-block {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    opacity: 0.3;
+    animation: qmfBlockPulse 1.4s ease-in-out infinite;
+}
+
+.qmf-loading-block:nth-child(1) { animation-delay: 0s; }
+.qmf-loading-block:nth-child(2) { animation-delay: 0.1s; }
+.qmf-loading-block:nth-child(3) { animation-delay: 0.2s; }
+.qmf-loading-block:nth-child(4) { animation-delay: 0.3s; }
+.qmf-loading-block:nth-child(5) { animation-delay: 0.4s; }
+.qmf-loading-block:nth-child(6) { animation-delay: 0.5s; }
+.qmf-loading-block:nth-child(7) { animation-delay: 0.6s; }
+.qmf-loading-block:nth-child(8) { animation-delay: 0.7s; }
+.qmf-loading-block:nth-child(9) { animation-delay: 0.8s; }
+
+@keyframes qmfBlockPulse {
+    0%, 100% { 
+        opacity: 0.3; 
+        transform: scale(0.8);
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1);
+        background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    }
+}
+
+/* ===== SUCCESS CHECKMARK ===== */
+.qmf-loading-checkmark {
+    display: none;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1.5rem;
+}
+
+.qmf-loading-checkmark.show {
+    display: block;
+    animation: qmfCheckmarkBounce 0.6s ease;
+}
+
+@keyframes qmfCheckmarkBounce {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.qmf-checkmark-circle {
+    stroke: #22c55e;
+    stroke-width: 2;
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    fill: none;
+    animation: qmfCheckCircle 0.6s ease forwards;
+}
+
+.qmf-checkmark-check {
+    stroke: #22c55e;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    fill: none;
+    animation: qmfCheckStroke 0.4s ease 0.4s forwards;
+}
+
+@keyframes qmfCheckCircle {
+    100% { stroke-dashoffset: 0; }
+}
+
+@keyframes qmfCheckStroke {
+    100% { stroke-dashoffset: 0; }
+}
+
+/* ===== LOADING TEXT ===== */
+.qmf-loading-text {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin-bottom: 1rem;
+    min-height: 1.5em;
+}
+
+.qmf-loading-dots {
+    display: inline-block;
+    width: 20px;
+    text-align: left;
+}
+
+.qmf-loading-dots::after {
+    content: '';
+    animation: qmfLoadingDots 1.5s infinite;
+}
+
+@keyframes qmfLoadingDots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+/* ===== PROGRESS BAR ===== */
+.qmf-loading-progress {
+    width: 200px;
+    height: 3px;
+    background: rgba(100, 116, 139, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.qmf-loading-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.qmf-loading-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: qmfShimmer 1.5s infinite;
+}
+
+@keyframes qmfShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===== URL FOOTER ===== */
+.qmf-loading-url {
+    position: absolute;
+    bottom: 2rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.75rem;
+    color: #475569;
+    letter-spacing: 0.05em;
+}
+
+.qmf-loading-url a {
+    color: #6366f1;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.qmf-loading-url a:hover {
+    color: #818cf8;
+}
+
+/* ===== DECORATION ELEMENTS ===== */
+.qmf-loading-decoration {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.qmf-loading-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(139, 92, 246, 0.4);
+    border-radius: 50%;
+    animation: qmfFloat 8s infinite;
+}
+
+.qmf-loading-particle:nth-child(2) { left: 10%; top: 20%; animation-delay: 0s; }
+.qmf-loading-particle:nth-child(3) { left: 20%; top: 80%; animation-delay: 1s; }
+.qmf-loading-particle:nth-child(4) { left: 80%; top: 30%; animation-delay: 2s; }
+.qmf-loading-particle:nth-child(5) { left: 90%; top: 70%; animation-delay: 3s; }
+.qmf-loading-particle:nth-child(6) { left: 50%; top: 10%; animation-delay: 4s; }
+.qmf-loading-particle:nth-child(7) { left: 30%; top: 60%; animation-delay: 5s; }
+
+@keyframes qmfFloat {
+    0%, 100% { 
+        transform: translateY(0) scale(1); 
+        opacity: 0.4;
+    }
+    50% { 
+        transform: translateY(-20px) scale(1.5); 
+        opacity: 0.8;
+    }
+}
+
+/* Glow ring effect */
+.qmf-loading-glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    animation: qmfGlowPulse 4s ease-in-out infinite;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes qmfGlowPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 480px) {
+    .qmf-loading-logo h1 {
+        font-size: 1.5rem;
+    }
+    
+    .qmf-loading-block {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .qmf-loading-blocks {
+        gap: 6px;
+    }
+}
+
+/* ===== LIGHT THEME ===== */
+.qmf-loading-screen.light {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+}
+
+.qmf-loading-screen.light .qmf-loading-logo h1 {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.qmf-loading-screen.light .qmf-loading-subtitle {
+    color: #64748b;
+}
+
+.qmf-loading-screen.light .qmf-loading-text {
+    color: #475569;
+}
+
+.qmf-loading-screen.light .qmf-loading-progress {
+    background: rgba(100, 116, 139, 0.2);
+}
+
+.qmf-loading-screen.light .qmf-loading-glow {
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+}
+
+.qmf-loading-screen.light .qmf-loading-particle {
+    background: rgba(99, 102, 241, 0.5);
+}

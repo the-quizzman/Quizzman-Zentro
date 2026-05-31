@@ -1,0 +1,33 @@
+/**
+ * QMF Friends Preload CSS
+ * Minimal CSS to prevent FOUC (Flash of Unstyled Content)
+ * Include this BEFORE qmf-loader.js to ensure friends panel is hidden on page load
+ * 
+ * Usage: <link rel="stylesheet" href="https://ui.quizzman.com/qmf/dist/qmf-friends-preload.css">
+ */
+
+/* Hide friends panel by default until JavaScript initializes it */
+.qmf-friends {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Hide friends button by default */
+.qmf-friends-button {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Hide any friend-related popups/overlays that might flash */
+.classroom-friend-overlay,
+.classroom-friend-popup,
+[class*="friend-panel"],
+[class*="friend-manager"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}

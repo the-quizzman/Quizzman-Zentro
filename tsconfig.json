@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@qmf/core": ["./packages/core/src/index.ts"],
+      "@qmf/tokens": ["./packages/tokens/src/index.ts"],
+      "@qmf/utils": ["./packages/utils/src/index.ts"],
+      "@qmf/ui": ["./packages/ui/src/index.ts"],
+      "@qmf/auth-shell": ["./packages/auth-shell/src/index.ts"],
+      "@qmf/header": ["./packages/header/src/index.ts"],
+      "@qmf/footer": ["./packages/footer/src/index.ts"],
+      "@qmf/chat-embed": ["./packages/chat-embed/src/index.ts"],
+      "@qmf/noti-embed": ["./packages/noti-embed/src/index.ts"],
+      "@qmf/loading-screen": ["./packages/loading-screen/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "_legacy_qmf"]
+}

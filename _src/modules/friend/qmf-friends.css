@@ -1,0 +1,1175 @@
+/**
+ * QMF Friends Manager v3.0.0
+ * Modern Friend Management UI
+ */
+
+/* CSS Variables - Theme Support */
+:root {
+  --qmf-friends-bg: #ffffff;
+  --qmf-friends-bg-secondary: #f8f9fa;
+  --qmf-friends-bg-hover: #f0f2f5;
+  --qmf-friends-bg-active: #e4e6eb;
+  --qmf-friends-text: #1a1a1a;
+  --qmf-friends-text-secondary: #65676b;
+  --qmf-friends-text-muted: #8a8d91;
+  --qmf-friends-border: #e4e6eb;
+  --qmf-friends-primary: #0084ff;
+  --qmf-friends-primary-light: #e7f3ff;
+  --qmf-friends-success: #31a24c;
+  --qmf-friends-success-light: #e6f4e9;
+  --qmf-friends-danger: #f02849;
+  --qmf-friends-danger-light: #ffe5e9;
+  --qmf-friends-warning: #f7b928;
+  --qmf-friends-warning-light: #fef5e1;
+  --qmf-friends-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --qmf-friends-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --qmf-friends-radius: 12px;
+  --qmf-friends-radius-sm: 8px;
+  --qmf-friends-radius-lg: 16px;
+  --qmf-friends-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --qmf-friends-bg: #242526;
+    --qmf-friends-bg-secondary: #3a3b3c;
+    --qmf-friends-bg-hover: #3a3b3c;
+    --qmf-friends-bg-active: #4e4f50;
+    --qmf-friends-text: #e4e6eb;
+    --qmf-friends-text-secondary: #b0b3b8;
+    --qmf-friends-text-muted: #8a8d91;
+    --qmf-friends-border: #3a3b3c;
+    --qmf-friends-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    --qmf-friends-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+
+[data-theme="dark"] {
+  --qmf-friends-bg: #242526;
+  --qmf-friends-bg-secondary: #3a3b3c;
+  --qmf-friends-bg-hover: #3a3b3c;
+  --qmf-friends-bg-active: #4e4f50;
+  --qmf-friends-text: #e4e6eb;
+  --qmf-friends-text-secondary: #b0b3b8;
+  --qmf-friends-text-muted: #8a8d91;
+  --qmf-friends-border: #3a3b3c;
+  --qmf-friends-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  --qmf-friends-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* ============================================
+   Main Container
+   ============================================ */
+
+.qmf-friends {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  width: 380px;
+  max-height: 550px;
+  background: var(--qmf-friends-bg);
+  border-radius: var(--qmf-friends-radius-lg);
+  box-shadow: var(--qmf-friends-shadow-lg);
+  display: none; /* Hidden by default */
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transition: var(--qmf-friends-transition);
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.qmf-friends.visible {
+  display: flex !important;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* ============================================
+   Header
+   ============================================ */
+
+.qmf-friends-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--qmf-friends-border);
+  background: var(--qmf-friends-bg);
+}
+
+.qmf-friends-header-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--qmf-friends-primary-light);
+  color: var(--qmf-friends-primary);
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.qmf-friends-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.qmf-friends-header-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--qmf-friends-text);
+}
+
+.qmf-friends-header-count {
+  font-size: 13px;
+  color: var(--qmf-friends-text-secondary);
+}
+
+.qmf-friends-header-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.qmf-friends-header-action {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--qmf-friends-text-secondary);
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-header-action:hover {
+  background: var(--qmf-friends-bg-hover);
+  color: var(--qmf-friends-text);
+}
+
+/* ============================================
+   Tabs Navigation
+   ============================================ */
+
+.qmf-friends-tabs {
+  display: flex;
+  padding: 8px 16px;
+  gap: 6px;
+  border-bottom: 1px solid var(--qmf-friends-border);
+  background: var(--qmf-friends-bg);
+}
+
+.qmf-friends-tab {
+  flex: 1;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--qmf-friends-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--qmf-friends-text-secondary);
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.qmf-friends-tab:hover {
+  background: var(--qmf-friends-bg-hover);
+}
+
+.qmf-friends-tab.active {
+  background: var(--qmf-friends-primary-light);
+  color: var(--qmf-friends-primary);
+}
+
+.qmf-friends-tab-badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--qmf-friends-danger);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 9px;
+}
+
+.qmf-friends-tab.active .qmf-friends-tab-badge {
+  background: var(--qmf-friends-primary);
+}
+
+/* ============================================
+   Search Bar
+   ============================================ */
+
+.qmf-friends-search {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--qmf-friends-border);
+  background: var(--qmf-friends-bg);
+}
+
+.qmf-friends-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.qmf-friends-search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--qmf-friends-text-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.qmf-friends-search-input {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  background: var(--qmf-friends-bg-secondary);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 14px;
+  color: var(--qmf-friends-text);
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-search-input:focus {
+  outline: none;
+  border-color: var(--qmf-friends-primary);
+  background: var(--qmf-friends-bg);
+}
+
+.qmf-friends-search-input::placeholder {
+  color: var(--qmf-friends-text-muted);
+}
+
+.qmf-friends-search-clear {
+  position: absolute;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--qmf-friends-bg-hover);
+  border: none;
+  border-radius: 50%;
+  color: var(--qmf-friends-text-secondary);
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-search-clear.visible {
+  display: flex;
+}
+
+.qmf-friends-search-clear:hover {
+  background: var(--qmf-friends-bg-active);
+}
+
+/* ============================================
+   Friend List
+   ============================================ */
+
+.qmf-friends-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  scroll-behavior: smooth;
+}
+
+.qmf-friends-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.qmf-friends-list::-webkit-scrollbar-thumb {
+  background: var(--qmf-friends-border);
+  border-radius: 3px;
+}
+
+/* Section Headers */
+.qmf-friends-section {
+  margin-bottom: 8px;
+}
+
+.qmf-friends-section-header {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  color: var(--qmf-friends-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.qmf-friends-section-count {
+  margin-left: 6px;
+  padding: 2px 6px;
+  background: var(--qmf-friends-bg-secondary);
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* ============================================
+   Friend Card
+   ============================================ */
+
+.qmf-friends-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: transparent;
+  border-radius: var(--qmf-friends-radius);
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-card:hover {
+  background: var(--qmf-friends-bg-hover);
+}
+
+.qmf-friends-card.selected {
+  background: var(--qmf-friends-primary-light);
+}
+
+/* Avatar */
+.qmf-friends-card-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.qmf-friends-card-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--qmf-friends-bg-secondary);
+}
+
+.qmf-friends-card-status {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--qmf-friends-text-muted);
+  border: 2px solid var(--qmf-friends-bg);
+}
+
+.qmf-friends-card-status.online {
+  background: var(--qmf-friends-success);
+}
+
+.qmf-friends-card-status.away {
+  background: var(--qmf-friends-warning);
+}
+
+.qmf-friends-card-badge {
+  position: absolute;
+  left: -4px;
+  bottom: -4px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 10px;
+  border: 2px solid var(--qmf-friends-bg);
+  background: var(--qmf-friends-bg);
+}
+
+.qmf-friends-card-badge.vip {
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+}
+
+.qmf-friends-card-badge.premium {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.qmf-friends-card-badge.verified {
+  background: var(--qmf-friends-primary);
+  color: white;
+}
+
+.qmf-friends-card-badge.admin {
+  background: var(--qmf-friends-danger);
+  color: white;
+}
+
+/* Info */
+.qmf-friends-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.qmf-friends-card-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--qmf-friends-text);
+  margin-bottom: 2px;
+}
+
+.qmf-friends-card-name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qmf-friends-card-verified {
+  color: var(--qmf-friends-primary);
+  font-size: 12px;
+}
+
+.qmf-friends-card-username {
+  font-size: 13px;
+  color: var(--qmf-friends-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qmf-friends-card-meta {
+  font-size: 12px;
+  color: var(--qmf-friends-text-muted);
+}
+
+/* Actions */
+.qmf-friends-card-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.qmf-friends-card-action {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--qmf-friends-bg-secondary);
+  border: none;
+  border-radius: 50%;
+  color: var(--qmf-friends-text-secondary);
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-card-action:hover {
+  background: var(--qmf-friends-primary-light);
+  color: var(--qmf-friends-primary);
+}
+
+.qmf-friends-card-action.chat:hover {
+  background: var(--qmf-friends-primary);
+  color: white;
+}
+
+.qmf-friends-card-action.remove:hover {
+  background: var(--qmf-friends-danger-light);
+  color: var(--qmf-friends-danger);
+}
+
+.qmf-friends-card-action.block:hover {
+  background: var(--qmf-friends-danger-light);
+  color: var(--qmf-friends-danger);
+}
+
+/* ============================================
+   Friend Request Card
+   ============================================ */
+
+.qmf-friends-request {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  background: var(--qmf-friends-bg-secondary);
+  border-radius: var(--qmf-friends-radius);
+  margin-bottom: 8px;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-request:hover {
+  background: var(--qmf-friends-bg-hover);
+}
+
+.qmf-friends-request-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qmf-friends-request-avatar {
+  position: relative;
+}
+
+.qmf-friends-request-avatar img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--qmf-friends-bg);
+}
+
+.qmf-friends-request-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.qmf-friends-request-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--qmf-friends-text);
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qmf-friends-request-meta {
+  font-size: 13px;
+  color: var(--qmf-friends-text-secondary);
+}
+
+.qmf-friends-request-meta span {
+  color: var(--qmf-friends-primary);
+}
+
+.qmf-friends-request-time {
+  font-size: 12px;
+  color: var(--qmf-friends-text-muted);
+}
+
+.qmf-friends-request-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.qmf-friends-request-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--qmf-friends-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-request-btn.accept {
+  background: var(--qmf-friends-primary);
+  color: white;
+}
+
+.qmf-friends-request-btn.accept:hover {
+  background: #0077e6;
+}
+
+.qmf-friends-request-btn.decline {
+  background: var(--qmf-friends-bg-active);
+  color: var(--qmf-friends-text);
+}
+
+.qmf-friends-request-btn.decline:hover {
+  background: var(--qmf-friends-danger-light);
+  color: var(--qmf-friends-danger);
+}
+
+/* ============================================
+   Blocked User Card
+   ============================================ */
+
+.qmf-friends-blocked {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--qmf-friends-bg-secondary);
+  border-radius: var(--qmf-friends-radius);
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+.qmf-friends-blocked:hover {
+  opacity: 1;
+}
+
+.qmf-friends-blocked-avatar img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(100%);
+}
+
+.qmf-friends-blocked-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.qmf-friends-blocked-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--qmf-friends-text);
+}
+
+.qmf-friends-blocked-meta {
+  font-size: 12px;
+  color: var(--qmf-friends-text-muted);
+}
+
+.qmf-friends-unblock-btn {
+  padding: 8px 16px;
+  background: var(--qmf-friends-bg-active);
+  border: none;
+  border-radius: var(--qmf-friends-radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--qmf-friends-text);
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-unblock-btn:hover {
+  background: var(--qmf-friends-primary-light);
+  color: var(--qmf-friends-primary);
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.qmf-friends-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.qmf-friends-empty-icon {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  background: var(--qmf-friends-bg-secondary);
+  border-radius: 50%;
+  font-size: 32px;
+}
+
+.qmf-friends-empty-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--qmf-friends-text);
+  margin-bottom: 8px;
+}
+
+.qmf-friends-empty-text {
+  font-size: 14px;
+  color: var(--qmf-friends-text-secondary);
+  max-width: 240px;
+  line-height: 1.5;
+}
+
+.qmf-friends-empty-btn {
+  margin-top: 16px;
+  padding: 10px 24px;
+  background: var(--qmf-friends-primary);
+  border: none;
+  border-radius: var(--qmf-friends-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-empty-btn:hover {
+  background: #0077e6;
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   Loading State
+   ============================================ */
+
+.qmf-friends-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.qmf-friends-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--qmf-friends-border);
+  border-top-color: var(--qmf-friends-primary);
+  border-radius: 50%;
+  animation: qmf-friends-spin 0.8s linear infinite;
+}
+
+@keyframes qmf-friends-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Skeleton Loading */
+.qmf-friends-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+}
+
+.qmf-friends-skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--qmf-friends-bg-secondary) 25%, var(--qmf-friends-bg-hover) 50%, var(--qmf-friends-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: qmf-friends-skeleton 1.5s infinite;
+}
+
+.qmf-friends-skeleton-content {
+  flex: 1;
+}
+
+.qmf-friends-skeleton-name {
+  width: 120px;
+  height: 14px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--qmf-friends-bg-secondary) 25%, var(--qmf-friends-bg-hover) 50%, var(--qmf-friends-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: qmf-friends-skeleton 1.5s infinite;
+}
+
+.qmf-friends-skeleton-text {
+  width: 80px;
+  height: 10px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--qmf-friends-bg-secondary) 25%, var(--qmf-friends-bg-hover) 50%, var(--qmf-friends-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: qmf-friends-skeleton 1.5s infinite;
+}
+
+@keyframes qmf-friends-skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   Add Friend Section
+   ============================================ */
+
+.qmf-friends-add {
+  padding: 16px;
+  border-top: 1px solid var(--qmf-friends-border);
+  background: var(--qmf-friends-bg);
+}
+
+.qmf-friends-add-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--qmf-friends-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.qmf-friends-add-form {
+  display: flex;
+  gap: 8px;
+}
+
+.qmf-friends-add-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: var(--qmf-friends-bg-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--qmf-friends-radius-sm);
+  font-size: 14px;
+  color: var(--qmf-friends-text);
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-add-input:focus {
+  outline: none;
+  border-color: var(--qmf-friends-primary);
+  background: var(--qmf-friends-bg);
+}
+
+.qmf-friends-add-btn {
+  padding: 10px 18px;
+  background: var(--qmf-friends-primary);
+  border: none;
+  border-radius: var(--qmf-friends-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+}
+
+.qmf-friends-add-btn:hover {
+  background: #0077e6;
+}
+
+.qmf-friends-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Context Menu
+   ============================================ */
+
+.qmf-friends-context-menu {
+  position: fixed;
+  min-width: 180px;
+  background: var(--qmf-friends-bg);
+  border-radius: var(--qmf-friends-radius);
+  box-shadow: var(--qmf-friends-shadow-lg);
+  padding: 8px;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  transform-origin: top left;
+  transition: opacity 0.15s, visibility 0.15s, transform 0.15s;
+}
+
+.qmf-friends-context-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.qmf-friends-context-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--qmf-friends-radius-sm);
+  font-size: 14px;
+  color: var(--qmf-friends-text);
+  cursor: pointer;
+  transition: var(--qmf-friends-transition);
+  text-align: left;
+}
+
+.qmf-friends-context-item i {
+  width: 18px;
+  text-align: center;
+  color: var(--qmf-friends-text-secondary);
+}
+
+.qmf-friends-context-item:hover {
+  background: var(--qmf-friends-bg-hover);
+}
+
+.qmf-friends-context-item.danger {
+  color: var(--qmf-friends-danger);
+}
+
+.qmf-friends-context-item.danger i {
+  color: var(--qmf-friends-danger);
+}
+
+.qmf-friends-context-item.danger:hover {
+  background: var(--qmf-friends-danger-light);
+}
+
+.qmf-friends-context-divider {
+  height: 1px;
+  margin: 6px 0;
+  background: var(--qmf-friends-border);
+}
+
+/* ============================================
+   Floating Button
+   ============================================ */
+
+.qmf-friends-button {
+  position: fixed;
+  right: 80px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--qmf-friends-primary);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 132, 255, 0.4);
+  transition: var(--qmf-friends-transition);
+  z-index: 9997;
+}
+
+/* Hide floating button on desktop - use header touchbar instead */
+@media (min-width: 768px) {
+  .qmf-friends-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+.qmf-friends-button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 132, 255, 0.5);
+}
+
+.qmf-friends-button:active {
+  transform: scale(0.95);
+}
+
+.qmf-friends-button-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--qmf-friends-danger);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 11px;
+  border: 2px solid var(--qmf-friends-bg);
+  animation: qmf-friends-badge-pulse 2s infinite;
+}
+
+@keyframes qmf-friends-badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* ============================================
+   Toast Notifications
+   ============================================ */
+
+.qmf-friends-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 12px 24px;
+  background: var(--qmf-friends-text);
+  color: var(--qmf-friends-bg);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 24px;
+  box-shadow: var(--qmf-friends-shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--qmf-friends-transition);
+  z-index: 10001;
+}
+
+.qmf-friends-toast.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.qmf-friends-toast.success {
+  background: var(--qmf-friends-success);
+  color: white;
+}
+
+.qmf-friends-toast.error {
+  background: var(--qmf-friends-danger);
+  color: white;
+}
+
+.qmf-friends-toast.warning {
+  background: var(--qmf-friends-warning);
+  color: #333;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+  .qmf-friends {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: none;
+    border-radius: 0;
+    transform: translateX(100%);
+  }
+  
+  .qmf-friends.visible {
+    transform: translateX(0);
+  }
+  
+  .qmf-friends-header {
+    padding: 12px 16px;
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+  
+  .qmf-friends-tabs {
+    padding: 6px 12px;
+  }
+  
+  .qmf-friends-tab {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+  
+  .qmf-friends-button {
+    right: 20px;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    width: 52px;
+    height: 52px;
+    font-size: 20px;
+  }
+  
+  .qmf-friends-list {
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  
+  .qmf-friends-add {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 480px) {
+  .qmf-friends-card-actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .qmf-friends-card-action {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .qmf-friends-request-actions {
+    flex-direction: column;
+  }
+  
+  .qmf-friends-add-form {
+    flex-direction: column;
+  }
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+/* Card slide in */
+.qmf-friends-card {
+  animation: qmf-friends-slide-in 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+.qmf-friends-card:nth-child(1) { animation-delay: 0.02s; }
+.qmf-friends-card:nth-child(2) { animation-delay: 0.04s; }
+.qmf-friends-card:nth-child(3) { animation-delay: 0.06s; }
+.qmf-friends-card:nth-child(4) { animation-delay: 0.08s; }
+.qmf-friends-card:nth-child(5) { animation-delay: 0.1s; }
+
+@keyframes qmf-friends-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Online pulse */
+.qmf-friends-card-status.online {
+  animation: qmf-friends-online-pulse 2s ease-in-out infinite;
+}
+
+@keyframes qmf-friends-online-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(49, 162, 76, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(49, 162, 76, 0); }
+}
+
+/* Request card highlight */
+.qmf-friends-request {
+  animation: qmf-friends-request-highlight 0.5s ease-out;
+}
+
+@keyframes qmf-friends-request-highlight {
+  0% {
+    background: var(--qmf-friends-primary-light);
+  }
+  100% {
+    background: var(--qmf-friends-bg-secondary);
+  }
+}
+
+/* Button hover glow */
+.qmf-friends-button.has-requests::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: var(--qmf-friends-primary);
+  opacity: 0.3;
+  animation: qmf-friends-glow 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes qmf-friends-glow {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.2); opacity: 0; }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+
+@media print {
+  .qmf-friends,
+  .qmf-friends-button,
+  .qmf-friends-context-menu {
+    display: none !important;
+  }
+}

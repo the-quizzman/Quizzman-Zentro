@@ -1,0 +1,140 @@
+/**
+ * @qmf/tokens - CSS Design Tokens
+ * Central CSS custom properties for the QMF design system.
+ * All components MUST use these tokens instead of hardcoded values.
+ */
+
+:root {
+  /* ─── Brand Colors ─────────────────────────── */
+  --qmf-color-primary: #4f46e5;
+  --qmf-color-primary-light: #818cf8;
+  --qmf-color-primary-dark: #3730a3;
+  --qmf-color-primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* ─── Status Colors ────────────────────────── */
+  --qmf-color-success: #22c55e;
+  --qmf-color-success-light: #86efac;
+  --qmf-color-success-dark: #15803d;
+  --qmf-color-warning: #f59e0b;
+  --qmf-color-warning-light: #fcd34d;
+  --qmf-color-warning-dark: #b45309;
+  --qmf-color-danger: #ef4444;
+  --qmf-color-danger-light: #fca5a5;
+  --qmf-color-danger-dark: #b91c1c;
+  --qmf-color-info: #3b82f6;
+  --qmf-color-info-light: #93c5fd;
+  --qmf-color-info-dark: #1d4ed8;
+
+  /* ─── Neutral Colors ───────────────────────── */
+  --qmf-color-white: #ffffff;
+  --qmf-color-black: #000000;
+  --qmf-color-gray-50: #f9fafb;
+  --qmf-color-gray-100: #f3f4f6;
+  --qmf-color-gray-200: #e5e7eb;
+  --qmf-color-gray-300: #d1d5db;
+  --qmf-color-gray-400: #9ca3af;
+  --qmf-color-gray-500: #6b7280;
+  --qmf-color-gray-600: #4b5563;
+  --qmf-color-gray-700: #374151;
+  --qmf-color-gray-800: #1f2937;
+  --qmf-color-gray-900: #111827;
+  --qmf-color-gray-950: #030712;
+
+  /* ─── Semantic Colors (Light) ──────────────── */
+  --qmf-bg-primary: #ffffff;
+  --qmf-bg-secondary: #f9fafb;
+  --qmf-bg-tertiary: #f3f4f6;
+  --qmf-text-primary: #111827;
+  --qmf-text-secondary: #4b5563;
+  --qmf-text-muted: #9ca3af;
+  --qmf-border-color: #e5e7eb;
+  --qmf-border-focus: #4f46e5;
+
+  /* ─── Spacing ──────────────────────────────── */
+  --qmf-space-0: 0;
+  --qmf-space-0-5: 0.125rem;
+  --qmf-space-1: 0.25rem;
+  --qmf-space-1-5: 0.375rem;
+  --qmf-space-2: 0.5rem;
+  --qmf-space-2-5: 0.625rem;
+  --qmf-space-3: 0.75rem;
+  --qmf-space-4: 1rem;
+  --qmf-space-5: 1.25rem;
+  --qmf-space-6: 1.5rem;
+  --qmf-space-8: 2rem;
+  --qmf-space-10: 2.5rem;
+  --qmf-space-12: 3rem;
+  --qmf-space-16: 4rem;
+  --qmf-space-20: 5rem;
+  --qmf-space-24: 6rem;
+
+  /* ─── Border Radius ────────────────────────── */
+  --qmf-radius-none: 0;
+  --qmf-radius-sm: 0.25rem;
+  --qmf-radius-md: 0.375rem;
+  --qmf-radius-lg: 0.5rem;
+  --qmf-radius-xl: 0.75rem;
+  --qmf-radius-2xl: 1rem;
+  --qmf-radius-3xl: 1.5rem;
+  --qmf-radius-full: 9999px;
+
+  /* ─── Shadows ──────────────────────────────── */
+  --qmf-shadow-none: none;
+  --qmf-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --qmf-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --qmf-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --qmf-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --qmf-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* ─── Z-Index ──────────────────────────────── */
+  --qmf-z-hide: -1;
+  --qmf-z-base: 0;
+  --qmf-z-dropdown: 100;
+  --qmf-z-sticky: 200;
+  --qmf-z-header: 300;
+  --qmf-z-overlay: 400;
+  --qmf-z-modal: 500;
+  --qmf-z-popover: 600;
+  --qmf-z-toast: 700;
+  --qmf-z-tooltip: 800;
+  --qmf-z-loading: 900;
+  --qmf-z-max: 9999;
+
+  /* ─── Typography ───────────────────────────── */
+  --qmf-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --qmf-font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+
+  --qmf-text-xs: 0.75rem;
+  --qmf-text-sm: 0.875rem;
+  --qmf-text-base: 1rem;
+  --qmf-text-lg: 1.125rem;
+  --qmf-text-xl: 1.25rem;
+  --qmf-text-2xl: 1.5rem;
+  --qmf-text-3xl: 1.875rem;
+  --qmf-text-4xl: 2.25rem;
+
+  --qmf-font-normal: 400;
+  --qmf-font-medium: 500;
+  --qmf-font-semibold: 600;
+  --qmf-font-bold: 700;
+
+  --qmf-leading-none: 1;
+  --qmf-leading-tight: 1.25;
+  --qmf-leading-snug: 1.375;
+  --qmf-leading-normal: 1.5;
+  --qmf-leading-relaxed: 1.625;
+  --qmf-leading-loose: 2;
+
+  /* ─── Transitions ──────────────────────────── */
+  --qmf-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --qmf-transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --qmf-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --qmf-transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ─── Layout ───────────────────────────────── */
+  --qmf-header-height: 56px;
+  --qmf-sidebar-width: 260px;
+  --qmf-sidebar-collapsed-width: 64px;
+  --qmf-max-content-width: 1200px;
+  --qmf-max-page-width: 1600px;
+}

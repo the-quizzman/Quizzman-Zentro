@@ -1,0 +1,37 @@
+/**
+ * @qmf/tokens - Dark Theme Override
+ * Overrides semantic color tokens for dark mode.
+ * Applied when [data-theme="dark"] is set on root element.
+ */
+
+[data-theme="dark"],
+.qmf-dark {
+  --qmf-bg-primary: #111827;
+  --qmf-bg-secondary: #1f2937;
+  --qmf-bg-tertiary: #374151;
+  --qmf-text-primary: #f9fafb;
+  --qmf-text-secondary: #d1d5db;
+  --qmf-text-muted: #6b7280;
+  --qmf-border-color: #374151;
+  --qmf-border-focus: #818cf8;
+
+  /* Dark shadows */
+  --qmf-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --qmf-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --qmf-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --qmf-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+/* Auto dark mode based on system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --qmf-bg-primary: #111827;
+    --qmf-bg-secondary: #1f2937;
+    --qmf-bg-tertiary: #374151;
+    --qmf-text-primary: #f9fafb;
+    --qmf-text-secondary: #d1d5db;
+    --qmf-text-muted: #6b7280;
+    --qmf-border-color: #374151;
+    --qmf-border-focus: #818cf8;
+  }
+}

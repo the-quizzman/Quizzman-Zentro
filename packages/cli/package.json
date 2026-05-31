@@ -1,0 +1,30 @@
+{
+  "name": "@qmf/cli",
+  "version": "3.0.1",
+  "private": true,
+  "description": "QMF CLI – scaffolding, build, doctor, add modules",
+  "type": "module",
+  "bin": {
+    "qmf": "./dist/index.mjs"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "zod": "^3.22.0",
+    "typescript": "^5.4.0",
+    "tsup": "^8.0.0"
+  }
+}

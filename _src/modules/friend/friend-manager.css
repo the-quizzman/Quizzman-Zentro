@@ -1,0 +1,892 @@
+/* Friend Manager - Custom CSS for Classroom System */
+/* Prevents overwrite from external modules */
+
+/* Friend Button with Badge */
+.classroom-friend-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.classroom-friend-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4444;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  animation: classroom-badge-pulse 2s infinite;
+  z-index: 10;
+}
+
+.classroom-friend-badge.classroom-hidden {
+  display: none;
+}
+
+@keyframes classroom-badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Friend Confirmation Container */
+.classroom-friend-confirm-container {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+  padding: 12px;
+  min-width: 320px;
+  max-width: 380px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  animation: classroom-slideDown 0.3s ease-out;
+  border: 1px solid rgba(102, 126, 234, 0.12);
+}
+
+.classroom-friend-confirm-container.classroom-show {
+  display: block;
+}
+
+@keyframes classroom-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.classroom-friend-confirm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.classroom-friend-confirm-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.classroom-friend-manage-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.classroom-friend-manage-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.classroom-friend-request-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+
+.classroom-friend-request-item:hover {
+  background: #f3f4f6;
+  transform: translateX(2px);
+}
+
+.classroom-friend-request-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.classroom-friend-request-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.classroom-friend-request-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.classroom-friend-request-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.classroom-friend-request-time {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.classroom-friend-request-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.classroom-friend-request-accept,
+.classroom-friend-request-reject {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.classroom-friend-request-accept {
+  background: #10b981;
+  color: white;
+}
+
+.classroom-friend-request-accept:hover {
+  background: #059669;
+  transform: scale(1.05);
+}
+
+.classroom-friend-request-reject {
+  background: #ef4444;
+  color: white;
+}
+
+.classroom-friend-request-reject:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+.classroom-friend-empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #9ca3af;
+}
+
+.classroom-friend-empty-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.classroom-friend-empty-text {
+  font-size: 13px;
+}
+
+/* Friend Manager Overlay - Desktop */
+.classroom-friend-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9998;
+  display: none;
+  animation: classroom-fadeIn 0.3s ease-out;
+}
+
+.classroom-friend-overlay.classroom-show {
+  display: block;
+}
+
+@keyframes classroom-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.classroom-friend-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 25px 70px rgba(102, 126, 234, 0.25), 0 8px 32px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 800px;
+  max-height: 85vh;
+  z-index: 9999;
+  display: none;
+  animation: classroom-popupSlideIn 0.3s ease-out;
+  overflow: hidden;
+  border: 1px solid rgba(102, 126, 234, 0.15);
+}
+
+.classroom-friend-popup.classroom-show {
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes classroom-popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.classroom-friend-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.classroom-friend-popup-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.classroom-friend-popup-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.classroom-friend-popup-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.classroom-friend-popup-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 16px 24px 0;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.classroom-friend-popup-tab {
+  flex: 1;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.classroom-friend-popup-tab:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.classroom-friend-popup-tab.classroom-active {
+  background: white;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.classroom-friend-popup-tab.classroom-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 3px 3px 0 0;
+}
+
+.classroom-friend-tab-badge {
+  display: inline-block;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 6px;
+}
+
+.classroom-friend-popup-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.classroom-friend-tab-view {
+  display: none;
+}
+
+.classroom-friend-tab-view.classroom-active {
+  display: block;
+}
+
+/* Search Tab */
+.classroom-friend-search-container {
+  margin-bottom: 20px;
+}
+
+.classroom-friend-search-input {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.2s;
+  background: white url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>') no-repeat 12px center;
+}
+
+.classroom-friend-search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.classroom-friend-search-results {
+  margin-top: 16px;
+}
+
+.classroom-friend-user-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+
+.classroom-friend-user-item:hover {
+  background: #f3f4f6;
+  transform: translateX(4px);
+}
+
+.classroom-friend-user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.classroom-friend-user-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.classroom-friend-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.classroom-friend-user-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.classroom-friend-user-email {
+  font-size: 12px;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.classroom-friend-user-action {
+  flex-shrink: 0;
+}
+
+.classroom-friend-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.classroom-friend-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.classroom-friend-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.classroom-friend-btn-secondary {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.classroom-friend-btn-secondary:hover {
+  background: #d1d5db;
+}
+
+.classroom-friend-btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.classroom-friend-btn-danger:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.classroom-friend-btn-success {
+  background: #10b981;
+  color: white;
+}
+
+.classroom-friend-btn-success:hover {
+  background: #059669;
+}
+
+.classroom-friend-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Friends List */
+.classroom-friends-grid {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: flex-start;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.classroom-friend-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.classroom-friend-card:hover {
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+}
+
+.classroom-friend-card-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 32px;
+  margin: 0 auto 12px;
+  position: relative;
+}
+
+.classroom-friend-card-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.classroom-friend-bestfriend-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #fbbf24;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.classroom-friend-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.classroom-friend-card-status {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.classroom-friend-card-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.classroom-friend-icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.classroom-friend-icon-btn-chat {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.classroom-friend-icon-btn-chat:hover {
+  opacity: 0.9;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.classroom-friend-icon-btn-star {
+  background: #fbbf24;
+  color: white;
+}
+
+.classroom-friend-icon-btn-star:hover {
+  background: #f59e0b;
+  transform: scale(1.1);
+}
+
+.classroom-friend-icon-btn-block {
+  background: #f59e0b;
+  color: white;
+}
+
+.classroom-friend-icon-btn-block:hover {
+  background: #d97706;
+  transform: scale(1.1);
+}
+
+.classroom-friend-icon-btn-remove {
+  background: #ef4444;
+  color: white;
+}
+
+.classroom-friend-icon-btn-remove:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.classroom-friend-icon-btn-unblock {
+  background: #10b981;
+  color: white;
+}
+
+.classroom-friend-icon-btn-unblock:hover {
+  background: #059669;
+  transform: scale(1.1);
+}
+
+/* Loading & Empty States */
+.classroom-friend-loading {
+  text-align: center;
+  padding: 40px;
+}
+
+.classroom-friend-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: classroom-spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes classroom-spin {
+  to { transform: rotate(360deg); }
+}
+
+.classroom-friend-loading-text {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Mobile Sidebar */
+@media (max-width: 768px) {
+  .classroom-friend-popup {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    transform: none;
+    width: 85%;
+    max-width: 360px;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0 16px 16px 0;
+    transition: left 0.3s ease-out;
+  }
+
+  .classroom-friend-popup.classroom-show {
+    left: 0;
+  }
+
+  .classroom-friend-popup-header {
+    padding: 16px 20px;
+  }
+
+  .classroom-friend-popup-title {
+    font-size: 18px;
+  }
+
+  .classroom-friend-popup-tabs {
+    flex-direction: column;
+    padding: 12px 20px 0;
+  }
+
+  .classroom-friend-popup-tab {
+    border-radius: 8px;
+    margin-bottom: 4px;
+  }
+
+  .classroom-friend-popup-tab.classroom-active::after {
+    display: none;
+  }
+
+  .classroom-friend-popup-content {
+    padding: 16px 20px;
+  }
+
+  .classroom-friends-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .classroom-friend-confirm-container {
+    position: fixed;
+    top: 60px; /* Below header */
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 380px;
+    border-radius: 12px;
+    max-height: 70vh;
+  }
+}
+
+/* Scrollbar Styling */
+.classroom-friend-popup-content::-webkit-scrollbar,
+.classroom-friend-confirm-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.classroom-friend-popup-content::-webkit-scrollbar-track,
+.classroom-friend-confirm-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.classroom-friend-popup-content::-webkit-scrollbar-thumb,
+.classroom-friend-confirm-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.classroom-friend-popup-content::-webkit-scrollbar-thumb:hover,
+.classroom-friend-confirm-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Sent Requests Tab */
+.classroom-friend-sent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.classroom-friend-sent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.classroom-friend-sent-item:hover {
+  background: #f3f4f6;
+}
+
+.classroom-friend-sent-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.classroom-friend-sent-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.classroom-friend-sent-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.classroom-friend-sent-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.classroom-friend-sent-status {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.classroom-friend-sent-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.classroom-friend-btn-recall {
+  background: #f59e0b;
+  color: white;
+}
+
+.classroom-friend-btn-recall:hover {
+  background: #d97706;
+}
+
+/* Toast Notification */
+.classroom-friend-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+  z-index: 10001;
+  max-width: 350px;
+  pointer-events: none;
+}
+
+.classroom-friend-toast-show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.classroom-friend-toast-success {
+  border-left: 4px solid #10b981;
+  color: #065f46;
+}
+
+.classroom-friend-toast-error {
+  border-left: 4px solid #ef4444;
+  color: #991b1b;
+}
+
+.classroom-friend-toast-info {
+  border-left: 4px solid #667eea;
+  color: #4c3d99;
+}

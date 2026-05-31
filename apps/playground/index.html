@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QMF Playground</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <div id="qmf-header"></div>
+  
+  <main id="app">
+    <div class="playground">
+      <h1>QMF Framework Playground</h1>
+      <p class="subtitle">Interactive demo for all QMF modules</p>
+
+      <!-- UI Components Section -->
+      <section class="demo-section">
+        <h2>UI Components</h2>
+        
+        <div class="demo-group">
+          <h3>Buttons</h3>
+          <div id="demo-buttons" class="demo-row"></div>
+        </div>
+
+        <div class="demo-group">
+          <h3>Toast Notifications</h3>
+          <div id="demo-toasts" class="demo-row"></div>
+        </div>
+
+        <div class="demo-group">
+          <h3>Modal</h3>
+          <div id="demo-modal" class="demo-row"></div>
+        </div>
+
+        <div class="demo-group">
+          <h3>Badges</h3>
+          <div id="demo-badges" class="demo-row"></div>
+        </div>
+      </section>
+
+      <!-- Design Tokens Section -->
+      <section class="demo-section">
+        <h2>Design Tokens</h2>
+        <div id="demo-tokens" class="demo-grid"></div>
+      </section>
+
+      <!-- Theme Toggle -->
+      <section class="demo-section">
+        <h2>Theme</h2>
+        <div id="demo-theme" class="demo-row"></div>
+      </section>
+
+      <!-- Loading Screen -->
+      <section class="demo-section">
+        <h2>Loading Screen</h2>
+        <div id="demo-loading" class="demo-row"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="qmf-footer"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

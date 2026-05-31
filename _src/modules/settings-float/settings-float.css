@@ -1,0 +1,195 @@
+/**
+ * QMF Settings Float Component Styles
+ * @version 1.0.0
+ */
+
+/* QMF Settings Float - Base */
+.qmf-settings-float {
+  position: fixed;
+  z-index: 9999;
+  font-family: var(--font-sans, 'Inter', system-ui, -apple-system, sans-serif);
+}
+
+.qmf-settings-float--bottom-right {
+  bottom: 24px;
+  right: 24px;
+}
+
+.qmf-settings-float--bottom-left {
+  bottom: 24px;
+  left: 24px;
+}
+
+/* Settings Toggle Button */
+.qmf-settings__toggle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--c-border, #e4dfd8);
+  background: var(--c-surface, #fff);
+  color: var(--c-text-secondary, #666);
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--c-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.04));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.qmf-settings__toggle:hover,
+.qmf-settings__toggle[aria-expanded="true"] {
+  border-color: var(--c-primary, #8b6914);
+  color: var(--c-primary, #8b6914);
+  transform: scale(1.1) rotate(30deg);
+  box-shadow: var(--c-card-shadow-hover, 0 4px 16px rgba(0, 0, 0, 0.08));
+}
+
+/* Settings Menu */
+.qmf-settings__menu {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  min-width: 200px;
+  background: var(--c-surface, #fff);
+  border: 1px solid var(--c-border, #e4dfd8);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: qmf-settings-fade-in 0.2s ease-out;
+}
+
+.qmf-settings__menu--open {
+  display: flex;
+}
+
+.qmf-settings-float--bottom-left .qmf-settings__menu {
+  right: auto;
+  left: 0;
+}
+
+@keyframes qmf-settings-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Settings Sections */
+.qmf-settings__section {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--c-border, #e4dfd8);
+}
+
+.qmf-settings__section:last-child {
+  border-bottom: none;
+}
+
+.qmf-settings__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--c-text-muted, #9c958e);
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Language Grid */
+.qmf-settings__langs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.qmf-settings__lang {
+  height: 36px;
+  padding: 0 8px;
+  border-radius: 8px;
+  border: 1px solid var(--c-border, #e4dfd8);
+  background: var(--c-surface, #fff);
+  color: var(--c-text-secondary, #666);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qmf-settings__lang:hover {
+  border-color: var(--c-primary, #8b6914);
+  color: var(--c-primary, #8b6914);
+}
+
+.qmf-settings__lang--active {
+  background: var(--c-primary, #8b6914);
+  color: #fff;
+  border-color: var(--c-primary, #8b6914);
+}
+
+/* Theme Toggle */
+.qmf-settings__themes {
+  display: flex;
+  gap: 8px;
+}
+
+.qmf-settings__theme {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--c-border, #e4dfd8);
+  background: var(--c-surface, #fff);
+  color: var(--c-text-secondary, #666);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s;
+}
+
+.qmf-settings__theme:hover {
+  border-color: var(--c-primary, #8b6914);
+  color: var(--c-primary, #8b6914);
+}
+
+.qmf-settings__theme--active {
+  background: var(--c-primary-subtle, rgba(139, 105, 20, 0.08));
+  color: var(--c-primary, #8b6914);
+  border-color: var(--c-primary, #8b6914);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .qmf-settings-float--bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .qmf-settings-float--bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+  
+  .qmf-settings__menu {
+    min-width: 180px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .qmf-settings__toggle,
+  .qmf-settings__lang,
+  .qmf-settings__theme {
+    transition: none;
+  }
+  
+  .qmf-settings__menu {
+    animation: none;
+  }
+}

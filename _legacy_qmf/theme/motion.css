@@ -1,0 +1,361 @@
+/**
+ * QMF Motion - Animation & transition utilities
+ * @version 1.0.0
+ */
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+/* Fade animations */
+@keyframes qmf-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes qmf-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes qmf-fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes qmf-fade-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes qmf-fade-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes qmf-fade-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Scale animations */
+@keyframes qmf-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes qmf-scale-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+@keyframes qmf-scale-in-bounce {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Slide animations */
+@keyframes qmf-slide-in-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes qmf-slide-in-down {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes qmf-slide-in-left {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes qmf-slide-in-right {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes qmf-slide-out-up {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
+}
+
+@keyframes qmf-slide-out-down {
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
+}
+
+@keyframes qmf-slide-out-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+}
+
+@keyframes qmf-slide-out-right {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
+
+/* Spinner */
+@keyframes qmf-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes qmf-spinner-dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+}
+
+/* Pulse */
+@keyframes qmf-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes qmf-pulse-scale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Bounce */
+@keyframes qmf-bounce {
+    0%, 100% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+@keyframes qmf-bounce-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    20% {
+        transform: scale(1.1);
+    }
+    40% {
+        transform: scale(0.9);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.03);
+    }
+    80% {
+        transform: scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Shake */
+@keyframes qmf-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Dots loading */
+@keyframes qmf-dots {
+    0%, 20% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    80%, 100% { transform: translateY(0); }
+}
+
+/* Progress bar */
+@keyframes qmf-progress-indeterminate {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+}
+
+/* Toast progress */
+@keyframes qmf-toast-progress {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+/* Skeleton loading */
+@keyframes qmf-skeleton {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+/* ============================================
+   ANIMATION UTILITY CLASSES
+   ============================================ */
+
+.qmf-animate-fade-in { animation: qmf-fade-in var(--qmf-duration-normal) var(--qmf-easing-out); }
+.qmf-animate-fade-out { animation: qmf-fade-out var(--qmf-duration-normal) var(--qmf-easing-in); }
+.qmf-animate-fade-in-up { animation: qmf-fade-in-up var(--qmf-duration-normal) var(--qmf-easing-out); }
+.qmf-animate-fade-in-down { animation: qmf-fade-in-down var(--qmf-duration-normal) var(--qmf-easing-out); }
+.qmf-animate-fade-in-left { animation: qmf-fade-in-left var(--qmf-duration-normal) var(--qmf-easing-out); }
+.qmf-animate-fade-in-right { animation: qmf-fade-in-right var(--qmf-duration-normal) var(--qmf-easing-out); }
+
+.qmf-animate-scale-in { animation: qmf-scale-in var(--qmf-duration-normal) var(--qmf-easing-out); }
+.qmf-animate-scale-out { animation: qmf-scale-out var(--qmf-duration-normal) var(--qmf-easing-in); }
+.qmf-animate-bounce-in { animation: qmf-bounce-in var(--qmf-duration-slow) var(--qmf-easing-default); }
+
+.qmf-animate-slide-in-up { animation: qmf-slide-in-up var(--qmf-duration-normal) var(--qmf-easing-out); }
+.qmf-animate-slide-in-down { animation: qmf-slide-in-down var(--qmf-duration-normal) var(--qmf-easing-out); }
+.qmf-animate-slide-in-left { animation: qmf-slide-in-left var(--qmf-duration-normal) var(--qmf-easing-out); }
+.qmf-animate-slide-in-right { animation: qmf-slide-in-right var(--qmf-duration-normal) var(--qmf-easing-out); }
+
+.qmf-animate-spin { animation: qmf-spin 1s linear infinite; }
+.qmf-animate-pulse { animation: qmf-pulse 2s ease-in-out infinite; }
+.qmf-animate-bounce { animation: qmf-bounce 1s infinite; }
+.qmf-animate-shake { animation: qmf-shake 0.5s ease-in-out; }
+
+/* Animation delays */
+.qmf-delay-75 { animation-delay: 75ms; }
+.qmf-delay-100 { animation-delay: 100ms; }
+.qmf-delay-150 { animation-delay: 150ms; }
+.qmf-delay-200 { animation-delay: 200ms; }
+.qmf-delay-300 { animation-delay: 300ms; }
+.qmf-delay-500 { animation-delay: 500ms; }
+.qmf-delay-700 { animation-delay: 700ms; }
+.qmf-delay-1000 { animation-delay: 1000ms; }
+
+/* Animation fill modes */
+.qmf-fill-forwards { animation-fill-mode: forwards; }
+.qmf-fill-backwards { animation-fill-mode: backwards; }
+.qmf-fill-both { animation-fill-mode: both; }
+
+/* ============================================
+   TRANSITION UTILITY CLASSES
+   ============================================ */
+
+.qmf-transition-none { transition: none; }
+.qmf-transition-all { transition: all var(--qmf-duration-normal) var(--qmf-easing-default); }
+.qmf-transition-colors { transition: color, background-color, border-color var(--qmf-duration-normal) var(--qmf-easing-default); }
+.qmf-transition-opacity { transition: opacity var(--qmf-duration-normal) var(--qmf-easing-default); }
+.qmf-transition-transform { transition: transform var(--qmf-duration-normal) var(--qmf-easing-default); }
+.qmf-transition-shadow { transition: box-shadow var(--qmf-duration-normal) var(--qmf-easing-default); }
+
+/* Duration modifiers */
+.qmf-duration-fast { transition-duration: var(--qmf-duration-fast); }
+.qmf-duration-normal { transition-duration: var(--qmf-duration-normal); }
+.qmf-duration-slow { transition-duration: var(--qmf-duration-slow); }
+
+/* Easing modifiers */
+.qmf-ease-in { transition-timing-function: var(--qmf-easing-in); }
+.qmf-ease-out { transition-timing-function: var(--qmf-easing-out); }
+.qmf-ease-in-out { transition-timing-function: var(--qmf-easing-in-out); }
+.qmf-ease-bounce { transition-timing-function: var(--qmf-easing-bounce); }
+
+/* ============================================
+   COMPONENT ANIMATION STATES
+   ============================================ */
+
+/* Enter/Leave transitions */
+.qmf-enter {
+    opacity: 0;
+}
+
+.qmf-enter-active {
+    opacity: 1;
+    transition: opacity var(--qmf-duration-normal) var(--qmf-easing-out);
+}
+
+.qmf-leave {
+    opacity: 1;
+}
+
+.qmf-leave-active {
+    opacity: 0;
+    transition: opacity var(--qmf-duration-normal) var(--qmf-easing-in);
+}
+
+/* Slide enter/leave */
+.qmf-slide-enter {
+    transform: translateY(-10px);
+    opacity: 0;
+}
+
+.qmf-slide-enter-active {
+    transform: translateY(0);
+    opacity: 1;
+    transition: all var(--qmf-duration-normal) var(--qmf-easing-out);
+}
+
+.qmf-slide-leave {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.qmf-slide-leave-active {
+    transform: translateY(10px);
+    opacity: 0;
+    transition: all var(--qmf-duration-normal) var(--qmf-easing-in);
+}
+
+/* No transition helper */
+.qmf-no-transition {
+    transition: none !important;
+}

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QMF Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-light: #dbeafe;
+            --primary-dark: #1e40af;
+            --sidebar-bg: #0f172a;
+            --sidebar-border: #1e293b;
+            --main-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --code-bg: #f1f5f9;
+            --code-border: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: #f8fafc;
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--sidebar-bg) 0%, #1a1f35 100%);
+            color: #e2e8f0;
+            padding: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            border-bottom: 1px solid var(--sidebar-border);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-content {
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 12px 20px;
+            color: #64748b;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0 8px;
+        }
+
+        .nav-item {
+            margin-bottom: 4px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            margin: 0 8px;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-left-color: #60a5fa;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: rgba(59, 130, 246, 0.25);
+            color: #60a5fa;
+            border-left-color: #60a5fa;
+            font-weight: 600;
+            box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main {
+            margin-left: 280px;
+            flex: 1;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .header-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* ========== MARKDOWN STYLES ========== */
+        .markdown-body {
+            font-size: 16px;
+            line-height: 1.75;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin: 0.5em 0 0.3em 0;
+            color: #0f172a;
+            border-bottom: 3px solid var(--primary-light);
+            padding-bottom: 0.3em;
+            letter-spacing: -0.5px;
+        }
+
+        .markdown-body h2 {
+            font-size: 2em;
+            font-weight: 700;
+            margin: 0.8em 0 0.3em 0;
+            color: #1e293b;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.3em;
+            letter-spacing: -0.3px;
+        }
+
+        .markdown-body h3 {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin: 0.8em 0 0.2em 0;
+            color: #334155;
+        }
+
+        .markdown-body h4 {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin: 0.8em 0 0.2em 0;
+            color: #475569;
+        }
+
+        .markdown-body h5,
+        .markdown-body h6 {
+            font-size: 1em;
+            font-weight: 700;
+            margin: 0.8em 0 0.2em 0;
+            color: #475569;
+        }
+
+        .markdown-body p {
+            margin: 1.2em 0;
+            line-height: 1.8;
+        }
+
+        .markdown-body a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .markdown-body a:hover {
+            color: var(--primary-dark);
+            border-bottom-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .markdown-body code {
+            background: var(--code-bg);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+            font-size: 0.92em;
+            color: #e11d48;
+            border: 1px solid var(--code-border);
+            font-weight: 500;
+        }
+
+        .markdown-body a code {
+            color: inherit;
+        }
+
+        .markdown-body pre {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 1.5em 0;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .markdown-body pre code {
+            background: none;
+            color: #e2e8f0;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            font-size: 0.9em;
+            font-weight: 400;
+        }
+
+        .markdown-body pre code.hljs {
+            display: block;
+        }
+
+        .markdown-body blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 0 16px;
+            color: #64748b;
+            margin: 1.5em 0;
+            background: rgba(59, 130, 246, 0.05);
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .markdown-body blockquote p {
+            margin: 0.5em 0;
+        }
+
+        .markdown-body table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1.5em 0;
+            font-size: 0.95em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .markdown-body table th,
+        .markdown-body table td {
+            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        .markdown-body table th {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .markdown-body table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .markdown-body table tr:hover {
+            background: #f1f5f9;
+        }
+
+        .markdown-body ul,
+        .markdown-body ol {
+            margin: 1.2em 0;
+            padding-left: 2.5em;
+        }
+
+        .markdown-body li {
+            margin: 0.6em 0;
+            line-height: 1.8;
+        }
+
+        .markdown-body li p {
+            margin: 0.3em 0;
+        }
+
+        .markdown-body ul ul,
+        .markdown-body ol ol,
+        .markdown-body ul ol,
+        .markdown-body ol ul {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* ========== LOADING & ERROR ========== */
+        .loading {
+            text-align: center;
+            padding: 60px 40px;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .loading::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--primary-light);
+            border-right-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 16px;
+            color: #991b1b;
+            margin: 2em 0;
+        }
+
+        /* ========== BREADCRUMB ========== */
+        .breadcrumb {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb-current {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                position: static;
+                border-bottom: 1px solid var(--sidebar-border);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .header-title {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .markdown-body h1 {
+                font-size: 2em;
+            }
+
+            .markdown-body h2 {
+                font-size: 1.5em;
+            }
+
+            .markdown-body h3 {
+                font-size: 1.25em;
+            }
+
+            .markdown-body pre {
+                padding: 12px;
+                font-size: 0.85em;
+            }
+
+            .markdown-body table {
+                font-size: 0.85em;
+            }
+
+            .markdown-body table th,
+            .markdown-body table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== SIDEBAR ========== -->
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>📚 QMF Docs</h1>
+                <p>Framework Documentation</p>
+            </div>
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">📖 Getting Started</div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-doc="USAGE" title="Learn how to use QMF">
+                                <span class="nav-icon">📖</span>
+                                <span>Usage Guide</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-doc="MIGRATION" title="Migrate from v2 to v3">
+                                <span class="nav-icon">🚀</span>
+                                <span>Migration Guide</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">⚙️ Reference</div>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a class="nav-link" data-doc="API" title="API reference documentation">
+                                <span class="nav-icon">🔌</span>
+                                <span>API Reference</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-doc="ARCHITECTURE" title="Understand the architecture">
+                                <span class="nav-icon">🏗️</span>
+                                <span>Architecture</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <div class="main">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="breadcrumb">
+                        <div>QMF Documentation</div>
+                        <div>/</div>
+                        <div class="breadcrumb-current" id="current-doc">Usage Guide</div>
+                    </div>
+                    <h2 class="header-title" id="doc-title">Usage Guide</h2>
+                    <p class="header-subtitle" id="doc-subtitle">Learn how to integrate and use QMF in your projects</p>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content">
+                <div id="doc-content" class="markdown-body loading">
+                    Loading documentation...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== MARKDOWN-IT SETUP ==========
+        const md = window.markdownit({
+            html: true,
+            linkify: true,
+            typographer: true,
+            highlight: function(str, lang) {
+                if (lang && window.hljs && window.hljs.getLanguage(lang)) {
+                    try {
+                        return '<pre><code class="hljs">' +
+                            window.hljs.highlight(str, { language: lang }).value +
+                            '</code></pre>';
+                    } catch (err) {
+                        console.error('Highlight error:', err);
+                    }
+                }
+                return '<pre><code class="hljs">' + 
+                    str.split('&').join('&amp;')
+                       .split('<').join('&lt;')
+                       .split('>').join('&gt;') +
+                    '</code></pre>';
+            }
+        });
+
+        // ========== DOCS MAPPING ==========
+        const docs = {
+            USAGE: { file: 'docs/USAGE.md', title: 'Usage Guide', subtitle: 'Learn how to integrate and use QMF in your projects' },
+            API: { file: 'docs/API.md', title: 'API Reference', subtitle: 'Complete API documentation for all modules' },
+            ARCHITECTURE: { file: 'docs/ARCHITECTURE.md', title: 'Architecture', subtitle: 'Understand the framework architecture and design principles' },
+            MIGRATION: { file: 'docs/MIGRATION.md', title: 'Migration Guide', subtitle: 'Migrate your projects from QMF v2 to v3' }
+        };
+
+        // ========== DOM ELEMENTS ==========
+        const contentDiv = document.getElementById('doc-content');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const headerTitle = document.getElementById('doc-title');
+        const headerSubtitle = document.getElementById('doc-subtitle');
+        const currentDocBreadcrumb = document.getElementById('current-doc');
+
+        // ========== LOAD DOCUMENT FUNCTION ==========
+        async function loadDoc(docKey) {
+            const docInfo = docs[docKey];
+            if (!docInfo) return;
+
+            try {
+                // Update UI to loading state
+                contentDiv.className = 'markdown-body loading';
+                contentDiv.innerHTML = 'Loading documentation...';
+
+                // Fetch markdown file
+                const response = await fetch(docInfo.file);
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+                const markdown = await response.text();
+                const html = md.render(markdown);
+
+                // Update content
+                contentDiv.className = 'markdown-body';
+                contentDiv.innerHTML = html;
+
+                // Update header
+                headerTitle.textContent = docInfo.title;
+                headerSubtitle.textContent = docInfo.subtitle;
+                currentDocBreadcrumb.textContent = docInfo.title;
+
+                // Update active nav link
+                navLinks.forEach(link => link.classList.remove('active'));
+                document.querySelector(`[data-doc="${docKey}"]`).classList.add('active');
+
+                // Smooth scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Apply syntax highlighting
+                if (window.hljs) {
+                    document.querySelectorAll('pre code').forEach(block => {
+                        window.hljs.highlightElement(block);
+                    });
+                }
+            } catch (err) {
+                contentDiv.className = 'markdown-body error';
+                contentDiv.innerHTML = `<strong>❌ Error loading document</strong><p>${err.message}</p>`;
+                console.error('Document load error:', err);
+            }
+        }
+
+        // ========== EVENT LISTENERS ==========
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const docKey = link.getAttribute('data-doc');
+                loadDoc(docKey);
+            });
+        });
+
+        // ========== INITIAL LOAD ==========
+        loadDoc('USAGE');
+    </script>
+</body>
+</html>

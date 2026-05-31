@@ -1,0 +1,36 @@
+{
+  "name": "@qmf/tokens",
+  "version": "3.0.1",
+  "description": "QMF Design Tokens - Colors, spacing, typography, shadows, z-index",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./css": "./dist/tokens.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./dark": "./dist/dark.css",
+    "./dark.css": "./dist/dark.css"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && cp src/*.css dist/",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  }
+}

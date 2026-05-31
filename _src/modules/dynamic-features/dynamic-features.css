@@ -1,0 +1,384 @@
+/**
+ * QMF Dynamic Features - Shared UI Components
+ * Dynamic Island & Featured Tools Banner
+ * Version: 1.0.0
+ * 
+ * Usage:
+ *   <link href="https://ui.quizzman.com/qmf/dist/modules/dynamic-features/dynamic-features.css" rel="stylesheet">
+ *   <script src="https://ui.quizzman.com/qmf/dist/modules/dynamic-features/dynamic-features.js"></script>
+ */
+
+/* ============================================
+   CSS Variables (inheritable from parent theme)
+   ============================================ */
+:root {
+    --qmf-df-bg-dark: #0a0a1a;
+    --qmf-df-bg-glass: rgba(255, 255, 255, 0.05);
+    --qmf-df-bg-glass-hover: rgba(255, 255, 255, 0.08);
+    --qmf-df-border-subtle: rgba(255, 255, 255, 0.08);
+    --qmf-df-border-hover: rgba(255, 255, 255, 0.15);
+    --qmf-df-text-primary: #ffffff;
+    --qmf-df-text-secondary: rgba(255, 255, 255, 0.7);
+    --qmf-df-accent-cyan: #00d4ff;
+    --qmf-df-accent-purple: #b24bff;
+    --qmf-df-brand-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* ============================================
+   Featured Tools Banner
+   ============================================ */
+.qmf-featured-banner {
+    position: relative;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-bottom: 1px solid var(--qmf-df-border-subtle);
+    padding: 20px 0;
+    margin-top: 60px;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.qmf-featured-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: qmfShimmer 3s infinite;
+}
+
+@keyframes qmfShimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.qmf-banner-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.qmf-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.qmf-banner-title {
+    flex-shrink: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--qmf-df-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qmf-banner-title i {
+    color: var(--qmf-df-accent-cyan);
+}
+
+.qmf-tools-carousel {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.qmf-tools-track {
+    display: flex;
+    gap: 16px;
+    animation: qmfSlideTools 20s linear infinite;
+}
+
+.qmf-tools-track:hover {
+    animation-play-state: paused;
+}
+
+.qmf-tool-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--qmf-df-bg-glass);
+    border: 1px solid var(--qmf-df-border-subtle);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    min-width: 240px;
+}
+
+.qmf-tool-item:hover {
+    background: var(--qmf-df-bg-glass-hover);
+    border-color: var(--qmf-df-border-hover);
+    transform: translateY(-2px);
+}
+
+.qmf-tool-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.qmf-tool-info {
+    flex: 1;
+}
+
+.qmf-tool-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--qmf-df-text-primary);
+    margin: 0;
+}
+
+.qmf-tool-desc {
+    font-size: 0.75rem;
+    color: var(--qmf-df-text-secondary);
+    margin: 0;
+}
+
+@keyframes qmfSlideTools {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ============================================
+   Dynamic Island Notification
+   ============================================ */
+.qmf-dynamic-island {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 12px 24px;
+    z-index: 99999;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    pointer-events: none;
+    min-width: 300px;
+    max-width: 400px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.qmf-dynamic-island.active {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.qmf-dynamic-island.expanded {
+    border-radius: 20px;
+    padding: 16px 24px;
+    min-height: 80px;
+}
+
+.qmf-island-compact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.qmf-island-compact.hidden {
+    display: none;
+}
+
+.qmf-island-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 12px;
+    color: white;
+}
+
+.qmf-island-text {
+    flex: 1;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+}
+
+.qmf-island-expand {
+    display: none;
+    opacity: 0;
+    animation: qmfFadeIn 0.3s ease 0.2s both;
+}
+
+.qmf-island-expand.active {
+    display: block;
+}
+
+.qmf-island-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.qmf-island-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qmf-island-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.2s ease;
+}
+
+.qmf-island-close:hover {
+    color: white;
+}
+
+.qmf-island-message {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+}
+
+@keyframes qmfFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Priority Styles */
+.qmf-dynamic-island.priority-high .qmf-island-icon {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+}
+
+.qmf-dynamic-island.priority-medium .qmf-island-icon {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.qmf-dynamic-island.priority-low .qmf-island-icon {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 768px) {
+    .qmf-featured-banner {
+        padding: 15px 0;
+    }
+
+    .qmf-banner-content {
+        gap: 16px;
+    }
+
+    .qmf-banner-title {
+        font-size: 0.9rem;
+    }
+
+    .qmf-tool-item {
+        min-width: 200px;
+        padding: 10px 16px;
+    }
+
+    .qmf-tool-name {
+        font-size: 0.85rem;
+    }
+
+    .qmf-tool-desc {
+        font-size: 0.7rem;
+    }
+
+    .qmf-dynamic-island {
+        top: 10px;
+        min-width: 280px;
+        max-width: 320px;
+        padding: 10px 20px;
+    }
+
+    .qmf-dynamic-island.expanded {
+        padding: 14px 20px;
+        min-height: 70px;
+    }
+
+    .qmf-island-text {
+        font-size: 0.8rem;
+    }
+
+    .qmf-island-title {
+        font-size: 0.85rem;
+    }
+
+    .qmf-island-message {
+        font-size: 0.75rem;
+    }
+
+    .qmf-tools-track {
+        animation-duration: 15s;
+    }
+}
+
+@media (max-width: 480px) {
+    .qmf-banner-title {
+        display: none;
+    }
+
+    .qmf-tool-item {
+        min-width: 180px;
+        padding: 8px 14px;
+    }
+
+    .qmf-dynamic-island {
+        min-width: 260px;
+        max-width: 300px;
+        padding: 8px 16px;
+    }
+
+    .qmf-island-text {
+        font-size: 0.75rem;
+    }
+}
+
+/* ============================================
+   Light Theme Support
+   ============================================ */
+[data-theme="light"] .qmf-featured-banner {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .qmf-tool-item {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .qmf-tool-item:hover {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="light"] .qmf-banner-title,
+[data-theme="light"] .qmf-tool-name {
+    color: #1a1a2e;
+}
+
+[data-theme="light"] .qmf-tool-desc {
+    color: rgba(0, 0, 0, 0.6);
+}
