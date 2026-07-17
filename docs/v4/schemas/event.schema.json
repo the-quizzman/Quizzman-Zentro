@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui.quizzman.com/qmf/schemas/event.schema.json",
+  "title": "QMF Typed Event Definition",
+  "description": "Canonical shape for one typed event. No magic strings. No anonymous payloads.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "namespace",
+    "version",
+    "description",
+    "payload",
+    "producers",
+    "consumers"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*\\.[a-z][a-z0-9A-Z.]*$",
+      "description": "Fully qualified event name: <namespace>.<action>"
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 280
+    },
+    "payload": {
+      "type": "object",
+      "description": "JSON Schema fragment OR reference to schema export name via x-qmf-schema",
+      "properties": {
+        "x-qmf-schema": { "type": "string" }
+      }
+    },
+    "producers": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "consumers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "deprecated": { "type": "boolean", "default": false },
+    "replacedBy": { "type": ["string", "null"], "default": null }
+  }
+}

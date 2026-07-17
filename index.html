@@ -1,934 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="QMF — Quizzman Modular Framework v3. A production-ready frontend framework for building composable web applications.">
-  <title>QMF — Quizzman Modular Framework</title>
-  <link rel="alternate" hreflang="en" href="https://ui.quizzman.com/qmf/">
-  <link rel="alternate" hreflang="vi" href="https://ui.quizzman.com/qmf/?lang=vi">
-  <link rel="sitemap" type="application/xml" href="/qmf/sitemap.xml">
-  <link rel="icon" href="/qmf/assets/logo/quizzman-logo.png" type="image/png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="/qmf/dist/modules/header/dynamic-island.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #6366f1;
-      --primary-light: #818cf8;
-      --primary-dark: #4f46e5;
-      --accent: #22d3ee;
-      --bg: #0b0f1a;
-      --bg-card: #111827;
-      --bg-code: #1e293b;
-      --text: #f1f5f9;
-      --text-muted: #94a3b8;
-      --border: #1e293b;
-      --success: #34d399;
-      --radius: 12px;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: var(--primary-light); text-decoration: none; transition: color .2s; }
-    a:hover { color: var(--accent); }
-    code, pre { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
-
-    /* NAV */
-    nav {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(11,15,26,.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: .75rem 0;
-    }
-    nav .container { display: flex; align-items: center; justify-content: space-between; }
-    .nav-brand { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: 1.15rem; color: var(--text); }
-    .nav-brand img { height: 28px; }
-    .nav-brand span { background: linear-gradient(135deg, var(--primary-light), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .nav-links { display: flex; gap: 1.5rem; font-size: .9rem; }
-    .nav-links a {
-      color: var(--text-muted);
-      position: relative;
-      transition: color .3s ease;
-    }
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--primary-light), var(--accent));
-      transition: width .3s ease;
-      border-radius: 2px;
-    }
-    .nav-links a:hover {
-      color: var(--text);
-      text-shadow: 0 0 20px rgba(99,102,241,.5);
-    }
-    .nav-links a:hover::after { width: 100%; }
-    .menu-toggle { display: none; }
-    .badge { font-size: .7rem; background: var(--primary-dark); color: #fff; padding: 2px 8px; border-radius: 10px; margin-left: .35rem; vertical-align: middle; }
-    .lang-switch { position: fixed; bottom: 1rem; right: 1rem; z-index: 100; display: flex; gap: .25rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: .25rem; }
-    .lang-switch button { background: transparent; border: none; color: var(--text-muted); padding: .25rem .5rem; border-radius: 4px; cursor: pointer; font-size: .75rem; font-weight: 500; }
-    .lang-switch button.active { background: var(--primary); color: #fff; }
-    .lang-switch button:hover:not(.active) { color: var(--text); }
-
-    /* HERO */
-    .hero {
-      padding: 5rem 0 4rem;
-      text-align: center;
-      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99,102,241,.12) 0%, transparent 60%);
-    }
-    .hero h1 { font-size: 3.25rem; font-weight: 800; letter-spacing: -.03em; margin-bottom: .75rem; }
-    .hero h1 .accent { background: linear-gradient(135deg, var(--primary-light), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem; }
-    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn {
-      display: inline-flex; align-items: center; gap: .4rem;
-      padding: .65rem 1.4rem; border-radius: 8px; font-size: .95rem; font-weight: 500;
-      transition: all .2s; cursor: pointer; border: none;
-    }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--primary-dark); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(99,102,241,.35); }
-    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-outline:hover { border-color: var(--primary-light); color: var(--primary-light); }
-
-    .install-cmd {
-      display: inline-flex; align-items: center; gap: .75rem;
-      background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px;
-      padding: .5rem 1rem; margin-top: 1.5rem; font-size: .9rem; color: var(--text-muted);
-    }
-    .install-cmd code { color: var(--accent); }
-    .install-cmd button {
-      background: none; border: none; color: var(--text-muted); cursor: pointer;
-      padding: 2px 6px; border-radius: 4px; font-size: .85rem;
-    }
-    .install-cmd button:hover { color: var(--text); background: rgba(255,255,255,.08); }
-
-    /* FEATURES */
-    .features { padding: 4rem 0; }
-    .section-title { font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: .5rem; }
-    .section-sub { text-align: center; color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
-    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
-    .feature-card {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 1.5rem; transition: border-color .2s, transform .2s;
-    }
-    .feature-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-    .feature-icon { font-size: 1.6rem; margin-bottom: .5rem; }
-    .feature-card h3 { font-size: 1rem; margin-bottom: .35rem; }
-    .feature-card p { font-size: .88rem; color: var(--text-muted); line-height: 1.55; }
-
-    /* ARCHITECTURE */
-    .architecture { padding: 4rem 0; }
-    .arch-diagram {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 2rem; max-width: 680px; margin: 0 auto; font-family: 'JetBrains Mono', monospace; font-size: .85rem;
-      line-height: 1.7; color: var(--text-muted); white-space: pre; overflow-x: auto;
-    }
-    .arch-diagram .layer-label { color: var(--accent); font-weight: 600; }
-    .arch-diagram .layer-pkg { color: var(--primary-light); }
-
-    /* CODE EXAMPLES */
-    .examples { padding: 4rem 0; }
-    .code-tabs { display: flex; gap: .5rem; margin-bottom: 0; }
-    .code-tab {
-      padding: .45rem 1rem; background: var(--bg-card); border: 1px solid var(--border);
-      border-bottom: none; border-radius: 8px 8px 0 0; color: var(--text-muted);
-      cursor: pointer; font-size: .85rem; transition: all .2s;
-    }
-    .code-tab.active { background: var(--bg-code); color: var(--accent); border-color: var(--primary-dark); }
-    .code-block {
-      background: var(--bg-code); border: 1px solid var(--border); border-radius: 0 var(--radius) var(--radius) var(--radius);
-      padding: 1.25rem 1.5rem; overflow-x: auto; font-size: .85rem; line-height: 1.7; display: none;
-    }
-    .code-block.active { display: block; }
-    .code-block .kw { color: #c084fc; }
-    .code-block .str { color: #34d399; }
-    .code-block .fn { color: #60a5fa; }
-    .code-block .cm { color: #64748b; }
-    .code-block .num { color: #fcd34d; }
-
-    /* API TABLE */
-    .api-section { padding: 4rem 0; }
-    .api-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
-    .api-table th {
-      text-align: left; padding: .75rem 1rem; background: var(--bg-card); color: var(--text-muted);
-      font-weight: 600; border-bottom: 2px solid var(--border);
-    }
-    .api-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--border); }
-    .api-table code { background: var(--bg-code); padding: 2px 6px; border-radius: 4px; font-size: .82rem; color: var(--accent); }
-    .api-table tr:hover td { background: rgba(99,102,241,.04); }
-
-    /* DOCS LINKS */
-    .docs-section { padding: 4rem 0; }
-    .docs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
-    .docs-card {
-      display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 1.25rem; transition: all .2s;
-    }
-    .docs-card:hover { border-color: var(--primary); transform: translateY(-2px); color: var(--text); }
-    .docs-card h3 { font-size: .95rem; margin-bottom: .35rem; color: var(--text); }
-    .docs-card p { font-size: .82rem; color: var(--text-muted); }
-
-    /* FOOTER */
-    footer {
-      padding: 2rem 0; border-top: 1px solid var(--border);
-      text-align: center; font-size: .82rem; color: var(--text-muted);
-    }
-    footer a { color: var(--text-muted); }
-
-    @media (max-width: 640px) {
-      .hero h1 { font-size: 2rem; }
-      .hero p { font-size: 1rem; }
-      .arch-diagram { font-size: .72rem; padding: 1rem; }
-      .nav-links { gap: .75rem; font-size: .8rem; }
-      .install-cmd {
-        display: flex;
-        flex-wrap: wrap;
-        max-width: 100%;
-        font-size: .75rem;
-        padding: .5rem;
-      }
-      .install-cmd code {
-        overflow-x: auto;
-        white-space: nowrap;
-        max-width: 100%;
-        flex: 1 1 auto;
-      }
-    }
-
-    @media (max-width: 900px) {
-      nav { padding: .5rem 0; }
-      nav .container {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-      }
-      .nav-brand img { height: 24px; }
-      .nav-links {
-        position: fixed;
-        top: 60px;
-        left: 1rem;
-        right: 1rem;
-        width: auto;
-        background: rgba(17,24,39,.85);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(99,102,241,.2);
-        border-radius: 16px;
-        padding: 1rem;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: .75rem 1.25rem;
-        opacity: 0;
-        transform: translateY(-10px) scale(0.95);
-        visibility: hidden;
-        transition: all .4s cubic-bezier(.4,0,.2,1);
-        box-shadow: 0 25px 50px -12px rgba(0,0,0,.5),
-                    0 0 40px rgba(99,102,241,.15);
-        z-index: 99;
-      }
-      .nav-links.active {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        visibility: visible;
-      }
-      .nav-links a {
-        flex: 0 0 auto;
-        padding: .5rem .875rem;
-        border-radius: 8px;
-        font-size: .875rem;
-        background: rgba(99,102,241,.05);
-        border: 1px solid transparent;
-        transition: all .3s ease;
-        animation: slideIn .5s ease backwards;
-      }
-      .nav-links.active a:nth-child(1) { animation-delay: .05s; }
-      .nav-links.active a:nth-child(2) { animation-delay: .1s; }
-      .nav-links.active a:nth-child(3) { animation-delay: .15s; }
-      .nav-links.active a:nth-child(4) { animation-delay: .2s; }
-      .nav-links.active a:nth-child(5) { animation-delay: .25s; }
-      .nav-links.active a:nth-child(6) { animation-delay: .3s; }
-      .nav-links.active a:nth-child(7) { animation-delay: .35s; }
-      .nav-links.active a:nth-child(8) { animation-delay: .4s; }
-      .nav-links a:hover {
-        background: rgba(99,102,241,.15);
-        border-color: rgba(99,102,241,.3);
-        color: var(--accent);
-        box-shadow: 0 0 20px rgba(99,102,241,.2);
-        transform: translateY(-2px);
-      }
-      .nav-links a::after { display: none; }
-      .menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background: rgba(99,102,241,.1);
-        border: 1px solid rgba(99,102,241,.2);
-        border-radius: 10px;
-        color: var(--text);
-        cursor: pointer;
-        transition: all .3s ease;
-      }
-      .menu-toggle:hover {
-        background: rgba(99,102,241,.2);
-        box-shadow: 0 0 20px rgba(99,102,241,.3);
-      }
-      .menu-toggle i { transition: transform .3s ease; }
-      .menu-toggle.active i { transform: rotate(90deg); }
-    }
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="QMF documentation hub — guides, API, components, AI indexes, and examples for Quizzman Modular Framework." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <link rel="canonical" href="https://ui.quizzman.com/" />
+  <title>QMF Framework — Documentation</title>
+  <link rel="alternate" hreflang="en" href="https://ui.quizzman.com/" />
+  <link rel="alternate" hreflang="vi" href="https://ui.quizzman.com/?lang=vi" />
+  <link rel="sitemap" type="application/xml" href="/qmf/sitemap.xml" />
+  <link rel="alternate" type="text/plain" title="LLM instructions" href="/qmf/llms.txt" />
+  <link rel="alternate" type="text/plain" title="LLM full index" href="/qmf/llms-full.txt" />
+  <link rel="icon" href="/qmf/assets/logo/favicon-32.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/qmf/assets/docs-portal.css?v=20260717-portal4" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('qmf-theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+        var l = localStorage.getItem('qmf-lang');
+        if (l === 'vi' || /[?&]lang=vi/.test(location.search)) document.documentElement.lang = 'vi';
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
+  <a class="sr-only" href="#main">Skip to content</a>
 
-<!-- NAV -->
-<nav>
-  <div class="container">
-    <a href="/qmf/" class="nav-brand">
-      <img src="/qmf/assets/logo/quizzman-logo.png" alt="QMF">
-      <span>QMF</span>
-      <span class="badge">v3.0</span>
-    </a>
-    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="nav-links" id="nav-links">
-      <a href="#features" data-i18n="nav_features" onclick="closeMenu()">Features</a>
-      <a href="#architecture" data-i18n="nav_architecture" onclick="closeMenu()">Architecture</a>
-      <a href="#quickstart" data-i18n="nav_quickstart" onclick="closeMenu()">Quick Start</a>
-      <a href="#api" data-i18n="nav_api" onclick="closeMenu()">API</a>
-      <a href="#dynamic-island" onclick="closeMenu()">Dynamic Island</a>
-      <a href="#docs" data-i18n="nav_docs" onclick="closeMenu()">Docs</a>
-      <a href="/registry/-/web/detail/@qmf/core" onclick="closeMenu()">Registry</a>
-      <a href="https://status.quizzman.com" onclick="closeMenu()">Status</a>
-    </div>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="container">
-    <h1><span class="accent">QMF</span> Framework</h1>
-    <p data-i18n="hero_desc">Quizzman Modular Framework v3 — A modular, plugin-based frontend framework for the entire Quizzman ecosystem.</p>
-    <div class="hero-actions">
-      <a href="#quickstart" class="btn btn-primary" data-i18n="btn_getstarted">Get Started</a>
-      <a href="#api" class="btn btn-outline">API Reference</a>
-      <a href="/qmf/docs/ARCHITECTURE.md" class="btn btn-outline">Architecture</a>
-    </div>
-    <div class="install-cmd">
-      <code>echo '@qmf:registry=https://ui.quizzman.com/registry/' &gt;&gt; .npmrc &amp;&amp; pnpm add @qmf/core @qmf/tokens</code>
-      <button onclick="navigator.clipboard.writeText(&quot;echo '@qmf:registry=https://ui.quizzman.com/registry/' >> .npmrc && pnpm add @qmf/core @qmf/tokens&quot;)" title="Copy">&#128203;</button>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="container">
-    <h2 class="section-title" data-i18n="features_title">Features</h2>
-    <p class="section-sub" data-i18n="features_sub">4-layer Architecture · Plugin system · Error isolation · DevTools</p>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon">&#128268;</div>
-        <h3 data-i18n="feat_plugin_title">Plugin System</h3>
-        <p data-i18n="feat_plugin_desc">Register modules as plugins with automatic dependency resolution. Supports eager &amp; lazy loading.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128230;</div>
-        <h3 data-i18n="feat_di_title">DI Container</h3>
-        <p data-i18n="feat_di_desc">Token-based dependency injection — register and resolve services anywhere in your app.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128274;</div>
-        <h3 data-i18n="feat_error_title">Error Isolation</h3>
-        <p data-i18n="feat_error_desc">Each module has its own error boundary. One module crashing won't affect others.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128202;</div>
-        <h3 data-i18n="feat_state_title">State Management</h3>
-        <p data-i18n="feat_state_desc">Global + isolated module store with Zod schema validation. Selectors, watchers, immutable updates.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128640;</div>
-        <h3 data-i18n="feat_lazy_title">Lazy Loading</h3>
-        <p data-i18n="feat_lazy_desc">Code-split modules, loaded only when needed. CSS auto-injected when plugin mounts.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128736;</div>
-        <h3 data-i18n="feat_devtools_title">DevTools</h3>
-        <p data-i18n="feat_devtools_desc">Event tracing, state inspection, plugin graph — all via <code>window.__QMF_DEVTOOLS__</code>.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128225;</div>
-        <h3 data-i18n="feat_event_title">Event Bus</h3>
-        <p data-i18n="feat_event_desc">Pub/sub with wildcards, scoped bus, and tracing. Inter-module communication without coupling.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128260;</div>
-        <h3 data-i18n="feat_lifecycle_title">Lifecycle Hooks</h3>
-        <p data-i18n="feat_lifecycle_desc">Manage module lifecycle: <code>onInit → onMount → onReady → onDestroy</code>. Sync and async.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#127760;</div>
-        <h3 data-i18n="feat_http_title">HTTP Client</h3>
-        <p data-i18n="feat_http_desc">Fetch wrapper with interceptors, retry logic, auth injection, and automatic error mapping.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ARCHITECTURE -->
-<section class="architecture" id="architecture">
-  <div class="container">
-    <h2 class="section-title" data-i18n="arch_title">4-Layer Architecture</h2>
-    <p class="section-sub" data-i18n="arch_sub">Each layer can only import from lower layers — no circular dependencies.</p>
-    <div class="arch-diagram"><span class="layer-label">Layer 3 — Modules</span>
-  <span class="layer-pkg">@qmf/header · @qmf/footer · @qmf/chat-embed · @qmf/noti-embed · @qmf/loading-screen</span>
-
-<span class="layer-label">Layer 2 — UI Kit</span>
-  <span class="layer-pkg">@qmf/ui</span>  →  Button · Modal · Dropdown · Toast · Panel · Avatar · Badge
-
-<span class="layer-label">Layer 1 — Core</span>
-  <span class="layer-pkg">@qmf/core</span>  →  EventBus · Store · Lifecycle · Config · HttpClient · DI · PluginLoader · ErrorBoundary
-
-<span class="layer-label">Layer 0 — Foundation</span>
-  <span class="layer-pkg">@qmf/tokens · @qmf/utils</span>  →  CSS custom properties · Logger · DOM helpers · Fetch wrapper</div>
-  </div>
-</section>
-
-<!-- QUICK START -->
-<section class="examples" id="quickstart">
-  <div class="container">
-    <h2 class="section-title" data-i18n="quickstart_title">Quick Start</h2>
-    <p class="section-sub" data-i18n="quickstart_sub">Choose the integration method that fits your project.</p>
-
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'cdn')">CDN</button>
-      <button class="code-tab" onclick="switchTab(this,'npm')">npm / pnpm</button>
-      <button class="code-tab" onclick="switchTab(this,'full')">Full Example</button>
-    </div>
-
-    <pre class="code-block active" id="tab-cdn"><code><span class="cm">&lt;!-- 1. Load QMF --&gt;</span>
-<span class="kw">&lt;link</span> rel=<span class="str">"stylesheet"</span> href=<span class="str">"https://ui.quizzman.com/qmf/dist/tokens.css"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;script</span> src=<span class="str">"https://ui.quizzman.com/qmf/dist/qmf.iife.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-
-<span class="cm">&lt;!-- 2. Init --&gt;</span>
-<span class="kw">&lt;script&gt;</span>
-  QMF.<span class="fn">init</span>({
-    appId: <span class="str">'my-app'</span>,
-    debug: <span class="num">true</span>
-  }).<span class="fn">then</span>(() =&gt; {
-    console.<span class="fn">log</span>(<span class="str">'QMF Ready!'</span>);
-  });
-<span class="kw">&lt;/script&gt;</span></code></pre>
-
-    <pre class="code-block" id="tab-npm"><code><span class="cm">// 1. Add to .npmrc (one-time)</span>
-<span class="cm">// echo '@qmf:registry=https://ui.quizzman.com/registry/' >> .npmrc</span>
-
-<span class="cm">// 2. Install</span>
-<span class="cm">// pnpm add @qmf/core @qmf/tokens @qmf/header</span>
-
-<span class="kw">import</span> { QMF, lazy } <span class="kw">from</span> <span class="str">'@qmf/core'</span>;
-<span class="kw">import</span> { createHeaderPlugin } <span class="kw">from</span> <span class="str">'@qmf/header'</span>;
-<span class="kw">import</span> <span class="str">'@qmf/tokens/css'</span>;
-
-<span class="cm">// Register plugins</span>
-QMF.<span class="fn">use</span>(<span class="fn">createHeaderPlugin</span>({ brandName: <span class="str">'My App'</span> }));
-QMF.<span class="fn">use</span>(<span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="str">'@qmf/chat-embed'</span>)));
-
-<span class="cm">// Initialize</span>
-<span class="kw">await</span> QMF.<span class="fn">init</span>({
-  appId: <span class="str">'my-app'</span>,
-  channel: <span class="str">'production'</span>,
-  debug: <span class="num">false</span>
-});</code></pre>
-
-    <pre class="code-block" id="tab-full"><code><span class="kw">import</span> { QMF, lazy, getGlobalEventBus } <span class="kw">from</span> <span class="str">'@qmf/core'</span>;
-<span class="kw">import</span> { createHeaderPlugin } <span class="kw">from</span> <span class="str">'@qmf/header'</span>;
-<span class="kw">import</span> { createFooterPlugin } <span class="kw">from</span> <span class="str">'@qmf/footer'</span>;
-<span class="kw">import</span> <span class="str">'@qmf/tokens/css'</span>;
-
-<span class="cm">// 1. Register plugins (eager)</span>
-QMF.<span class="fn">use</span>(<span class="fn">createHeaderPlugin</span>({ brandName: <span class="str">'QuizzMan LMS'</span> }));
-QMF.<span class="fn">use</span>(<span class="fn">createFooterPlugin</span>());
-
-<span class="cm">// 2. Register plugins (lazy — loaded on demand)</span>
-QMF.<span class="fn">use</span>(<span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="str">'@qmf/chat-embed'</span>)));
-QMF.<span class="fn">use</span>(<span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="str">'@qmf/noti-embed'</span>)));
-
-<span class="cm">// 3. Init framework</span>
-<span class="kw">await</span> QMF.<span class="fn">init</span>({
-  appId: <span class="str">'quizzman-lms'</span>,
-  channel: <span class="str">'production'</span>,
-  debug: <span class="kw">import</span>.meta.env.DEV,
-});
-
-<span class="cm">// 4. Use event bus</span>
-<span class="kw">const</span> bus = <span class="fn">getGlobalEventBus</span>();
-bus.<span class="fn">on</span>(<span class="str">'auth:login'</span>, (user) =&gt; console.<span class="fn">log</span>(<span class="str">'Logged in:'</span>, user));
-bus.<span class="fn">emit</span>(<span class="str">'auth:login'</span>, { id: <span class="num">1</span>, name: <span class="str">'Admin'</span> });
-
-<span class="cm">// 5. Access store</span>
-<span class="kw">const</span> state = QMF.store.<span class="fn">getState</span>();
-QMF.store.<span class="fn">watch</span>(s =&gt; s.user, (newUser) =&gt; {
-  console.<span class="fn">log</span>(<span class="str">'User changed:'</span>, newUser);
-});</code></pre>
-  </div>
-</section>
-
-<!-- API -->
-<section class="api-section" id="api">
-  <div class="container">
-    <h2 class="section-title" data-i18n="api_title">Core API</h2>
-    <p class="section-sub" data-i18n="api_sub">Core APIs of <code>@qmf/core</code></p>
-    <div style="overflow-x:auto;">
-    <table class="api-table">
-      <thead>
-        <tr><th>Module</th><th>API</th><th data-i18n="api_th_desc">Description</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>EventBus</strong></td>
-          <td><code>on</code> · <code>off</code> · <code>emit</code> · <code>once</code></td>
-          <td data-i18n="api_eventbus">Pub/sub with wildcard <code>*</code> and <code>EventBus.scoped(prefix)</code></td>
-        </tr>
-        <tr>
-          <td><strong>Store</strong></td>
-          <td><code>getState</code> · <code>setState</code> · <code>select</code> · <code>watch</code></td>
-          <td data-i18n="api_store">Immutable state container, Zod validation, selector + watcher</td>
-        </tr>
-        <tr>
-          <td><strong>Lifecycle</strong></td>
-          <td><code>hook</code> · <code>transition</code></td>
-          <td data-i18n="api_lifecycle">Module lifecycle: <code>onInit → onMount → onReady → onDestroy</code></td>
-        </tr>
-        <tr>
-          <td><strong>Config</strong></td>
-          <td><code>validateConfig</code> · <code>resolveEnvUrls</code></td>
-          <td data-i18n="api_config">Zod schema validation + environment URL resolution</td>
-        </tr>
-        <tr>
-          <td><strong>HttpClient</strong></td>
-          <td><code>get</code> · <code>post</code> · <code>put</code> · <code>delete</code></td>
-          <td data-i18n="api_http">Fetch wrapper: interceptor, retry, auth injection</td>
-        </tr>
-        <tr>
-          <td><strong>DI</strong></td>
-          <td><code>register</code> · <code>resolve</code> · <code>createToken</code></td>
-          <td data-i18n="api_di">Token-based dependency injection</td>
-        </tr>
-        <tr>
-          <td><strong>PluginLoader</strong></td>
-          <td><code>QMF.use</code> · <code>lazy</code></td>
-          <td data-i18n="api_plugin">Plugin registration with dependency graph + lazy loading</td>
-        </tr>
-        <tr>
-          <td><strong>ErrorBoundary</strong></td>
-          <td><code>protect</code> · <code>onError</code></td>
-          <td data-i18n="api_error">Per-module error isolation, fallback UI</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-  </div>
-</section>
-
-<!-- DYNAMIC ISLAND -->
-<section class="features" id="dynamic-island">
-  <div class="container">
-    <h2 class="section-title">Dynamic Island</h2>
-    <p class="section-sub" data-i18n="island_sub">Notification pill — System notifications displayed as a "pill" at the top of the page, expands on hover/click.</p>
-
-    <!-- Live Demo -->
-    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 2rem;">
-      <h3 style="font-size: .95rem; margin-bottom: 1rem; color: var(--accent);">&#127918; <span data-i18n="demo_title">Live Demo</span></h3>
-      <div style="display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-        <button class="btn btn-primary" onclick="demoIsland('info')">Info</button>
-        <button class="btn btn-outline" onclick="demoIsland('success')" style="border-color:#34d399;color:#34d399;">Success</button>
-        <button class="btn btn-outline" onclick="demoIsland('warning')" style="border-color:#f5b942;color:#f5b942;">Warning</button>
-        <button class="btn btn-outline" onclick="demoIsland('error')" style="border-color:#ff6b6b;color:#ff6b6b;">Error</button>
-        <button class="btn btn-outline" onclick="demoIsland('promo')" style="border-color:var(--primary-light);color:var(--primary-light);">Promo</button>
-        <button class="btn btn-outline" onclick="demoQueue()" style="border-color:var(--accent);color:var(--accent);">Queue (3)</button>
-      </div>
-      <p style="font-size: .82rem; color: var(--text-muted);" data-i18n="demo_desc">Click buttons to see Dynamic Island. Hover to expand, click close button or wait for auto-dismiss.</p>
-    </div>
-
-    <!-- CDN Usage -->
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'island-cdn')">CDN</button>
-      <button class="code-tab" onclick="switchTab(this,'island-api')">API Reference</button>
-      <button class="code-tab" onclick="switchTab(this,'island-css')">CSS Variables</button>
-    </div>
-
-    <pre class="code-block active" id="tab-island-cdn"><code><span class="cm">&lt;!-- 1. Load CSS + JS --&gt;</span>
-<span class="kw">&lt;link</span> rel=<span class="str">"stylesheet"</span>
-      href=<span class="str">"https://ui.quizzman.com/qmf/dist/modules/header/dynamic-island.css"</span><span class="kw">&gt;</span>
-<span class="kw">&lt;script</span> src=<span class="str">"https://ui.quizzman.com/qmf/dist/modules/header/dynamic-island.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
-
-<span class="cm">&lt;!-- 2. Use --&gt;</span>
-<span class="kw">&lt;script&gt;</span>
-  <span class="kw">const</span> island = <span class="kw">new</span> <span class="fn">QMFDynamicIsland</span>();
-
-  <span class="cm">// Push a notification</span>
-  island.<span class="fn">push</span>({
-    title:    <span class="str">'System Update'</span>,
-    message:  <span class="str">'Version 3.0 is now available!'</span>,
-    icon:     <span class="str">'fas fa-rocket'</span>,
-    priority: <span class="str">'info'</span>,      <span class="cm">// info | success | warning | error | promo</span>
-    duration: <span class="num">6000</span>,        <span class="cm">// ms, 0 = sticky</span>
-    actions: [
-      { label: <span class="str">'View Details'</span>, href: <span class="str">'https://quizzman.com'</span>, primary: <span class="num">true</span> },
-      { label: <span class="str">'Dismiss'</span> }
-    ]
-  });
-<span class="kw">&lt;/script&gt;</span></code></pre>
-
-    <pre class="code-block" id="tab-island-api"><code><span class="cm">// Constructor</span>
-<span class="kw">const</span> island = <span class="kw">new</span> <span class="fn">QMFDynamicIsland</span>({
-  autoDismiss: <span class="num">6000</span>,     <span class="cm">// Default auto-dismiss (ms)</span>
-  maxQueue:    <span class="num">10</span>,       <span class="cm">// Max queued notifications</span>
-  hoverExpand: <span class="num">true</span>,     <span class="cm">// Expand on hover (desktop)</span>
-  container:   document.body
-});
-
-<span class="cm">// Methods</span>
-island.<span class="fn">push</span>(data)       <span class="cm">// Add notification to queue</span>
-island.<span class="fn">dismiss</span>()       <span class="cm">// Dismiss current, show next</span>
-island.<span class="fn">expand</span>()        <span class="cm">// Expand to full view</span>
-island.<span class="fn">collapse</span>()      <span class="cm">// Collapse to compact pill</span>
-island.<span class="fn">clear</span>()         <span class="cm">// Clear all notifications</span>
-
-<span class="cm">// Notification data shape</span>
-{
-  title:    <span class="str">'string'</span>,           <span class="cm">// Required — Heading</span>
-  message:  <span class="str">'string'</span>,           <span class="cm">// Required — Body text</span>
-  icon:     <span class="str">'fas fa-bell'</span>,      <span class="cm">// FontAwesome class</span>
-  priority: <span class="str">'info'</span>,             <span class="cm">// info | success | warning | error | promo</span>
-  duration: <span class="num">6000</span>,               <span class="cm">// Auto-dismiss ms (0 = sticky)</span>
-  actions:  [                      <span class="cm">// Optional buttons</span>
-    { label: <span class="str">'Click'</span>, href: <span class="str">'...'</span>, primary: <span class="num">true</span> },
-    { label: <span class="str">'Action'</span>, onClick: () =&gt; {} }
-  ]
-}</code></pre>
-
-    <pre class="code-block" id="tab-island-css"><code><span class="cm">/* Override these CSS variables to customize */</span>
-:root {
-  <span class="fn">--qmf-island-bg</span>:       <span class="str">rgba(15, 15, 30, 0.92)</span>;  <span class="cm">/* Background */</span>
-  <span class="fn">--qmf-island-border</span>:   <span class="str">rgba(255, 255, 255, 0.1)</span>;
-  <span class="fn">--qmf-island-text</span>:     <span class="str">#ffffff</span>;
-  <span class="fn">--qmf-island-text-muted</span>: <span class="str">rgba(255, 255, 255, 0.7)</span>;
-  <span class="fn">--qmf-island-radius</span>:   <span class="str">28px</span>;              <span class="cm">/* Compact pill radius */</span>
-  <span class="fn">--qmf-island-z</span>:        <span class="str">10000</span>;             <span class="cm">/* z-index */</span>
-
-  <span class="cm">/* Priority colors */</span>
-  <span class="fn">--qmf-island-info</span>:     <span class="str">#4facfe</span>;
-  <span class="fn">--qmf-island-success</span>:  <span class="str">#43e97b</span>;
-  <span class="fn">--qmf-island-warning</span>:  <span class="str">#f5b942</span>;
-  <span class="fn">--qmf-island-error</span>:    <span class="str">#ff6b6b</span>;
-  <span class="fn">--qmf-island-promo</span>:    <span class="str">linear-gradient(135deg, #667eea, #764ba2)</span>;
-}
-
-<span class="cm">/* BEM classes */</span>
-<span class="fn">.qmf-island</span>                     <span class="cm">/* Container */</span>
-<span class="fn">.qmf-island--visible</span>            <span class="cm">/* Shown */</span>
-<span class="fn">.qmf-island--expanded</span>           <span class="cm">/* Full view */</span>
-<span class="fn">.qmf-island--has-queue</span>          <span class="cm">/* Queue dots visible */</span>
-<span class="fn">.qmf-island__compact</span>            <span class="cm">/* Pill row */</span>
-<span class="fn">.qmf-island__icon</span>               <span class="cm">/* Icon circle */</span>
-<span class="fn">.qmf-island__icon--info</span>         <span class="cm">/* Priority modifier */</span>
-<span class="fn">.qmf-island__label</span>              <span class="cm">/* Title text */</span>
-<span class="fn">.qmf-island__body</span>               <span class="cm">/* Expanded content */</span>
-<span class="fn">.qmf-island__actions</span>            <span class="cm">/* Action buttons row */</span>
-<span class="fn">.qmf-island__action--primary</span>    <span class="cm">/* Primary CTA */</span>
-<span class="fn">.qmf-island__queue</span>              <span class="cm">/* Queue dots container */</span></code></pre>
-
-    <!-- Features Grid -->
-    <div class="feature-grid" style="margin-top: 2rem;">
-      <div class="feature-card">
-        <div class="feature-icon">&#128276;</div>
-        <h3 data-i18n="island_feat_queue_title">Queue System</h3>
-        <p data-i18n="island_feat_queue_desc">Push multiple notifications in sequence — they're queued and displayed one by one with queue dots indicator.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#127912;</div>
-        <h3 data-i18n="island_feat_priority_title">5 Priority Levels</h3>
-        <p data-i18n="island_feat_priority_desc"><code>info</code> · <code>success</code> · <code>warning</code> · <code>error</code> · <code>promo</code> — each level has its own gradient color.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128241;</div>
-        <h3 data-i18n="island_feat_a11y_title">Responsive + A11y</h3>
-        <p data-i18n="island_feat_a11y_desc">Responsive on all devices. ARIA <code>role="status"</code>, <code>aria-live="polite"</code>, <code>prefers-reduced-motion</code>.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#127769;</div>
-        <h3 data-i18n="island_feat_theme_title">Light / Dark Theme</h3>
-        <p data-i18n="island_feat_theme_desc">Auto-detects <code>[data-theme="light"]</code>. All colors via CSS custom properties, easy to override.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#128171;</div>
-        <h3 data-i18n="island_feat_action_title">Action Buttons</h3>
-        <p data-i18n="island_feat_action_desc">Each notification can have action buttons: link (<code>href</code>) or callback (<code>onClick</code>).</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">&#129520;</div>
-        <h3 data-i18n="island_feat_zero_title">Zero Dependencies</h3>
-        <p data-i18n="island_feat_zero_desc">Just 1 CSS + 1 JS file. No framework or library dependencies. &lt;10KB combined.</p>
-      </div>
-    </div>
-
-    <!-- CDN Files -->
-    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-top: 2rem;">
-      <h3 style="font-size: .9rem; margin-bottom: .75rem;">&#128230; <span data-i18n="cdn_files">CDN Files</span></h3>
-      <div style="display: flex; flex-direction: column; gap: .5rem; font-family: 'JetBrains Mono', monospace; font-size: .82rem;">
-        <div style="display: flex; align-items: center; gap: .5rem;">
-          <span style="color: var(--accent); flex-shrink: 0;">CSS</span>
-          <code style="background: var(--bg-code); padding: 4px 8px; border-radius: 4px; color: var(--text-muted); overflow-x: auto;">https://ui.quizzman.com/qmf/dist/modules/header/dynamic-island.css</code>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="QMF home">
+        <img src="/qmf/assets/logo/quizzman-logo.png" width="28" height="28" alt="" />
+        <span class="brand-name">QMF</span>
+      </a>
+      <details class="version-menu">
+        <summary aria-label="Switch version">v4 Alpha</summary>
+        <div class="version-panel">
+          <a href="/qmf/docs/v4/README.md"><span>Latest</span><strong>v4 Alpha</strong></a>
+          <a href="/qmf/docs/USAGE.md"><span>Stable</span><strong>v3.0</strong></a>
         </div>
-        <div style="display: flex; align-items: center; gap: .5rem;">
-          <span style="color: var(--accent); flex-shrink: 0;">JS</span>
-          <code style="background: var(--bg-code); padding: 4px 8px; border-radius: 4px; color: var(--text-muted); overflow-x: auto;">https://ui.quizzman.com/qmf/dist/modules/header/dynamic-island.js</code>
+      </details>
+
+      <nav class="nav-center" aria-label="Primary">
+        <a href="#docs" data-i18n="nav_docs">Docs</a>
+        <a href="#components" data-i18n="nav_components">Components</a>
+        <a href="#guides" data-i18n="nav_guides">Guides</a>
+        <a href="/qmf/docs/API.md" data-i18n="nav_api">API</a>
+        <details class="more-menu">
+          <summary>More</summary>
+          <div class="more-panel">
+            <a href="#examples" data-i18n="nav_examples">Examples</a>
+            <a href="#ai" data-i18n="nav_ai">AI</a>
+            <a href="/registry/" data-i18n="nav_registry">Registry</a>
+            <a href="/qmf/docs/v4/ROADMAP.md">Roadmap</a>
+            <a href="https://status.quizzman.com">Status</a>
+            <a href="/qmf/docs/v4/IMPLEMENTATION.md" data-i18n="nav_changelog">Changelog</a>
+          </div>
+        </details>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="search-trigger" id="search-open" aria-label="Search documentation">
+          <span data-i18n="search_placeholder">Search...</span>
+          <kbd>⌘K</kbd>
+        </button>
+        <button type="button" class="icon-btn" id="theme-toggle" aria-label="Toggle theme" aria-pressed="false" title="Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <a class="icon-btn" href="https://github.com/the-quizzman" aria-label="GitHub" rel="noopener noreferrer" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.9-1.32 2.74-1.05 2.74-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .26.18.59.69.48A10.03 10.03 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"/></svg>
+        </a>
+        <button type="button" class="icon-btn" id="lang-toggle" data-i18n-aria="lang_switch" aria-label="Switch language">EN</button>
+        <button type="button" class="mobile-nav-toggle icon-btn" id="mobile-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Open menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <div class="drawer-backdrop" data-drawer-close></div>
+    <div class="drawer-panel">
+      <nav aria-label="Mobile">
+        <a href="#docs" data-i18n="nav_docs">Docs</a>
+        <a href="#components" data-i18n="nav_components">Components</a>
+        <a href="#guides" data-i18n="nav_guides">Guides</a>
+        <a href="#examples" data-i18n="nav_examples">Examples</a>
+        <a href="/qmf/docs/API.md" data-i18n="nav_api">API</a>
+        <a href="#ai" data-i18n="nav_ai">AI</a>
+        <a href="/registry/" data-i18n="nav_registry">Registry</a>
+        <a href="/qmf/v4-demo/">Live Demo</a>
+        <button type="button" class="search-trigger" data-search-open>Search… <kbd>⌘K</kbd></button>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main" class="portal-layout">
+    <div class="portal-shell container">
+      <aside class="doc-sidebar" aria-label="Documentation navigation">
+        <nav class="side-nav">
+          <div class="side-item">
+            <a href="#docs">Getting Started</a>
+            <div class="side-flyout">
+              <a href="/qmf/docs/USAGE.md">Installation</a>
+              <a href="/qmf/docs/v4/README.md">First Project</a>
+              <a href="/qmf/docs/v4/CLI_SPEC.md">CLI</a>
+              <a href="/qmf/docs/v4/CONTRACT.md">Configuration</a>
+            </div>
+          </div>
+          <div class="side-item">
+            <a href="#docs">Core</a>
+            <div class="side-flyout">
+              <a href="/qmf/docs/v4/MODULE_SPEC.md">Modules</a>
+              <a href="/qmf/docs/v4/EVENT_SPEC.md">Events</a>
+              <a href="/qmf/docs/v4/STATE_SPEC.md">State</a>
+              <a href="/qmf/docs/API.md">Lifecycle</a>
+            </div>
+          </div>
+          <div class="side-item">
+            <a href="#components">Components</a>
+            <div class="side-flyout">
+              <a href="/qmf/docs.html#ui">UI Kit</a>
+              <a href="/qmf/docs/header-settings-setup.md">Navigation</a>
+              <a href="/qmf/docs/header-settings-setup.md">Dynamic Island</a>
+              <a href="/qmf/components.json">components.json</a>
+            </div>
+          </div>
+          <div class="side-item">
+            <a href="/qmf/docs/API.md">API</a>
+            <div class="side-flyout">
+              <a href="/qmf/docs/API.md">Core API</a>
+              <a href="/qmf/api-index.json">API Index</a>
+              <a href="/qmf/schemas/">Schemas</a>
+              <a href="/qmf/docs/v4/CONTRACT.md">Contract</a>
+            </div>
+          </div>
+          <div class="side-item">
+            <a href="#guides">Guides</a>
+            <div class="side-flyout">
+              <a href="/qmf/docs/ARCHITECTURE.md">Architecture</a>
+              <a href="/qmf/docs/v4/CONVENTION.md">Conventions</a>
+              <a href="/qmf/docs/v4/MIGRATION_v3_v4.md">Migration</a>
+              <a href="/qmf/docs/v4/AI_RULES.md">AI Rules</a>
+            </div>
+          </div>
+          <div class="side-item">
+            <a href="/registry/">Registry</a>
+            <div class="side-flyout">
+              <a href="/registry/">Packages</a>
+              <a href="/registry/@qmf%2fruntime">@qmf/runtime</a>
+              <a href="/registry/@qmf%2fcontract">@qmf/contract</a>
+            </div>
+          </div>
+          <div class="side-item">
+            <a href="#ai">AI</a>
+            <div class="side-flyout">
+              <a href="/qmf/llms.txt">llms.txt</a>
+              <a href="/qmf/llms-full.txt">llms-full.txt</a>
+              <a href="/qmf/docs-index.json">docs-index.json</a>
+              <a href="/qmf/docs/v4/AI_RULES.md">Coding guidelines</a>
+            </div>
+          </div>
+          <div class="side-item">
+            <a href="#examples">More...</a>
+            <div class="side-flyout">
+              <a href="#examples">Examples</a>
+              <a href="/qmf/v4-demo/">Live Demo</a>
+              <a href="/qmf/docs/v4/ROADMAP.md">Roadmap</a>
+              <a href="https://status.quizzman.com">Status</a>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <div class="portal-main">
+        <section class="cmd-preview" aria-label="Command palette preview">
+          <button type="button" class="cmd-preview-btn" data-search-open>
+            <kbd>⌘K</kbd>
+            <span>Search documentation</span>
+            <span class="cmd-hints"><em>Components</em><em>API</em><em>Commands</em><em>Jump to docs</em></span>
+          </button>
+        </section>
+
+        <section class="hero hero-compact">
+          <p class="hero-kicker" data-i18n="hero_kicker">Developer Documentation</p>
+          <h1 data-i18n="hero_title">QMF Framework</h1>
+          <p class="hero-lead" data-i18n="hero_subtitle">Build modern modular applications with a lightweight plugin architecture.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/qmf/docs/USAGE.md" data-i18n="hero_btn_start">Get Started</a>
+            <a class="btn btn-secondary" href="/qmf/docs.html" data-i18n="hero_btn_docs">Documentation</a>
+            <a class="btn btn-ghost" href="#ai" data-i18n="hero_btn_ai">AI Documentation</a>
+          </div>
+          <div class="install-cmd">
+            <code>npm i @qmf/runtime@4.0.0-alpha.1</code>
+            <button type="button" data-copy="npm i @qmf/runtime@4.0.0-alpha.1 --registry https://ui.quizzman.com/registry/" aria-label="Copy install command">Copy</button>
+          </div>
+          <div class="hero-stats" aria-label="Version status">
+            <div><span>Latest</span><strong>v4 Alpha</strong></div>
+            <div><span>Stable</span><strong>v3.0</strong></div>
+            <div><span>Registry</span><strong>5 packages</strong></div>
+          </div>
+        </section>
+
+        <section class="latest-strip" aria-labelledby="latest-title">
+          <div class="latest-head">
+            <p class="section-label">Latest</p>
+            <h2 id="latest-title">Latest updates</h2>
+          </div>
+          <ol class="timeline">
+            <li><time>Today</time><a href="/qmf/docs/v4/QMF_SPEC.md">Runtime updated</a></li>
+            <li><time>2 days ago</time><a href="/qmf/docs/header-settings-setup.md">Dynamic Island API</a></li>
+            <li><time>5 days ago</time><a href="/qmf/docs/v4/IMPLEMENTATION.md">v4 Alpha released</a></li>
+            <li><time>1 week ago</time><a href="/qmf/docs.html#ui">New components</a></li>
+          </ol>
+          <a class="latest-more" href="/qmf/docs/v4/IMPLEMENTATION.md">View changelog</a>
+        </section>
+
+        <section class="section section-tight" id="quick" aria-labelledby="quick-title">
+          <div class="section-head inline-head">
+            <p class="section-label">Workflow</p>
+            <h2 id="quick-title" data-i18n="section_quick">Quick actions</h2>
+          </div>
+          <div class="quick-grid workflow-grid">
+            <a class="quick-card finder-card" href="/qmf/docs/USAGE.md"><span class="glyph" aria-hidden="true">↓</span><span class="label">Install</span><span class="desc">Install QMF</span><span class="arrow">→</span></a>
+            <a class="quick-card finder-card" href="/qmf/docs/v4/CLI_SPEC.md"><span class="glyph" aria-hidden="true">◇</span><span class="label">Create App</span><span class="desc">Scaffold CLI</span><span class="arrow">→</span></a>
+            <a class="quick-card finder-card" href="#components"><span class="glyph" aria-hidden="true">▣</span><span class="label">Components</span><span class="desc">Learn UI</span><span class="arrow">→</span></a>
+            <a class="quick-card finder-card" href="/qmf/docs/v4/STATE_SPEC.md"><span class="glyph" aria-hidden="true">◎</span><span class="label">Build UI</span><span class="desc">State + events</span><span class="arrow">→</span></a>
+            <a class="quick-card finder-card" href="/qmf/docs/API.md"><span class="glyph" aria-hidden="true">↦</span><span class="label">Routing</span><span class="desc">Navigate</span><span class="arrow">→</span></a>
+            <a class="quick-card finder-card" href="/qmf/docs/v4/IMPLEMENTATION.md"><span class="glyph" aria-hidden="true">↑</span><span class="label">Deploy</span><span class="desc">CDN + registry</span><span class="arrow">→</span></a>
+          </div>
+        </section>
+
+        <section class="ai-ready" id="ai" aria-labelledby="ai-title">
+          <div>
+            <p class="section-label">AI Ready</p>
+            <h2 id="ai-title">AI Documentation</h2>
+            <p>Indexes and prompts for ChatGPT, Claude, Gemini, Cursor, Copilot, OpenHands, Codex.</p>
+            <a class="btn btn-primary" href="/qmf/llms-full.txt">View AI Docs</a>
+          </div>
+          <ul class="ai-checklist">
+            <li><a href="/qmf/llms.txt">llms.txt</a></li>
+            <li><a href="/qmf/llms-full.txt">llms-full.txt</a></li>
+            <li><a href="/qmf/components.json">components.json</a></li>
+            <li><a href="/qmf/api-index.json">api-index.json</a></li>
+            <li><a href="/qmf/docs-index.json">docs-index.json</a></li>
+            <li><a href="/qmf/docs/v4/examples/ai-workflow/">prompts/</a></li>
+          </ul>
+        </section>
+
+        <section class="why-qmf section-tight" aria-labelledby="why-title">
+          <div class="section-head inline-head">
+            <p class="section-label">Framework</p>
+            <h2 id="why-title">Why QMF?</h2>
+          </div>
+          <ul class="why-grid">
+            <li><strong>Modular</strong><span>Plugin-first app shell</span></li>
+            <li><strong>Vanilla JS</strong><span>No JSX in core layers</span></li>
+            <li><strong>Tiny Runtime</strong><span>Contract + events + inspect</span></li>
+            <li><strong>Plugin First</strong><span>Manifest-driven modules</span></li>
+            <li><strong>SSR Ready</strong><span>Static / CDN friendly</span></li>
+            <li><strong>AI Ready</strong><span>llms.txt + JSON indexes</span></li>
+          </ul>
+        </section>
+
+        <section class="section section-tight" id="docs" aria-labelledby="docs-title">
+          <div class="section-head inline-head">
+            <p class="section-label">Library</p>
+            <h2 id="docs-title" data-i18n="section_docs">Documentation</h2>
+          </div>
+          <div class="cat-grid dense-cat-grid">
+            <div class="cat-col" id="getting-started"><h3>Getting Started</h3><ul><li><a href="/qmf/docs/USAGE.md">Installation</a></li><li><a href="/qmf/docs/v4/README.md">First Project</a></li><li><a href="/qmf/docs/v4/CLI_SPEC.md">CLI</a></li><li><a href="/qmf/docs/v4/CONTRACT.md">Configuration</a></li></ul></div>
+            <div class="cat-col"><h3>Core</h3><ul><li><a href="/qmf/docs/v4/MODULE_SPEC.md">Module</a></li><li><a href="/qmf/docs/v4/EVENT_SPEC.md">Event</a></li><li><a href="/qmf/docs/v4/STATE_SPEC.md">State</a></li><li><a href="/qmf/docs/API.md">Lifecycle</a></li></ul></div>
+            <div class="cat-col" id="guides"><h3>Guides</h3><ul><li><a href="/qmf/docs/ARCHITECTURE.md">Architecture</a></li><li><a href="/qmf/docs/v4/CONVENTION.md">Best Practices</a></li><li><a href="/qmf/docs/v4/MIGRATION_v3_v4.md">Migration</a></li><li><a href="/qmf/docs/ARCHITECTURE.public.md">Security</a></li></ul></div>
+            <div class="cat-col"><h3>API</h3><ul><li><a href="/qmf/docs/API.md">Core API</a></li><li><a href="/qmf/api-index.json">API Index</a></li><li><a href="/qmf/schemas/">Schemas</a></li><li><a href="/registry/">Registry</a></li></ul></div>
+          </div>
+        </section>
+
+        <section class="section section-tight" id="components" aria-labelledby="comp-title">
+          <div class="section-head inline-head"><p class="section-label">Explorer</p><h2 id="comp-title" data-i18n="section_components">Component explorer</h2></div>
+          <div class="comp-grid compact-comp-grid">
+            <a href="/qmf/docs.html#ui">Button</a><a href="/qmf/docs.html#ui">Card</a><a href="/qmf/docs.html#ui">Input</a><a href="/qmf/docs.html#ui">Dialog</a><a href="/qmf/docs.html#ui">Tabs</a><a href="/qmf/docs.html#ui">Toast</a><a href="/qmf/docs.html#ui">Table</a><a href="/qmf/docs/header-settings-setup.md">Navigation</a>
+          </div>
+        </section>
+
+        <section class="section section-tight" id="examples" aria-labelledby="ex-title">
+          <div class="section-head inline-head"><p class="section-label">Examples</p><h2 id="ex-title" data-i18n="section_examples">Examples</h2></div>
+          <div class="ex-grid compact-ex-grid">
+            <a class="quick-card" href="/qmf/v4-demo/"><span class="label">Starter</span><span class="desc">Auth + dictionary</span></a>
+            <a class="quick-card" href="/qmf/docs/v4/examples/app/"><span class="label">Dashboard</span><span class="desc">Contract-driven app</span></a>
+            <a class="quick-card" href="/qmf/docs.html"><span class="label">Documentation</span><span class="desc">Docs shell</span></a>
+            <a class="quick-card" href="/qmf/docs/v4/examples/ai-workflow/"><span class="label">AI Workflow</span><span class="desc">Agent prompts</span></a>
+          </div>
+        </section>
+      </div>
+
+      <aside class="right-rail" aria-label="Developer dashboard">
+        <div class="dash-card">
+          <h3>Developer Dashboard</h3>
+          <section>
+            <p class="dash-label">Latest Release</p>
+            <p class="dash-value">4.0.0-alpha.1</p>
+            <a href="/qmf/docs/v4/IMPLEMENTATION.md">Release notes</a>
+          </section>
+          <section>
+            <p class="dash-label">Recent Updates</p>
+            <a href="/qmf/docs/v4/CONTRACT.md">Contract spec</a>
+            <a href="/qmf/docs/v4/AI_RULES.md">AI rules</a>
+            <a href="/qmf/v4-demo/">Live demo</a>
+          </section>
+          <section>
+            <p class="dash-label">Popular Docs</p>
+            <a href="/qmf/docs/USAGE.md">Installation</a>
+            <a href="/qmf/docs/ARCHITECTURE.md">Architecture</a>
+            <a href="/qmf/docs/API.md">API Reference</a>
+          </section>
+          <section>
+            <p class="dash-label">Migration</p>
+            <a href="/qmf/docs/v4/MIGRATION_v3_v4.md">v3 → v4</a>
+            <a href="/qmf/docs/MIGRATION.md">v2 → v3</a>
+          </section>
+          <section class="dash-last">
+            <p class="dash-label">Status</p>
+            <a href="https://status.quizzman.com">Service status</a>
+            <a href="/qmf/version">/version</a>
+          </section>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3 data-i18n="footer_docs">Documentation</h3>
+          <ul>
+            <li><a href="/qmf/docs.html">Docs UI</a></li>
+            <li><a href="/qmf/docs/USAGE.md">Usage</a></li>
+            <li><a href="/qmf/docs/ARCHITECTURE.md">Architecture</a></li>
+            <li><a href="/qmf/docs/v4/README.md">QMF 4.0</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 data-i18n="footer_api">API</h3>
+          <ul>
+            <li><a href="/qmf/docs/API.md">Core API</a></li>
+            <li><a href="/qmf/api-index.json">API Index</a></li>
+            <li><a href="/qmf/schemas/">Schemas</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 data-i18n="footer_guides">Guides</h3>
+          <ul>
+            <li><a href="/qmf/docs/MIGRATION.md">Migration</a></li>
+            <li><a href="/qmf/docs/v4/AI_RULES.md">AI Rules</a></li>
+            <li><a href="/qmf/docs/v4/CONVENTION.md">Convention</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 data-i18n="footer_examples">Examples</h3>
+          <ul>
+            <li><a href="/qmf/v4-demo/">Live Demo</a></li>
+            <li><a href="/qmf/docs/v4/examples/app/">Example App</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 data-i18n="footer_registry">Registry</h3>
+          <ul>
+            <li><a href="/registry/">Packages</a></li>
+            <li><a href="/qmf/version">/version</a></li>
+            <li><a href="https://status.quizzman.com">Status</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 data-i18n="footer_ai">AI</h3>
+          <ul>
+            <li><a href="/qmf/llms.txt">llms.txt</a></li>
+            <li><a href="/qmf/llms-full.txt">llms-full.txt</a></li>
+            <li><a href="/qmf/sitemap.xml">Sitemap</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 data-i18n="footer_community">Community</h3>
+          <ul>
+            <li><a href="https://github.com/the-quizzman">GitHub</a></li>
+            <li><a href="https://quizzman.com/">Quizzman</a></li>
+            <li><a href="/qmf/docs/v4/ROADMAP.md">Roadmap</a></li>
+            <li><a href="/qmf/docs/v4/IMPLEMENTATION.md">Changelog</a></li>
+          </ul>
         </div>
       </div>
+      <div class="footer-bar">
+        <p data-i18n="footer_tagline">Documentation-first modular framework for Quizzman.</p>
+        <p>QMF · MIT License · Stable 3.0.0 · Alpha 4.0.0-alpha.1</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SEARCH MODAL -->
+  <div id="search-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Search documentation">
+    <div class="search-dialog">
+      <div class="search-input-row">
+        <input id="search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search documentation..." data-i18n-placeholder="search_placeholder" />
+        <kbd>esc</kbd>
+      </div>
+      <div id="search-filters" class="chips search-filters" role="tablist" aria-label="Filter category"></div>
+      <div id="search-recent" class="search-recent" hidden></div>
+      <ul id="search-results" class="results search-results" role="listbox" aria-label="Results"></ul>
+      <div class="search-footer">
+        <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> open</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- DOCS -->
-<section class="docs-section" id="docs">
-  <div class="container">
-    <h2 class="section-title" data-i18n="docs_title">Documentation</h2>
-    <p class="section-sub" data-i18n="docs_sub">Read detailed documentation for each part of QMF.</p>
-    <div class="docs-grid">
-      <a href="/qmf/docs/USAGE.md" class="docs-card">
-        <h3>&#128214; <span data-i18n="doc_usage_title">Usage Guide</span></h3>
-        <p data-i18n="doc_usage_desc">Basic usage guide: init, plugin, state, event bus, config.</p>
-      </a>
-      <a href="/qmf/docs/API.md" class="docs-card">
-        <h3>&#128203; <span data-i18n="doc_api_title">API Reference</span></h3>
-        <p data-i18n="doc_api_desc">Detailed API docs for EventBus, Store, Lifecycle, HttpClient, DI, Config.</p>
-      </a>
-      <a href="/qmf/docs/ARCHITECTURE.md" class="docs-card">
-        <h3>&#127959; <span data-i18n="doc_arch_title">Architecture</span></h3>
-        <p data-i18n="doc_arch_desc">4-layer architecture, import rules, plugin system, module structure.</p>
-      </a>
-      <a href="/qmf/docs/MIGRATION.md" class="docs-card">
-        <h3>&#128260; <span data-i18n="doc_migrate_title">Migration v2 → v3</span></h3>
-        <p data-i18n="doc_migrate_desc">Guide for migrating from share-ui (v2) to QMF v3. Includes compat layer.</p>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <p>QMF v3.0.0 · Built 2026-03-07 · <a href="https://status.quizzman.com">Service Status</a> · <a href="/qmf/version">/version</a></p>
-  </div>
-</footer>
-
-<!-- Language Switcher -->
-<div class="lang-switch">
-  <button onclick="setLang('en')" id="lang-en" class="active">EN</button>
-  <button onclick="setLang('vi')" id="lang-vi">VI</button>
-</div>
-
-<script src="/qmf/dist/modules/header/dynamic-island.js"></script>
-<script>
-function toggleMenu() {
-  var nav = document.getElementById('nav-links');
-  var btn = document.querySelector('.menu-toggle');
-  nav.classList.toggle('active');
-  btn.classList.toggle('active');
-}
-
-function closeMenu() {
-  var nav = document.getElementById('nav-links');
-  var btn = document.querySelector('.menu-toggle');
-  nav.classList.remove('active');
-  btn.classList.remove('active');
-}
-
-function switchTab(el, name) {
-  var parent = el.parentElement;
-  parent.querySelectorAll('.code-tab').forEach(function(t) { t.classList.remove('active'); });
-  var section = parent.parentElement;
-  section.querySelectorAll('.code-block').forEach(function(b) { b.classList.remove('active'); });
-  el.classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
-}
-
-// i18n Translations
-var i18n = {
-  en: {
-    nav_features: 'Features', nav_architecture: 'Architecture', nav_quickstart: 'Quick Start', nav_api: 'API', nav_docs: 'Docs',
-    hero_desc: 'Quizzman Modular Framework v3 — A modular, plugin-based frontend framework for the entire Quizzman ecosystem.',
-    btn_getstarted: 'Get Started',
-    features_title: 'Features', features_sub: '4-layer Architecture · Plugin system · Error isolation · DevTools',
-    feat_plugin_desc: 'Register modules as plugins with automatic dependency resolution. Supports eager & lazy loading.',
-    feat_di_desc: 'Token-based dependency injection — register and resolve services anywhere in your app.',
-    feat_error_desc: 'Each module has its own error boundary. One module crashing won\'t affect others.',
-    feat_state_desc: 'Global + isolated module store with Zod schema validation. Selectors, watchers, immutable updates.',
-    feat_lazy_desc: 'Code-split modules, loaded only when needed. CSS auto-injected when plugin mounts.',
-    feat_devtools_desc: 'Event tracing, state inspection, plugin graph — all via window.__QMF_DEVTOOLS__.',
-    feat_event_desc: 'Pub/sub with wildcards, scoped bus, and tracing. Inter-module communication without coupling.',
-    feat_lifecycle_desc: 'Manage module lifecycle: onInit → onMount → onReady → onDestroy. Sync and async.',
-    feat_http_desc: 'Fetch wrapper with interceptors, retry logic, auth injection, and automatic error mapping.',
-    arch_title: '4-Layer Architecture', arch_sub: 'Each layer can only import from lower layers — no circular dependencies.',
-    quickstart_title: 'Quick Start', quickstart_sub: 'Choose the integration method that fits your project.',
-    api_title: 'Core API', api_sub: 'Core APIs of @qmf/core', api_th_desc: 'Description',
-    api_eventbus: 'Pub/sub with wildcard * and EventBus.scoped(prefix)',
-    api_store: 'Immutable state container, Zod validation, selector + watcher',
-    api_lifecycle: 'Module lifecycle: onInit → onMount → onReady → onDestroy',
-    api_config: 'Zod schema validation + environment URL resolution',
-    api_http: 'Fetch wrapper: interceptor, retry, auth injection',
-    api_di: 'Token-based dependency injection',
-    api_plugin: 'Plugin registration with dependency graph + lazy loading',
-    api_error: 'Per-module error isolation, fallback UI',
-    island_sub: 'Notification pill — System notifications displayed as a "pill" at the top of the page, expands on hover/click.',
-    demo_title: 'Live Demo', demo_desc: 'Click buttons to see Dynamic Island. Hover to expand, click close button or wait for auto-dismiss.',
-    island_feat_queue_desc: 'Push multiple notifications in sequence — they\'re queued and displayed one by one with queue dots indicator.',
-    island_feat_priority_desc: 'info · success · warning · error · promo — each level has its own gradient color.',
-    island_feat_a11y_desc: 'Responsive on all devices. ARIA role="status", aria-live="polite", prefers-reduced-motion.',
-    island_feat_theme_desc: 'Auto-detects [data-theme="light"]. All colors via CSS custom properties, easy to override.',
-    island_feat_action_desc: 'Each notification can have action buttons: link (href) or callback (onClick).',
-    island_feat_zero_desc: 'Just 1 CSS + 1 JS file. No framework or library dependencies. <10KB combined.',
-    cdn_files: 'CDN Files',
-    docs_title: 'Documentation', docs_sub: 'Read detailed documentation for each part of QMF.',
-    doc_usage_desc: 'Basic usage guide: init, plugin, state, event bus, config.',
-    doc_api_desc: 'Detailed API docs for EventBus, Store, Lifecycle, HttpClient, DI, Config.',
-    doc_arch_desc: '4-layer architecture, import rules, plugin system, module structure.',
-    doc_migrate_desc: 'Guide for migrating from share-ui (v2) to QMF v3. Includes compat layer.',
-    demo_info_title: 'System Update', demo_info_msg: 'QMF v3.0 is now available — with many new features!',
-    demo_success_title: 'Success!', demo_success_msg: 'Account verified. Welcome to QuizzMan.',
-    demo_warning_title: 'Maintenance Warning', demo_warning_msg: 'System maintenance scheduled for 02:00 AM tomorrow.',
-    demo_error_title: 'Connection Error', demo_error_msg: 'Unable to connect to server. Please try again.',
-    demo_promo_title: 'QuizzMan Pro', demo_promo_msg: 'Upgrade to Pro to unlock all features!',
-    demo_promo_action1: 'Upgrade', demo_promo_action2: 'Learn More'
-  },
-  vi: {
-    nav_features: 'Tính năng', nav_architecture: 'Kiến trúc', nav_quickstart: 'Bắt đầu', nav_api: 'API', nav_docs: 'Tài liệu',
-    hero_desc: 'Quizzman Modular Framework v3 — Framework frontend dạng modular, plugin-based, dùng cho toàn bộ hệ thống Quizzman.',
-    btn_getstarted: 'Bắt đầu nhanh',
-    features_title: 'Tính năng', features_sub: 'Kiến trúc 4 lớp · Hệ thống plugin · Cách ly lỗi · DevTools',
-    feat_plugin_desc: 'Đăng ký module dạng plugin với tự động giải quyết dependency. Hỗ trợ eager & lazy loading.',
-    feat_di_desc: 'Dependency injection dựa trên token — đăng ký và resolve service ở bất kỳ đâu trong app.',
-    feat_error_desc: 'Mỗi module có error boundary riêng. Một module crash không ảnh hưởng đến module khác.',
-    feat_state_desc: 'Global + isolated module store với Zod schema validation. Selector, watcher, immutable update.',
-    feat_lazy_desc: 'Code-split module, chỉ load khi cần. CSS tự inject khi plugin mount.',
-    feat_devtools_desc: 'Event tracing, state inspection, plugin graph — tất cả qua window.__QMF_DEVTOOLS__.',
-    feat_event_desc: 'Pub/sub với wildcard, scoped bus, và tracing. Giao tiếp giữa các module không cần coupling.',
-    feat_lifecycle_desc: 'Quản lý vòng đời module: onInit → onMount → onReady → onDestroy. Đồng bộ và async.',
-    feat_http_desc: 'Fetch wrapper với interceptor, retry logic, auth injection, và error mapping tự động.',
-    arch_title: 'Kiến trúc 4 lớp', arch_sub: 'Mỗi lớp chỉ được import từ lớp thấp hơn — không có circular dependency.',
-    quickstart_title: 'Bắt đầu nhanh', quickstart_sub: 'Chọn cách tích hợp phù hợp với project của bạn.',
-    api_title: 'Core API', api_sub: 'Các API chính của @qmf/core', api_th_desc: 'Mô tả',
-    api_eventbus: 'Pub/sub với wildcard * và EventBus.scoped(prefix)',
-    api_store: 'Immutable state container, Zod validation, selector + watcher',
-    api_lifecycle: 'Module lifecycle: onInit → onMount → onReady → onDestroy',
-    api_config: 'Zod schema validation + environment URL resolution',
-    api_http: 'Fetch wrapper: interceptor, retry, auth injection',
-    api_di: 'Token-based dependency injection',
-    api_plugin: 'Plugin registration với dependency graph + lazy loading',
-    api_error: 'Per-module error isolation, fallback UI',
-    island_sub: 'Notification pill — Hiển thị thông báo hệ thống dạng "viên thuốc" ở đầu trang, mở rộng khi hover/click.',
-    demo_title: 'Demo trực tiếp', demo_desc: 'Nhấn nút để xem Dynamic Island. Hover để mở rộng, click nút close hoặc chờ auto-dismiss.',
-    island_feat_queue_desc: 'Push nhiều notification liên tiếp — chúng được xếp hàng và hiển thị lần lượt với queue dots indicator.',
-    island_feat_priority_desc: 'info · success · warning · error · promo — mỗi level có gradient color riêng.',
-    island_feat_a11y_desc: 'Responsive trên mọi thiết bị. ARIA role="status", aria-live="polite", prefers-reduced-motion.',
-    island_feat_theme_desc: 'Tự động nhận [data-theme="light"]. Tất cả màu sắc qua CSS custom properties, dễ override.',
-    island_feat_action_desc: 'Mỗi notification có thể có action buttons: link (href) hoặc callback (onClick).',
-    island_feat_zero_desc: 'Chỉ cần 1 CSS + 1 JS file. Không phụ thuộc framework hay thư viện nào. <10KB combined.',
-    cdn_files: 'CDN Files',
-    docs_title: 'Tài liệu', docs_sub: 'Đọc chi tiết từng phần của QMF.',
-    doc_usage_desc: 'Hướng dẫn sử dụng cơ bản: init, plugin, state, event bus, config.',
-    doc_api_desc: 'Chi tiết API của EventBus, Store, Lifecycle, HttpClient, DI, Config.',
-    doc_arch_desc: 'Kiến trúc 4 lớp, import rules, plugin system, module structure.',
-    doc_migrate_desc: 'Hướng dẫn chuyển từ share-ui (v2) sang QMF v3. Hỗ trợ compat layer.',
-    demo_info_title: 'Cập nhật hệ thống', demo_info_msg: 'QMF v3.0 đã sẵn sàng — nhiều tính năng mới!',
-    demo_success_title: 'Thành công!', demo_success_msg: 'Tài khoản đã được xác thực. Chào mừng bạn đến QuizzMan.',
-    demo_warning_title: 'Cảnh báo bảo trì', demo_warning_msg: 'Hệ thống sẽ bảo trì vào 02:00 AM ngày mai.',
-    demo_error_title: 'Lỗi kết nối', demo_error_msg: 'Không thể kết nối đến server. Vui lòng thử lại.',
-    demo_promo_title: 'QuizzMan Pro', demo_promo_msg: 'Nâng cấp Pro để mở khóa tất cả tính năng!',
-    demo_promo_action1: 'Nâng cấp', demo_promo_action2: 'Tìm hiểu'
-  }
-};
-
-var currentLang = localStorage.getItem('qmf-lang') || 'en';
-
-function setLang(lang) {
-  currentLang = lang;
-  localStorage.setItem('qmf-lang', lang);
-  document.documentElement.lang = lang;
-  updateI18n();
-  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-  document.getElementById('lang-vi').classList.toggle('active', lang === 'vi');
-}
-
-function t(key) {
-  return i18n[currentLang][key] || i18n['en'][key] || key;
-}
-
-function updateI18n() {
-  document.querySelectorAll('[data-i18n]').forEach(function(el) {
-    var key = el.getAttribute('data-i18n');
-    if (i18n[currentLang][key]) {
-      el.textContent = i18n[currentLang][key];
-    }
-  });
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-  setLang(currentLang);
-});
-
-var _demoIsland;
-function demoIsland(priority) {
-  if (!_demoIsland) _demoIsland = new QMFDynamicIsland();
-  var demos = {
-    info:    { titleKey: 'demo_info_title', messageKey: 'demo_info_msg', icon: 'fas fa-circle-info' },
-    success: { titleKey: 'demo_success_title', messageKey: 'demo_success_msg', icon: 'fas fa-check-circle' },
-    warning: { titleKey: 'demo_warning_title', messageKey: 'demo_warning_msg', icon: 'fas fa-triangle-exclamation' },
-    error:   { titleKey: 'demo_error_title', messageKey: 'demo_error_msg', icon: 'fas fa-circle-xmark' },
-    promo:   { titleKey: 'demo_promo_title', messageKey: 'demo_promo_msg', icon: 'fas fa-gem',
-               actions: [{ labelKey: 'demo_promo_action1', href: '#', primary: true }, { labelKey: 'demo_promo_action2' }] }
-  };
-  var d = demos[priority];
-  var actions = (d.actions || []).map(function(a) {
-    return { label: t(a.labelKey), href: a.href, primary: a.primary, onClick: a.onClick };
-  });
-  _demoIsland.push({ title: t(d.titleKey), message: t(d.messageKey), icon: d.icon, priority: priority, duration: 8000, actions: actions });
-}
-function demoQueue() {
-  demoIsland('info');
-  setTimeout(function() { demoIsland('success'); }, 200);
-  setTimeout(function() { demoIsland('warning'); }, 400);
-}
-</script>
+  <script src="/qmf/assets/docs-portal.js?v=20260717-portal3" defer></script>
 </body>
 </html>

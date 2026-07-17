@@ -1,0 +1,21 @@
+{
+  "name": "@qmf/events",
+  "version": "4.0.0-alpha.1",
+  "description": "QMF 4.0 named/typed event bus — vanilla JS",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "registry": "http://127.0.0.1:4873/",
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

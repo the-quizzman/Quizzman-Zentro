@@ -103,7 +103,7 @@ export const QMF_CONFIG = {
 export const APP_CONFIGS = {
   classroom: {
     appId: 'classroom',
-    appName: 'QuizzMan Classroom',
+    appName: 'Quizzman Classroom',
     pageTitle: 'Classroom',
     logo: 'https://ui.quizzman.com/qmf/assets/logo/classroom/classroom-logo-128.png',
     favicon: 'https://ui.quizzman.com/qmf/assets/logo/classroom/favicon.ico',
@@ -121,7 +121,7 @@ export const APP_CONFIGS = {
   
   play: {
     appId: 'play',
-    appName: 'QuizzMan Play',
+    appName: 'Quizzman Play',
     pageTitle: 'Play House',
     logo: 'https://ui.quizzman.com/qmf/assets/logo/play/play-logo-128.png',
     favicon: 'https://ui.quizzman.com/qmf/assets/logo/play/favicon.ico',
@@ -139,7 +139,7 @@ export const APP_CONFIGS = {
   
   main: {
     appId: 'main',
-    appName: 'QuizzMan',
+    appName: 'Quizzman',
     pageTitle: 'Home',
     logo: QMF_CONFIG.logo.main,
     favicon: 'https://ui.quizzman.com/qmf/assets/logo/favicon.ico',
@@ -153,7 +153,7 @@ export const APP_CONFIGS = {
   
   dictionary: {
     appId: 'dictionary',
-    appName: 'QuizzMan Dictionary',
+    appName: 'Quizzman Dictionary',
     pageTitle: 'Dictionary',
     logo: QMF_CONFIG.logo.main,
     favicon: 'https://ui.quizzman.com/qmf/assets/logo/favicon.ico',
@@ -167,7 +167,7 @@ export const APP_CONFIGS = {
   
   lms: {
     appId: 'lms',
-    appName: 'QuizzMan LMS',
+    appName: 'Quizzman LMS',
     pageTitle: 'Learning Management',
     logo: 'https://ui.quizzman.com/qmf/assets/logo/lms/lms-logo.png',
     favicon: 'https://ui.quizzman.com/qmf/assets/logo/lms/favicon.ico',

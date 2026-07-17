@@ -1,0 +1,69 @@
+# QMF — Full LLM Index
+> Expanded documentation map for AI agents (ChatGPT, Claude, Gemini, Cursor, Copilot, Codex, OpenHands, OpenRouter).
+> Prefer this file when you need exhaustive links. For a short overview use /qmf/llms.txt.
+
+## Identity
+- Product: QMF (Quizzman Modular Framework)
+- Stable: 3.0.0 (CDN / @qmf/core stack)
+- Alpha: 4.0.0-alpha.1 (vanilla JS contract runtime — @qmf/contract, @qmf/events, @qmf/runtime, @qmf/inspect, @qmf/qmf-cli)
+- Home: https://ui.quizzman.com/
+- Language (4.0): JavaScript (vanilla ESM). No JSX in Foundation/Runtime/Component/Module layers.
+
+## Machine-readable indexes
+- https://ui.quizzman.com/qmf/llms.txt
+- https://ui.quizzman.com/qmf/llms-full.txt
+- https://ui.quizzman.com/qmf/docs-index.json
+- https://ui.quizzman.com/qmf/api-index.json
+- https://ui.quizzman.com/qmf/components.json
+- https://ui.quizzman.com/qmf/search.json
+- https://ui.quizzman.com/qmf/sitemap.xml
+- https://ui.quizzman.com/qmf/schemas/index.json
+- https://ui.quizzman.com/registry/ (npm / Verdaccio — @qmf packages)
+
+## Human docs
+- https://ui.quizzman.com/qmf/docs.html
+- https://ui.quizzman.com/qmf/docs/USAGE.md
+- https://ui.quizzman.com/qmf/docs/API.md
+- https://ui.quizzman.com/qmf/docs/ARCHITECTURE.md
+- https://ui.quizzman.com/qmf/docs/ARCHITECTURE.public.md
+- https://ui.quizzman.com/qmf/docs/MIGRATION.md
+- https://ui.quizzman.com/qmf/docs/header-settings-setup.md
+
+## QMF 4.0 (AI-first contract)
+- https://ui.quizzman.com/qmf/docs/v4/README.md
+- https://ui.quizzman.com/qmf/docs/v4/QMF_SPEC.md
+- https://ui.quizzman.com/qmf/docs/v4/CONTRACT.md
+- https://ui.quizzman.com/qmf/docs/v4/CONVENTION.md
+- https://ui.quizzman.com/qmf/docs/v4/AI_RULES.md
+- https://ui.quizzman.com/qmf/docs/v4/CLI_SPEC.md
+- https://ui.quizzman.com/qmf/docs/v4/EVENT_SPEC.md
+- https://ui.quizzman.com/qmf/docs/v4/MODULE_SPEC.md
+- https://ui.quizzman.com/qmf/docs/v4/PLUGIN_SPEC.md
+- https://ui.quizzman.com/qmf/docs/v4/STATE_SPEC.md
+- https://ui.quizzman.com/qmf/docs/v4/INTROSPECTION.md
+- https://ui.quizzman.com/qmf/docs/v4/LANGUAGE.md
+- https://ui.quizzman.com/qmf/docs/v4/MIGRATION_v3_v4.md
+- https://ui.quizzman.com/qmf/docs/v4/IMPLEMENTATION.md
+- https://ui.quizzman.com/qmf/docs/v4/ROADMAP.md
+- Live demo: https://ui.quizzman.com/qmf/v4-demo/
+
+## Schemas (SSOT)
+- https://ui.quizzman.com/qmf/schemas/qmf.schema.schema.json
+- https://ui.quizzman.com/qmf/schemas/module.manifest.schema.json
+- https://ui.quizzman.com/qmf/schemas/event.schema.json
+
+## CDN (stable v3)
+- https://ui.quizzman.com/qmf/v3/tokens.css
+- https://ui.quizzman.com/qmf/v3/qmf.min.js
+- https://ui.quizzman.com/qmf/dist/qmf.min.js
+
+## Coding guidelines for agents
+1. Treat qmf.schema.json + module manifests as source of truth (4.0).
+2. Prefer vanilla JS ESM for new modules; do not introduce JSX in core layers.
+3. Use defineEvent / emit / subscribe — no magic string events without schema.
+4. Run doctor (qmf4 doctor) before claiming a module is complete.
+5. Read AI_RULES.md and CONVENTION.md before generating files.
+
+## Crawl policy
+See https://ui.quizzman.com/qmf/robots.txt
+Content-Signal: ai-train=no, search=yes, ai-input=yes

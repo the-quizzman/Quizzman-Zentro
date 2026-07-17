@@ -736,7 +736,7 @@ QMF.plugins.footer.init({
     
     // Social links
     socialLinks: [
-        { icon: 'github', href: 'https://github.com/quizzman', label: 'GitHub' },
+        { icon: 'github', href: 'https://github.com/the-quizzman', label: 'GitHub' },
         { icon: 'facebook', href: 'https://facebook.com/quizzman', label: 'Facebook' },
         { icon: 'youtube', href: 'https://youtube.com/quizzman', label: 'YouTube' }
     ],

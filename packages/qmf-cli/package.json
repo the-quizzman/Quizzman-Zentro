@@ -1,0 +1,27 @@
+{
+  "name": "@qmf/qmf-cli",
+  "version": "4.0.0-alpha.1",
+  "description": "QMF 4.0 official CLI — vanilla JS",
+  "type": "module",
+  "bin": {
+    "qmf4": "./src/cli.js"
+  },
+  "exports": {
+    ".": "./src/cli.js"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@qmf/contract": "4.0.0-alpha.1",
+    "@qmf/inspect": "4.0.0-alpha.1"
+  },
+  "publishConfig": {
+    "registry": "http://127.0.0.1:4873/",
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -33,8 +33,8 @@ const CDN_CONFIG = {
   rsync: {
     host: 'ui.quizzman.com',
     user: 'deploy',
-    remotePath: '/var/www/ui.quizzman.com/qmf/v3/',
-    logoAssetsRemotePath: '/var/www/ui.quizzman.com/qmf/assets/logo/',
+    remotePath: '/opt/Quizzman/qmf/dist/',
+    logoAssetsRemotePath: '/opt/Quizzman/qmf/assets/logo/',
   },
   // Option 2: S3/R2 bucket
   s3: {

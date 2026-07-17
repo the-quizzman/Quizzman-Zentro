@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui.quizzman.com/qmf/schemas/module.manifest.schema.json",
+  "title": "QMF Module Manifest v1",
+  "description": "Machine-readable metadata for one QMF module. AI agents MUST prefer this over parsing source.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "version",
+    "layer",
+    "dependencies",
+    "services",
+    "events",
+    "states",
+    "exports",
+    "configSchema",
+    "lifecycle"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,31}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": { "type": "string", "maxLength": 280 },
+    "layer": { "const": "module" },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "version"],
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": "string" },
+          "optional": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "token", "file"],
+        "properties": {
+          "id": { "type": "string" },
+          "token": { "type": "string", "description": "DI token" },
+          "file": { "type": "string", "const": "service.js" },
+          "singleton": { "type": "boolean", "default": true }
+        }
+      }
+    },
+    "events": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "produces": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/eventRef" }
+        },
+        "consumes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/eventRef" }
+        }
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "file", "schema"],
+        "properties": {
+          "id": { "type": "string" },
+          "file": { "type": "string", "const": "state.js" },
+          "schema": { "type": "string", "description": "schema export name" },
+          "scope": { "type": "string", "enum": ["module", "global"], "default": "module" }
+        }
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9.:_-]*$" },
+      "default": []
+    },
+    "exports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plugin"],
+      "properties": {
+        "plugin": { "type": "string", "default": "module.js" },
+        "public": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        }
+      }
+    },
+    "configSchema": {
+      "type": "string",
+      "description": "Export name of JSON Schema in config.js",
+      "default": "ConfigSchema"
+    },
+    "lifecycle": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "onBeforeInit",
+          "onInit",
+          "onAfterInit",
+          "onBeforeMount",
+          "onMount",
+          "onAfterMount",
+          "onBeforeConnect",
+          "onConnect",
+          "onAfterConnect",
+          "onReady",
+          "onBeforeDestroy",
+          "onDestroy"
+        ]
+      }
+    },
+    "entry": {
+      "type": "string",
+      "default": "module.js"
+    },
+    "files": {
+      "type": "object",
+      "description": "Required file set for strictConvention",
+      "additionalProperties": false,
+      "properties": {
+        "module": { "const": "module.js" },
+        "config": { "const": "config.js" },
+        "state": { "const": "state.js" },
+        "service": { "const": "service.js" },
+        "events": { "const": "events.js" },
+        "view": { "const": "view.js" },
+        "manifest": { "const": "manifest.json" }
+      }
+    }
+  },
+  "$defs": {
+    "eventRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*\\.[a-z][a-z0-9A-Z.]*$"
+        },
+        "version": { "type": "integer", "minimum": 1 },
+        "schema": { "type": "string", "description": "schema export in events.js" }
+      }
+    }
+  }
+}

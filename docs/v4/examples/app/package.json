@@ -1,0 +1,22 @@
+{
+  "name": "qmf-example-dictionary",
+  "version": "4.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "qmf dev",
+    "build": "qmf build",
+    "doctor": "node ../../../../packages/qmf-cli/src/cli.js doctor --strict .",
+    "inspect": "qmf inspect summary",
+    "bootstrap": "node src/runtime/bootstrap.js"
+  },
+  "dependencies": {
+    "@qmf/contract": "file:../../../../packages/contract",
+    "@qmf/events": "file:../../../../packages/events",
+    "@qmf/runtime": "file:../../../../packages/runtime",
+    "@qmf/inspect": "file:../../../../packages/inspect"
+  },
+  "devDependencies": {
+    "@qmf/cli": "^4.0.0"
+  }
+}

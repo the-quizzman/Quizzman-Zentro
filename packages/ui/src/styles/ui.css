@@ -121,7 +121,7 @@
 /* ─── Dropdown ───────────────────────────────────────────── */
 
 .qmf-dropdown {
-  position: absolute;
+  position: fixed;
   min-width: 200px;
   background: var(--qmf-bg-primary);
   border: 1px solid var(--qmf-border-color);
@@ -130,10 +130,13 @@
   z-index: var(--qmf-z-dropdown);
   padding: var(--qmf-space-1) 0;
   animation: qmf-fade-in 0.15s ease;
+  font-family: var(--qmf-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.qmf-dropdown--right { right: 0; }
-.qmf-dropdown--left { left: 0; }
+.qmf-dropdown--right,
+.qmf-dropdown--left { /* alignment handled in JS when portaled */ }
 
 .qmf-dropdown__item {
   display: flex; align-items: center; gap: var(--qmf-space-2-5);

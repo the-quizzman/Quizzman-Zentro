@@ -1,5 +1,5 @@
 /**
- * QuizzMan Dynamic Features JS
+ * Quizzman Dynamic Features JS
  * Host: ui.quizzman.com/qmf/ui/dynamic/
  * 
  * API Schema:

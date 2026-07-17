@@ -1,0 +1,53 @@
+{
+  "framework": "QMF",
+  "version": "4.0.0",
+  "name": "qmf-example-dictionary",
+  "layers": {
+    "foundation": "src/foundation",
+    "runtime": "src/runtime",
+    "components": "src/components",
+    "modules": "src/modules"
+  },
+  "modules": [
+    {
+      "id": "auth",
+      "path": "auth",
+      "manifest": "manifest.json",
+      "enabled": true,
+      "lazy": false
+    },
+    {
+      "id": "dictionary",
+      "path": "dictionary",
+      "manifest": "manifest.json",
+      "enabled": true,
+      "lazy": true
+    }
+  ],
+  "eventBus": "typed",
+  "manifest": "v1",
+  "language": "js",
+  "router": null,
+  "componentModel": "imperative",
+  "adapters": {
+    "react": null,
+    "vue": null,
+    "svelte": null
+  },
+  "ai": {
+    "strictConvention": true,
+    "requireManifest": true,
+    "allowImperativeDOM": true,
+    "allowMagicEvents": false,
+    "requireSchemaBeforeWrite": true
+  },
+  "build": {
+    "target": "es2020",
+    "cdn": false,
+    "sri": true
+  },
+  "inspect": {
+    "enabled": true,
+    "exposeGlobal": true
+  }
+}

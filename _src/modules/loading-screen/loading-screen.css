@@ -1,0 +1,440 @@
+/**
+ * QMF Bootstrap / Loading Screen v2.0
+ * Runtime variant: framework bootstrapping (not app spinner)
+ * Flashcard variant: legacy fc-load (compat)
+ */
+
+/* ─── Runtime bootstrap ─────────────────────────────────── */
+
+.qm-boot {
+  --qm-boot-bg: #0b1020;
+  --qm-boot-muted: #8b95a8;
+  --qm-boot-line: rgba(125, 166, 255, 0.35);
+  --qm-boot-glow: rgba(125, 166, 255, 0.55);
+  --qm-boot-font: 'Inter', 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+  font-family: var(--qm-boot-font);
+  color: #e8eefc;
+}
+
+.qm-boot *,
+.qm-boot *::before,
+.qm-boot *::after {
+  box-sizing: border-box;
+}
+
+.qm-boot--boot {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: var(--qm-boot-bg);
+  background-image:
+    linear-gradient(rgba(201, 214, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 214, 255, 0.02) 1px, transparent 1px),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size:
+    48px 48px,
+    48px 48px,
+    180px 180px;
+  background-repeat: repeat;
+}
+
+.qm-boot--inline {
+  position: relative;
+  width: 100%;
+  min-height: min(52vh, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--qm-boot-bg);
+}
+
+.qm-boot--out {
+  animation: qmBootOut 0.42s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes qmBootOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+html.qm-load-active,
+html.qm-load-active body {
+  overflow: hidden;
+}
+
+#qm-initial-loading.qm-boot {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+}
+
+.qm-boot__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 420px);
+  text-align: center;
+}
+
+.qm-boot__mark-wrap {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.qm-boot__mark {
+  font-size: clamp(4.5rem, 14vw, 6.25rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  background: linear-gradient(180deg, #c9d6ff 0%, #7da6ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 28px rgba(125, 166, 255, 0.35));
+  user-select: none;
+}
+
+.qm-boot__scan {
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  width: 28%;
+  left: -30%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 214, 255, 0.05) 35%,
+    rgba(125, 166, 255, 0.55) 50%,
+    rgba(201, 214, 255, 0.05) 65%,
+    transparent 100%
+  );
+  box-shadow: 0 0 24px var(--qm-boot-glow);
+  mix-blend-mode: screen;
+  animation: qmBootScan 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes qmBootScan {
+  0% {
+    left: -35%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+  }
+}
+
+.qm-boot__sub {
+  margin: 0 0 28px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--qm-boot-muted);
+}
+
+.qm-boot__status {
+  margin: 0 0 18px;
+  min-height: 1.4em;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #d5deef;
+  letter-spacing: 0.01em;
+}
+
+.qm-boot__status--fade {
+  animation: qmBootStatusIn 0.35s ease both;
+}
+
+.qm-boot__status--ready {
+  color: #9ec0ff;
+  font-weight: 600;
+}
+
+@keyframes qmBootStatusIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.qm-boot__progress {
+  width: min(100%, 280px);
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(201, 214, 255, 0.12);
+  overflow: hidden;
+}
+
+.qm-boot__progress-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7da6ff, #c9d6ff);
+  box-shadow: 0 0 10px var(--qm-boot-glow);
+  transition: width 0.35s ease;
+}
+
+.qm-boot__footer {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #6b758a;
+  font-variant-numeric: tabular-nums;
+}
+
+.qm-boot__log {
+  width: min(100%, 320px);
+  min-height: 6.5rem;
+  margin: 0 0 16px;
+  text-align: left;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #9aa6bd;
+}
+
+.qm-boot__log-line {
+  margin-bottom: 0.55rem;
+  animation: qmBootStatusIn 0.28s ease both;
+}
+
+.qm-boot__log-line--fade {
+  opacity: 0.25;
+  transition: opacity 0.35s ease;
+}
+
+.qm-boot__log-cmd {
+  color: #7da6ff;
+}
+
+.qm-boot__log-ok {
+  color: #8f9bb0;
+  padding-left: 0.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qm-boot__scan,
+  .qm-boot__status--fade,
+  .qm-boot__log-line {
+    animation: none !important;
+  }
+  .qm-boot__progress-fill {
+    transition: none;
+  }
+}
+
+/* ─── Legacy flashcard (compat) ─────────────────────────── */
+
+:root {
+  --qm-load-font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --qm-load-bg: #faf8f5;
+  --qm-load-bg-glow: rgba(254, 243, 199, 0.55);
+  --qm-load-card-from: #fff;
+  --qm-load-card-mid: #fffbeb;
+  --qm-load-card-to: #f0fdfa;
+  --qm-load-card-border: rgba(180, 83, 9, 0.16);
+  --qm-load-card-shadow: rgba(180, 83, 9, 0.1);
+  --qm-load-badge-border: #d97706;
+  --qm-load-brand: #92400e;
+  --qm-load-msg: #57534e;
+  --qm-load-amber: #fbbf24;
+  --qm-load-teal: #0d9488;
+  --qm-load-blue: #2563eb;
+}
+
+#qm-initial-loading.qm-load {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #faf8f5;
+}
+
+.qm-load {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--qm-load-font);
+}
+
+.qm-load--boot {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, var(--qm-load-bg-glow), transparent 55%),
+    var(--qm-load-bg);
+}
+
+.qm-load--boot.qm-load--out {
+  animation: qmBootOut 0.35s ease-out forwards;
+  pointer-events: none;
+}
+
+.qm-load--inline {
+  position: relative;
+  width: 100%;
+  min-height: min(52vh, 400px);
+  padding: 24px 16px;
+  background: transparent;
+}
+
+.qm-load--dark {
+  --qm-load-bg: #0c0a09;
+  --qm-load-bg-glow: rgba(79, 70, 229, 0.2);
+  --qm-load-card-from: #1c1917;
+  --qm-load-card-mid: #292524;
+  --qm-load-card-to: #1e1b4b;
+  --qm-load-card-border: rgba(251, 191, 36, 0.2);
+  --qm-load-card-shadow: rgba(0, 0, 0, 0.35);
+  --qm-load-badge-border: #fbbf24;
+  --qm-load-brand: #fcd34d;
+  --qm-load-msg: #a8a29e;
+}
+
+.qm-load__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: min(100%, 320px);
+  padding: 28px 24px 32px;
+  border-radius: 20px;
+  background: linear-gradient(
+    165deg,
+    var(--qm-load-card-from) 0%,
+    var(--qm-load-card-mid) 45%,
+    var(--qm-load-card-to) 100%
+  );
+  border: 2px solid var(--qm-load-card-border);
+  box-shadow:
+    0 8px 0 var(--qm-load-card-shadow),
+    0 20px 48px rgba(28, 25, 23, 0.08);
+}
+
+.qm-load__badge {
+  width: 72px;
+  height: 72px;
+  padding: 6px;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid var(--qm-load-badge-border);
+}
+
+.qm-load__logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.qm-load__brand {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--qm-load-brand);
+}
+
+.qm-load__tagline {
+  margin: -6px 0 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--qm-load-msg);
+  opacity: 0.75;
+}
+
+.qm-load__map {
+  display: block;
+  width: 100%;
+  height: 72px;
+  overflow: visible;
+}
+
+.qm-load__path-bg {
+  fill: none;
+  stroke: rgba(120, 113, 108, 0.16);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.qm-load__path-fill {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: qmLoadPath 2.4s ease-in-out infinite;
+}
+
+@keyframes qmLoadPath {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0.5;
+  }
+  45% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  55% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -100;
+    opacity: 0.5;
+  }
+}
+
+.qm-load__node {
+  fill: #d6d3d1;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.qm-load__msg {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--qm-load-msg);
+}

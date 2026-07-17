@@ -66,7 +66,7 @@
             {
                 id: 1,
                 type: 'feature',
-                title: 'Chào mừng đến QuizzMan',
+                title: 'Chào mừng đến Quizzman',
                 message: 'Khám phá các tính năng học tập tương tác!',
                 icon: 'fas fa-star',
                 color: '#00d4ff',

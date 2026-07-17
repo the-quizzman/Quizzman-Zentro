@@ -1,0 +1,37 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  aria-hidden="true"
+>
+  <!-- Con d¥u Quizzman  scalloped wax seal + chï Q -->
+  <path
+    d="M12 2.8 Q14.545 2.503 16.6 4.033 Q18.953 5.047 19.967 7.4 Q21.497 9.455 21.2 12 Q21.497 14.545 19.967 16.6 Q18.953 18.953 16.6 19.967 Q14.545 21.497 12 21.2 Q9.455 21.497 7.4 19.967 Q5.047 18.953 4.033 16.6 Q2.503 14.545 2.8 12 Q2.503 9.455 4.033 7.4 Q5.047 5.047 7.4 4.033 Q9.455 2.503 12 2.8 Z"
+    stroke="currentColor"
+    stroke-width="1.35"
+    stroke-linejoin="round"
+  />
+  <circle
+    cx="12"
+    cy="12"
+    r="6.35"
+    stroke="currentColor"
+    stroke-width="1.05"
+  />
+  <!-- Chï Q -->
+  <circle
+    cx="12"
+    cy="11.55"
+    r="3.15"
+    stroke="currentColor"
+    stroke-width="1.55"
+  />
+  <path
+    d="M13.85 13.55 L16.15 16.05"
+    stroke="currentColor"
+    stroke-width="1.55"
+    stroke-linecap="round"
+  />
+</svg>

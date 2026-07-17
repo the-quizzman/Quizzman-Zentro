@@ -1,0 +1,38 @@
+{
+  "framework": "QMF",
+  "version": "4.0.0",
+  "name": "my-app",
+  "language": "js",
+  "layers": {
+    "foundation": "src/foundation",
+    "runtime": "src/runtime",
+    "components": "src/components",
+    "modules": "src/modules"
+  },
+  "modules": [],
+  "eventBus": "typed",
+  "manifest": "v1",
+  "router": null,
+  "componentModel": "imperative",
+  "adapters": {
+    "react": null,
+    "vue": null,
+    "svelte": null
+  },
+  "ai": {
+    "strictConvention": true,
+    "requireManifest": true,
+    "allowImperativeDOM": true,
+    "allowMagicEvents": false,
+    "requireSchemaBeforeWrite": true
+  },
+  "build": {
+    "target": "es2020",
+    "cdn": false,
+    "sri": true
+  },
+  "inspect": {
+    "enabled": true,
+    "exposeGlobal": true
+  }
+}

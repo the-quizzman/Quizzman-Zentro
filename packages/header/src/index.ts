@@ -15,7 +15,7 @@ export const HeaderConfigSchema = z.object({
   // Branding (LEFT zone)
   logoSrc: z.string().optional(),
   logoSrcDark: z.string().optional(),
-  brandName: z.string().default('QuizzMan'),
+  brandName: z.string().default('Quizzman'),
   pageTitle: z.string().optional(),
 
   // Main logo (CENTER zone)
@@ -29,6 +29,8 @@ export const HeaderConfigSchema = z.object({
   showFriend: z.boolean().default(false),
   showNotification: z.boolean().default(false),
   showUserDropdown: z.boolean().default(true),
+  /** When true, skip built-in login/user UI — mount auth-widget into the actions zone instead */
+  useAuthWidget: z.boolean().default(false),
 
   // URLs
   loginUrl: z.string().url().default('https://id.quizzman.com/login'),
@@ -271,7 +273,9 @@ export class QMFHeader {
   }
 
   private renderRightZone(): HTMLElement {
-    const right = createElement('div', { className: 'qmf-header__cluster qmf-header__cluster--right' });
+    const right = createElement('div', {
+      className: 'qmf-header__cluster qmf-header__cluster--right qmf-header__right qmf-header__actions',
+    });
 
     // Social buttons
     if (this.config.showChat) {
@@ -304,17 +308,18 @@ export class QMFHeader {
       right.appendChild(notiBtn);
     }
 
-    // Login button (shown when not authenticated)
-    const loginBtn = createElement('a', {
-      className: 'qmf-header__login-btn qmf-btn qmf-btn--primary qmf-btn--sm',
-      href: this.config.loginUrl,
-    }, ['Đăng nhập']);
-    loginBtn.style.display = 'none';
-    right.appendChild(loginBtn);
+    // Built-in auth UI (skipped when auth-widget owns the actions zone)
+    if (!this.config.useAuthWidget) {
+      const loginBtn = createElement('a', {
+        className: 'qmf-header__login-btn qmf-btn qmf-btn--primary qmf-btn--sm',
+        href: this.config.loginUrl,
+      }, ['Đăng nhập']);
+      loginBtn.style.display = 'none';
+      right.appendChild(loginBtn);
 
-    // User dropdown (shown when authenticated)
-    if (this.config.showUserDropdown) {
-      right.appendChild(this.renderUserDropdown());
+      if (this.config.showUserDropdown) {
+        right.appendChild(this.renderUserDropdown());
+      }
     }
 
     return right;
@@ -465,6 +470,9 @@ export function createHeaderPlugin(config?: Partial<HeaderConfig>): QMFPlugin {
       onMount: () => {
         headerInstance = new QMFHeader(config);
         headerInstance.mount(mountTarget);
+        if (typeof window !== 'undefined') {
+          (window as Record<string, unknown>).qmfHeader = headerInstance;
+        }
       },
       onDestroy: () => {
         headerInstance?.destroy();

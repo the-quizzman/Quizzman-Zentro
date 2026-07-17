@@ -1,0 +1,136 @@
+# robots.txt — ui.quizzman.com (QMF)
+# Last updated: 2026-07-16
+# Served at https://ui.quizzman.com/robots.txt and /qmf/robots.txt
+#
+# Content-Signal meaning:
+#   ai-train=no   → do not use for model training
+#   search=yes    → allow search engine indexing
+#   ai-input=yes  → allow AI agents to fetch docs for answers (NOT blocked)
+
+User-agent: *
+Content-Signal: ai-train=no, search=yes, ai-input=yes
+Allow: /
+Allow: /llms.txt
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/llms-full.txt
+Allow: /qmf/docs-index.json
+Allow: /qmf/api-index.json
+Allow: /qmf/components.json
+Allow: /qmf/search.json
+Allow: /qmf/v4-demo/
+Allow: /qmf/schemas/
+Allow: /qmf/packages/
+Allow: /qmf/docs
+Allow: /qmf/docs.html
+Allow: /qmf/docs/
+Allow: /qmf/sitemap.xml
+Allow: /qmf/index.html
+Allow: /qmf/v3/
+Allow: /qmf/dist/
+Allow: /qmf/assets/
+Disallow: /registry/
+Disallow: /qmf/kernel/
+Disallow: /qmf/services/
+Disallow: /qmf/plugins/
+Disallow: /qmf/scripts/
+Disallow: /qmf/node_modules/
+Disallow: /qmf/_src/
+Disallow: /qmf/docs/*.internal.md
+Disallow: /qmf/docs/*.internal.html
+
+# Search
+User-agent: Googlebot
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: Bingbot
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: OAI-SearchBot
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+# Anthropic
+User-agent: anthropic-ai
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: Claude-Web
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+# Other AI
+User-agent: PerplexityBot
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: Google-Extended
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: CCBot
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: Bytespider
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: Amazonbot
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+User-agent: Applebot-Extended
+Allow: /
+Allow: /qmf/
+Allow: /qmf/llms.txt
+Allow: /qmf/docs/
+
+Sitemap: https://ui.quizzman.com/qmf/sitemap.xml

@@ -42,6 +42,7 @@ export class Dropdown {
   private emitter = createEventEmitter();
   private isOpen = false;
   private outsideClickHandler: ((e: MouseEvent) => void) | null = null;
+  private repositionHandler: (() => void) | null = null;
 
   constructor(options: DropdownOptions) {
     this.id = uniqueId('dropdown');
@@ -63,12 +64,17 @@ export class Dropdown {
   close(): void {
     if (!this.isOpen) return;
     this.isOpen = false;
-    this.menuEl?.remove();
-    this.menuEl = null;
     if (this.outsideClickHandler) {
       document.removeEventListener('click', this.outsideClickHandler);
       this.outsideClickHandler = null;
     }
+    if (this.repositionHandler) {
+      window.removeEventListener('resize', this.repositionHandler);
+      window.removeEventListener('scroll', this.repositionHandler, true);
+      this.repositionHandler = null;
+    }
+    this.menuEl?.remove();
+    this.menuEl = null;
     this.emitter.emit('close');
   }
 
@@ -130,9 +136,34 @@ export class Dropdown {
       this.menuEl.appendChild(el);
     }
 
-    // Position relative to trigger
+    // Portal to body so overflow/transform in headers cannot clip or misalign the menu.
     const trigger = this.options.trigger;
-    trigger.parentElement?.appendChild(this.menuEl);
+    document.body.appendChild(this.menuEl);
+
+    const positionMenu = () => {
+      if (!this.menuEl) return;
+      const rect = trigger.getBoundingClientRect();
+      const gap = 8;
+      const viewportPad = 8;
+      const menuWidth = this.menuEl.offsetWidth || 200;
+      let left = align === 'right' ? rect.right - menuWidth : rect.left;
+      left = Math.max(viewportPad, Math.min(left, window.innerWidth - menuWidth - viewportPad));
+
+      Object.assign(this.menuEl.style, {
+        position: 'fixed',
+        top: `${rect.bottom + gap}px`,
+        left: `${left}px`,
+        right: 'auto',
+        bottom: 'auto',
+      });
+    };
+
+    positionMenu();
+    this.repositionHandler = () => {
+      if (this.isOpen) positionMenu();
+    };
+    window.addEventListener('resize', this.repositionHandler);
+    window.addEventListener('scroll', this.repositionHandler, true);
 
     // Close on outside click
     this.outsideClickHandler = (e: MouseEvent) => {

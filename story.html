@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi" data-view-mode="reading">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Story Viewer — QMF</title>
+  <meta name="description" content="Quizzman Story Viewer — Markdown → Report → Story. Tái sử dụng cho mọi tài liệu Markdown." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://ui.quizzman.com/qmf/story.html" />
+  <link rel="icon" href="/qmf/assets/logo/favicon-32.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/qmf/assets/story-viewer/story-viewer.css?v=20260717-story4" />
+  <link rel="stylesheet" href="/qmf/assets/story-viewer/vendor/github-dark.min.css?v=20260717-story2" />
+</head>
+<body>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+  <div class="mv-backdrop" id="drawer-backdrop"></div>
+
+  <header class="mv-header">
+    <a class="mv-brand" href="/" title="QMF Developer Portal">
+      <img src="/qmf/assets/logo/favicon-32.png" alt="" width="22" height="22" />
+      <span>QMF</span>
+    </a>
+
+    <div class="mode-switch" role="tablist" aria-label="Chế độ xem">
+      <button type="button" role="tab" id="mode-reading" class="is-active" aria-selected="true">Đọc</button>
+      <button type="button" role="tab" id="mode-research" aria-selected="false">Nghiên cứu</button>
+    </div>
+
+    <div class="mv-actions">
+      <button type="button" class="mv-btn mv-search-trigger" id="open-search" aria-label="Search">
+        <span class="mv-search-label">Tìm</span>
+        <kbd class="mv-kbd">⌘K</kbd>
+      </button>
+      <div class="mv-mobile-toggles">
+        <button type="button" class="mv-btn" id="open-nav">Mục</button>
+        <button type="button" class="mv-btn" id="open-toc">Trang</button>
+      </div>
+      <a class="mv-btn" id="full-result-link" href="/" hidden>Portal</a>
+      <a class="mv-btn research-only" id="raw-link" href="#" title="Plain Markdown">Raw</a>
+      <button type="button" class="mv-btn research-only" id="copy-link">Copy link</button>
+      <button type="button" class="mv-btn research-only" id="dev-mode-toggle" aria-pressed="false" title="Evidence IDs">Dev</button>
+      <button type="button" class="mv-btn mv-btn-icon" id="theme-toggle" aria-label="Toggle theme" title="Theme">◐</button>
+    </div>
+  </header>
+
+  <div class="mv-shell">
+    <aside class="mv-nav" id="doc-nav" aria-label="Mục lục">
+      <p class="mv-side-label">Lối đọc</p>
+      <div class="snapshot-card story-side-card">
+        <span class="snapshot-card-label" id="side-label">Tài liệu</span>
+        <strong id="side-hexagram">…</strong>
+        <span id="side-outcome"></span>
+      </div>
+      <nav id="section-nav"></nav>
+      <div class="mv-nav-extra">
+        <a id="side-full-link" href="/" style="display:none">Mở giao diện đầy đủ</a>
+        <a class="research-only" id="side-json-link" href="#" style="display:none">JSON</a>
+      </div>
+    </aside>
+
+    <main class="mv-main">
+      <header class="story-hero" id="doc-hero" hidden>
+        <div class="story-hex" id="story-hex"></div>
+        <p class="story-outcome" id="story-outcome" hidden></p>
+        <p class="story-epigraph" id="story-epigraph" hidden></p>
+        <div class="story-divider" aria-hidden="true"></div>
+        <p class="story-question" id="story-question" hidden></p>
+        <div class="story-meta research-only" id="doc-meta"></div>
+      </header>
+
+      <div class="mv-status" id="status"><div class="mv-spinner"></div>Đang mở bản đọc…</div>
+      <article class="mv-article markdown-body" id="article" hidden></article>
+
+      <details class="method-drawer" id="method-drawer" hidden>
+        <summary>Phương pháp luận giải</summary>
+        <div id="method-drawer-body"></div>
+      </details>
+    </main>
+
+    <aside class="mv-toc" id="doc-toc" aria-label="Trên trang này">
+      <p class="mv-side-label">Trên trang này</p>
+      <div class="mv-toc-tree">
+        <div class="toc-rail" aria-hidden="true"><div class="toc-rail-fill" id="toc-rail-fill"></div></div>
+        <ul class="mv-toc-list" id="toc-list"></ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="mv-cmd" id="cmd-palette" hidden>
+    <div class="mv-cmd-scrim" id="cmd-scrim"></div>
+    <div class="mv-cmd-panel" role="dialog" aria-modal="true" aria-label="Tìm trong tài liệu">
+      <div class="mv-cmd-input-wrap">
+        <span class="mv-cmd-icon" aria-hidden="true">⌕</span>
+        <input type="search" id="cmd-input" class="mv-cmd-input" placeholder="Tìm trong tài liệu…" autocomplete="off" spellcheck="false" />
+        <kbd class="mv-kbd">Esc</kbd>
+      </div>
+      <ul class="mv-cmd-results" id="cmd-results" role="listbox"></ul>
+      <div class="mv-cmd-footer">
+        <span><kbd class="mv-kbd">↑↓</kbd> chọn</span>
+        <span><kbd class="mv-kbd">↵</kbd> tới</span>
+        <span><kbd class="mv-kbd">esc</kbd> đóng</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/qmf/assets/story-viewer/vendor/markdown-it.min.js"></script>
+  <script src="/qmf/assets/story-viewer/vendor/highlight.min.js"></script>
+  <script src="/qmf/assets/story-viewer/story-viewer.js?v=20260717-story4"></script>
+</body>
+</html>

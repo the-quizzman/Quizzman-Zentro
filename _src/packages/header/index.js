@@ -6,7 +6,7 @@ import { updateBadge, createBadge, createDropdown } from '@qmf/ui';
 var HeaderConfigSchema = z.object({
   // Branding (LEFT zone)
   logoSrc: z.string().optional(),
-  brandName: z.string().default("QuizzMan"),
+  brandName: z.string().default("Quizzman"),
   pageTitle: z.string().optional(),
   // Main logo (CENTER zone)
   mainLogoUrl: z.string().optional(),

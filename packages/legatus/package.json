@@ -1,0 +1,39 @@
+{
+  "name": "@qmf/legatus",
+  "version": "1.0.0",
+  "description": "QMF Legatus plugin — notification bell, inbox, toast, realtime client",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./style.css": "./dist/legatus.css"
+  },
+  "sideEffects": ["*.css"],
+  "scripts": {
+    "build": "tsup && node scripts/build-standalone.mjs",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@qmf/core": "^3.0.0 || ^4.0.0",
+    "@qmf/utils": "^3.0.0",
+    "@qmf/ui": "^3.0.0"
+  },
+  "devDependencies": {
+    "@qmf/core": "workspace:*",
+    "@qmf/utils": "workspace:*",
+    "@qmf/ui": "workspace:*",
+    "esbuild": "^0.25.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "zod": "^3.22.0"
+  },
+  "private": true
+}

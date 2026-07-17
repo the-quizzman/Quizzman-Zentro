@@ -238,13 +238,13 @@ describe('Meta Manager', () => {
       title: 'OG Test',
       ogImage: 'https://example.com/image.png',
       ogType: 'website',
-      ogSiteName: 'QuizzMan',
+      ogSiteName: 'Quizzman',
     });
 
     expect(fakeDoc.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe('OG Test');
     expect(fakeDoc.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe('https://example.com/image.png');
     expect(fakeDoc.querySelector('meta[property="og:type"]')?.getAttribute('content')).toBe('website');
-    expect(fakeDoc.querySelector('meta[property="og:site_name"]')?.getAttribute('content')).toBe('QuizzMan');
+    expect(fakeDoc.querySelector('meta[property="og:site_name"]')?.getAttribute('content')).toBe('Quizzman');
   });
 
   it('creates Twitter Card meta tags', () => {

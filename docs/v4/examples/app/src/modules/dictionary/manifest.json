@@ -1,0 +1,58 @@
+{
+  "name": "dictionary",
+  "version": "1.0.0",
+  "description": "Dictionary search and entry viewing.",
+  "layer": "module",
+  "dependencies": [
+    { "name": "auth", "version": "^1.0.0", "optional": false }
+  ],
+  "services": [
+    {
+      "id": "search",
+      "token": "svc:dictionary.search",
+      "file": "service.js",
+      "singleton": true
+    }
+  ],
+  "events": {
+    "produces": [
+      {
+        "name": "dictionary.search",
+        "version": 1,
+        "schema": "DictionarySearchPayload"
+      }
+    ],
+    "consumes": [
+      {
+        "name": "auth.session.changed",
+        "version": 1,
+        "schema": "AuthSessionChangedPayload"
+      }
+    ]
+  },
+  "states": [
+    {
+      "id": "dictionary",
+      "file": "state.js",
+      "schema": "StateSchema",
+      "scope": "module"
+    }
+  ],
+  "permissions": ["dict:read"],
+  "exports": {
+    "plugin": "module.js",
+    "public": []
+  },
+  "configSchema": "ConfigSchema",
+  "lifecycle": ["onInit", "onMount", "onConnect", "onReady", "onDestroy"],
+  "entry": "module.js",
+  "files": {
+    "module": "module.js",
+    "config": "config.js",
+    "state": "state.js",
+    "service": "service.js",
+    "events": "events.js",
+    "view": "view.js",
+    "manifest": "manifest.json"
+  }
+}

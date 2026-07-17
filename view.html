@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QMF Docs</title>
+  <meta name="description" content="QMF documentation viewer — readable Markdown for humans. Raw .md remains available for AI crawlers via ?raw=1." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://ui.quizzman.com/qmf/view.html" />
+  <link rel="icon" href="/qmf/assets/logo/favicon-32.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/qmf/assets/md-viewer.css?v=20260717-md3" />
+  <link rel="stylesheet" href="/qmf/assets/vendor/github-dark.min.css?v=20260717-md3" />
+</head>
+<body>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+  <div class="mv-backdrop" id="drawer-backdrop"></div>
+
+  <header class="mv-header">
+    <a class="mv-brand" href="/" title="QMF Developer Portal">
+      <img src="/qmf/assets/logo/favicon-32.png" alt="" width="22" height="22" />
+      <span>QMF</span>
+    </a>
+
+    <div class="mv-crumb" aria-label="Breadcrumb">
+      <a href="/">Portal</a>
+      <span class="sep">/</span>
+      <a href="/qmf/docs.html">Docs</a>
+      <span class="sep">/</span>
+      <strong id="crumb-title">Loading…</strong>
+    </div>
+
+    <div class="mv-actions">
+      <button type="button" class="mv-btn mv-search-trigger" id="open-search" aria-label="Search documentation">
+        <span class="mv-search-label">Search</span>
+        <kbd class="mv-kbd">⌘K</kbd>
+      </button>
+      <div class="mv-mobile-toggles">
+        <button type="button" class="mv-btn" id="open-nav" aria-label="Open documents">Docs</button>
+        <button type="button" class="mv-btn" id="open-toc" aria-label="Open table of contents">On this page</button>
+      </div>
+      <a class="mv-btn" id="raw-link" href="#" title="Plain Markdown">Raw</a>
+      <button type="button" class="mv-btn" id="copy-link">Copy link</button>
+      <button type="button" class="mv-btn mv-btn-icon" id="theme-toggle" aria-label="Toggle theme" title="Theme">◐</button>
+    </div>
+  </header>
+
+  <div class="mv-shell">
+    <aside class="mv-nav" id="doc-nav" aria-label="Documentation">
+      <p class="mv-side-label">Documents</p>
+      <div id="nav-groups"></div>
+    </aside>
+
+    <main class="mv-main">
+      <header class="mv-hero" id="doc-hero" hidden>
+        <h1 class="mv-hero-title" id="doc-title"></h1>
+        <div class="mv-hero-meta" id="doc-meta"></div>
+      </header>
+      <div class="mv-status" id="status"><div class="mv-spinner"></div>Loading document…</div>
+      <article class="mv-article markdown-body" id="article" hidden></article>
+      <nav class="mv-pager" id="pager" hidden aria-label="Adjacent documents"></nav>
+    </main>
+
+    <aside class="mv-toc" id="doc-toc" aria-label="On this page">
+      <p class="mv-side-label">On this page</p>
+      <div class="mv-toc-tree" id="toc-tree">
+        <div class="toc-rail" aria-hidden="true"><div class="toc-rail-fill" id="toc-rail-fill"></div></div>
+        <ul class="mv-toc-list" id="toc-list"></ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="mv-cmd" id="cmd-palette" hidden>
+    <div class="mv-cmd-scrim" id="cmd-scrim"></div>
+    <div class="mv-cmd-panel" role="dialog" aria-modal="true" aria-label="Search documentation">
+      <div class="mv-cmd-input-wrap">
+        <span class="mv-cmd-icon" aria-hidden="true">⌕</span>
+        <input type="search" id="cmd-input" class="mv-cmd-input" placeholder="Search documentation…" autocomplete="off" spellcheck="false" />
+        <kbd class="mv-kbd">Esc</kbd>
+      </div>
+      <ul class="mv-cmd-results" id="cmd-results" role="listbox"></ul>
+      <div class="mv-cmd-footer">
+        <span><kbd class="mv-kbd">↑↓</kbd> navigate</span>
+        <span><kbd class="mv-kbd">↵</kbd> open</span>
+        <span><kbd class="mv-kbd">esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/qmf/assets/vendor/markdown-it.min.js"></script>
+  <script src="/qmf/assets/vendor/highlight.min.js"></script>
+  <script src="/qmf/assets/md-viewer.js?v=20260717-md3"></script>
+</body>
+</html>

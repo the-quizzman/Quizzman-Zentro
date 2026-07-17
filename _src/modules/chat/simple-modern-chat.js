@@ -1,5 +1,5 @@
 /**
- * QuizzMan Simple Modern Chat - Easy Integration
+ * Quizzman Simple Modern Chat - Easy Integration
  * Can be used anywhere with just one function call
  */
 

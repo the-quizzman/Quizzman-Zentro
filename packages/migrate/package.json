@@ -31,7 +31,7 @@
     "codemod",
     "refactoring"
   ],
-  "author": "QuizzMan",
+  "author": "Quizzman",
   "license": "MIT",
   "dependencies": {
     "glob": "^10.5.0"

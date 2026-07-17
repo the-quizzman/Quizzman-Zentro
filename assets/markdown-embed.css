@@ -1,0 +1,592 @@
+/**
+ * Quizzman Markdown Embed — scoped reading surface
+ * Safe to load inside Dictionary / Mentis / Wiki shells (no body/html takeover).
+ *
+ * Host: .mv-embed > article.mv-article.markdown-body
+ */
+
+.mv-embed {
+  --mv-radius-sm: 8px;
+  --mv-radius: 12px;
+  --mv-prose: min(42rem, 100%);
+  --mv-font-sans: var(
+    --dict-font-sans,
+    "IBM Plex Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif
+  );
+  --mv-font-mono: var(
+    --dict-font-mono,
+    "IBM Plex Mono",
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace
+  );
+  --mv-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --mv-duration: 180ms;
+
+  --text: var(--dict-color-text-primary, #1d1d1f);
+  --text-secondary: var(--dict-color-text-secondary, #6e6e73);
+  --text-tertiary: var(--dict-color-text-tertiary, #86868b);
+  --bg: var(--dict-color-bg-primary, #f5f5f7);
+  --bg-elevated: var(--dict-color-bg-secondary, var(--dict-glass-bg-elevated, #ffffff));
+  --bg-subtle: var(--dict-color-bg-tertiary, #ebebed);
+  --border: var(--dict-color-border-primary, var(--dict-glass-border, rgba(0, 0, 0, 0.08)));
+  --accent: var(--dict-color-accent-primary, var(--dict-color-primary, #0f5c4c));
+  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
+  --blockquote-bg: color-mix(in srgb, var(--accent) 8%, transparent);
+  --code-bg: var(--dict-color-bg-tertiary, #f0f0f2);
+  --pre-bg: #1d1d1f;
+  --pre-text: #f5f5f7;
+  --table-stripe: color-mix(in srgb, var(--text) 3%, transparent);
+  --shadow: 0 1px 0 var(--border);
+
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  color: var(--text);
+  font-family: var(--mv-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fill host width (Dictionary / Mentis panels) instead of a narrow docs column */
+.mv-embed.mv-embed--fluid,
+.dict-md-host .mv-embed,
+.qm-dictionary-mf .mv-embed {
+  --mv-prose: 100%;
+}
+
+.mv-embed .mv-article {
+  width: 100%;
+  max-width: var(--mv-prose);
+  margin: 0;
+  box-sizing: border-box;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--mv-radius);
+  box-shadow: var(--shadow);
+  padding: 2rem 1.75rem 2.25rem;
+  animation: mv-embed-in 320ms var(--mv-ease) both;
+}
+
+.qm-dictionary-mf .mv-embed .mv-article,
+.dict-md-host .mv-embed .mv-article {
+  /* Match dict-card chrome so input + result share one column */
+  background: var(--dict-glass-bg-elevated, var(--bg-elevated));
+  border: 1px solid var(--dict-glass-border, var(--border));
+  border-radius: var(--dict-radius-xl, var(--mv-radius));
+  box-shadow: var(--dict-shadow-card, var(--shadow));
+  padding: var(--dict-space-5, 2rem);
+}
+
+@keyframes mv-embed-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mv-embed .markdown-body {
+  color: var(--text);
+  font-size: 1.015rem;
+  line-height: 1.7;
+  letter-spacing: -0.011em;
+}
+
+.mv-embed .markdown-body > :first-child {
+  margin-top: 0;
+}
+
+.mv-embed .markdown-body h1,
+.mv-embed .markdown-body h2,
+.mv-embed .markdown-body h3,
+.mv-embed .markdown-body h4 {
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.mv-embed .markdown-body h1 {
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  margin: 0 0 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mv-embed .markdown-body h1.mv-formula-title {
+  font-family: var(--dict-font-serif, "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-size: clamp(2rem, 7vw, 2.6rem);
+  line-height: 1.15;
+}
+
+.mv-embed .markdown-body h2 {
+  font-size: 1.2rem;
+  margin: 2.25rem 0 0.85rem;
+  padding: 0.15rem 0 0.55rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  color: var(--text);
+  letter-spacing: -0.015em;
+}
+
+.mv-embed .markdown-body h2::before {
+  content: "";
+  display: inline-block;
+  width: 0.35rem;
+  height: 0.85em;
+  margin-right: 0.55rem;
+  vertical-align: -0.08em;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.mv-embed .markdown-body h3 {
+  font-size: 1.05rem;
+  margin: 1.6rem 0 0.5rem;
+  color: var(--text-secondary);
+}
+
+.mv-embed .markdown-body .heading-anchor {
+  margin-left: 0.35rem;
+  color: var(--text-tertiary);
+  opacity: 0;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity var(--mv-duration) var(--mv-ease);
+}
+
+.mv-embed .markdown-body h1:hover .heading-anchor,
+.mv-embed .markdown-body h2:hover .heading-anchor,
+.mv-embed .markdown-body h3:hover .heading-anchor {
+  opacity: 1;
+}
+
+.mv-embed .markdown-body p {
+  margin: 0 0 1.05rem;
+}
+
+.mv-embed .markdown-body a {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.mv-embed .markdown-body strong {
+  font-weight: 650;
+}
+
+.mv-embed .markdown-body .mv-reading {
+  margin: 0.35rem 0 1.1rem;
+  font-size: clamp(1.35rem, 3.5vw, 1.7rem);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  color: var(--accent);
+}
+
+.mv-embed .markdown-body .mv-reading strong {
+  font-weight: inherit;
+  color: inherit;
+}
+
+.mv-embed .markdown-body ol {
+  list-style: none;
+  counter-reset: mv-step;
+  padding-left: 0;
+}
+
+.mv-embed .markdown-body ol > li {
+  position: relative;
+  counter-increment: mv-step;
+  padding-left: 2.1rem;
+  margin: 0.85rem 0;
+}
+
+.mv-embed .markdown-body ol > li::before {
+  content: counter(mv-step);
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  width: 1.45rem;
+  height: 1.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mv-embed .markdown-body ul,
+.mv-embed .markdown-body ol {
+  margin: 0 0 1.1rem;
+}
+
+.mv-embed .markdown-body ul {
+  padding-left: 1.15rem;
+}
+
+.mv-embed .markdown-body li {
+  margin: 0.28rem 0;
+}
+
+.mv-embed .markdown-body li::marker {
+  color: var(--text-tertiary);
+}
+
+.mv-embed .markdown-body li.mv-labeled-item {
+  list-style: none;
+  margin-left: -0.35rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+}
+
+.mv-embed .markdown-body li.mv-labeled-item .mv-kv__k {
+  display: inline-block;
+  min-width: 4.5em;
+  margin-right: 0.35rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  font-size: 0.82em;
+  letter-spacing: 0.01em;
+}
+
+.mv-embed .markdown-body blockquote,
+.mv-embed .markdown-body .mv-callout {
+  margin: 1.25rem 0;
+  padding: 0.95rem 1.1rem;
+  border-left: 3px solid var(--accent);
+  background: var(--blockquote-bg);
+  border-radius: 0 var(--mv-radius-sm) var(--mv-radius-sm) 0;
+  color: var(--text);
+}
+
+.mv-embed .markdown-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.mv-embed .markdown-body .mv-callout strong {
+  color: var(--text-secondary);
+  font-weight: 650;
+}
+
+/* Semantic key/value grid (hero meta, callouts) */
+.mv-embed .markdown-body .mv-kv {
+  margin: 0;
+  display: grid;
+  gap: 0.45rem 1rem;
+}
+
+.mv-embed .markdown-body .mv-kv__row {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 7.5rem) 1fr;
+  gap: 0.5rem 0.85rem;
+  align-items: baseline;
+}
+
+.mv-embed .markdown-body .mv-kv__k {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.mv-embed .markdown-body .mv-kv__v {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.02rem;
+  font-weight: 560;
+  letter-spacing: 0.02em;
+  word-break: break-word;
+}
+
+.mv-embed .markdown-body .mv-callout--kv {
+  padding: 1rem 1.15rem;
+}
+
+.mv-embed .markdown-body hr {
+  border: 0;
+  height: 1px;
+  background: var(--border);
+  margin: 2rem 0;
+}
+
+.mv-embed .markdown-body code {
+  font-family: var(--mv-font-mono);
+  font-size: 0.86em;
+  background: var(--code-bg);
+  padding: 0.12em 0.38em;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+}
+
+.mv-embed .markdown-body .code-block {
+  margin: 1.25rem 0;
+  border-radius: var(--mv-radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--pre-bg);
+}
+
+.mv-embed .markdown-body .code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mv-embed .markdown-body .code-lang {
+  font-family: var(--mv-font-mono);
+  font-size: 0.68rem;
+  font-weight: 560;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.mv-embed .markdown-body .code-block pre {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  background: transparent;
+  color: var(--pre-text);
+  overflow-x: auto;
+  border: 0;
+}
+
+.mv-embed .markdown-body pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: inherit;
+}
+
+.mv-embed .markdown-body .code-copy {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.78);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 550;
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mv-embed .markdown-body .code-copy.copied {
+  color: #7dff9a;
+}
+
+.mv-embed .markdown-body table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.25rem 0;
+  font-size: 0.92rem;
+  display: table;
+  table-layout: fixed;
+  border: 1px solid var(--border);
+  border-radius: var(--mv-radius-sm);
+  overflow: hidden;
+}
+
+.mv-embed .markdown-body th,
+.mv-embed .markdown-body td {
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.mv-embed .markdown-body tr:last-child td {
+  border-bottom: 0;
+}
+
+.mv-embed .markdown-body th {
+  background: var(--bg-subtle);
+  font-weight: 650;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.mv-embed .markdown-body tr:nth-child(even) td {
+  background: var(--table-stripe);
+}
+
+/* Property table: label column muted, value column emphasized */
+.mv-embed .markdown-body table.mv-props-table {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.mv-embed .markdown-body table.mv-props-table thead {
+  display: none;
+}
+
+.mv-embed .markdown-body table.mv-props-table td:first-child {
+  width: 38%;
+  color: var(--text-tertiary);
+  font-weight: 650;
+  font-size: 0.82rem;
+  background: transparent;
+}
+
+.mv-embed .markdown-body table.mv-props-table td:last-child {
+  font-weight: 560;
+  color: var(--text);
+  background: transparent;
+}
+
+.mv-embed .markdown-body table.mv-props-table tr:nth-child(even) td {
+  background: var(--table-stripe);
+}
+
+/* Data table (Chữ | Hán Việt | Pinyin | Nguồn): fit width, wrap cells */
+.mv-embed .markdown-body table.mv-data-table td:first-child,
+.mv-embed .markdown-body table.mv-data-table th:first-child {
+  width: 3.25rem;
+}
+
+.mv-embed .markdown-body table.mv-data-table td:first-child {
+  font-family: var(--dict-font-serif, "Noto Serif SC", "Source Han Serif SC", serif);
+  font-size: 1.2rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* Horizontal flow diagram: 幫母 → MC → Hán Việt.
+   Wraps (never clipped) and stays packed/centered (not stretched). */
+.mv-embed .markdown-body .mv-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.6rem;
+  margin: 1.4rem 0;
+  padding: 1rem 0.85rem;
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  border-radius: var(--mv-radius);
+}
+
+.mv-embed .markdown-body .mv-flow__node {
+  margin: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.5rem 0.9rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  font-size: 1rem;
+  line-height: 1.35;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.mv-embed .markdown-body .mv-flow__node strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.mv-embed .markdown-body .mv-flow__arrow {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-size: 1.15rem;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+/* Academic flow arrows (standalone ↓ between block steps) */
+.mv-embed .markdown-body .mv-flow-arrow {
+  margin: 0.55rem 0 1rem;
+  color: var(--accent);
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: 0;
+  opacity: 0.7;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .mv-embed .mv-article {
+    padding: 1.35rem 1.1rem 1.75rem;
+    border-radius: var(--mv-radius-sm);
+  }
+
+  .mv-embed .markdown-body {
+    font-size: 0.97rem;
+  }
+
+  .mv-embed .markdown-body table {
+    font-size: 0.85rem;
+  }
+
+  .mv-embed .markdown-body th,
+  .mv-embed .markdown-body td {
+    padding: 0.5rem 0.6rem;
+  }
+
+  .mv-embed .markdown-body .mv-kv__row {
+    grid-template-columns: 1fr;
+    gap: 0.12rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  }
+
+  .mv-embed .markdown-body .mv-kv__row:last-child {
+    border-bottom: 0;
+  }
+
+  .mv-embed .markdown-body table.mv-props-table {
+    max-width: none;
+  }
+
+  .mv-embed .markdown-body .mv-flow {
+    gap: 0.4rem;
+    padding: 0.85rem 0.65rem;
+  }
+
+  .mv-embed .markdown-body .mv-flow__node {
+    font-size: 0.92rem;
+    padding: 0.42rem 0.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mv-embed .mv-article {
+    animation: none;
+  }
+}

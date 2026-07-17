@@ -107,13 +107,17 @@ async function build() {
   ensureDir(DIST);
   ensureDir(join(DIST, 'packages'));
 
-  // Regenerate logo assets
+  // Regenerate logo assets (optional — skip if ImageMagick unavailable)
   console.log('\n[2/6] Generating logo assets...');
-  run('node scripts/generate-logo-variants.mjs --write');
+  try {
+    run('node scripts/generate-logo-variants.mjs --write');
+  } catch {
+    console.warn('  ⚠ Logo generation skipped (ImageMagick missing or assets present)');
+  }
 
   // Install dependencies
   console.log('\n[3/6] Installing dependencies...');
-  run('pnpm install --frozen-lockfile');
+  run('pnpm install --no-frozen-lockfile');
 
   // Build all packages
   console.log('\n[4/6] Building packages...');
@@ -167,12 +171,24 @@ async function build() {
     copyFileSync(uiCss, join(DIST, 'ui.css'));
   }
 
-  // Copy standalone module files (_src/modules → dist/modules)
+  // Copy standalone module files (_src/modules → dist/modules + modules-v3 mirror)
   const srcModules = join(ROOT, '_src', 'modules');
   const distModules = join(DIST, 'modules');
   if (existsSync(srcModules)) {
     console.log('  → Copying standalone modules to dist/modules...');
     copyDir(srcModules, distModules);
+    copyDir(srcModules, join(DIST, 'modules-v3'));
+  }
+
+  // v3 path aliases (legacy URLs)
+  ensureDir(join(DIST, 'v3'));
+  for (const [name, target] of [['qmf.min.js', 'qmf.min.js'], ['tokens.css', 'tokens.css']]) {
+    const t = join(DIST, target);
+    if (existsSync(t)) {
+      const linkPath = join(DIST, 'v3', name);
+      if (existsSync(linkPath)) unlinkSync(linkPath);
+      symlinkSync(target, linkPath);
+    }
   }
 
   // Create legacy symlinks (qmf.js → qmf.min.js, qmf.css → tokens.css)

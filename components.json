@@ -1,0 +1,21 @@
+{
+  "name": "QMF Components",
+  "version": "3.0.0",
+  "updated": "2026-07-16",
+  "components": [
+    { "id": "button", "title": "Button", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "card", "title": "Card", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "input", "title": "Input", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "dialog", "title": "Dialog / Modal", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "tabs", "title": "Tabs", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "toast", "title": "Toast", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "table", "title": "Table", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "dropdown", "title": "Dropdown", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "navigation", "title": "Navigation / Header", "href": "/qmf/docs/header-settings-setup.md", "package": "@qmf/header" },
+    { "id": "dynamic-island", "title": "Dynamic Island", "href": "/qmf/#components", "package": "@qmf/header" },
+    { "id": "badge", "title": "Badge", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "avatar", "title": "Avatar", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "panel", "title": "Panel", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" },
+    { "id": "overlay", "title": "Overlay", "href": "/qmf/docs.html#ui", "package": "@qmf/ui" }
+  ]
+}

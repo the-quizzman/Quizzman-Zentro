@@ -1,0 +1,13 @@
+{
+  "version": "4.0.0-alpha.1",
+  "schemas": [
+    "event.schema.json",
+    "module.manifest.schema.json",
+    "qmf.schema.schema.json"
+  ],
+  "urls": {
+    "contract": "/qmf/schemas/qmf.schema.schema.json",
+    "manifest": "/qmf/schemas/module.manifest.schema.json",
+    "event": "/qmf/schemas/event.schema.json"
+  }
+}

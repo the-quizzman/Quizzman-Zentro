@@ -1,0 +1,31 @@
+{
+  "name": "QMF",
+  "version": "3.0.0",
+  "alpha": "4.0.0-alpha.1",
+  "home": "https://ui.quizzman.com/",
+  "updated": "2026-07-16",
+  "documents": [
+    { "id": "usage", "title": "Usage / Install", "href": "/qmf/docs/USAGE.md", "category": "Getting Started", "updated": "2026-07-16", "popular": true },
+    { "id": "api", "title": "API Reference", "href": "/qmf/docs/API.md", "category": "API", "updated": "2026-07-16", "popular": true },
+    { "id": "architecture", "title": "Architecture", "href": "/qmf/docs/ARCHITECTURE.md", "category": "Core", "updated": "2026-07-16", "popular": true },
+    { "id": "architecture-public", "title": "Architecture (public)", "href": "/qmf/docs/ARCHITECTURE.public.md", "category": "Core", "updated": "2026-07-16" },
+    { "id": "migration", "title": "Migration v2 → v3", "href": "/qmf/docs/MIGRATION.md", "category": "Guides", "updated": "2026-07-16" },
+    { "id": "header-settings", "title": "Header & Settings", "href": "/qmf/docs/header-settings-setup.md", "category": "Guides", "updated": "2026-07-16" },
+    { "id": "v4-readme", "title": "QMF 4.0 Overview", "href": "/qmf/docs/v4/README.md", "category": "Getting Started", "updated": "2026-07-16", "new": true },
+    { "id": "v4-spec", "title": "QMF Spec", "href": "/qmf/docs/v4/QMF_SPEC.md", "category": "Core", "updated": "2026-07-16", "new": true },
+    { "id": "v4-contract", "title": "Contract (qmf.schema.json)", "href": "/qmf/docs/v4/CONTRACT.md", "category": "Core", "updated": "2026-07-16", "new": true },
+    { "id": "v4-convention", "title": "Convention", "href": "/qmf/docs/v4/CONVENTION.md", "category": "Guides", "updated": "2026-07-16", "new": true },
+    { "id": "v4-cli", "title": "CLI Spec", "href": "/qmf/docs/v4/CLI_SPEC.md", "category": "Getting Started", "updated": "2026-07-16", "new": true },
+    { "id": "v4-events", "title": "Event Spec", "href": "/qmf/docs/v4/EVENT_SPEC.md", "category": "Core", "updated": "2026-07-16", "new": true },
+    { "id": "v4-modules", "title": "Module Spec", "href": "/qmf/docs/v4/MODULE_SPEC.md", "category": "Core", "updated": "2026-07-16", "new": true },
+    { "id": "v4-plugins", "title": "Plugin Spec", "href": "/qmf/docs/v4/PLUGIN_SPEC.md", "category": "Advanced", "updated": "2026-07-16", "new": true },
+    { "id": "v4-state", "title": "State Spec", "href": "/qmf/docs/v4/STATE_SPEC.md", "category": "Core", "updated": "2026-07-16", "new": true },
+    { "id": "v4-ai", "title": "AI Rules", "href": "/qmf/docs/v4/AI_RULES.md", "category": "AI", "updated": "2026-07-16", "new": true, "popular": true },
+    { "id": "v4-introspection", "title": "Introspection", "href": "/qmf/docs/v4/INTROSPECTION.md", "category": "Advanced", "updated": "2026-07-16", "new": true },
+    { "id": "v4-migration", "title": "Migration v3 → v4", "href": "/qmf/docs/v4/MIGRATION_v3_v4.md", "category": "Guides", "updated": "2026-07-16", "new": true },
+    { "id": "v4-impl", "title": "Implementation Status", "href": "/qmf/docs/v4/IMPLEMENTATION.md", "category": "Guides", "updated": "2026-07-16", "new": true },
+    { "id": "v4-demo", "title": "Live Demo (4.0)", "href": "/qmf/v4-demo/", "category": "Examples", "updated": "2026-07-16", "new": true, "popular": true },
+    { "id": "docs-shell", "title": "Docs UI", "href": "/qmf/docs.html", "category": "Getting Started", "updated": "2026-07-16" },
+    { "id": "llms", "title": "llms.txt", "href": "/qmf/llms.txt", "category": "AI", "updated": "2026-07-16", "popular": true }
+  ]
+}

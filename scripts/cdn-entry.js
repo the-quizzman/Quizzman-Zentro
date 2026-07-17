@@ -32,12 +32,16 @@ export { QMFLoadingScreen, createLoadingScreenPlugin } from '@qmf/loading-screen
 // Re-export auth shell
 export { AuthShell, createAuthShellPlugin } from '@qmf/auth-shell';
 
+// Re-export Legatus (notification / realtime UI)
+export { Legatus, createLegatusPlugin } from '@qmf/legatus';
+
 // === Expose full plugin API on window ===
 import { QMF } from '@qmf/core';
 import { QMFHeader, createHeaderPlugin } from '@qmf/header';
 import { QMFFooter, createFooterPlugin } from '@qmf/footer';
 import { QMFLoadingScreen, createLoadingScreenPlugin } from '@qmf/loading-screen';
 import { AuthShell, createAuthShellPlugin } from '@qmf/auth-shell';
+import { Legatus, createLegatusPlugin } from '@qmf/legatus';
 
 if (typeof window !== 'undefined') {
   // Plugin factories (recommended — follows QMF lifecycle)
@@ -45,12 +49,14 @@ if (typeof window !== 'undefined') {
   window.createFooterPlugin = createFooterPlugin;
   window.createLoadingScreenPlugin = createLoadingScreenPlugin;
   window.createAuthShellPlugin = createAuthShellPlugin;
+  window.createLegatusPlugin = createLegatusPlugin;
 
   // Classes for direct instantiation
   window.QMFHeader = QMFHeader;
   window.QMFFooter = QMFFooter;
   window.QMFLoadingScreen = QMFLoadingScreen;
   window.AuthShell = AuthShell;
+  window.Legatus = Legatus;
 
   // --- Patch QMF.use() to support pre-init plugin registration ---
   // Core's use() throws if called before init(). We queue plugins and
@@ -111,4 +117,6 @@ if (typeof window !== 'undefined') {
     footer.mount(selector || '#qmf-footer');
     return footer;
   };
+
+  QMF.Legatus = Legatus;
 }

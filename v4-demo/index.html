@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QMF — Live Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #13202c;
+      --muted: #5a6b7a;
+      --line: #d5dde5;
+      --paper: #f6f3ee;
+      --panel: #fffcf8;
+      --accent: #0d7a6f;
+      --accent-soft: #d8efe9;
+      --ok: #0f766e;
+      --err: #b91c1c;
+      --shadow: 0 18px 50px rgba(19, 32, 44, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "DM Sans", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, #cfe8e2 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 0%, #e8dfd0 0%, transparent 50%),
+        linear-gradient(180deg, #ebe6de 0%, var(--paper) 40%, #efeae3 100%);
+    }
+    .shell { max-width: 1080px; margin: 0 auto; padding: 1.25rem 1.25rem 3rem; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding: 0.35rem 0 1.5rem;
+    }
+    .brand { display: flex; align-items: baseline; gap: 0.55rem; }
+    .brand strong {
+      font-size: clamp(1.75rem, 4vw, 2.35rem);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 1;
+    }
+    .brand em {
+      font-style: normal; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+      background: var(--accent-soft); padding: 0.2rem 0.45rem; border-radius: 4px;
+    }
+    #status { font-size: 0.82rem; color: var(--muted); font-family: "JetBrains Mono", monospace; }
+    #status.ok { color: var(--ok); }
+    #status.err { color: var(--err); }
+    .hero { margin-bottom: 1.75rem; }
+    .hero p {
+      margin: 0.65rem 0 0; max-width: 36rem; font-size: 1.05rem;
+      line-height: 1.55; color: var(--muted);
+    }
+    .grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem; }
+    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+    .panel {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+      box-shadow: var(--shadow); padding: 1.1rem 1.15rem 1.2rem; min-height: 200px;
+    }
+    .panel header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.75rem; margin-bottom: 0.85rem;
+    }
+    .panel h2 {
+      margin: 0; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    }
+    .tag {
+      font-size: 0.68rem; font-family: "JetBrains Mono", monospace; color: var(--accent);
+      background: var(--accent-soft); padding: 0.15rem 0.4rem; border-radius: 4px;
+    }
+    #qmf-auth { min-height: 2.5rem; display: flex; align-items: center; }
+    .qmf-auth-chip {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.55rem 0.9rem; border-radius: 999px; background: var(--ink);
+      color: #f7f4ef !important; text-decoration: none; font-weight: 600; font-size: 0.92rem;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .qmf-auth-chip:hover { transform: translateY(-1px); background: #1c2d3c; }
+    .qmf-dict-input {
+      width: 100%; padding: 0.75rem 0.9rem; border-radius: 10px; border: 1px solid var(--line);
+      background: #fff; color: var(--ink); font: inherit; font-size: 0.98rem;
+      margin-bottom: 0.75rem; outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .qmf-dict-input:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13, 122, 111, 0.15);
+    }
+    .qmf-dict-results { list-style: none; margin: 0; padding: 0; }
+    .qmf-dict-results li {
+      padding: 0.7rem 0.15rem; border-bottom: 1px solid var(--line);
+      font-size: 0.95rem; animation: rise 0.28s ease both;
+    }
+    .qmf-dict-results li:last-child { border-bottom: 0; }
+    .qmf-dict-results li::before {
+      content: "→"; color: var(--accent); margin-right: 0.55rem;
+      font-family: "JetBrains Mono", monospace;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hint { margin: 0.35rem 0 0; font-size: 0.8rem; color: var(--muted); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+    button {
+      font: inherit; font-size: 0.85rem; font-weight: 600; border: 1px solid var(--line);
+      background: #fff; color: var(--ink); border-radius: 8px; padding: 0.45rem 0.75rem;
+      cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    button:hover { background: var(--accent-soft); border-color: #9fcfc6; }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button.primary:hover { background: #0a645b; }
+    .wide { grid-column: 1 / -1; margin-top: 0.15rem; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 820px) { .split { grid-template-columns: 1fr; } }
+    pre, #event-log {
+      margin: 0; font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.72rem; line-height: 1.5; color: var(--muted);
+      white-space: pre-wrap; word-break: break-word; max-height: 220px; overflow: auto;
+      background: #f0ebe3; border-radius: 8px; padding: 0.75rem;
+    }
+    #event-log .e {
+      display: block; padding: 0.15rem 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    #event-log .e:last-child { border-bottom: 0; }
+    #event-log .name { color: var(--accent); font-weight: 500; }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "@qmf/runtime": "/qmf/packages/runtime/src/browser-entry.js",
+      "@qmf/runtime/dom": "/qmf/packages/runtime/src/dom.js",
+      "@qmf/contract": "/qmf/packages/contract/src/browser.js",
+      "@qmf/contract/browser": "/qmf/packages/contract/src/browser.js",
+      "@qmf/contract/validate": "/qmf/packages/contract/src/validate.js",
+      "@qmf/events": "/qmf/packages/events/src/index.js",
+      "@qmf/inspect": "/qmf/packages/inspect/src/api.js",
+      "@qmf/inspect/api": "/qmf/packages/inspect/src/api.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <strong>QMF</strong>
+        <em>4.0 alpha</em>
+      </div>
+      <div id="status">booting…</div>
+    </div>
+
+    <section class="hero">
+      <p>
+        Demo live trên CDN — boot từ <code>qmf.schema.json</code>, load module
+        <strong>auth</strong> + <strong>dictionary</strong>, emit typed events,
+        expose <code>window.QMF.inspect</code>.
+      </p>
+    </section>
+
+    <div class="grid">
+      <section class="panel">
+        <header>
+          <h2>Auth module</h2>
+          <span class="tag">#qmf-auth</span>
+        </header>
+        <div id="qmf-auth"></div>
+        <p class="hint">Session qua DI <code>svc:auth.session</code>.</p>
+        <div class="actions">
+          <button type="button" class="primary" id="btn-guest">Đăng nhập guest</button>
+          <button type="button" id="btn-pro">User pro</button>
+          <button type="button" id="btn-out">Sign out</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <header>
+          <h2>Dictionary module</h2>
+          <span class="tag">#qmf-dictionary</span>
+        </header>
+        <div id="qmf-dictionary"></div>
+        <p class="hint">Gõ rồi Enter — thử <code>quiz</code>, <code>react</code>, <code>qmf</code>.</p>
+      </section>
+
+      <section class="panel wide">
+        <header>
+          <h2>Live event bus + inspect</h2>
+          <span class="tag">typed events</span>
+        </header>
+        <div class="split">
+          <div>
+            <h2 style="margin-bottom:0.5rem">Events</h2>
+            <div id="event-log">waiting…</div>
+          </div>
+          <div>
+            <h2 style="margin-bottom:0.5rem">QMF.inspect</h2>
+            <pre id="inspect-out">—</pre>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

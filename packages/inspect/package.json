@@ -1,0 +1,26 @@
+{
+  "name": "@qmf/inspect",
+  "version": "4.0.0-alpha.1",
+  "description": "QMF 4.0 doctor + inspect — vanilla JS",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./api": "./src/api.js",
+    "./doctor": "./src/doctor.js"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@qmf/contract": "4.0.0-alpha.1"
+  },
+  "publishConfig": {
+    "registry": "http://127.0.0.1:4873/",
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

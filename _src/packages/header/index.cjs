@@ -8,7 +8,7 @@ var ui = require('@qmf/ui');
 var HeaderConfigSchema = core.z.object({
   // Branding (LEFT zone)
   logoSrc: core.z.string().optional(),
-  brandName: core.z.string().default("QuizzMan"),
+  brandName: core.z.string().default("Quizzman"),
   pageTitle: core.z.string().optional(),
   // Main logo (CENTER zone)
   mainLogoUrl: core.z.string().optional(),

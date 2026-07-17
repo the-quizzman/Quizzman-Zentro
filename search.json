@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-07-16",
+  "entries": [
+    { "title": "Usage / Install", "href": "/qmf/docs/USAGE.md", "category": "Docs", "keywords": ["install", "cdn", "init", "quickstart"] },
+    { "title": "API Reference", "href": "/qmf/docs/API.md", "category": "API", "keywords": ["eventbus", "store", "lifecycle", "di", "http"] },
+    { "title": "Architecture", "href": "/qmf/docs/ARCHITECTURE.md", "category": "Docs", "keywords": ["layers", "plugin", "module"] },
+    { "title": "Migration v2 → v3", "href": "/qmf/docs/MIGRATION.md", "category": "Guides", "keywords": ["migrate", "upgrade", "breaking"] },
+    { "title": "Header & Settings", "href": "/qmf/docs/header-settings-setup.md", "category": "Guides", "keywords": ["header", "island", "settings"] },
+    { "title": "QMF 4.0 Overview", "href": "/qmf/docs/v4/README.md", "category": "Docs", "keywords": ["v4", "alpha", "contract"] },
+    { "title": "QMF Spec", "href": "/qmf/docs/v4/QMF_SPEC.md", "category": "Docs", "keywords": ["spec", "runtime", "bootstrap"] },
+    { "title": "Contract", "href": "/qmf/docs/v4/CONTRACT.md", "category": "API", "keywords": ["qmf.schema.json", "manifest", "ssot"] },
+    { "title": "CLI Spec", "href": "/qmf/docs/v4/CLI_SPEC.md", "category": "Docs", "keywords": ["qmf4", "doctor", "scaffold"] },
+    { "title": "Event Spec", "href": "/qmf/docs/v4/EVENT_SPEC.md", "category": "API", "keywords": ["defineEvent", "emit", "subscribe"] },
+    { "title": "Module Spec", "href": "/qmf/docs/v4/MODULE_SPEC.md", "category": "Docs", "keywords": ["module", "manifest", "7 files"] },
+    { "title": "Plugin Spec", "href": "/qmf/docs/v4/PLUGIN_SPEC.md", "category": "Docs", "keywords": ["plugin", "hooks"] },
+    { "title": "State Spec", "href": "/qmf/docs/v4/STATE_SPEC.md", "category": "API", "keywords": ["store", "state"] },
+    { "title": "AI Rules", "href": "/qmf/docs/v4/AI_RULES.md", "category": "AI", "keywords": ["llm", "agent", "cursor", "claude"] },
+    { "title": "Introspection", "href": "/qmf/docs/v4/INTROSPECTION.md", "category": "API", "keywords": ["inspect", "doctor"] },
+    { "title": "Migration v3 → v4", "href": "/qmf/docs/v4/MIGRATION_v3_v4.md", "category": "Guides", "keywords": ["v4", "migrate"] },
+    { "title": "Live Demo 4.0", "href": "/qmf/v4-demo/", "category": "Examples", "keywords": ["demo", "browser", "auth", "dictionary"] },
+    { "title": "llms.txt", "href": "/qmf/llms.txt", "category": "AI", "keywords": ["llm", "crawl", "agents"] },
+    { "title": "llms-full.txt", "href": "/qmf/llms-full.txt", "category": "AI", "keywords": ["llm", "full", "index"] },
+    { "title": "Docs Index JSON", "href": "/qmf/docs-index.json", "category": "AI", "keywords": ["index", "json", "crawl"] },
+    { "title": "API Index JSON", "href": "/qmf/api-index.json", "category": "AI", "keywords": ["api", "packages"] },
+    { "title": "Components JSON", "href": "/qmf/components.json", "category": "AI", "keywords": ["ui", "components"] },
+    { "title": "Registry", "href": "/registry/", "category": "Registry", "keywords": ["npm", "verdaccio", "@qmf"] },
+    { "title": "Docs UI", "href": "/qmf/docs.html", "category": "Docs", "keywords": ["documentation", "shell"] },
+    { "title": "Schemas", "href": "/qmf/schemas/", "category": "API", "keywords": ["json-schema", "contract"] },
+    { "title": "Sitemap", "href": "/qmf/sitemap.xml", "category": "AI", "keywords": ["sitemap", "crawl"] }
+  ]
+}

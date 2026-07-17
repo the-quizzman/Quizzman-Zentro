@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui.quizzman.com/qmf/schemas/qmf.schema.schema.json",
+  "title": "QMF Project Contract",
+  "description": "Single source of truth for a QMF 4.0 application. Consumed by CLI, runtime, AI agents, and IDE extensions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["framework", "version", "language", "layers", "modules", "eventBus", "manifest", "ai"],
+  "properties": {
+    "framework": {
+      "const": "QMF",
+      "description": "Must be exactly QMF."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^4\\.\\d+\\.\\d+$",
+      "description": "QMF major.minor.patch. Major must be 4."
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,63}$",
+      "description": "Application id (kebab-case)."
+    },
+    "layers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["foundation", "runtime", "components", "modules"],
+      "properties": {
+        "foundation": { "type": "string", "default": "src/foundation" },
+        "runtime": { "type": "string", "default": "src/runtime" },
+        "components": { "type": "string", "default": "src/components" },
+        "modules": { "type": "string", "default": "src/modules" }
+      }
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "manifest"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,31}$"
+          },
+          "path": {
+            "type": "string",
+            "description": "Relative path under layers.modules"
+          },
+          "manifest": {
+            "type": "string",
+            "description": "Path to module.manifest.json relative to module path",
+            "default": "manifest.json"
+          },
+          "enabled": { "type": "boolean", "default": true },
+          "lazy": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "eventBus": {
+      "type": "string",
+      "enum": ["typed", "legacy"],
+      "description": "typed = Initiative 3; legacy = v3 string bus (compat only)."
+    },
+    "manifest": {
+      "type": "string",
+      "enum": ["v1"],
+      "description": "Module manifest format version."
+    },
+    "router": {
+      "type": ["string", "null"],
+      "enum": [null, "qmf-router", "adapter-react-router", "adapter-vue-router"],
+      "default": null
+    },
+    "language": {
+      "type": "string",
+      "enum": ["js"],
+      "default": "js",
+      "description": "QMF apps are vanilla JavaScript only. TypeScript is not a framework language."
+    },
+    "componentModel": {
+      "type": "string",
+      "enum": ["imperative", "declarative-adapter"],
+      "default": "imperative",
+      "description": "Core never uses JSX. declarative-adapter lives only in adapter packages."
+    },
+    "adapters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "react": { "type": ["string", "null"], "default": null },
+        "vue": { "type": ["string", "null"], "default": null },
+        "svelte": { "type": ["string", "null"], "default": null }
+      }
+    },
+    "ai": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strictConvention", "requireManifest", "allowMagicEvents"],
+      "properties": {
+        "strictConvention": {
+          "type": "boolean",
+          "const": true,
+          "description": "When true, folder/naming violations are hard errors."
+        },
+        "requireManifest": {
+          "type": "boolean",
+          "const": true
+        },
+        "allowImperativeDOM": {
+          "type": "boolean",
+          "default": true,
+          "description": "true = @qmf/ui createElement style allowed in components/."
+        },
+        "allowMagicEvents": {
+          "type": "boolean",
+          "const": false,
+          "description": "Must be false in QMF 4.0 typed mode."
+        },
+        "requireSchemaBeforeWrite": {
+          "type": "boolean",
+          "default": true,
+          "description": "AI agents must read this contract before writing files."
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target": { "type": "string", "enum": ["es2020", "es2022"], "default": "es2020" },
+        "cdn": { "type": "boolean", "default": false },
+        "sri": { "type": "boolean", "default": true }
+      }
+    },
+    "inspect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "exposeGlobal": { "type": "boolean", "default": true }
+      }
+    }
+  }
+}

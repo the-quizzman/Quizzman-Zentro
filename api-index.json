@@ -1,0 +1,28 @@
+{
+  "name": "QMF API Index",
+  "version": "3.0.0",
+  "updated": "2026-07-16",
+  "packages": [
+    { "name": "@qmf/core", "href": "/qmf/docs/API.md", "version": "3.0.0", "stable": true },
+    { "name": "@qmf/tokens", "href": "/qmf/v3/tokens.css", "version": "3.0.0", "stable": true },
+    { "name": "@qmf/ui", "href": "/qmf/v3/ui.css", "version": "3.0.0", "stable": true },
+    { "name": "@qmf/header", "href": "/qmf/docs/header-settings-setup.md", "version": "3.0.0", "stable": true },
+    { "name": "@qmf/contract", "href": "/qmf/docs/v4/CONTRACT.md", "version": "4.0.0-alpha.1", "alpha": true },
+    { "name": "@qmf/events", "href": "/qmf/docs/v4/EVENT_SPEC.md", "version": "4.0.0-alpha.1", "alpha": true },
+    { "name": "@qmf/runtime", "href": "/qmf/docs/v4/QMF_SPEC.md", "version": "4.0.0-alpha.1", "alpha": true },
+    { "name": "@qmf/inspect", "href": "/qmf/docs/v4/INTROSPECTION.md", "version": "4.0.0-alpha.1", "alpha": true },
+    { "name": "@qmf/qmf-cli", "href": "/qmf/docs/v4/CLI_SPEC.md", "version": "4.0.0-alpha.1", "alpha": true, "bin": "qmf4" }
+  ],
+  "apis": [
+    { "id": "eventbus", "title": "EventBus", "href": "/qmf/docs/API.md#eventbus", "package": "@qmf/core" },
+    { "id": "store", "title": "Store", "href": "/qmf/docs/API.md#store", "package": "@qmf/core" },
+    { "id": "lifecycle", "title": "Lifecycle", "href": "/qmf/docs/API.md#lifecycle", "package": "@qmf/core" },
+    { "id": "di", "title": "Dependency Injection", "href": "/qmf/docs/API.md#di", "package": "@qmf/core" },
+    { "id": "http", "title": "HttpClient", "href": "/qmf/docs/API.md#http", "package": "@qmf/core" },
+    { "id": "plugin", "title": "Plugin System", "href": "/qmf/docs/API.md#plugin", "package": "@qmf/core" },
+    { "id": "defineEvent", "title": "defineEvent / emit / subscribe", "href": "/qmf/docs/v4/EVENT_SPEC.md", "package": "@qmf/events" },
+    { "id": "bootstrap", "title": "bootstrapFromContract", "href": "/qmf/docs/v4/QMF_SPEC.md", "package": "@qmf/runtime" },
+    { "id": "doctor", "title": "runDoctor / inspect", "href": "/qmf/docs/v4/INTROSPECTION.md", "package": "@qmf/inspect" },
+    { "id": "contract", "title": "loadContract / assertValid", "href": "/qmf/docs/v4/CONTRACT.md", "package": "@qmf/contract" }
+  ]
+}

@@ -5,6 +5,9 @@
   
   "default": {
     "logo": "quizzman-logo.png",
+    "logoOnLightSurface": "quizzman-logo-116.webp",
+    "logoOnDarkSurface": "quizzman-logo-116.webp",
+    "logoDarkLegacyWordmark": "quizzman-logo-dark.png",
     "logoDark": "quizzman-logo-dark.png",
     "logoLoading": "quizzman-logo-loading.png",
     "logoWebp": "quizzman-logo-116.webp",
@@ -46,11 +49,36 @@
       "hasCustomLogo": true,
       "logo": "play/play-logo.png",
       "favicon": "play/favicon.ico",
+      "appleTouchIcon": "play/apple-touch-icon.png",
       "sizes": {
+        "16": "play/favicon-16x16.png",
         "32": "play/play-logo-32.png",
         "64": "play/play-logo-64.png",
         "128": "play/play-logo-128.png",
-        "256": "play/play-logo-256.png"
+        "256": "play/play-logo-256.png",
+        "512": "play/android-chrome-512x512.png"
+      }
+    },
+    "iching": {
+      "hasCustomLogo": true,
+      "logo": "iching/iching-logo.png",
+      "favicon": "iching/favicon-iching.ico",
+      "sizes": {
+        "32": "iching/iching-logo-32.png",
+        "64": "iching/iching-logo-64.png",
+        "128": "iching/iching-logo-128.png",
+        "256": "iching/iching-logo-256.png"
+      }
+    },
+    "calendar": {
+      "hasCustomLogo": true,
+      "logo": "calendar/calendar-logo.png",
+      "favicon": "calendar/favicon-calendar.ico",
+      "sizes": {
+        "32": "calendar/calendar-logo-32.png",
+        "64": "calendar/calendar-logo-64.png",
+        "128": "calendar/calendar-logo-128.png",
+        "256": "calendar/calendar-logo-256.png"
       }
     },
     "webmail": {

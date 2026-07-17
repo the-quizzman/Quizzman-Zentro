@@ -1,0 +1,67 @@
+# QMF — Quizzman Modular Framework
+> Production frontend framework for composable Quizzman web apps (tokens, UI, header, chat embed).
+> Use this file to discover public documentation for AI agents and crawlers.
+
+## Product
+- Name: QMF (Quizzman Modular Framework) v3
+- CDN home: https://ui.quizzman.com/
+- Docs shell: https://ui.quizzman.com/qmf/docs.html
+- npm packages: `@qmf/core`, `@qmf/tokens`, `@qmf/ui`, `@qmf/header`, `@qmf/chat-embed`
+- Marketing: https://quizzman.com/
+
+## Related Quizzman products (AI discovery)
+- Slide Studio (Markdown slides): https://app.quizzman.com/slide-studio/llms.txt
+- Slide Studio about: https://app.quizzman.com/slide-studio/about
+- App platform: https://app.quizzman.com/
+
+## Documentation (preferred for AI agents — plain Markdown)
+- Usage / install: https://ui.quizzman.com/qmf/docs/USAGE.md
+- Core API: https://ui.quizzman.com/qmf/docs/API.md
+- Architecture (public): https://ui.quizzman.com/qmf/docs/ARCHITECTURE.md
+- Migration: https://ui.quizzman.com/qmf/docs/MIGRATION.md
+- Header & settings: https://ui.quizzman.com/qmf/docs/header-settings-setup.md
+- Path registry: https://ui.quizzman.com/qmf/docs/paths/
+- QMF 4.0: https://ui.quizzman.com/qmf/docs/v4/README.md
+- AI rules: https://ui.quizzman.com/qmf/docs/v4/AI_RULES.md
+- Full LLM index: https://ui.quizzman.com/qmf/llms-full.txt
+- Docs index JSON: https://ui.quizzman.com/qmf/docs-index.json
+- API index JSON: https://ui.quizzman.com/qmf/api-index.json
+- Components JSON: https://ui.quizzman.com/qmf/components.json
+- Search index: https://ui.quizzman.com/qmf/search.json
+- Human docs UI: https://ui.quizzman.com/qmf/docs.html
+- Live demo 4.0: https://ui.quizzman.com/qmf/v4-demo/
+
+## Quick start (CDN)
+```html
+<link rel="stylesheet" href="https://ui.quizzman.com/qmf/v3/tokens.css">
+<script src="https://ui.quizzman.com/qmf/v3/qmf.iife.js"></script>
+<script>
+  QMF.init({ appId: 'my-app', debug: true }).then(() => console.log('QMF Ready'));
+</script>
+```
+
+Stable CDN entries also include:
+- https://ui.quizzman.com/qmf/v3/qmf.min.js
+- https://ui.quizzman.com/qmf/dist/qmf.min.js
+- https://ui.quizzman.com/qmf/assets/
+
+## What QMF is for
+- Shared design tokens and UI primitives across Quizzman products
+- Dynamic header / settings island
+- Chat embed and modular frontend services
+- Consistent theming for Lab, Wiki, App, Dict, and other subdomains
+
+## Related Lab tools that load QMF
+- Lab: https://lab.quizzman.com/llms.txt
+- Lab about I-Ching: https://lab.quizzman.com/tool/about-iching
+- Lab about Calendar: https://lab.quizzman.com/tool/about-calendar
+
+## Crawl policy
+- Allow indexing and AI grounding of `/qmf/docs/*.md`, `docs.html`, `llms.txt`, `sitemap.xml`, and public `v3/` / `dist/` entry assets.
+- Deny internal/source trees: `kernel/`, `services/`, `plugins/`, `scripts/`, `node_modules/`, `_src/`, `*.internal.md`.
+- Content-Signal: ai-train=no, search=yes, ai-input=yes
+- robots.txt: https://ui.quizzman.com/qmf/robots.txt
+- sitemap: https://ui.quizzman.com/qmf/sitemap.xml
+
+## Contact
+https://quizzman.com/

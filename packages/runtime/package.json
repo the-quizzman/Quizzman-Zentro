@@ -1,0 +1,31 @@
+{
+  "name": "@qmf/runtime",
+  "version": "4.0.0-alpha.1",
+  "description": "QMF 4.0 minimal runtime — vanilla JS",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": {
+      "browser": "./src/browser-entry.js",
+      "default": "./src/index.js"
+    },
+    "./browser": "./src/browser-entry.js",
+    "./dom": "./src/dom.js"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@qmf/contract": "4.0.0-alpha.1",
+    "@qmf/events": "4.0.0-alpha.1",
+    "@qmf/inspect": "4.0.0-alpha.1"
+  },
+  "publishConfig": {
+    "registry": "http://127.0.0.1:4873/",
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

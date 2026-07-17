@@ -1,0 +1,54 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "description": "Sample module",
+  "layer": "module",
+  "dependencies": [],
+  "services": [
+    {
+      "id": "main",
+      "token": "svc:sample.main",
+      "file": "service.js",
+      "singleton": true
+    }
+  ],
+  "events": {
+    "produces": [
+      {
+        "name": "sample.ready",
+        "version": 1,
+        "schema": "SampleReadyPayload"
+      }
+    ],
+    "consumes": []
+  },
+  "states": [
+    {
+      "id": "sample",
+      "file": "state.js",
+      "schema": "StateSchema",
+      "scope": "module"
+    }
+  ],
+  "permissions": [],
+  "exports": {
+    "plugin": "module.js",
+    "public": []
+  },
+  "configSchema": "ConfigSchema",
+  "lifecycle": [
+    "onMount",
+    "onReady",
+    "onDestroy"
+  ],
+  "entry": "module.js",
+  "files": {
+    "module": "module.js",
+    "config": "config.js",
+    "state": "state.js",
+    "service": "service.js",
+    "events": "events.js",
+    "view": "view.js",
+    "manifest": "manifest.json"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "doctor": "qmf4 doctor --strict",
+    "inspect": "qmf4 inspect summary"
+  }
+}
