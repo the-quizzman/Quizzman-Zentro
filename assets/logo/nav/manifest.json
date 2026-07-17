@@ -1,0 +1,7 @@
+{
+  "version": "20260718",
+  "cdnBase": "https://ui.quizzman.com/qmf/assets/logo/nav",
+  "size": 40,
+  "retina": 80,
+  "items": ["slide-studio", "quiz-editor", "wiki", "idiom-king", "pikahans"]
+}

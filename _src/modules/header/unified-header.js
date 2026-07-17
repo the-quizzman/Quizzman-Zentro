@@ -8,14 +8,28 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.5.0';
+  const VERSION = '3.5.3';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   const CDN_NAV_BASE = 'https://ui.quizzman.com/qmf/dist/modules-v3/header';
   const LEGATUS_BRIDGE = CDN_BASE + '/legatus-bridge.js?v=' + VERSION;
   const LEGATUS_ENDPOINT = 'https://legatus.quizzman.com';
+  const NAV_ICON_BASE = 'https://ui.quizzman.com/qmf/assets/logo/nav';
+  const NAV_ICON_VER = '20260718';
+
+  function navIcon(name) {
+    const base = NAV_ICON_BASE + '/' + name;
+    return {
+      iconImg: base + '-40.png?v=' + NAV_ICON_VER,
+      iconImg2x: base + '-80.png?v=' + NAV_ICON_VER,
+      iconImgWebp: base + '-40.webp?v=' + NAV_ICON_VER,
+      iconImgWebp2x: base + '-80.webp?v=' + NAV_ICON_VER,
+      iconAlt: name.replace(/-/g, ' '),
+    };
+  }
 
   /**
    * Four primary sections only. Add new apps as children — never new top-level items.
+   * Product logos: compressed WebP/PNG thumbs under /qmf/assets/logo/nav/ (cached 7d).
    */
   const QUIZZMAN_NAV_ITEMS = [
     {
@@ -24,9 +38,9 @@
       href: 'https://app.quizzman.com',
       children: [
         { id: 'mentis', label: 'Mentis', href: 'https://mentis.quizzman.com', icon: 'M', description: 'AI assistant' },
-        { id: 'quiz-editor', label: 'Quiz Editor', href: 'https://app.quizzman.com/quiz-editor/', icon: 'Q', description: 'Create interactive quizzes' },
-        { id: 'slide-studio', label: 'Slide Studio', href: 'https://app.quizzman.com/slide-studio/', icon: 'S', description: 'Presentation editor' },
-        { id: 'lab', label: 'Lab', href: 'https://lab.quizzman.com', icon: 'L', description: 'Experiments and tools' },
+        { id: 'quiz-editor', label: 'Quiz Editor', href: 'https://app.quizzman.com/quiz-editor/', description: 'Create interactive quizzes', ...navIcon('quiz-editor') },
+        { id: 'slide-studio', label: 'Slide Studio', href: 'https://app.quizzman.com/slide-studio/', description: 'Presentation editor', ...navIcon('slide-studio') },
+        { id: 'lab', label: 'Eastern Lab', href: 'https://lab.quizzman.com', icon: 'L', description: 'Experiments and tools' },
         { id: 'app-platform', label: 'App Platform', href: 'https://app.quizzman.com', icon: 'A', description: 'All Quizzman apps' },
       ],
     },
@@ -35,7 +49,7 @@
       label: 'Tri thức',
       href: 'https://wiki.quizzman.com',
       children: [
-        { id: 'wiki', label: 'Wiki', href: 'https://wiki.quizzman.com', icon: 'W', description: 'Knowledge base' },
+        { id: 'wiki', label: 'Wiki', href: 'https://wiki.quizzman.com', description: 'Knowledge base', ...navIcon('wiki') },
         { id: 'dictionary', label: 'Dictionary', href: 'https://dict.quizzman.com', icon: '典', description: 'Chinese dictionary' },
         { id: 'docs', label: 'Docs', href: 'https://ui.quizzman.com/qmf/docs.html', icon: 'D', description: 'Platform documentation' },
         { id: 'ai-knowledge', label: 'AI Knowledge', href: 'https://mentis.quizzman.com', icon: 'AI', description: 'Ask Mentis about anything' },
@@ -60,8 +74,8 @@
       children: [
         { id: 'edu-games', label: 'Educational games', href: 'https://play.quizzman.com', icon: 'G', description: 'Learn through play' },
         { id: 'multiplayer', label: 'Multiplayer', href: 'https://play.quizzman.com', icon: '合', description: 'Join a live room' },
-        { id: 'practice', label: 'Practice', href: 'https://play.quizzman.com/pikahans', icon: '漢', description: 'Pikahans word practice' },
-        { id: 'challenges', label: 'Challenges', href: 'https://play.quizzman.com/idiom-king', icon: '語', description: 'Idiom King challenges' },
+        { id: 'practice', label: 'Practice', href: 'https://play.quizzman.com/pikahans', description: 'Pikahans word practice', ...navIcon('pikahans') },
+        { id: 'challenges', label: 'Challenges', href: 'https://play.quizzman.com/idiom-king', description: 'Idiom King challenges', ...navIcon('idiom-king') },
       ],
     },
   ];
@@ -172,12 +186,33 @@
     return {};
   }
 
+  function renderMegaIcon(child) {
+    if (child.iconImg) {
+      const alt = escapeHtml(child.iconAlt || child.label);
+      const src = escapeHtml(child.iconImg);
+      const src2x = child.iconImg2x ? escapeHtml(child.iconImg2x) : '';
+      const webp = child.iconImgWebp ? escapeHtml(child.iconImgWebp) : '';
+      const webp2x = child.iconImgWebp2x ? escapeHtml(child.iconImgWebp2x) : '';
+      const pngSrcset = src2x ? `${src} 1x, ${src2x} 2x` : src;
+      const webpSrcset = webp && webp2x ? `${webp} 1x, ${webp2x} 2x` : webp;
+
+      return `
+        <span class="lab-header__mega-icon lab-header__mega-icon--img" aria-hidden="true">
+          <picture>
+            ${webpSrcset ? `<source type="image/webp" srcset="${webpSrcset}">` : (webp ? `<source type="image/webp" srcset="${webp}">` : '')}
+            <img src="${src}" ${src2x ? `srcset="${pngSrcset}"` : ''} alt="${alt}" width="20" height="20" loading="lazy" decoding="async">
+          </picture>
+        </span>
+      `;
+    }
+
+    return `<span class="lab-header__mega-icon" aria-hidden="true">${escapeHtml(child.icon || child.label.charAt(0))}</span>`;
+  }
+
   function renderMegaCard(child, activeChild) {
     const isActive = child.id === activeChild;
     const isDisabled = !!child.disabled;
-    const icon = child.iconImg
-      ? `<span class="lab-header__mega-icon lab-header__mega-icon--img" aria-hidden="true"><img src="${escapeHtml(child.iconImg)}" alt="${escapeHtml(child.iconAlt || child.label)}" width="20" height="20" loading="lazy" decoding="async"></span>`
-      : `<span class="lab-header__mega-icon" aria-hidden="true">${escapeHtml(child.icon || child.label.charAt(0))}</span>`;
+    const icon = renderMegaIcon(child);
 
     const body = `
       ${icon}
