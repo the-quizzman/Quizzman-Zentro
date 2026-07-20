@@ -1,7 +1,12 @@
 /**
- * QMF Bootstrap / Loading Screen v2.0
+ * QMF Bootstrap / Loading Screen v2.1
  * Runtime variant: framework bootstrapping (not app spinner)
- * Flashcard variant: legacy fc-load (compat)
+ * Flashcard variant: app splash — fullscreen by default, card opt-in
+ *
+ * Palette (override per app on #qm-initial-loading / .qm-load / .qm-boot):
+ *   --qm-load-primary | --qm-load-secondary | --qm-load-accent
+ *   --qm-load-bg | --qm-load-bg-glow | --qm-load-brand | --qm-load-msg
+ *   --qm-boot-bg | --qm-boot-primary | --qm-boot-secondary | --qm-boot-glow | --qm-boot-muted
  */
 
 /* ─── Runtime bootstrap ─────────────────────────────────── */
@@ -9,8 +14,10 @@
 .qm-boot {
   --qm-boot-bg: #0b1020;
   --qm-boot-muted: #8b95a8;
-  --qm-boot-line: rgba(125, 166, 255, 0.35);
-  --qm-boot-glow: rgba(125, 166, 255, 0.55);
+  --qm-boot-primary: #7da6ff;
+  --qm-boot-secondary: #c9d6ff;
+  --qm-boot-line: color-mix(in srgb, var(--qm-boot-primary) 35%, transparent);
+  --qm-boot-glow: color-mix(in srgb, var(--qm-boot-primary) 55%, transparent);
   --qm-boot-font: 'Inter', 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
   box-sizing: border-box;
   font-family: var(--qm-boot-font);
@@ -99,11 +106,11 @@ html.qm-load-active body {
   font-size: clamp(4.5rem, 14vw, 6.25rem);
   font-weight: 600;
   letter-spacing: -0.04em;
-  background: linear-gradient(180deg, #c9d6ff 0%, #7da6ff 100%);
+  background: linear-gradient(180deg, var(--qm-boot-secondary) 0%, var(--qm-boot-primary) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 0 28px rgba(125, 166, 255, 0.35));
+  filter: drop-shadow(0 0 28px var(--qm-boot-glow));
   user-select: none;
 }
 
@@ -116,9 +123,9 @@ html.qm-load-active body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(201, 214, 255, 0.05) 35%,
-    rgba(125, 166, 255, 0.55) 50%,
-    rgba(201, 214, 255, 0.05) 65%,
+    color-mix(in srgb, var(--qm-boot-secondary) 5%, transparent) 35%,
+    var(--qm-boot-glow) 50%,
+    color-mix(in srgb, var(--qm-boot-secondary) 5%, transparent) 65%,
     transparent 100%
   );
   box-shadow: 0 0 24px var(--qm-boot-glow);
@@ -167,7 +174,7 @@ html.qm-load-active body {
 }
 
 .qm-boot__status--ready {
-  color: #9ec0ff;
+  color: var(--qm-boot-secondary);
   font-weight: 600;
 }
 
@@ -186,7 +193,7 @@ html.qm-load-active body {
   width: min(100%, 280px);
   height: 2px;
   border-radius: 1px;
-  background: rgba(201, 214, 255, 0.12);
+  background: color-mix(in srgb, var(--qm-boot-secondary) 12%, transparent);
   overflow: hidden;
 }
 
@@ -195,7 +202,7 @@ html.qm-load-active body {
   height: 100%;
   width: 0%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #7da6ff, #c9d6ff);
+  background: linear-gradient(90deg, var(--qm-boot-primary), var(--qm-boot-secondary));
   box-shadow: 0 0 10px var(--qm-boot-glow);
   transition: width 0.35s ease;
 }
@@ -237,7 +244,7 @@ html.qm-load-active body {
 }
 
 .qm-boot__log-cmd {
-  color: #7da6ff;
+  color: var(--qm-boot-primary);
 }
 
 .qm-boot__log-ok {
@@ -256,23 +263,26 @@ html.qm-load-active body {
   }
 }
 
-/* ─── Legacy flashcard (compat) ─────────────────────────── */
+/* ─── App splash / flashcard ────────────────────────────── */
 
 :root {
   --qm-load-font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --qm-load-bg: #faf8f5;
-  --qm-load-bg-glow: rgba(254, 243, 199, 0.55);
+  --qm-load-bg-glow: color-mix(in srgb, var(--qm-load-primary, #fbbf24) 35%, transparent);
   --qm-load-card-from: #fff;
   --qm-load-card-mid: #fffbeb;
   --qm-load-card-to: #f0fdfa;
-  --qm-load-card-border: rgba(180, 83, 9, 0.16);
-  --qm-load-card-shadow: rgba(180, 83, 9, 0.1);
-  --qm-load-badge-border: #d97706;
+  --qm-load-card-border: color-mix(in srgb, var(--qm-load-primary, #d97706) 22%, transparent);
+  --qm-load-card-shadow: color-mix(in srgb, var(--qm-load-primary, #d97706) 14%, transparent);
+  --qm-load-badge-border: var(--qm-load-primary, #d97706);
   --qm-load-brand: #92400e;
   --qm-load-msg: #57534e;
-  --qm-load-amber: #fbbf24;
-  --qm-load-teal: #0d9488;
-  --qm-load-blue: #2563eb;
+  --qm-load-primary: #fbbf24;
+  --qm-load-secondary: #0d9488;
+  --qm-load-accent: #2563eb;
+  --qm-load-amber: var(--qm-load-primary);
+  --qm-load-teal: var(--qm-load-secondary);
+  --qm-load-blue: var(--qm-load-accent);
 }
 
 #qm-initial-loading.qm-load {
@@ -282,7 +292,7 @@ html.qm-load-active body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #faf8f5;
+  background: var(--qm-load-bg);
 }
 
 .qm-load {
@@ -292,6 +302,7 @@ html.qm-load-active body {
   justify-content: center;
   text-align: center;
   font-family: var(--qm-load-font);
+  color: var(--qm-load-msg);
 }
 
 .qm-load--boot {
@@ -318,22 +329,33 @@ html.qm-load-active body {
 
 .qm-load--dark {
   --qm-load-bg: #0c0a09;
-  --qm-load-bg-glow: rgba(79, 70, 229, 0.2);
+  --qm-load-bg-glow: color-mix(in srgb, var(--qm-load-accent, #4f46e5) 28%, transparent);
   --qm-load-card-from: #1c1917;
   --qm-load-card-mid: #292524;
   --qm-load-card-to: #1e1b4b;
-  --qm-load-card-border: rgba(251, 191, 36, 0.2);
+  --qm-load-card-border: color-mix(in srgb, var(--qm-load-primary, #fbbf24) 28%, transparent);
   --qm-load-card-shadow: rgba(0, 0, 0, 0.35);
-  --qm-load-badge-border: #fbbf24;
+  --qm-load-badge-border: var(--qm-load-primary, #fbbf24);
   --qm-load-brand: #fcd34d;
   --qm-load-msg: #a8a29e;
 }
 
+/* Default: fullscreen / no card */
 .qm-load__inner {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
+  width: min(100%, 360px);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* Opt-in card layout for legacy consumers */
+.qm-load--card .qm-load__inner {
   width: min(100%, 320px);
   padding: 28px 24px 32px;
   border-radius: 20px;
@@ -350,6 +372,16 @@ html.qm-load-active body {
 }
 
 .qm-load__badge {
+  width: 80px;
+  height: 80px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.qm-load--card .qm-load__badge {
   width: 72px;
   height: 72px;
   padding: 6px;
@@ -363,15 +395,26 @@ html.qm-load-active body {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  border-radius: 16px;
+}
+
+.qm-load--card .qm-load__logo {
   border-radius: 12px;
 }
 
 .qm-load__brand {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: var(--qm-load-brand);
+}
+
+.qm-load--card .qm-load__brand {
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--qm-load-brand);
 }
 
 .qm-load__tagline {
@@ -393,7 +436,7 @@ html.qm-load-active body {
 
 .qm-load__path-bg {
   fill: none;
-  stroke: rgba(120, 113, 108, 0.16);
+  stroke: color-mix(in srgb, var(--qm-load-msg) 22%, transparent);
   stroke-width: 4;
   stroke-linecap: round;
 }
@@ -427,9 +470,14 @@ html.qm-load-active body {
 }
 
 .qm-load__node {
-  fill: #d6d3d1;
-  stroke: #fff;
+  fill: color-mix(in srgb, var(--qm-load-msg) 35%, #fff);
+  stroke: var(--qm-load-bg);
   stroke-width: 2;
+}
+
+.qm-load__runner {
+  fill: var(--qm-load-primary);
+  stroke: color-mix(in srgb, var(--qm-load-primary) 70%, #000);
 }
 
 .qm-load__msg {
@@ -437,4 +485,36 @@ html.qm-load-active body {
   font-size: 0.88rem;
   font-weight: 800;
   color: var(--qm-load-msg);
+}
+
+.qm-load__bar {
+  width: min(100%, 220px);
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--qm-load-msg) 14%, transparent);
+  overflow: hidden;
+}
+
+.qm-load__bar-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--qm-load-primary),
+    var(--qm-load-secondary),
+    var(--qm-load-accent)
+  );
+  transition: width 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qm-load__path-fill,
+  .qm-load__runner {
+    animation: none !important;
+  }
+  .qm-load__bar-fill {
+    transition: none;
+  }
 }

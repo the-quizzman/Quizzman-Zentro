@@ -3,6 +3,8 @@
  * Desktop: modal popup · Mobile: side sheet from the right
  */
 
+import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
+
 function escapeHtml(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -46,6 +48,7 @@ export function defineCenter(cssText, runtime) {
     connectedCallback() {
       if (!this.shadowRoot) this.attachShadow({ mode: "open" });
       this.setAttribute("data-role", "hub");
+      ensureQuizFont();
       this._paintShell();
       this._unsub = runtime.store.subscribe((s) => this.paintActivity(s));
       this._unsubLocale = runtime.bus.on("locale:change", () => {
@@ -57,6 +60,7 @@ export function defineCenter(cssText, runtime) {
         this.paintMentis();
         if (wasOpen) this.open({ tab });
       });
+      this._unsubTheme = watchTheme(() => this._syncTheme());
       document.addEventListener("keydown", this._onKey);
       runtime.ensureStarted();
     }
@@ -64,17 +68,23 @@ export function defineCenter(cssText, runtime) {
     disconnectedCallback() {
       this._unsub?.();
       this._unsubLocale?.();
+      this._unsubTheme?.();
       document.removeEventListener("keydown", this._onKey);
       document.documentElement.style.removeProperty("overflow");
     }
 
+    _syncTheme() {
+      const root = this.shadowRoot?.querySelector(".lg-root");
+      applyTheme(this, root);
+    }
+
     _paintShell() {
-      const theme = this.getAttribute("theme") || "";
+      ensureQuizFont();
       const t = runtime.i18n.t.bind(runtime.i18n);
       const title = t("brand");
       this.shadowRoot.innerHTML = `
         <style>${cssText}</style>
-        <div class="lg-root lg-center-root" ${theme ? `data-theme="${theme}"` : ""} data-open="false" hidden>
+        <div class="lg-root lg-center-root" data-open="false" hidden>
           <div class="lg-center-backdrop" data-close></div>
           <div class="lg-center-dialog" role="dialog" aria-modal="true" aria-label="${escapeAttr(title)}">
             <div class="lg-panel-head">
@@ -113,6 +123,7 @@ export function defineCenter(cssText, runtime) {
           </div>
         </div>
       `;
+      this._syncTheme();
 
       this.shadowRoot.querySelectorAll("[data-close]").forEach((el) => {
         el.addEventListener("click", () => this.close());
@@ -216,6 +227,7 @@ export function defineCenter(cssText, runtime) {
       if (!this.shadowRoot) this.connectedCallback();
       const root = this.shadowRoot.querySelector(".lg-center-root");
       if (!root) return;
+      this._syncTheme();
       if (opts.tab) this._setTab(opts.tab);
       this._open = true;
       this.setAttribute("data-open", "true");

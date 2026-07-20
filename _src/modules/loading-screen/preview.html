@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QMF Loading Screen Preview · 2.1.0</title>
+  <link rel="stylesheet" href="./loading-screen.css?v=2.1.0" />
+  <style>
+    :root {
+      font-family: Inter, Manrope, system-ui, sans-serif;
+      color: #0f172a;
+      background: #f8fafc;
+    }
+    body { margin: 0; padding: 24px; }
+    h1 { font-size: 1.25rem; margin: 0 0 8px; }
+    p { margin: 0 0 20px; color: #64748b; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    button {
+      appearance: none;
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    button:hover { border-color: #94a3b8; }
+    button strong { display: block; margin-bottom: 4px; }
+    button span { color: #64748b; font-size: 0.85rem; }
+    .note {
+      margin-top: 24px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Loading Screen Preview · v2.1.0</h1>
+  <p>Fullscreen / no-card · palette theo từng hệ thống. Click để xem splash (tự ẩn sau ~2.2s).</p>
+  <div class="grid" id="apps"></div>
+  <div class="note">
+    Local preview dùng CSS/JS cùng thư mục (<code>_src/modules/loading-screen</code>).
+    Consumer production sẽ pin <code>?v=2.1.0</code> sau khi publish CDN.
+  </div>
+  <script src="./loading-screen.js?v=2.1.0"></script>
+  <script>
+    var APPS = [
+      {
+        id: 'quiz-editor',
+        label: 'Quiz Editor',
+        desc: 'Indigo → sky → coral',
+        cfg: {
+          variant: 'flashcard',
+          layout: 'fullscreen',
+          brandName: 'Quiz Editor',
+          tagLine: 'Quizzman',
+          message: 'Starting…',
+          theme: 'light',
+          appLogoUrl: 'https://ui.quizzman.com/qmf/assets/logo/nav/quiz-editor-80.webp',
+          palette: {
+            primary: '#3F5EFB',
+            secondary: '#38bdf8',
+            accent: '#FF7A45',
+            background: '#f7f9fc',
+            brand: '#1e293b',
+            text: '#64748b',
+            bgGlow: 'rgba(63,94,251,.18)',
+          },
+        },
+      },
+      {
+        id: 'iching',
+        label: 'I-Ching',
+        desc: 'Gold → violet · Lab',
+        cfg: {
+          variant: 'flashcard',
+          layout: 'fullscreen',
+          brandName: 'Quizzman I-Ching',
+          tagLine: 'Science Lab',
+          message: 'Đang khởi động…',
+          theme: 'light',
+          appLogoUrl: 'https://ui.quizzman.com/qmf/assets/logo/iching/iching-logo-128.png',
+          palette: {
+            primary: '#d4af37',
+            secondary: '#7a5af8',
+            accent: '#374151',
+            background: '#faf8f5',
+            brand: '#374151',
+            text: '#64748b',
+            bgGlow: 'rgba(212,175,55,.28)',
+          },
+        },
+      },
+      {
+        id: 'mentis',
+        label: 'Mentis',
+        desc: 'Teal workspace',
+        cfg: {
+          variant: 'flashcard',
+          layout: 'fullscreen',
+          brandName: 'Mentis',
+          tagLine: 'Knowledge Workspace',
+          message: 'Starting Mentis…',
+          theme: 'light',
+          appLogoUrl: 'https://ui.quizzman.com/qmf/assets/logo/nav/mentis-80.webp',
+          palette: {
+            primary: '#0f766e',
+            secondary: '#14b8a6',
+            accent: '#0d9488',
+            background: '#f0fdfa',
+            brand: '#134e4a',
+            text: '#54716c',
+            bgGlow: 'rgba(15,118,110,.22)',
+          },
+        },
+      },
+      {
+        id: 'slide-studio',
+        label: 'Slide Studio',
+        desc: 'Indigo dark present',
+        cfg: {
+          variant: 'flashcard',
+          layout: 'fullscreen',
+          brandName: 'Quizzman Slide Studio',
+          tagLine: 'Trình chiếu',
+          message: 'Đang tải trình chiếu…',
+          theme: 'dark',
+          appLogoUrl: 'https://ui.quizzman.com/qmf/assets/logo/nav/slide-studio-80.webp',
+          palette: {
+            primary: '#6366f1',
+            secondary: '#818cf8',
+            accent: '#a78bfa',
+            background: '#070514',
+            brand: '#e0e7ff',
+            text: '#a5b4fc',
+            bgGlow: 'rgba(99,102,241,.35)',
+          },
+        },
+      },
+      {
+        id: 'assignment',
+        label: 'Assignments',
+        desc: 'Blue → cyan → lime',
+        cfg: {
+          variant: 'flashcard',
+          layout: 'fullscreen',
+          brandName: 'Assignments',
+          tagLine: 'Quizzman',
+          message: 'Starting…',
+          theme: 'light',
+          appLogoUrl: 'https://ui.quizzman.com/qmf/assets/logo/nav/assignment-80.webp',
+          palette: {
+            primary: '#1045B0',
+            secondary: '#28C2D1',
+            accent: '#A2F053',
+            background: '#f7f9fc',
+            brand: '#0f172a',
+            text: '#64748b',
+            bgGlow: 'rgba(16,69,176,.18)',
+          },
+        },
+      },
+      {
+        id: 'mandarin',
+        label: 'Mandarin / Study',
+        desc: 'Warm paper · amber/teal/blue',
+        cfg: {
+          variant: 'flashcard',
+          layout: 'fullscreen',
+          brandName: 'Quizzman Mandarin',
+          tagLine: 'HSK · Flashcard',
+          message: 'Đang tải trang thi thử…',
+          theme: 'light',
+          appLogoUrl: 'https://ui.quizzman.com/qmf/assets/logo/nav/mandarin-80.webp',
+          palette: {
+            primary: '#fbbf24',
+            secondary: '#0d9488',
+            accent: '#2563eb',
+            background: '#faf8f5',
+            brand: '#92400e',
+            text: '#57534e',
+            bgGlow: 'rgba(254,243,199,.55)',
+          },
+        },
+      },
+      {
+        id: 'runtime',
+        label: 'QMF Runtime',
+        desc: 'Framework bootstrap',
+        cfg: {
+          variant: 'runtime',
+          presentation: 'status',
+          message: 'Initializing QMF Runtime…',
+          minDisplayMs: 1200,
+          palette: {
+            primary: '#7da6ff',
+            secondary: '#c9d6ff',
+            background: '#0b1020',
+          },
+        },
+      },
+      {
+        id: 'card-legacy',
+        label: 'Legacy card',
+        desc: 'Opt-in compatibility only',
+        cfg: {
+          variant: 'flashcard',
+          layout: 'card',
+          brandName: 'Legacy Card',
+          message: 'Card layout (compat)',
+          theme: 'light',
+          appLogoUrl: 'https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-loading-116.webp',
+        },
+      },
+    ];
+
+    var root = document.getElementById('apps');
+    var active = null;
+
+    APPS.forEach(function (app) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.innerHTML = '<strong>' + app.label + '</strong><span>' + app.desc + '</span>';
+      btn.addEventListener('click', async function () {
+        if (active && typeof active.hide === 'function') {
+          try { await active.hide(); } catch (e) {}
+        }
+        active = createQuizzmanLoadingScreen(Object.assign({
+          minDisplayMs: 1600,
+          fadeOutMs: 360,
+          autoStages: true,
+        }, app.cfg));
+        active.setProgress(28);
+        setTimeout(function () { active && active.setProgress(72); }, 700);
+        setTimeout(function () {
+          if (!active) return;
+          active.hide().then(function () { active = null; });
+        }, 1800);
+      });
+      root.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

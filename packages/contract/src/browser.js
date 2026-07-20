@@ -3,6 +3,9 @@
  */
 import { assertValid, validate } from './validate.js';
 
+/** @type {Map<string, Promise<any>>} */
+const jsonMemo = new Map();
+
 /**
  * @param {string} url
  */
@@ -13,12 +16,26 @@ async function fetchJson(url) {
 }
 
 /**
+ * Memoize meta-schema fetches — loadManifestUrl used to re-download the same
+ * meta schema once per module (huge request spam on boot).
+ * @param {string} url
+ */
+function fetchJsonMemo(url) {
+  let pending = jsonMemo.get(url);
+  if (!pending) {
+    pending = fetchJson(url);
+    jsonMemo.set(url, pending);
+  }
+  return pending;
+}
+
+/**
  * @param {string} metaSchemaUrl
  * @param {string} contractUrl
  */
 export async function loadContractUrl(contractUrl, metaSchemaUrl) {
   const [meta, raw] = await Promise.all([
-    fetchJson(metaSchemaUrl),
+    fetchJsonMemo(metaSchemaUrl),
     fetchJson(contractUrl),
   ]);
   if (raw.language == null) raw.language = 'js';
@@ -31,7 +48,7 @@ export async function loadContractUrl(contractUrl, metaSchemaUrl) {
  */
 export async function loadManifestUrl(manifestUrl, metaSchemaUrl) {
   const [meta, raw] = await Promise.all([
-    fetchJson(metaSchemaUrl),
+    fetchJsonMemo(metaSchemaUrl),
     fetchJson(manifestUrl),
   ]);
   return assertValid(meta, raw, { name: 'manifest.json', applyDefaults: true });

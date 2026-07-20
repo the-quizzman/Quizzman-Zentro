@@ -201,9 +201,15 @@ function setupLoadingDemo() {
     variant: 'primary',
     onClick: async () => {
       const ls = showLoadingScreen({
-        brandName: 'Quizzman',
+        brandName: 'Quiz Editor',
         showParticles: true,
         minDisplayTime: 3000,
+        palette: {
+          primary: '#3F5EFB',
+          secondary: '#FF7A45',
+          background: 'linear-gradient(135deg, #f7f8ff 0%, #eef2ff 50%, #fff7ed 100%)',
+          brand: '#1e293b',
+        },
       });
 
       // Simulate progress

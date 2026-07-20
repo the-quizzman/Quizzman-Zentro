@@ -1,4 +1,6 @@
 /** Con dấu chữ Q — official Legatus / Quizzman seal icon */
+import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
+
 const BELL_SVG = `
 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
   <path d="M12 2.8 Q14.545 2.503 16.6 4.033 Q18.953 5.047 19.967 7.4 Q21.497 9.455 21.2 12 Q21.497 14.545 19.967 16.6 Q18.953 18.953 16.6 19.967 Q14.545 21.497 12 21.2 Q9.455 21.497 7.4 19.967 Q5.047 18.953 4.033 16.6 Q2.503 14.545 2.8 12 Q2.503 9.455 4.033 7.4 Q5.047 5.047 7.4 4.033 Q9.455 2.503 12 2.8 Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/>
@@ -36,6 +38,7 @@ export function defineBell(cssText, runtime) {
     }
 
     connectedCallback() {
+      ensureQuizFont();
       this.render();
       this._unsub = runtime.store.subscribe((s) => this.sync(s));
       this._unsubLocale = runtime.bus.on("locale:change", () => {
@@ -43,6 +46,7 @@ export function defineBell(cssText, runtime) {
         this.sync(runtime.store.get());
         if (this._open) this.open();
       });
+      this._unsubTheme = watchTheme(() => this._syncTheme());
       runtime.ensureStarted();
       document.addEventListener("pointerdown", this._onDoc);
       document.addEventListener("keydown", this._onKey);
@@ -51,17 +55,23 @@ export function defineBell(cssText, runtime) {
     disconnectedCallback() {
       this._unsub?.();
       this._unsubLocale?.();
+      this._unsubTheme?.();
       document.removeEventListener("pointerdown", this._onDoc);
       document.removeEventListener("keydown", this._onKey);
     }
 
+    _syncTheme() {
+      const root = this.shadowRoot?.querySelector(".lg-root");
+      applyTheme(this, root);
+    }
+
     render() {
-      const theme = this.getAttribute("theme") || "";
+      ensureQuizFont();
       const t = runtime.i18n.t.bind(runtime.i18n);
       const label = t("notifications");
       this.shadowRoot.innerHTML = `
         <style>${cssText}</style>
-        <div class="lg-root lg-wrap" ${theme ? `data-theme="${theme}"` : ""}>
+        <div class="lg-root lg-wrap">
           <button class="lg-bell" type="button" part="bell" aria-label="${escapeAttr(label)}" aria-expanded="false">
             ${BELL_SVG}
             <span class="lg-badge" hidden part="badge">0</span>
@@ -90,6 +100,7 @@ export function defineBell(cssText, runtime) {
           </div>
         </div>
       `;
+      this._syncTheme();
 
       const root = this.shadowRoot;
       root.querySelector(".lg-bell").addEventListener("click", () => this.toggle());
@@ -173,6 +184,7 @@ export function defineBell(cssText, runtime) {
 
     async open() {
       this._open = true;
+      this._syncTheme();
       const mobile = isMobile();
       const bell = this.shadowRoot.querySelector(".lg-bell");
       if (!bell) return;
@@ -239,17 +251,26 @@ export function defineToastHost(cssText, runtime) {
 
   class LegatusToasts extends HTMLElement {
     connectedCallback() {
+      ensureQuizFont();
       this.attachShadow({ mode: "open" });
       const placement = this.getAttribute("placement") || "top-right";
       this.shadowRoot.innerHTML = `
         <style>${cssText}</style>
         <div class="lg-root lg-toasts" data-placement="${escapeAttr(placement)}"></div>
       `;
+      this._syncTheme();
+      this._unsubTheme = watchTheme(() => this._syncTheme());
       this._off = runtime.bus.on("toast", (payload) => this.push(payload));
     }
 
     disconnectedCallback() {
       this._off?.();
+      this._unsubTheme?.();
+    }
+
+    _syncTheme() {
+      const root = this.shadowRoot?.querySelector(".lg-root");
+      applyTheme(this, root);
     }
 
     push(payload = {}) {

@@ -32,7 +32,7 @@ export const QMF_PACKAGES: Record<string, string> = {
   '@qmf/footer': '3.0.0',
   '@qmf/chat-embed': '3.0.0',
   '@qmf/noti-embed': '3.0.0',
-  '@qmf/loading-screen': '3.0.0',
+  '@qmf/loading-screen': '3.0.2',
 };
 
 /**

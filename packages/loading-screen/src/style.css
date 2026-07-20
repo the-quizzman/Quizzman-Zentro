@@ -1,8 +1,14 @@
-/* @qmf/loading-screen – Fullscreen loading splash */
+/* @qmf/loading-screen – Fullscreen loading splash (no card) */
 
 /* ─── Base ─────────────────────────────────────────────── */
 
 .qmf-loading {
+  --qmf-loading-bg: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+  --qmf-loading-text: #1f2937;
+  --qmf-loading-glow: rgba(99, 102, 241, 0.3);
+  --qmf-loading-brand: inherit;
+  --qmf-loading-accent: var(--qmf-color-secondary, #06b6d4);
+
   position: fixed;
   inset: 0;
   z-index: var(--qmf-z-max, 9999);
@@ -12,6 +18,8 @@
   font-family: var(--qmf-font-sans, system-ui, sans-serif);
   transition: opacity 500ms ease;
   overflow: hidden;
+  background: var(--qmf-loading-bg);
+  color: var(--qmf-loading-text);
 }
 
 .qmf-loading--hiding {
@@ -22,23 +30,23 @@
 /* ─── Light Theme ──────────────────────────────────────── */
 
 .qmf-loading--light {
-  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
-  color: #1f2937;
+  --qmf-loading-bg: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+  --qmf-loading-text: #1f2937;
 }
 
 .qmf-loading--light .qmf-loading__particle {
-  background: rgba(99, 102, 241, 0.15);
+  background: color-mix(in srgb, var(--qmf-color-primary, #6366f1) 15%, transparent);
 }
 
 /* ─── Dark Theme ───────────────────────────────────────── */
 
 .qmf-loading--dark {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0c1222 100%);
-  color: #f9fafb;
+  --qmf-loading-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0c1222 100%);
+  --qmf-loading-text: #f9fafb;
 }
 
 .qmf-loading--dark .qmf-loading__particle {
-  background: rgba(165, 180, 252, 0.12);
+  background: color-mix(in srgb, var(--qmf-color-primary, #a5b4fc) 12%, transparent);
 }
 
 /* ─── Particles ────────────────────────────────────────── */
@@ -83,9 +91,12 @@
   gap: var(--qmf-spacing-4, 16px);
   text-align: center;
   padding: var(--qmf-spacing-6, 24px);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
-/* ─── Q Logo ───────────────────────────────────────────── */
+/* ─── Logo ─────────────────────────────────────────────── */
 
 .qmf-loading__logo-wrap {
   animation: qmf-logo-pulse 2s ease-in-out infinite;
@@ -94,6 +105,7 @@
 .qmf-loading__logo {
   height: 80px;
   width: auto;
+  border-radius: 16px;
 }
 
 .qmf-loading__q-logo {
@@ -107,7 +119,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 20px 60px var(--qmf-loading-glow);
 }
 
 @keyframes qmf-logo-pulse {
@@ -129,6 +141,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: var(--qmf-loading-brand);
 }
 
 .qmf-loading__tagline {
@@ -148,7 +161,7 @@
 }
 
 .qmf-loading--light .qmf-loading__progress {
-  background: rgba(99, 102, 241, 0.15);
+  background: color-mix(in srgb, var(--qmf-color-primary, #6366f1) 15%, transparent);
 }
 
 .qmf-loading--dark .qmf-loading__progress {
@@ -206,5 +219,16 @@
 
   .qmf-loading__progress {
     width: 180px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qmf-loading__logo-wrap,
+  .qmf-loading__particle,
+  .qmf-loading__progress-bar::after {
+    animation: none !important;
+  }
+  .qmf-loading__progress-bar {
+    transition: none;
   }
 }

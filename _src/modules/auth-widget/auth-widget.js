@@ -251,12 +251,22 @@
         
         /* Dropdown — portaled to body with fixed coords (see openDrop) */
         .qmf-auth-drop {
+          --qmf-auth-drop-bg: rgba(255, 255, 255, 0.98);
+          --qmf-auth-drop-border: rgba(15, 23, 42, 0.12);
+          --qmf-auth-drop-text: #0f172a;
+          --qmf-auth-drop-muted: #64748b;
+          --qmf-auth-drop-icon: #64748b;
+          --qmf-auth-drop-divider: rgba(15, 23, 42, 0.09);
+          --qmf-auth-drop-hover-bg: rgba(79, 70, 229, 0.08);
+          --qmf-auth-drop-hover-text: #4f46e5;
+          --qmf-auth-drop-accent: #8b6914;
           position: fixed;
           z-index: 10000;
-          background: var(--qmf-bg-primary, var(--c-surface, #fff));
-          border: 1px solid var(--qmf-border-color, var(--c-border, #e4dfd8));
+          color-scheme: light;
+          background: var(--qmf-auth-drop-bg);
+          border: 1px solid var(--qmf-auth-drop-border);
           border-radius: var(--qmf-radius-md, 10px);
-          box-shadow: var(--qmf-shadow-lg, 0 10px 40px rgba(0, 0, 0, 0.12));
+          box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16), 0 2px 8px rgba(15, 23, 42, 0.08);
           min-width: 200px;
           padding: 6px;
           font-family: ${FONT_STACK};
@@ -275,51 +285,52 @@
           transform: translateY(0);
           pointer-events: auto;
         }
-        [data-theme="dark"] .qmf-auth-drop {
-          background: var(--qmf-bg-primary, #1a1e35);
-          border-color: var(--qmf-border-color, #2a2e48);
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+        :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-drop {
+          --qmf-auth-drop-bg: rgba(15, 23, 42, 0.98);
+          --qmf-auth-drop-border: rgba(255, 255, 255, 0.10);
+          --qmf-auth-drop-text: #f1f5f9;
+          --qmf-auth-drop-muted: #94a3b8;
+          --qmf-auth-drop-icon: #94a3b8;
+          --qmf-auth-drop-divider: rgba(255, 255, 255, 0.08);
+          --qmf-auth-drop-hover-bg: rgba(165, 180, 252, 0.11);
+          --qmf-auth-drop-hover-text: #c7d2fe;
+          --qmf-auth-drop-accent: #d4a843;
+          color-scheme: dark;
+          box-shadow: 0 20px 55px rgba(0, 0, 0, 0.52), 0 2px 10px rgba(0, 0, 0, 0.34);
+          backdrop-filter: blur(20px) saturate(1.25);
+          -webkit-backdrop-filter: blur(20px) saturate(1.25);
         }
         
         .qmf-auth-user-title {
           font-size: 0.72rem;
-          color: var(--qmf-text-secondary, #888);
+          color: var(--qmf-auth-drop-muted);
           margin-top: 2px;
         }
         .qmf-auth-user-lumen {
           font-size: 0.72rem;
-          color: var(--c-primary, #8b6914);
+          color: var(--qmf-auth-drop-accent);
           margin-top: 4px;
           font-weight: 600;
-        }
-        [data-theme="dark"] .qmf-auth-user-lumen {
-          color: #d4a843;
         }
 
         /* Dropdown User Info */
         .qmf-auth-user {
           padding: 10px 12px 8px;
           margin: 0 0 4px;
-          border-bottom: 1px solid var(--qmf-border-color, var(--c-border, #e4dfd8));
+          border-bottom: 1px solid var(--qmf-auth-drop-divider);
           font-family: ${FONT_STACK};
-        }
-        [data-theme="dark"] .qmf-auth-user {
-          border-color: #2a2e48;
         }
         .qmf-auth-user-name {
           font-family: ${FONT_STACK};
           font-size: 0.875rem;
           font-weight: 600;
           line-height: 1.3;
-          color: var(--qmf-text-primary, var(--c-text, #2c2a28));
-        }
-        [data-theme="dark"] .qmf-auth-user-name {
-          color: #e5e7eb;
+          color: var(--qmf-auth-drop-text);
         }
         .qmf-auth-user-email {
           font-family: ${FONT_STACK};
           font-size: 0.75rem;
-          color: var(--qmf-text-muted, var(--c-text-muted, #888));
+          color: var(--qmf-auth-drop-muted);
           margin-top: 3px;
           max-width: 220px;
           overflow: hidden;
@@ -338,7 +349,7 @@
           font-family: ${FONT_STACK};
           font-size: 0.875rem;
           font-weight: 500;
-          color: var(--qmf-text-primary, var(--c-text, #444));
+          color: var(--qmf-auth-drop-text);
           text-decoration: none;
           background: none;
           border: none;
@@ -352,38 +363,42 @@
           width: 16px;
           text-align: center;
           font-size: 0.8rem;
-          color: var(--qmf-text-secondary, #6b7280);
-        }
-        [data-theme="dark"] .qmf-auth-drop a,
-        [data-theme="dark"] .qmf-auth-drop button {
-          color: #d1d5db;
+          color: var(--qmf-auth-drop-icon);
         }
         .qmf-auth-drop a:hover,
         .qmf-auth-drop button:hover {
-          background: var(--qmf-bg-tertiary, rgba(139, 105, 20, 0.08));
-          color: var(--qmf-brand-primary, var(--c-primary, #8b6914));
+          background: var(--qmf-auth-drop-hover-bg);
+          color: var(--qmf-auth-drop-hover-text);
         }
         .qmf-auth-drop a:hover i,
         .qmf-auth-drop button:hover i {
-          color: var(--qmf-brand-primary, var(--c-primary, #8b6914));
+          color: var(--qmf-auth-drop-hover-text);
         }
-        [data-theme="dark"] .qmf-auth-drop a:hover,
-        [data-theme="dark"] .qmf-auth-drop button:hover {
-          background: rgba(212, 168, 67, 0.12);
-          color: #d4a843;
+        .qmf-auth-drop a:focus-visible,
+        .qmf-auth-drop button:focus-visible {
+          outline: 2px solid color-mix(in srgb, var(--qmf-auth-drop-hover-text) 70%, transparent);
+          outline-offset: -2px;
+          background: var(--qmf-auth-drop-hover-bg);
         }
-        [data-theme="dark"] .qmf-auth-drop a:hover i,
-        [data-theme="dark"] .qmf-auth-drop button:hover i {
-          color: #d4a843;
+        .qmf-auth-drop .qmf-auth-logout-btn:hover {
+          background: rgba(239, 68, 68, 0.11);
+          color: #ef4444;
+        }
+        .qmf-auth-drop .qmf-auth-logout-btn:hover i {
+          color: #ef4444;
+        }
+        :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-drop .qmf-auth-logout-btn:hover {
+          background: rgba(248, 113, 113, 0.12);
+          color: #fca5a5;
+        }
+        :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-drop .qmf-auth-logout-btn:hover i {
+          color: #fca5a5;
         }
         
         .qmf-auth-drop-divider {
           height: 1px;
-          background: var(--qmf-border-color, var(--c-border, #e4dfd8));
+          background: var(--qmf-auth-drop-divider);
           margin: 4px 6px;
-        }
-        [data-theme="dark"] .qmf-auth-drop-divider {
-          background: #2a2e48;
         }
         
         .qmf-auth-wrap--open .qmf-auth-chip {
@@ -565,7 +580,8 @@
             try { localStorage.setItem('user', JSON.stringify(auth.user)); } catch (e) { /* ignore */ }
             this.renderUserChip();
             if (typeof this.config.onUserLoad === 'function') {
-              this.config.onUserLoad(auth.user);
+              const token = auth.token || auth.accessToken || this.getToken() || null;
+              this.config.onUserLoad(auth.user, { token });
             }
           } else {
             this.checkAuthFallback();
@@ -633,7 +649,8 @@
             try { localStorage.setItem('user', JSON.stringify(data.user)); } catch (e) { /* ignore */ }
             this.renderUserChip();
             if (typeof this.config.onUserLoad === 'function') {
-              this.config.onUserLoad(data.user);
+              const token = data.token || data.accessToken || this.getToken() || null;
+              this.config.onUserLoad(data.user, { token });
             }
           } else {
             try { localStorage.removeItem('user'); } catch (e) { /* ignore */ }

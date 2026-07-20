@@ -10,7 +10,7 @@ const rootEsbuild = join(pkgRoot, '..', '..', 'node_modules', '.bin', 'esbuild')
 
 mkdirSync(dist, { recursive: true });
 
-const VERSION = '1.1.0';
+const VERSION = '1.2.2';
 
 function runBuild() {
   const esbuildBin = existsSync(rootEsbuild) ? rootEsbuild : 'npx esbuild';

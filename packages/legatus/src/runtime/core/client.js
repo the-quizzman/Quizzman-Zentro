@@ -46,6 +46,7 @@ export class LegatusClient {
       if (!authHeaders.Authorization) {
         const err = new Error("not authenticated");
         err.status = 401;
+        err.code = "TOKEN_MISSING";
         throw err;
       }
       return fetch(this.apiUrl(path), {
@@ -58,7 +59,16 @@ export class LegatusClient {
       });
     };
 
-    let res = await execute(false);
+    let res;
+    try {
+      res = await execute(false);
+    } catch (err) {
+      // The visible UI can already be authenticated through an HttpOnly
+      // IdSys session while no access token is readable by JavaScript yet.
+      // Force-refresh once before surfacing a false "not authenticated".
+      if (err?.status !== 401) throw err;
+      res = await execute(true);
+    }
     // Match Quizzman SSO semantics: refresh the short-lived access token
     // through IdSys, then retry the API request exactly once.
     if (res.status === 401) {
@@ -130,7 +140,8 @@ export class LegatusClient {
 
   async connect() {
     this._closed = false;
-    const token = await this.getToken();
+    let token = await this.getToken();
+    if (!token) token = await this.getToken({ forceRefresh: true });
     if (!token) {
       this.store.set({ connected: false, error: "not authenticated" });
       return;

@@ -14,6 +14,18 @@ import { createElement, createLogger, createEventEmitter } from '@qmf/utils';
 
 // ─── Config Schema ──────────────────────────────────────────
 
+export const LoadingScreenPaletteSchema = z.object({
+  primary: z.string().optional(),
+  secondary: z.string().optional(),
+  accent: z.string().optional(),
+  background: z.string().optional(),
+  backgroundDark: z.string().optional(),
+  brand: z.string().optional(),
+  text: z.string().optional(),
+  muted: z.string().optional(),
+  glow: z.string().optional(),
+}).optional();
+
 export const LoadingScreenConfigSchema = z.object({
   // Branding
   logoUrl: z.string().optional(),
@@ -23,6 +35,9 @@ export const LoadingScreenConfigSchema = z.object({
 
   // Theme
   theme: z.enum(['auto', 'dark', 'light']).default('auto'),
+
+  // Per-app palette → CSS variables on root
+  palette: LoadingScreenPaletteSchema,
 
   // Particles
   showParticles: z.boolean().default(true),
@@ -147,10 +162,9 @@ export class QMFLoadingScreen {
       await new Promise(resolve => setTimeout(resolve, this.config.fadeOutDuration));
     }
 
-    this.destroy();
-
     this.logger.debug('Loading screen hidden');
     this.emitter.emit('hide');
+    this.destroy();
   }
 
   /** Immediately remove without animation */
@@ -183,6 +197,19 @@ export class QMFLoadingScreen {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
 
+  private applyPalette(el: HTMLElement, theme: 'dark' | 'light'): void {
+    const p = this.config.palette;
+    if (!p) return;
+    if (p.primary) el.style.setProperty('--qmf-color-primary', p.primary);
+    if (p.secondary) el.style.setProperty('--qmf-color-secondary', p.secondary);
+    if (p.accent) el.style.setProperty('--qmf-loading-accent', p.accent);
+    const bg = theme === 'dark' ? (p.backgroundDark || p.background) : p.background;
+    if (bg) el.style.setProperty('--qmf-loading-bg', bg);
+    if (p.brand) el.style.setProperty('--qmf-loading-brand', p.brand);
+    if (p.text || p.muted) el.style.setProperty('--qmf-loading-text', p.text || p.muted || '');
+    if (p.glow) el.style.setProperty('--qmf-loading-glow', p.glow);
+  }
+
   private render(): void {
     const theme = this.resolveTheme();
 
@@ -194,6 +221,7 @@ export class QMFLoadingScreen {
       'aria-valuemin': '0',
       'aria-valuemax': '100',
     });
+    this.applyPalette(this.screenEl, theme);
 
     // Particles canvas
     if (this.config.showParticles) {
@@ -297,7 +325,7 @@ export function createLoadingScreenPlugin(config?: Partial<LoadingScreenConfig>)
   let instance: QMFLoadingScreen | null = null;
   return {
     name: 'loading-screen',
-    version: '3.0.0',
+    version: '3.0.2',
     hooks: {
       onBeforeInit: () => {
         instance = new QMFLoadingScreen(config);

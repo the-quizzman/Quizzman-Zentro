@@ -7,10 +7,11 @@
   'use strict';
 
   var CDN = 'https://ui.quizzman.com/qmf/dist/legatus';
-  var VERSION = '1.1.1';
+  var VERSION = '1.2.2';
   var loading = null;
   var authWired = false;
   var layoutWired = false;
+  var latestAccessToken = null;
 
   function isMobile() {
     return !!(global.matchMedia && global.matchMedia('(max-width: 720px)').matches);
@@ -74,12 +75,22 @@
   function resolveToken(options) {
     options = options || {};
     return Promise.resolve().then(function () {
-      var auth = global.QuizzmanAuth || global.IdSysSSO;
-      if (options.forceRefresh && auth && typeof auth.refreshAccessToken === 'function') {
-        return Promise.resolve(auth.refreshAccessToken()).then(function (token) {
-          if (token) return token;
-          return resolveToken({ forceRefresh: false });
-        }).catch(function () { return null; });
+      if (options.forceRefresh) {
+        var refreshOwner = null;
+        if (global.IdSysSSO && typeof global.IdSysSSO.refreshAccessToken === 'function') {
+          refreshOwner = global.IdSysSSO;
+        } else if (global.QuizzmanAuth && typeof global.QuizzmanAuth.refreshAccessToken === 'function') {
+          refreshOwner = global.QuizzmanAuth;
+        }
+        if (refreshOwner) {
+          return Promise.resolve(refreshOwner.refreshAccessToken(true)).then(function (token) {
+            if (token) {
+              latestAccessToken = token;
+              return token;
+            }
+            return resolveToken({ forceRefresh: false });
+          }).catch(function () { return resolveToken({ forceRefresh: false }); });
+        }
       }
       if (global.QuizzmanAuth && typeof global.QuizzmanAuth.getToken === 'function') {
         var qt = global.QuizzmanAuth.getToken();
@@ -110,7 +121,7 @@
           if (v) return v;
         }
       } catch (e) { /* private mode */ }
-      return global.__QM_ACCESS_TOKEN__ || null;
+      return latestAccessToken || global.__QM_ACCESS_TOKEN__ || null;
     });
   }
 
@@ -277,8 +288,11 @@
     if (authWired) return;
     authWired = true;
 
-    function onReady() {
+    function onReady(event) {
       try {
+        var detailToken = event && event.detail &&
+          (event.detail.token || event.detail.accessToken || event.detail.access_token);
+        if (detailToken) latestAccessToken = detailToken;
         applyLayout(Legatus, opts);
         if (Legatus.client && Legatus.client.connect) Legatus.client.connect();
         if (Legatus.refresh) Legatus.refresh();
@@ -287,6 +301,7 @@
 
     function onLogout() {
       try {
+        latestAccessToken = null;
         clearDesktopEntry();
         document.querySelectorAll('legatus-orb').forEach(function (o) { o.remove(); });
         if (Legatus.client && Legatus.client.disconnect) Legatus.client.disconnect();
@@ -320,6 +335,7 @@
         autoConnect: true,
         toastHost: true,
         locale: locale,
+        forceRestart: true,
         tokenProvider: function (options) { return resolveToken(options); },
       });
 

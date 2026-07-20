@@ -1,7 +1,23 @@
 {
-  "version": "20260718",
+  "version": "20260719-3",
   "cdnBase": "https://ui.quizzman.com/qmf/assets/logo/nav",
   "size": 40,
   "retina": 80,
-  "items": ["slide-studio", "quiz-editor", "wiki", "idiom-king", "pikahans"]
+  "items": [
+    "slide-studio",
+    "quiz-editor",
+    "assignment",
+    "iching",
+    "lms",
+    "classroom",
+    "calendar",
+    "ui",
+    "wiki",
+    "idiom-king",
+    "pikahans",
+    "mentis",
+    "eastern-lab",
+    "mandarin",
+    "live-quiz"
+  ]
 }

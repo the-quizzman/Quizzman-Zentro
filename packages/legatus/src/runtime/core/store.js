@@ -40,6 +40,7 @@ export function createStore(bus) {
       state.items = items;
       state.nextCursor = nextCursor;
       state.hasMore = hasMore;
+      state.error = null;
       notify();
     },
     prepend(item) {

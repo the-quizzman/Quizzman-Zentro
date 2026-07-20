@@ -4,14 +4,19 @@
  *
  * Variants:
  *   runtime (default) — QMF mark + scan glow + thin progress + status/log
- *   flashcard         — legacy fc-load wavy path (compat)
+ *   flashcard         — app splash (fullscreen / no-card by default)
  *
- * @version 2.0.0
+ * Palette: pass `palette: { primary, secondary, accent, background, text, muted, glow, brand }`
+ * or set CSS variables on the mount root / #qm-initial-loading.
+ *
+ * Layout (flashcard): `layout: 'fullscreen'` (default) | `'card'` (legacy opt-in)
+ *
+ * @version 2.1.0
  */
 (function () {
   'use strict';
 
-  var VERSION = '2.0.0';
+  var VERSION = '2.1.0';
   var CDN_LOGO = 'https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-loading-116.webp';
   var CDN_LOGO_DARK = 'https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-dark-116.webp';
 
@@ -44,6 +49,7 @@
   var DEFAULTS = {
     variant: 'runtime',
     presentation: 'status',
+    layout: 'fullscreen',
     brandMark: 'QMF',
     productName: 'Quizzman Meta Framework',
     brandName: 'Quizzman',
@@ -61,6 +67,7 @@
     zIndex: 99999,
     autoStages: true,
     stageIntervalMs: 420,
+    palette: null,
   };
 
   var _uid = 0;
@@ -94,6 +101,88 @@
     return theme === 'dark' ? CDN_LOGO_DARK : CDN_LOGO;
   }
 
+  function normalizePalette(palette) {
+    if (!palette || typeof palette !== 'object') return null;
+    return {
+      primary: palette.primary || palette.amber || null,
+      secondary: palette.secondary || palette.teal || null,
+      accent: palette.accent || palette.blue || null,
+      background: palette.background || palette.bg || null,
+      bgGlow: palette.bgGlow || palette.glowBg || null,
+      brand: palette.brand || palette.brandColor || null,
+      text: palette.text || palette.msg || null,
+      muted: palette.muted || null,
+      glow: palette.glow || null,
+    };
+  }
+
+  function applyPalette(el, config) {
+    if (!el) return;
+    var p = normalizePalette(config && config.palette);
+    if (!p) return;
+
+    var isRuntime = !config || config.variant !== 'flashcard';
+    if (isRuntime) {
+      if (p.background) el.style.setProperty('--qm-boot-bg', p.background);
+      if (p.primary) el.style.setProperty('--qm-boot-primary', p.primary);
+      if (p.secondary) el.style.setProperty('--qm-boot-secondary', p.secondary);
+      if (p.muted) el.style.setProperty('--qm-boot-muted', p.muted);
+      if (p.glow) el.style.setProperty('--qm-boot-glow', p.glow);
+      return;
+    }
+
+    if (p.primary) {
+      el.style.setProperty('--qm-load-primary', p.primary);
+      el.style.setProperty('--qm-load-amber', p.primary);
+    }
+    if (p.secondary) {
+      el.style.setProperty('--qm-load-secondary', p.secondary);
+      el.style.setProperty('--qm-load-teal', p.secondary);
+    }
+    if (p.accent) {
+      el.style.setProperty('--qm-load-accent', p.accent);
+      el.style.setProperty('--qm-load-blue', p.accent);
+    }
+    if (p.background) el.style.setProperty('--qm-load-bg', p.background);
+    if (p.bgGlow) el.style.setProperty('--qm-load-bg-glow', p.bgGlow);
+    if (p.brand) el.style.setProperty('--qm-load-brand', p.brand);
+    if (p.text) el.style.setProperty('--qm-load-msg', p.text);
+    if (p.glow && !p.bgGlow) el.style.setProperty('--qm-load-bg-glow', p.glow);
+  }
+
+  function paletteStyleAttr(config) {
+    var p = normalizePalette(config && config.palette);
+    if (!p) return '';
+    var parts = [];
+    var isRuntime = config.variant !== 'flashcard';
+    if (isRuntime) {
+      if (p.background) parts.push('--qm-boot-bg:' + p.background);
+      if (p.primary) parts.push('--qm-boot-primary:' + p.primary);
+      if (p.secondary) parts.push('--qm-boot-secondary:' + p.secondary);
+      if (p.muted) parts.push('--qm-boot-muted:' + p.muted);
+      if (p.glow) parts.push('--qm-boot-glow:' + p.glow);
+    } else {
+      if (p.primary) {
+        parts.push('--qm-load-primary:' + p.primary);
+        parts.push('--qm-load-amber:' + p.primary);
+      }
+      if (p.secondary) {
+        parts.push('--qm-load-secondary:' + p.secondary);
+        parts.push('--qm-load-teal:' + p.secondary);
+      }
+      if (p.accent) {
+        parts.push('--qm-load-accent:' + p.accent);
+        parts.push('--qm-load-blue:' + p.accent);
+      }
+      if (p.background) parts.push('--qm-load-bg:' + p.background);
+      if (p.bgGlow) parts.push('--qm-load-bg-glow:' + p.bgGlow);
+      else if (p.glow) parts.push('--qm-load-bg-glow:' + p.glow);
+      if (p.brand) parts.push('--qm-load-brand:' + p.brand);
+      if (p.text) parts.push('--qm-load-msg:' + p.text);
+    }
+    return parts.length ? ' style="' + esc(parts.join(';')) + '"' : '';
+  }
+
   function buildMapSvg(gradId) {
     return (
       '<svg class="qm-load__map" viewBox="0 0 280 72" aria-hidden="true">' +
@@ -101,9 +190,9 @@
       '<linearGradient id="' +
       gradId +
       '" x1="0%" y1="0%" x2="100%" y2="0%">' +
-      '<stop offset="0%" stop-color="#fbbf24"/>' +
-      '<stop offset="55%" stop-color="#0d9488"/>' +
-      '<stop offset="100%" stop-color="#2563eb"/>' +
+      '<stop offset="0%" stop-color="var(--qm-load-primary)"/>' +
+      '<stop offset="55%" stop-color="var(--qm-load-secondary)"/>' +
+      '<stop offset="100%" stop-color="var(--qm-load-accent)"/>' +
       '</linearGradient>' +
       '</defs>' +
       '<path class="qm-load__path-bg" d="' +
@@ -118,7 +207,7 @@
       '<circle class="qm-load__node qm-load__node--d1" cx="100" cy="42" r="4.5"/>' +
       '<circle class="qm-load__node qm-load__node--d2" cx="180" cy="42" r="4.5"/>' +
       '<circle class="qm-load__node qm-load__node--d3" cx="260" cy="42" r="4.5"/>' +
-      '<circle class="qm-load__runner" r="6" fill="#fbbf24" stroke="#d97706" stroke-width="2">' +
+      '<circle class="qm-load__runner" r="6" stroke-width="2">' +
       '<animateMotion dur="2.4s" repeatCount="indefinite" path="' +
       LOAD_PATH +
       '"/>' +
@@ -135,7 +224,7 @@
       '" alt="' +
       esc(config.brandName) +
       '"' +
-      ' width="64" height="64" decoding="async"' +
+      ' width="80" height="80" decoding="async"' +
       ' onerror="this.onerror=null;this.src=\'' +
       esc(fallback) +
       '\'">'
@@ -199,6 +288,16 @@
     );
   }
 
+  function flashcardClassList(cfg, theme) {
+    var layout = cfg.layout === 'card' ? 'card' : 'fullscreen';
+    return (
+      'qm-load qm-load--boot qm-load--' +
+      theme +
+      ' qm-load--' +
+      layout
+    );
+  }
+
   function buildBootShellHtml(config) {
     var cfg = Object.assign({}, DEFAULTS, config || {});
     if (cfg.variant === 'flashcard') {
@@ -206,9 +305,10 @@
       var gradId = 'qmLoadGrad' + ++_uid;
       var logo = resolveLoaderLogo(cfg, theme);
       return (
-        '<div id="qm-initial-loading" class="qm-load qm-load--boot qm-load--' +
-        theme +
+        '<div id="qm-initial-loading" class="' +
+        flashcardClassList(cfg, theme) +
         '"' +
+        paletteStyleAttr(cfg) +
         ' role="status" aria-live="polite" aria-label="' +
         esc(cfg.message) +
         '">' +
@@ -218,6 +318,7 @@
     }
     return (
       '<div id="qm-initial-loading" class="qm-boot qm-boot--boot"' +
+      paletteStyleAttr(cfg) +
       ' role="status" aria-live="polite" aria-label="' +
       esc(cfg.message) +
       '">' +
@@ -263,10 +364,16 @@
     } else {
       var logo = resolveLoaderLogo(cfg, theme);
       root.className =
-        'qm-load qm-load--' + theme + ' qm-load--' + (cfg.mode === 'inline' ? 'inline' : 'boot');
+        'qm-load qm-load--' +
+        theme +
+        ' qm-load--' +
+        (cfg.mode === 'inline' ? 'inline' : 'boot') +
+        ' qm-load--' +
+        (cfg.layout === 'card' ? 'card' : 'fullscreen');
       root.innerHTML = buildFlashcardInner(cfg, logo, this.gradId);
     }
 
+    applyPalette(root, cfg);
     root.setAttribute('role', 'status');
     root.setAttribute('aria-live', 'polite');
     root.setAttribute('aria-label', cfg.message || 'Bootstrapping QMF');
@@ -274,10 +381,10 @@
 
     this.root = root;
     this.msgEl = root.querySelector('.qm-boot__status, .qm-load__msg');
-    this.fillEl = root.querySelector('.qm-boot__progress-fill');
+    this.fillEl = root.querySelector('.qm-boot__progress-fill, .qm-load__bar-fill');
     this.timeEl = root.querySelector('.qm-boot__time');
     this.logEl = root.querySelector('.qm-boot__log');
-    this.barEl = root.querySelector('.qm-boot__progress');
+    this.barEl = root.querySelector('.qm-boot__progress, .qm-load__bar');
 
     var mount = function () {
       document.body.appendChild(root);
@@ -475,8 +582,8 @@
     var fadeOutMs = opts.fadeOutMs != null ? opts.fadeOutMs : 420;
     var started = opts.startedAt || window.__qmLoadStart || Date.now();
     var timeEl = el.querySelector('.qm-boot__time');
-    var fill = el.querySelector('.qm-boot__progress-fill');
-    var status = el.querySelector('.qm-boot__status');
+    var fill = el.querySelector('.qm-boot__progress-fill, .qm-load__bar-fill');
+    var status = el.querySelector('.qm-boot__status, .qm-load__msg');
 
     if (fill) fill.style.width = '100%';
     if (status) {
@@ -511,6 +618,7 @@
       Object.assign({ variant: 'runtime', presentation: 'status' }, config || {}),
     );
   };
+  window.applyQuizzmanLoaderPalette = applyPalette;
 
   if (window.QMF) {
     window.QMF.createLoadingScreen = window.createQuizzmanLoadingScreen;

@@ -2,7 +2,6 @@
   "version": "1.0.0",
   "description": "Logo configuration for Quizzman subsystems",
   "cdnBase": "https://ui.quizzman.com/qmf/assets/logo",
-  
   "default": {
     "logo": "quizzman-logo.png",
     "logoOnLightSurface": "quizzman-logo-116.webp",
@@ -17,9 +16,14 @@
     "faviconDark": "favicon-dark-32.png",
     "faviconIco": "favicon.ico",
     "appleTouchIcon": "apple-touch-icon.png",
-    "sizes": [32, 64, 128, 256, 512]
+    "sizes": [
+      32,
+      64,
+      128,
+      256,
+      512
+    ]
   },
-  
   "subsystems": {
     "classroom": {
       "hasCustomLogo": true,
@@ -81,6 +85,17 @@
         "256": "calendar/calendar-logo-256.png"
       }
     },
+    "assignment": {
+      "hasCustomLogo": true,
+      "logo": "assignment/assignment-logo.png",
+      "sizes": {
+        "32": "assignment/assignment-logo-32.png",
+        "64": "assignment/assignment-logo-64.png",
+        "128": "assignment/assignment-logo-128.png",
+        "256": "assignment/assignment-logo-256.png",
+        "512": "assignment/assignment-logo-512.png"
+      }
+    },
     "webmail": {
       "hasCustomLogo": true,
       "logo": "webmail/webmail-logo.png",
@@ -93,17 +108,114 @@
         "512": "webmail/webmail-logo-512.png"
       }
     },
+    "ui": {
+      "hasCustomLogo": true,
+      "logo": "ui/ui-logo.png",
+      "sizes": {
+        "32": "ui/ui-logo-32.png",
+        "64": "ui/ui-logo-64.png",
+        "128": "ui/ui-logo-128.png",
+        "256": "ui/ui-logo-256.png",
+        "512": "ui/ui-logo-512.png"
+      }
+    },
+    "dictionary": {
+      "hasCustomLogo": true,
+      "logo": "dictionary/dictionary-logo.png",
+      "favicon": "dictionary/favicon.ico",
+      "appleTouchIcon": "dictionary/apple-touch-icon.png",
+      "sizes": {
+        "16": "dictionary/favicon-16x16.png",
+        "32": "dictionary/dictionary-logo-32.png",
+        "64": "dictionary/dictionary-logo-64.png",
+        "128": "dictionary/dictionary-logo-128.png",
+        "180": "dictionary/dictionary-logo-180.png",
+        "192": "dictionary/dictionary-logo-192.png",
+        "256": "dictionary/dictionary-logo-256.png",
+        "512": "dictionary/dictionary-logo-512.png"
+      }
+    },
     "nav": {
       "hasCustomLogo": true,
       "description": "Compressed header mega-menu thumbnails (40/80 + webp)",
       "cdnPath": "nav",
-      "version": "20260718",
+      "version": "20260719-3",
       "items": {
-        "slide-studio": { "40": "nav/slide-studio-40.webp", "80": "nav/slide-studio-80.webp", "png40": "nav/slide-studio-40.png" },
-        "quiz-editor": { "40": "nav/quiz-editor-40.webp", "80": "nav/quiz-editor-80.webp", "png40": "nav/quiz-editor-40.png" },
-        "wiki": { "40": "nav/wiki-40.webp", "80": "nav/wiki-80.webp", "png40": "nav/wiki-40.png" },
-        "idiom-king": { "40": "nav/idiom-king-40.webp", "80": "nav/idiom-king-80.webp", "png40": "nav/idiom-king-40.png" },
-        "pikahans": { "40": "nav/pikahans-40.webp", "80": "nav/pikahans-80.webp", "png40": "nav/pikahans-40.png" }
+        "slide-studio": {
+          "40": "nav/slide-studio-40.webp",
+          "80": "nav/slide-studio-80.webp",
+          "png40": "nav/slide-studio-40.png"
+        },
+        "quiz-editor": {
+          "40": "nav/quiz-editor-40.webp",
+          "80": "nav/quiz-editor-80.webp",
+          "png40": "nav/quiz-editor-40.png"
+        },
+        "assignment": {
+          "40": "nav/assignment-40.webp",
+          "80": "nav/assignment-80.webp",
+          "png40": "nav/assignment-40.png"
+        },
+        "iching": {
+          "40": "nav/iching-40.webp",
+          "80": "nav/iching-80.webp",
+          "png40": "nav/iching-40.png"
+        },
+        "lms": {
+          "40": "nav/lms-40.webp",
+          "80": "nav/lms-80.webp",
+          "png40": "nav/lms-40.png"
+        },
+        "classroom": {
+          "40": "nav/classroom-40.webp",
+          "80": "nav/classroom-80.webp",
+          "png40": "nav/classroom-40.png"
+        },
+        "calendar": {
+          "40": "nav/calendar-40.webp",
+          "80": "nav/calendar-80.webp",
+          "png40": "nav/calendar-40.png"
+        },
+        "ui": {
+          "40": "nav/ui-40.webp",
+          "80": "nav/ui-80.webp",
+          "png40": "nav/ui-40.png"
+        },
+        "wiki": {
+          "40": "nav/wiki-40.webp",
+          "80": "nav/wiki-80.webp",
+          "png40": "nav/wiki-40.png"
+        },
+        "idiom-king": {
+          "40": "nav/idiom-king-40.webp",
+          "80": "nav/idiom-king-80.webp",
+          "png40": "nav/idiom-king-40.png"
+        },
+        "pikahans": {
+          "40": "nav/pikahans-40.webp",
+          "80": "nav/pikahans-80.webp",
+          "png40": "nav/pikahans-40.png"
+        },
+        "mentis": {
+          "40": "nav/mentis-40.webp",
+          "80": "nav/mentis-80.webp",
+          "png40": "nav/mentis-40.png"
+        },
+        "eastern-lab": {
+          "40": "nav/eastern-lab-40.webp",
+          "80": "nav/eastern-lab-80.webp",
+          "png40": "nav/eastern-lab-40.png"
+        },
+        "mandarin": {
+          "40": "nav/mandarin-40.webp",
+          "80": "nav/mandarin-80.webp",
+          "png40": "nav/mandarin-40.png"
+        },
+        "live-quiz": {
+          "40": "nav/live-quiz-40.webp",
+          "80": "nav/live-quiz-80.webp",
+          "png40": "nav/live-quiz-40.png"
+        }
       }
     },
     "id": {
@@ -121,9 +233,25 @@
     "api": {
       "hasCustomLogo": false,
       "useDefault": true
+    },
+    "lab": {
+      "hasCustomLogo": true,
+      "logo": "lab/lab-logo.png",
+      "favicon": "lab/favicon.ico",
+      "appleTouchIcon": "lab/apple-touch-icon.png",
+      "sizes": {
+        "16": "lab/favicon-16x16.png",
+        "32": "lab/lab-logo-32.png",
+        "48": "lab/lab-logo-48.png",
+        "64": "lab/lab-logo-64.png",
+        "128": "lab/lab-logo-128.png",
+        "180": "lab/lab-logo-180.png",
+        "192": "lab/lab-logo-192.png",
+        "256": "lab/lab-logo-256.png",
+        "512": "lab/lab-logo-512.png"
+      }
     }
   },
-  
   "usage": {
     "html": "<link rel=\"icon\" href=\"{{cdnBase}}/{{favicon}}\">\n<img src=\"{{cdnBase}}/{{logo}}\" alt=\"Logo\">",
     "js": "const logo = await fetch('/qmf/assets/logo/logo-config.json').then(r => r.json());"

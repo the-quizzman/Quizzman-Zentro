@@ -3,6 +3,8 @@
  * States: idle | attention | thinking | speaking | open
  */
 
+import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
+
 function escapeHtml(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -35,6 +37,7 @@ export function defineOrb(cssText, runtime) {
     connectedCallback() {
       if (!this.shadowRoot) this.attachShadow({ mode: "open" });
       this.setAttribute("data-role", "orb");
+      ensureQuizFont();
       this.render();
       this._unsub = runtime.store.subscribe((s) => this.sync(s));
       this._offBus.push(
@@ -59,6 +62,7 @@ export function defineOrb(cssText, runtime) {
           this.sync(runtime.store.get());
         })
       );
+      this._unsubTheme = watchTheme(() => this._syncTheme());
       this._mq = window.matchMedia("(max-width: 720px)");
       this._mq.addEventListener?.("change", this._onMq);
       this._syncVisibility();
@@ -67,8 +71,14 @@ export function defineOrb(cssText, runtime) {
 
     disconnectedCallback() {
       this._unsub?.();
+      this._unsubTheme?.();
       this._offBus.forEach((off) => off?.());
       this._mq?.removeEventListener?.("change", this._onMq);
+    }
+
+    _syncTheme() {
+      const root = this.shadowRoot?.querySelector(".lg-root");
+      applyTheme(this, root);
     }
 
     _syncVisibility() {
@@ -78,6 +88,7 @@ export function defineOrb(cssText, runtime) {
     }
 
     render() {
+      ensureQuizFont();
       const t = runtime.i18n.t.bind(runtime.i18n);
       this.shadowRoot.innerHTML = `
         <style>${cssText}</style>
@@ -90,6 +101,7 @@ export function defineOrb(cssText, runtime) {
           </button>
         </div>
       `;
+      this._syncTheme();
       this.shadowRoot.querySelector(".lg-orb")?.addEventListener("click", () => this._activate());
     }
 

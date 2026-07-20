@@ -9,10 +9,88 @@ const TOKEN_KEYS = [
   "token",
 ];
 
+async function refreshFromIdSys(force = false) {
+  if (typeof window === "undefined") return null;
+
+  const idsys = window.IdSysSSO;
+  if (idsys && typeof idsys.refreshAccessToken === "function") {
+    try {
+      const refreshed = await idsys.refreshAccessToken(force);
+      if (refreshed) return refreshed;
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (idsys && typeof idsys.getAuth === "function") {
+    try {
+      const auth = await idsys.getAuth(force);
+      const token = auth?.token || auth?.accessToken || auth?.access_token || null;
+      if (token) return token;
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (window.QuizzmanAuth && typeof window.QuizzmanAuth.refreshAccessToken === "function") {
+    try {
+      const refreshed = await window.QuizzmanAuth.refreshAccessToken(force);
+      if (refreshed) return refreshed;
+    } catch {
+      /* ignore */
+    }
+  }
+
+  return null;
+}
+
+function readVisibleToken() {
+  if (typeof window !== "undefined") {
+    if (window.IdSysSSO?.getToken) {
+      try {
+        const t = window.IdSysSSO.getToken();
+        if (t) return t;
+      } catch {
+        /* ignore */
+      }
+    }
+    if (window.QuizzmanAuth?.getToken) {
+      try {
+        const t = window.QuizzmanAuth.getToken();
+        if (t) return t;
+      } catch {
+        /* ignore */
+      }
+    }
+    if (window.SlideStudioAuth?.getToken) {
+      try {
+        const t = window.SlideStudioAuth.getToken();
+        if (t) return t;
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  for (const k of TOKEN_KEYS) {
+    try {
+      const v = localStorage.getItem(k);
+      if (v) return v;
+    } catch {
+      /* private mode */
+    }
+  }
+
+  if (typeof window !== "undefined" && window.__QM_ACCESS_TOKEN__) {
+    return window.__QM_ACCESS_TOKEN__;
+  }
+  return null;
+}
+
 /**
  * Resolve an access token from options / SSO / local storage.
  * @param {object} opts
- * @returns {() => Promise<string|null>}
+ * @returns {(requestOptions?: {forceRefresh?: boolean}) => Promise<string|null>}
  */
 export function createTokenProvider(opts = {}) {
   if (typeof opts.tokenProvider === "function") {
@@ -23,51 +101,16 @@ export function createTokenProvider(opts = {}) {
   }
 
   return async (requestOptions = {}) => {
-    if (typeof window !== "undefined") {
-      if (requestOptions.forceRefresh) {
-        const refresh =
-          window.QuizzmanAuth?.refreshAccessToken ||
-          window.IdSysSSO?.refreshAccessToken;
-        if (typeof refresh === "function") {
-          try {
-            const refreshed = await refresh.call(
-              window.QuizzmanAuth?.refreshAccessToken ? window.QuizzmanAuth : window.IdSysSSO
-            );
-            if (refreshed) return refreshed;
-          } catch { /* ignore */ }
-        }
-      }
-      if (window.QuizzmanAuth?.getToken) {
-        try {
-          const t = window.QuizzmanAuth.getToken();
-          if (t) return t;
-        } catch { /* ignore */ }
-      }
-      if (window.IdSysSSO?.getToken) {
-        try {
-          const t = window.IdSysSSO.getToken();
-          if (t) return t;
-        } catch { /* ignore */ }
-      }
-      if (window.SlideStudioAuth?.getToken) {
-        try {
-          const t = window.SlideStudioAuth.getToken();
-          if (t) return t;
-        } catch { /* ignore */ }
-      }
+    if (requestOptions.forceRefresh) {
+      const refreshed = await refreshFromIdSys(true);
+      if (refreshed) return refreshed;
     }
-    for (const k of TOKEN_KEYS) {
-      try {
-        const v = localStorage.getItem(k);
-        if (v) return v;
-      } catch {
-        /* private mode */
-      }
-    }
-    if (typeof window !== "undefined" && window.__QM_ACCESS_TOKEN__) {
-      return window.__QM_ACCESS_TOKEN__;
-    }
-    return null;
+
+    const visible = readVisibleToken();
+    if (visible) return visible;
+
+    // Session may already be authenticated via HttpOnly refresh cookie.
+    return refreshFromIdSys(true);
   };
 }
 

@@ -42,10 +42,10 @@ let runtime = null;
 function createRuntime(options) {
   const bus = createBus();
   const store = createStore(bus);
-  const getToken = createTokenProvider(options);
+  let getToken = createTokenProvider(options);
   const client = new LegatusClient({
     endpoint: options.endpoint || DEFAULT_ENDPOINT,
-    getToken,
+    getToken: (requestOptions) => getToken(requestOptions),
     bus,
     store,
   });
@@ -53,6 +53,7 @@ function createRuntime(options) {
   let locale = detectLang(options.locale || options.lang);
   const i18n = createI18n(() => locale);
   let started = false;
+  let startPromise = null;
 
   /** @type {LegatusRuntime} */
   const rt = {
@@ -70,17 +71,30 @@ function createRuntime(options) {
       locale = next;
       bus.emit("locale:change", locale);
     },
-    async ensureStarted() {
-      if (started) return;
+    rebindAuth(nextOptions = {}) {
+      Object.assign(options, nextOptions || {});
+      getToken = createTokenProvider(options);
+      client.getToken = (requestOptions) => getToken(requestOptions);
+      if (nextOptions.endpoint) {
+        client.endpoint = String(nextOptions.endpoint).replace(/\/$/, "");
+      }
+    },
+    async ensureStarted({ force = false } = {}) {
+      if (started && !force) return startPromise;
+      if (startPromise && !force) return startPromise;
       started = true;
-      try {
-        await client.fetchUnread();
-      } catch {
-        /* anonymous / offline */
-      }
-      if (options.autoConnect !== false) {
-        await client.connect();
-      }
+      startPromise = (async () => {
+        store.set({ error: null });
+        try {
+          await client.fetchUnread();
+        } catch {
+          /* anonymous / offline */
+        }
+        if (options.autoConnect !== false) {
+          await client.connect();
+        }
+      })();
+      return startPromise;
     },
     openCenter(opts = {}) {
       let el = document.querySelector("legatus-center");
@@ -136,9 +150,13 @@ const api = {
    */
   init(options = {}) {
     if (runtime) {
-      Object.assign(runtime.options, options);
+      runtime.rebindAuth(options);
       if (options.locale || options.lang) {
         runtime.setLocale(options.locale || options.lang);
+      }
+      // Re-auth after SSO finishes (or when a fresh tokenProvider is supplied).
+      if (options.tokenProvider || options.token || options.forceRestart) {
+        void runtime.ensureStarted({ force: true });
       }
       return api;
     }
