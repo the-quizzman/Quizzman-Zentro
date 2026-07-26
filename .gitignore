@@ -13,10 +13,35 @@ build/
 out/
 coverage/
 
-# Environment
+# Environment & secrets
 .env
 .env.*
+.npmrc
 .indexnow-key
+*indexnow*
+
+# Production / host-only (keep on server, not in public git)
+nginx/
+registry/
+6b6e1e42e90ed0a0c50ac454aaf1e709.txt
+
+# Internal docs
+**/ARCHITECTURE.internal.md
+*.internal.md
+
+# Legacy & archives (local only)
+_legacy_qmf/
+.archived-logo-sources/
+
+# Symlinks / local harness
+QMF
+v3
+reports/
+test-header-nav.html
+*.bak
+*.old
+qmf-minify.sh.old
+PHAN_TICH_KIEN_TRUC.md
 
 # Editor
 .vscode/
@@ -31,5 +56,3 @@ Thumbs.db
 # Other
 logs/
 *.log
-QMF
-reports/

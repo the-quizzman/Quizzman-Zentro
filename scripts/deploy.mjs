@@ -27,20 +27,19 @@ const target = args.includes('--target')
   : 'cdn';
 const dryRun = args.includes('--dry-run');
 
-// CDN Config (update these for your setup)
+// CDN Config — override via env for host-specific paths (do not hardcode secrets)
 const CDN_CONFIG = {
-  // Option 1: rsync to server
   rsync: {
-    host: 'ui.quizzman.com',
-    user: 'deploy',
-    remotePath: '/opt/Quizzman/qmf/dist/',
-    logoAssetsRemotePath: '/opt/Quizzman/qmf/assets/logo/',
+    host: process.env.QMF_CDN_HOST || 'cdn.example.com',
+    user: process.env.QMF_CDN_USER || 'deploy',
+    remotePath: process.env.QMF_CDN_PATH || '/var/www/qmf/dist/',
+    logoAssetsRemotePath:
+      process.env.QMF_CDN_LOGO_PATH || '/var/www/qmf/assets/logo/',
   },
-  // Option 2: S3/R2 bucket
   s3: {
-    bucket: 'qmf-cdn',
-    region: 'auto',
-    prefix: 'qmf/v3/',
+    bucket: process.env.QMF_CDN_BUCKET || 'qmf-cdn',
+    region: process.env.QMF_CDN_REGION || 'auto',
+    prefix: process.env.QMF_CDN_PREFIX || 'qmf/v3/',
   },
 };
 
@@ -123,7 +122,7 @@ async function deployCDN() {
   // run(`aws s3 sync ${DIST}/ s3://${bucket}/${prefix} --delete`);
 
   console.log('\n✓ CDN deploy complete!');
-  console.log(`  URL: https://ui.quizzman.com/qmf/v3/`);
+  console.log(`  Host: ${CDN_CONFIG.rsync.host}`);
 }
 
 // ─── Publish to npm ─────────────────────────────────────────

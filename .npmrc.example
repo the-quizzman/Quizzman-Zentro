@@ -1,0 +1,6 @@
+# Copy to .npmrc for a private Verdaccio (or similar) registry.
+# Do not commit real credentials.
+
+# registry=http://127.0.0.1:4873/
+# //127.0.0.1:4873/:_auth=<base64 user:password>
+# //127.0.0.1:4873/:always-auth=true
