@@ -7,14 +7,124 @@
   'use strict';
 
   var CDN = 'https://ui.quizzman.com/qmf/dist/legatus';
-  var VERSION = '1.2.2';
+  var VERSION = '1.2.9';
+  var ID_REFRESH_URL = 'https://id.quizzman.com/api/auth/refresh';
+  var EXPIRY_SKEW_SECS = 45;
   var loading = null;
   var authWired = false;
   var layoutWired = false;
   var latestAccessToken = null;
 
+  function decodeJwtPayload(token) {
+    try {
+      var part = String(token || '').split('.')[1];
+      if (!part) return null;
+      var json = atob(part.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(json);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function isTokenUsable(token) {
+    if (!token) return false;
+    var payload = decodeJwtPayload(token);
+    if (!payload || typeof payload.exp !== 'number') return true;
+    return payload.exp > Math.floor(Date.now() / 1000) + EXPIRY_SKEW_SECS;
+  }
+
+  function clearStoredTokens() {
+    var keys = [
+      'jwt_token', 'access_token', 'accessToken',
+      'qm_access_token', 'quizzman_access_token', 'token', 'auth_token'
+    ];
+    for (var i = 0; i < keys.length; i++) {
+      try { localStorage.removeItem(keys[i]); } catch (e) { /* private mode */ }
+    }
+    try {
+      document.cookie = 'jwt_token=; path=/; domain=.quizzman.com; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      document.cookie = 'jwt_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    } catch (e) { /* ignore */ }
+  }
+
+  function persistToken(token) {
+    if (!token) return;
+    latestAccessToken = token;
+    try { localStorage.setItem('jwt_token', token); } catch (e) { /* ignore */ }
+    try {
+      document.cookie = 'jwt_token=' + encodeURIComponent(token) +
+        '; path=/; domain=.quizzman.com; max-age=' + (90 * 24 * 60 * 60) + '; SameSite=Lax; Secure';
+    } catch (e) { /* ignore */ }
+    try { global.__QM_ACCESS_TOKEN__ = token; } catch (e) { /* ignore */ }
+  }
+
+  function refreshViaCookie() {
+    return fetch(ID_REFRESH_URL, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: '{}'
+    }).then(function (res) {
+      if (!res.ok) return null;
+      return res.json().catch(function () { return null; });
+    }).then(function (data) {
+      var token = data && (data.token || data.accessToken || data.access_token) || null;
+      if (data && data.success && token && isTokenUsable(token)) {
+        persistToken(token);
+        return token;
+      }
+      return null;
+    }).catch(function () { return null; });
+  }
+
+  function ssoOwners() {
+    var seen = [];
+    var out = [];
+    var candidates = [global.IdSysSSO, global.QuizzmanAuth, global.QuizzmanSSO];
+    for (var i = 0; i < candidates.length; i++) {
+      var owner = candidates[i];
+      if (!owner) continue;
+      var dup = false;
+      for (var j = 0; j < seen.length; j++) {
+        if (seen[j] === owner) { dup = true; break; }
+      }
+      if (dup) continue;
+      seen.push(owner);
+      out.push(owner);
+    }
+    return out;
+  }
+
+  function refreshAccessToken(force) {
+    var owners = ssoOwners();
+    function tryOwner(idx) {
+      if (idx >= owners.length) return refreshViaCookie();
+      var owner = owners[idx];
+      if (typeof owner.refreshAccessToken === 'function') {
+        return Promise.resolve(owner.refreshAccessToken(!!force)).then(function (token) {
+          if (token && isTokenUsable(token)) {
+            persistToken(token);
+            return token;
+          }
+          return tryOwner(idx + 1);
+        }).catch(function () { return tryOwner(idx + 1); });
+      }
+      if (typeof owner.ensureToken === 'function') {
+        return Promise.resolve(owner.ensureToken()).then(function (token) {
+          if (token && isTokenUsable(token)) {
+            persistToken(token);
+            return token;
+          }
+          return tryOwner(idx + 1);
+        }).catch(function () { return tryOwner(idx + 1); });
+      }
+      return tryOwner(idx + 1);
+    }
+    return tryOwner(0);
+  }
+
   function isMobile() {
-    return !!(global.matchMedia && global.matchMedia('(max-width: 720px)').matches);
+    return !!(global.matchMedia && global.matchMedia('(max-width: 899px)').matches);
   }
 
   function ensureSlotHideStyle() {
@@ -22,7 +132,7 @@
     var style = document.createElement('style');
     style.id = 'qmf-legatus-slot-hide';
     style.textContent =
-      '@media (max-width: 720px){' +
+      '@media (max-width: 899px){' +
       '[data-qmf-notification-slot],.lab-header__notification-slot{display:none!important;}' +
       '}';
     document.head.appendChild(style);
@@ -76,52 +186,62 @@
     options = options || {};
     return Promise.resolve().then(function () {
       if (options.forceRefresh) {
-        var refreshOwner = null;
-        if (global.IdSysSSO && typeof global.IdSysSSO.refreshAccessToken === 'function') {
-          refreshOwner = global.IdSysSSO;
-        } else if (global.QuizzmanAuth && typeof global.QuizzmanAuth.refreshAccessToken === 'function') {
-          refreshOwner = global.QuizzmanAuth;
-        }
-        if (refreshOwner) {
-          return Promise.resolve(refreshOwner.refreshAccessToken(true)).then(function (token) {
-            if (token) {
-              latestAccessToken = token;
-              return token;
+        return refreshAccessToken(true);
+      }
+
+      var candidate = null;
+      var owners = ssoOwners();
+      for (var oi = 0; oi < owners.length; oi++) {
+        if (typeof owners[oi].getToken !== 'function') continue;
+        try {
+          candidate = owners[oi].getToken();
+          if (candidate) break;
+        } catch (e) { /* ignore */ }
+      }
+      if (!candidate && global.SlideStudioAuth && typeof global.SlideStudioAuth.getToken === 'function') {
+        candidate = global.SlideStudioAuth.getToken();
+      }
+      if (!candidate) {
+        try {
+          var keys = [
+            'jwt_token', 'access_token', 'accessToken',
+            'qm_access_token', 'quizzman_access_token', 'token', 'auth_token'
+          ];
+          for (var i = 0; i < keys.length; i++) {
+            var v = localStorage.getItem(keys[i]);
+            if (v) { candidate = v; break; }
+          }
+        } catch (e) { /* private mode */ }
+      }
+      if (!candidate) {
+        candidate = latestAccessToken || global.__QM_ACCESS_TOKEN__ || null;
+      }
+
+      if (candidate && isTokenUsable(candidate)) {
+        latestAccessToken = candidate;
+        return candidate;
+      }
+
+      if (candidate && !isTokenUsable(candidate)) {
+        clearStoredTokens();
+        latestAccessToken = null;
+      }
+
+      // Prefer SSO getAuth (may refresh), then cookie refresh — never return expired JWT.
+      for (var gi = 0; gi < owners.length; gi++) {
+        if (typeof owners[gi].getAuth === 'function') {
+          return owners[gi].getAuth(true).then(function (auth) {
+            var t = (auth && (auth.token || auth.accessToken)) || null;
+            if (t && isTokenUsable(t)) {
+              persistToken(t);
+              return t;
             }
-            return resolveToken({ forceRefresh: false });
-          }).catch(function () { return resolveToken({ forceRefresh: false }); });
+            return refreshAccessToken(true);
+          }).catch(function () { return refreshAccessToken(true); });
         }
       }
-      if (global.QuizzmanAuth && typeof global.QuizzmanAuth.getToken === 'function') {
-        var qt = global.QuizzmanAuth.getToken();
-        if (qt) return qt;
-      }
-      if (global.IdSysSSO) {
-        if (typeof global.IdSysSSO.getToken === 'function') {
-          var t = global.IdSysSSO.getToken();
-          if (t) return t;
-        }
-        if (typeof global.IdSysSSO.getAuth === 'function') {
-          return global.IdSysSSO.getAuth().then(function (auth) {
-            return (auth && (auth.token || auth.accessToken)) || null;
-          }).catch(function () { return null; });
-        }
-      }
-      if (global.SlideStudioAuth && typeof global.SlideStudioAuth.getToken === 'function') {
-        var st = global.SlideStudioAuth.getToken();
-        if (st) return st;
-      }
-      try {
-        var keys = [
-          'jwt_token', 'access_token', 'accessToken',
-          'qm_access_token', 'quizzman_access_token', 'token', 'auth_token'
-        ];
-        for (var i = 0; i < keys.length; i++) {
-          var v = localStorage.getItem(keys[i]);
-          if (v) return v;
-        }
-      } catch (e) { /* private mode */ }
-      return latestAccessToken || global.__QM_ACCESS_TOKEN__ || null;
+
+      return refreshAccessToken(true);
     });
   }
 
@@ -153,9 +273,10 @@
     if (!el || !el.isConnected) return false;
     if (el.hidden) return false;
     var style = window.getComputedStyle(el);
-    if (style.display === 'none' || style.visibility === 'hidden') return false;
-    var rects = el.getClientRects();
-    return rects.length > 0;
+    // Only treat display:none as unusable. Ignore inherited visibility:hidden
+    // (FOUC gates like account-styles-ready hide <body> temporarily).
+    if (style.display === 'none') return false;
+    return true;
   }
 
   function collectSlots(slotSel) {
@@ -173,6 +294,10 @@
   function pickSlot(slots) {
     for (var i = 0; i < slots.length; i++) {
       if (isVisible(slots[i])) return slots[i];
+    }
+    // Fallback: still mount into first connected slot (FOUC / not-yet-painted).
+    for (var j = 0; j < slots.length; j++) {
+      if (slots[j] && slots[j].isConnected) return slots[j];
     }
     return slots[0] || null;
   }
@@ -202,11 +327,10 @@
       if (document.body && document.body.classList.contains('authenticated')) return true;
     } catch (e) { /* ignore */ }
     try {
-      if (global.QuizzmanAuth && typeof global.QuizzmanAuth.getToken === 'function' && global.QuizzmanAuth.getToken()) {
-        return true;
-      }
-      if (global.IdSysSSO && typeof global.IdSysSSO.getToken === 'function' && global.IdSysSSO.getToken()) {
-        return true;
+      var owners = ssoOwners();
+      for (var i = 0; i < owners.length; i++) {
+        if (typeof owners[i].getToken === 'function' && owners[i].getToken()) return true;
+        if (typeof owners[i].hasSessionHint === 'function' && owners[i].hasSessionHint()) return true;
       }
     } catch (e) { /* ignore */ }
     try {
@@ -273,7 +397,7 @@
   function wireLayout(Legatus, opts) {
     if (layoutWired) return;
     layoutWired = true;
-    var mq = global.matchMedia('(max-width: 720px)');
+    var mq = global.matchMedia('(max-width: 899px)');
     var onChange = function () {
       applyLayout(Legatus, opts);
       if (!isMobile() && hasAuthSession()) {
@@ -309,12 +433,35 @@
       } catch (e) { /* ignore */ }
     }
 
+    /** Sites that only toggle body.authenticated (no qmf:auth-ready) still remount the bell. */
+    function watchBodyAuth() {
+      try {
+        if (typeof MutationObserver === 'undefined' || !document.body) return;
+        var last = document.body.classList.contains('authenticated');
+        var mo = new MutationObserver(function () {
+          var now = document.body.classList.contains('authenticated');
+          if (now === last) return;
+          last = now;
+          if (now) onReady();
+          else onLogout();
+        });
+        mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      } catch (e) { /* ignore */ }
+    }
+
     global.addEventListener('qmf:auth-ready', onReady);
     global.addEventListener('idsys:ready', onReady);
     global.addEventListener('idsys:login', onReady);
     global.addEventListener('idsys:token-refreshed', onReady);
+    global.addEventListener('payments:auth', function (event) {
+      try {
+        if (event && event.detail && event.detail.user) onReady(event);
+        else onLogout();
+      } catch (e) { /* ignore */ }
+    });
     global.addEventListener('qmf:auth-logout', onLogout);
     global.addEventListener('idsys:logout', onLogout);
+    watchBodyAuth();
   }
 
   /**
@@ -323,11 +470,15 @@
    * @param {string} [opts.endpoint]
    * @param {string} [opts.locale]
    * @param {string} [opts.lang]
+   * @param {string} [opts.token]
+   * @param {string} [opts.accessToken]
    */
   function mountLegatusInHeader(opts) {
     opts = opts || {};
     var endpoint = opts.endpoint || 'https://legatus.quizzman.com';
     var locale = resolveLocale(opts.locale || opts.lang);
+    var bootstrapToken = opts.token || opts.accessToken || opts.access_token || null;
+    if (bootstrapToken) persistToken(bootstrapToken);
 
     return ensureAssets().then(function (Legatus) {
       Legatus.init({
@@ -342,11 +493,25 @@
       wireAuth(Legatus, opts);
       wireLayout(Legatus, opts);
       applyLayout(Legatus, opts);
+      // FOUC / late CSS: remount after body becomes visible.
+      scheduleAuthRemount(opts);
       return Legatus;
     }).catch(function (err) {
       console.warn('[QMF Legatus] mount failed', err);
       return null;
     });
+  }
+
+  function scheduleAuthRemount(opts) {
+    var delays = [0, 100, 300, 800, 1600];
+    for (var i = 0; i < delays.length; i++) {
+      (function (ms) {
+        setTimeout(function () {
+          if (!hasAuthSession() || !global.Legatus) return;
+          remountToVisibleSlot(opts);
+        }, ms);
+      })(delays[i]);
+    }
   }
 
   function remountToVisibleSlot(opts) {

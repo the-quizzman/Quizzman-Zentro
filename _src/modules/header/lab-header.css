@@ -74,13 +74,25 @@ body:has(.qm-dictionary-mf).has-qmf-header {
     z-index: 1001;
     height: var(--qmf-header-h);
     background: var(--qmf-header-bg);
-    backdrop-filter: var(--qmf-header-blur);
-    -webkit-backdrop-filter: var(--qmf-header-blur);
+    /* backdrop-filter on this element would trap position:fixed drawer
+       (containing block = 58px header). Blur lives on ::before instead. */
     border-bottom: 1px solid var(--qmf-header-border);
     box-shadow: var(--qmf-header-shadow);
     margin: 0;
     padding: 0;
     display: block;
+    overflow: visible;
+}
+
+/* Glass blur — sibling layer, not an ancestor of the drawer */
+.lab-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    backdrop-filter: var(--qmf-header-blur);
+    -webkit-backdrop-filter: var(--qmf-header-blur);
 }
 
 /* Brand gradient hairline — Eastern Lab gold → violet */
@@ -91,6 +103,7 @@ body:has(.qm-dictionary-mf).has-qmf-header {
     right: 0;
     bottom: -1px;
     height: 2px;
+    z-index: 2;
     background: var(--qmf-header-accent-line);
     pointer-events: none;
 }
@@ -105,6 +118,8 @@ body:has(.qm-dictionary-mf).has-qmf-header {
 
 /* ── Flex layout ─────────────────────────────────────────── */
 .lab-header__inner {
+    position: relative;
+    z-index: 1;
     max-width: 1440px;
     margin: 0 auto;
     height: 100%;
@@ -385,14 +400,64 @@ body.dark-mode .lab-header__badge {
 }
 
 .lab-header__actions .qmf-auth-avatar-wrap {
-    width: 28px;
-    height: 28px;
+    width: 34px;
+    height: 34px;
+    padding: 3px;
 }
 
 .lab-header__actions .qmf-auth-avatar {
-    width: 26px;
-    height: 26px;
+    width: 100%;
+    height: 100%;
     font-size: 0.68rem;
+}
+
+/* ── Search toggle (narrow viewports) ────────────────────── */
+.lab-header__search-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--qmf-header-muted);
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: background 140ms ease, color 140ms ease;
+}
+
+.lab-header__search-btn:hover,
+.lab-header__search-btn[aria-expanded="true"] {
+    background: var(--qmf-header-btn-hover-bg, rgba(15, 23, 42, 0.06));
+    color: var(--qmf-header-text);
+}
+
+.lab-header__search-btn:focus-visible {
+    outline: 2px solid rgba(122, 90, 248, 0.45);
+    outline-offset: 2px;
+}
+
+.lab-header__search-dismiss {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--qmf-header-muted);
+    cursor: pointer;
+}
+
+.lab-header__search-dismiss:hover {
+    background: rgba(15, 23, 42, 0.06);
+    color: var(--qmf-header-text);
 }
 
 /* ── Global search — command-palette glass ───────────────── */
@@ -423,6 +488,65 @@ body.dark-mode .lab-header__badge {
 @media (min-width: 900px) {
     .lab-header__search {
         display: inline-flex;
+    }
+
+    .lab-header__search-btn,
+    .lab-header__search-dismiss {
+        display: none !important;
+    }
+}
+
+@media (max-width: 899px) {
+    /* Hide compact search toggle on tablet/mobile — declutter header */
+    .lab-header__search-btn {
+        display: none !important;
+    }
+
+    .lab-header--search-open {
+        position: relative;
+    }
+
+    .lab-header--search-open .lab-header__search {
+        display: inline-flex;
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 20;
+        flex: none;
+        min-width: 0;
+        max-width: none;
+        width: auto;
+        height: 38px;
+        padding: 0 8px 0 34px;
+        background: rgba(255, 255, 255, 0.96);
+        border-color: rgba(122, 90, 248, 0.3);
+        box-shadow: 0 8px 28px -12px rgba(15, 23, 42, 0.35);
+    }
+
+    [data-theme="dark"] .lab-header--search-open .lab-header__search,
+    body.dark-mode .lab-header--search-open .lab-header__search {
+        background: rgba(22, 27, 40, 0.98);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .lab-header--search-open .lab-header__search-dismiss {
+        display: inline-flex;
+    }
+
+    .lab-header--search-open .lab-header__search-kbd,
+    .lab-header--search-open .lab-header__search-btn {
+        display: none !important;
+    }
+
+    .lab-header--search-open .lab-header__nav,
+    .lab-header--search-open .lab-header__titles,
+    .lab-header--search-open .lab-header__join-quiz,
+    .lab-header--search-open .lab-header__notification-slot,
+    .lab-header--search-open .lab-header__mobile-menu {
+        visibility: hidden;
+        pointer-events: none;
     }
 }
 
@@ -531,7 +655,7 @@ body.dark-mode .lab-header__search-kbd {
     min-height: 32px;
 }
 
-@media (min-width: 721px) {
+@media (min-width: 900px) {
     body.authenticated .lab-header__notification-slot,
     .lab-header__notification-slot[data-legatus-auth="1"] {
         display: inline-flex;
@@ -880,19 +1004,29 @@ body.dark-mode .lab-header__mega {
 .lab-header__drawer {
     position: fixed;
     top: 0;
-    right: 0;
+    bottom: 0;
+    /* Slide with `right` — NOT transform. iOS Safari breaks overflow
+       scroll inside transformed ancestors. */
+    right: calc(-1 * min(360px, 92vw) - 24px);
     width: min(360px, 92vw);
-    height: 100dvh;
+    height: auto;
+    max-height: none;
     background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px) saturate(1.3);
-    -webkit-backdrop-filter: blur(20px) saturate(1.3);
     border-left: 1px solid var(--qm-color-border);
     box-shadow: -12px 0 40px rgba(15, 23, 42, 0.1);
-    z-index: 1199;
-    transform: translateX(100%);
-    transition: transform 200ms ease;
+    z-index: 1200;
+    transform: none;
+    transition: right 200ms ease;
     display: flex;
     flex-direction: column;
+    /* Single scroll root = the drawer itself */
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
 }
 
 [data-theme="dark"] .lab-header__drawer,
@@ -900,20 +1034,53 @@ body.dark-mode .lab-header__drawer {
     background: rgba(15, 23, 42, 0.98);
 }
 
-.lab-header--drawer-open .lab-header__drawer {
-    transform: translateX(0);
+/* Open state — drawer may be portaled under <body> */
+.lab-header--drawer-open .lab-header__drawer,
+body.lab-header-drawer-open .lab-header__drawer {
+    right: 0;
+    transform: none;
+}
+
+/* Avoid clipping the fixed drawer when header is short / in-flow */
+.lab-header--drawer-open {
+    overflow: visible;
 }
 
 body.lab-header-drawer-open {
     overflow: hidden;
 }
 
+body.lab-header-drawer-open .lab-header__drawer-backdrop {
+    display: block;
+}
+
+/* Keep floating widgets from covering the last drawer items */
+body.lab-header-drawer-open legatus-orb,
+body.lab-header-drawer-open .legatus-orb,
+body.lab-header-drawer-open .qmf-settings-float,
+body.lab-header-drawer-open .lab-settings,
+body.lab-header-drawer-open #labSettings {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
 .lab-header__drawer-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 14px 16px;
     border-bottom: 1px solid var(--qm-color-border);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+[data-theme="dark"] .lab-header__drawer-head,
+body.dark-mode .lab-header__drawer-head {
+    background: rgba(15, 23, 42, 0.98);
 }
 
 .lab-header__drawer-title {
@@ -939,20 +1106,31 @@ body.lab-header-drawer-open {
 }
 
 .lab-header__drawer-body {
-    overflow-y: auto;
+    /* Content flows; scrolling is on .lab-header__drawer */
+    flex: 0 0 auto;
+    min-height: auto;
+    max-height: none;
+    overflow: visible;
     padding: 12px;
+    padding-bottom: 24px;
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
 .lab-header__drawer-extras {
-    margin-top: auto;
+    flex: 0 0 auto;
+    margin-top: 0;
     padding: 12px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
     border-top: 1px solid var(--qm-color-border);
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.lab-header__drawer-extras:empty {
+    display: none;
 }
 
 .lab-header__drawer-link {
@@ -1054,6 +1232,43 @@ body.lab-header-drawer-open {
 }
 
 /* ── Responsive ──────────────────────────────────────────── */
+
+/* Mid widths: icon-only nav (text → tooltip via title attr) */
+@media (max-width: 1099px) and (min-width: 721px) {
+    .lab-header__nav-text,
+    .lab-header__nav-chevron {
+        display: none;
+    }
+
+    .lab-header__nav-link,
+    .lab-header__nav-trigger {
+        width: 36px;
+        padding: 0;
+        justify-content: center;
+        gap: 0;
+    }
+
+    .lab-header__nav-ico {
+        margin: 0;
+    }
+
+    .lab-header__nav {
+        gap: 2px;
+    }
+
+    .lab-header__search {
+        flex: 0 1 280px;
+        min-width: 160px;
+        max-width: 320px;
+    }
+}
+
+@media (max-width: 899px) and (min-width: 721px) {
+    .lab-header__brand {
+        max-width: 160px;
+    }
+}
+
 @media (max-width: 720px) {
     .lab-header--has-nav .lab-header__nav {
         display: none !important;

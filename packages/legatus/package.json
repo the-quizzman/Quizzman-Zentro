@@ -1,7 +1,7 @@
 {
   "name": "@qmf/legatus",
-  "version": "1.0.0",
-  "description": "QMF Legatus plugin — notification bell, inbox, toast, realtime client",
+  "version": "1.2.9",
+  "description": "QMF Legatus plugin \u2014 notification bell, inbox, toast, realtime client",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -14,7 +14,9 @@
     },
     "./style.css": "./dist/legatus.css"
   },
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "build": "tsup && node scripts/build-standalone.mjs",
     "dev": "tsup --watch",

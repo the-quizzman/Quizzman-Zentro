@@ -16,7 +16,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '1.3.0';
+  const VERSION = '1.4.4';
   const FONT_STACK = "var(--qmf-font-sans, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif)";
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/auth-widget';
   const ID_SYS = 'https://id.quizzman.com';
@@ -84,10 +84,14 @@
     }
 
     injectStyles() {
-      if (document.getElementById('qmf-auth-widget-styles')) return;
-      
-      const style = document.createElement('style');
-      style.id = 'qmf-auth-widget-styles';
+      let style = document.getElementById('qmf-auth-widget-styles');
+      if (style && style.getAttribute('data-v') === VERSION) return;
+      if (!style) {
+        style = document.createElement('style');
+        style.id = 'qmf-auth-widget-styles';
+        document.head.appendChild(style);
+      }
+      style.setAttribute('data-v', VERSION);
       style.textContent = `
         /* QMF Auth Widget - Base */
         .qmf-auth-wrap {
@@ -131,21 +135,23 @@
           border-color: #d4a843;
         }
         
-        /* User Chip */
+        /* User Chip — plan ring + lumen bar */
         .qmf-auth-chip {
           display: inline-flex;
           align-items: center;
-          gap: 4px;
-          padding: 0 8px;
-          height: 38px;
-          border-radius: 10px;
-          border: 1px solid var(--c-border, rgba(0,0,0,0.12));
-          background: var(--c-surface, rgba(255,255,255,0.7));
-          color: var(--c-text-secondary, #555);
+          gap: 8px;
+          padding: 4px 10px 4px 4px;
+          min-height: 44px;
+          height: auto;
+          border-radius: 14px;
+          border: 1px solid rgba(15, 23, 42, 0.08);
+          background: rgba(255, 255, 255, 0.82);
+          backdrop-filter: blur(12px);
+          color: #374151;
           cursor: pointer;
           font-size: 0.82rem;
           font-weight: 500;
-          transition: all 0.25s;
+          transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
           font-family: inherit;
           white-space: nowrap;
         }
@@ -155,37 +161,118 @@
           color: #aaa;
         }
         .qmf-auth-chip:hover {
-          background: rgba(139, 105, 20, 0.1);
-          color: var(--c-primary, #8b6914);
-          border-color: var(--c-primary, #8b6914);
+          background: rgba(79, 70, 229, 0.06);
+          border-color: rgba(79, 70, 229, 0.28);
+          box-shadow: 0 4px 14px rgba(79, 70, 229, 0.1);
         }
         [data-theme="dark"] .qmf-auth-chip:hover {
-          background: rgba(212, 168, 67, 0.12);
-          color: #d4a843;
-          border-color: #d4a843;
+          background: rgba(129, 140, 248, 0.12);
+          border-color: rgba(129, 140, 248, 0.35);
         }
-        
-        /* Avatar + frame + progress ring */
+
+        .qmf-auth-identity {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 3px;
+          min-width: 36px;
+        }
+
+        /* Avatar — multicolor plan ring (Google One clarity, Quizzman hues) */
         .qmf-auth-avatar-wrap {
           position: relative;
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           flex-shrink: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .qmf-auth-progress {
-          position: absolute;
-          inset: 0;
+          display: grid;
+          place-items: center;
           border-radius: 50%;
-          pointer-events: none;
+          padding: 3px;
+          box-sizing: border-box;
+          background: var(--qmf-plan-ring);
+          box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.06);
         }
+        .qmf-auth-avatar-wrap::before {
+          content: none;
+          display: none;
+        }
+        /* Free — soft prism (still multicolor, not gray) */
+        .qmf-auth-avatar-wrap[data-tier="free"] {
+          --qmf-plan-ring: conic-gradient(
+            from 200deg,
+            #38bdf8 0deg,
+            #34d399 80deg,
+            #fbbf24 160deg,
+            #fb7185 240deg,
+            #a78bfa 300deg,
+            #38bdf8 360deg
+          );
+        }
+        /* Plus — teal · cyan · mint · gold */
+        .qmf-auth-avatar-wrap[data-tier="plus"] {
+          --qmf-plan-ring: conic-gradient(
+            from 210deg,
+            #0d9488 0deg,
+            #22d3ee 70deg,
+            #6ee7b7 140deg,
+            #fcd34d 210deg,
+            #2dd4bf 290deg,
+            #0d9488 360deg
+          );
+          box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.2), 0 0 12px rgba(34, 211, 238, 0.35);
+        }
+        /* Pro — ember · amber · coral · violet (vivid, not Google RGB) */
+        .qmf-auth-avatar-wrap[data-tier="pro"],
+        .qmf-auth-avatar-wrap[data-tier="premium"] {
+          --qmf-plan-ring: conic-gradient(
+            from 180deg,
+            #ea580c 0deg,
+            #fbbf24 60deg,
+            #fb7185 130deg,
+            #a855f7 200deg,
+            #f97316 280deg,
+            #ea580c 360deg
+          );
+          box-shadow: 0 0 0 1px rgba(234, 88, 12, 0.22), 0 0 14px rgba(251, 191, 36, 0.4);
+        }
+        /* Elite — aurora teal → violet → rose → gold */
+        .qmf-auth-avatar-wrap[data-tier="elite"],
+        .qmf-auth-avatar-wrap[data-tier="enterprise"],
+        .qmf-auth-avatar-wrap[data-tier="ultra"] {
+          --qmf-plan-ring: conic-gradient(
+            from 0deg,
+            #14b8a6 0deg,
+            #6366f1 75deg,
+            #e11d48 150deg,
+            #f59e0b 225deg,
+            #06b6d4 300deg,
+            #14b8a6 360deg
+          );
+          box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2), 0 0 14px rgba(20, 184, 166, 0.35);
+        }
+        /* Legend — full prism, denser stops */
+        .qmf-auth-avatar-wrap[data-tier="legend"] {
+          --qmf-plan-ring: conic-gradient(
+            from 90deg,
+            #22d3ee 0deg,
+            #818cf8 55deg,
+            #e879f9 110deg,
+            #fb7185 165deg,
+            #fbbf24 220deg,
+            #34d399 275deg,
+            #22d3ee 360deg
+          );
+          box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.25), 0 0 16px rgba(232, 121, 249, 0.4);
+        }
+        .qmf-auth-progress { display: none !important; }
+
         .qmf-auth-avatar {
-          width: 28px;
-          height: 28px;
+          width: 100%;
+          height: 100%;
           border-radius: 50%;
-          background: linear-gradient(135deg, var(--c-primary, #8b6914), var(--c-accent, #5c4a9e));
+          border: 2px solid #fff;
+          box-sizing: border-box;
+          background: linear-gradient(135deg, #0f766e, #134e4a);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -196,57 +283,96 @@
           text-transform: uppercase;
           overflow: hidden;
           position: relative;
-          z-index: 1;
+          z-index: 2;
+        }
+        [data-theme="dark"] .qmf-auth-avatar,
+        body.dark-mode .qmf-auth-avatar {
+          border-color: #1e2433;
         }
         .qmf-auth-avatar img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           border-radius: 50%;
+          display: block;
         }
-        .qmf-auth-avatar-wrap[data-frame] .qmf-auth-avatar {
-          box-shadow: 0 0 0 2px var(--qmf-auth-frame, #c9a227);
-        }
-        .qmf-auth-avatar-wrap[data-frame="frame.bronze-halo"] { --qmf-auth-frame: #b87333; }
-        .qmf-auth-avatar-wrap[data-frame="frame.silver-halo"] { --qmf-auth-frame: #c0c0c0; }
-        .qmf-auth-avatar-wrap[data-frame="frame.gold-halo"] { --qmf-auth-frame: #d4a843; }
-        .qmf-auth-avatar-wrap[data-frame="frame.aurora"] { --qmf-auth-frame: #7dd3c0; }
-        .qmf-auth-avatar-wrap[data-frame="frame.scholar-ring"] { --qmf-auth-frame: #8b6914; }
-        .qmf-auth-avatar-wrap[data-frame="frame.celestial"] { --qmf-auth-frame: #7c9cff; }
         [data-theme="dark"] .qmf-auth-avatar {
-          background: linear-gradient(135deg, #d4a843, #9b8ce0);
+          background: linear-gradient(135deg, #818cf8, #a78bfa);
+        }
+
+        /* Lumen bar under the plan circle */
+        .qmf-auth-lumen-stack {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2px;
+          width: 100%;
+          min-width: 34px;
+        }
+        .qmf-auth-lumen-bar {
+          width: 100%;
+          height: 3px;
+          border-radius: 999px;
+          background: rgba(15, 23, 42, 0.08);
+          overflow: hidden;
+        }
+        [data-theme="dark"] .qmf-auth-lumen-bar {
+          background: rgba(255, 255, 255, 0.12);
+        }
+        .qmf-auth-lumen-bar__fill {
+          height: 100%;
+          width: var(--qmf-lumen-pct, 0%);
+          border-radius: inherit;
+          background: linear-gradient(90deg, #4285F4, #34A853, #FBBC05, #EA4335);
+          background-size: 200% 100%;
+          animation: qmf-auth-lumen-flow 5s ease-in-out infinite;
+          transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes qmf-auth-lumen-flow {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
         }
         .qmf-auth-lumen {
-          margin-left: 2px;
-          font-size: 0.68rem;
-          font-weight: 650;
+          margin: 0;
+          font-size: 0.62rem;
+          font-weight: 700;
           letter-spacing: 0.01em;
-          color: var(--c-primary, #8b6914);
+          color: #4F46E5;
           font-variant-numeric: tabular-nums;
+          line-height: 1;
         }
         [data-theme="dark"] .qmf-auth-lumen {
-          color: #d4a843;
+          color: #a5b4fc;
         }
-        
+
         /* Tier Badge */
         .qmf-auth-tier {
-          margin-left: 4px;
-          font-size: 0.6rem;
+          margin-left: 0;
+          font-size: 0.58rem;
           font-weight: 700;
           text-transform: uppercase;
-          padding: 2px 6px;
-          border-radius: 4px;
-          background: var(--c-primary, #8b6914);
+          letter-spacing: 0.04em;
+          padding: 3px 7px;
+          border-radius: 999px;
+          background: #4F46E5;
           color: #fff;
         }
-        .qmf-auth-tier--pro {
-          background: linear-gradient(135deg, #8b6914, #d4a843);
+        .qmf-auth-tier--plus {
+          background: linear-gradient(135deg, #4285F4, #34A853);
         }
+        .qmf-auth-tier--pro,
         .qmf-auth-tier--premium {
-          background: linear-gradient(135deg, #5c4a9e, #8b5cf6);
+          background: linear-gradient(135deg, #4F46E5, #8B5CF6);
         }
-        .qmf-auth-tier--enterprise {
-          background: linear-gradient(135deg, #059669, #10b981);
+        .qmf-auth-tier--elite,
+        .qmf-auth-tier--enterprise,
+        .qmf-auth-tier--ultra {
+          background: linear-gradient(135deg, #111827, #374151);
+          box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.45);
+        }
+        .qmf-auth-tier--legend {
+          background: linear-gradient(135deg, #67e8f9, #a78bfa, #f0abfc);
+          color: #312e81;
         }
         
         /* Dropdown — portaled to body with fixed coords (see openDrop) */
@@ -412,7 +538,6 @@
           }
         }
       `;
-      document.head.appendChild(style);
     }
 
     getLang() {
@@ -491,29 +616,34 @@
       return src;
     }
 
-    buildAvatarEl(avatarSrc, initials, lumen) {
+    normalizeTier(raw) {
+      const t = String(raw || 'free').toLowerCase().trim().replace(/^quizzman\s+/, '');
+      if (['pro', 'premium', 'professional'].includes(t)) return 'pro';
+      if (['plus', 'basic'].includes(t)) return 'plus';
+      if (['elite', 'ultra', 'enterprise'].includes(t)) return 'elite';
+      if (t === 'legend') return 'legend';
+      if (t === 'free' || t === 'inactive') return 'free';
+      return t || 'free';
+    }
+
+    lumenBarPct(lumen) {
+      const progress = Number(lumen?.progress);
+      const balance = Number(lumen?.balance ?? 0);
+      if (Number.isFinite(progress) && progress >= 0) {
+        return Math.max(0, Math.min(100, Math.round(progress <= 1 ? progress * 100 : progress)));
+      }
+      if (balance <= 0) return 0;
+      return Math.min(100, Math.max(10, Math.round(Math.log10(balance + 1) * 28)));
+    }
+
+    buildAvatarEl(avatarSrc, initials, lumen, tier) {
+      const identity = document.createElement('div');
+      identity.className = 'qmf-auth-identity';
+
       const wrap = document.createElement('div');
       wrap.className = 'qmf-auth-avatar-wrap';
+      wrap.setAttribute('data-tier', this.normalizeTier(tier));
       if (lumen?.frame) wrap.setAttribute('data-frame', lumen.frame);
-
-      if (this.config.showProgressRing && lumen && typeof lumen.progress === 'number') {
-        const progress = Math.max(0, Math.min(1, Number(lumen.progress) || 0));
-        const size = 32;
-        const stroke = 2;
-        const r = (size - stroke) / 2;
-        const c = 2 * Math.PI * r;
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('class', 'qmf-auth-progress');
-        svg.setAttribute('width', String(size));
-        svg.setAttribute('height', String(size));
-        svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
-        svg.innerHTML =
-          `<circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="rgba(139,105,20,0.18)" stroke-width="${stroke}"/>` +
-          `<circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--c-primary,#8b6914)" stroke-width="${stroke}" ` +
-          `stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - progress)}" ` +
-          `transform="rotate(-90 ${size / 2} ${size / 2})"/>`;
-        wrap.appendChild(svg);
-      }
 
       const avatarEl = document.createElement('div');
       avatarEl.className = 'qmf-auth-avatar';
@@ -531,7 +661,29 @@
         avatarEl.textContent = initials;
       }
       wrap.appendChild(avatarEl);
-      return wrap;
+      identity.appendChild(wrap);
+
+      if (this.config.showLumenBadge && lumen && lumen.balance != null) {
+        const stack = document.createElement('div');
+        stack.className = 'qmf-auth-lumen-stack';
+        const bar = document.createElement('div');
+        bar.className = 'qmf-auth-lumen-bar';
+        const fill = document.createElement('div');
+        fill.className = 'qmf-auth-lumen-bar__fill';
+        fill.style.setProperty('--qmf-lumen-pct', this.lumenBarPct(lumen) + '%');
+        bar.appendChild(fill);
+        const lumenEl = document.createElement('span');
+        lumenEl.className = 'qmf-auth-lumen';
+        lumenEl.title = lumen.title
+          ? `${lumen.title} · Lv${lumen.level || 1}`
+          : `Lv${lumen.level || 1}`;
+        lumenEl.textContent = this.formatLumen(lumen.balance);
+        stack.appendChild(bar);
+        stack.appendChild(lumenEl);
+        identity.appendChild(stack);
+      }
+
+      return identity;
     }
 
     formatLumen(n) {
@@ -672,10 +824,16 @@
       };
     }
 
-    /** Keep Legatus slot last in actions (after login / chip). */
+    /** Keep Legatus slot last in actions (after login / chip). Recreate if wiped. */
     pinNotificationSlot() {
-      const slot = this.container.querySelector('[data-qmf-notification-slot]');
-      if (slot && slot.parentElement === this.container) {
+      let slot = this.container.querySelector('[data-qmf-notification-slot]');
+      if (!slot) {
+        slot = document.createElement('div');
+        slot.className = 'lab-header__notification-slot';
+        slot.setAttribute('data-qmf-notification-slot', '');
+        slot.setAttribute('aria-label', 'Notifications');
+        this.container.appendChild(slot);
+      } else if (slot.parentElement === this.container) {
         this.container.appendChild(slot);
       }
       return slot;
@@ -688,8 +846,14 @@
       } catch (e) { /* ignore */ }
       const slot = this.pinNotificationSlot();
       if (!slot) return;
-      if (on) slot.setAttribute('data-legatus-auth', '1');
-      else {
+      if (on) {
+        slot.setAttribute('data-legatus-auth', '1');
+        try {
+          if (typeof window.remountLegatusToVisibleSlot === 'function') {
+            window.remountLegatusToVisibleSlot({ slot: slot });
+          }
+        } catch (e) { /* ignore */ }
+      } else {
         slot.removeAttribute('data-legatus-auth');
         slot.querySelectorAll('legatus-bell').forEach((b) => b.remove());
       }
@@ -734,7 +898,7 @@
       const avatarSrc = this.resolveAvatarUrl(user);
 
       // Get tier from qmTier if available
-      const tier = window.qmTier?.tier || user.tier || 'free';
+      const tier = this.normalizeTier(window.qmTier?.tier || user.tier || user.plan_code || 'free');
       const lumen = user.lumen || null;
       const title = (this.config.showTitle && lumen?.title) ? lumen.title : '';
 
@@ -749,21 +913,13 @@
       chip.setAttribute('aria-haspopup', 'true');
       chip.setAttribute('aria-expanded', 'false');
 
-      chip.appendChild(this.buildAvatarEl(avatarSrc, initials, lumen));
-
-      if (this.config.showLumenBadge && lumen && lumen.balance != null) {
-        const lumenEl = document.createElement('span');
-        lumenEl.className = 'qmf-auth-lumen';
-        lumenEl.title = title ? `${title} · Lv${lumen.level || 1}` : `Lv${lumen.level || 1}`;
-        lumenEl.textContent = this.formatLumen(lumen.balance);
-        chip.appendChild(lumenEl);
-      }
+      chip.appendChild(this.buildAvatarEl(avatarSrc, initials, lumen, tier));
 
       // Tier badge
       if (this.config.showTierBadge && tier && tier !== 'free') {
         const tierEl = document.createElement('span');
         tierEl.className = 'qmf-auth-tier qmf-auth-tier--' + tier;
-        tierEl.textContent = tier.toUpperCase();
+        tierEl.textContent = tier === 'pro' ? 'PRO' : tier.toUpperCase();
         chip.appendChild(tierEl);
       }
 
@@ -800,6 +956,12 @@
       wrap.appendChild(drop);
       this.container.insertBefore(wrap, this.container.firstChild);
       this.setLegatusAuthVisible(true);
+      try {
+        const token = this.getToken() || null;
+        window.dispatchEvent(new CustomEvent('qmf:auth-ready', {
+          detail: { user: this.user || null, token }
+        }));
+      } catch (e) { /* ignore */ }
 
       this.elements = { ...this.elements, wrap, chip, drop };
       this.rendered = true;
@@ -939,13 +1101,16 @@
     }
 
     refresh() {
-      this.container.innerHTML = '';
+      // Never wipe the whole actions row — that deletes Join Quiz + Legatus slot.
+      if (this.container) {
+        this.container.querySelectorAll('.qmf-auth-wrap, .qmf-auth-login').forEach((el) => el.remove());
+      }
       this.checkAuth();
     }
 
     destroy() {
       if (this.container) {
-        this.container.innerHTML = '';
+        this.container.querySelectorAll('.qmf-auth-wrap, .qmf-auth-login').forEach((el) => el.remove());
       }
     }
   }

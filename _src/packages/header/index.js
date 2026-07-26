@@ -20,7 +20,7 @@ var HeaderConfigSchema = z.object({
   // URLs
   loginUrl: z.string().url().default("https://id.quizzman.com/login"),
   profileUrl: z.string().url().default("https://id.quizzman.com/account"),
-  settingsUrl: z.string().url().default("https://id.quizzman.com/settings"),
+  settingsUrl: z.string().url().default("https://id.quizzman.com/account"),
   // Navigation items
   navItems: z.array(z.object({
     label: z.string(),

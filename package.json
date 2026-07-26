@@ -2,9 +2,17 @@
   "name": "@qmf/monorepo",
   "version": "3.0.0",
   "private": true,
-  "description": "QMF - Quizzman Frontend Framework",
-  "author": "Quizzman Team",
+  "description": "Quizzman Modular Framework (QMF) — modular frontend framework by Quizzman.com",
+  "author": "Quizzman.com",
   "license": "MIT",
+  "homepage": "https://quizzman.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/the-quizzman/Quizzman-Modular-Framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/the-quizzman/Quizzman-Modular-Framework/issues"
+  },
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
@@ -18,6 +26,8 @@
     "build:cdn": "node scripts/build-cdn.mjs",
     "publish:ui": "node scripts/publish-ui.mjs",
     "verify:cdn": "node scripts/verify-cdn.mjs",
+    "verify:auth-shell": "node scripts/verify-auth-shell.mjs",
+    "audit:auth-shell": "node scripts/audit-auth-shell.mjs --live",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",

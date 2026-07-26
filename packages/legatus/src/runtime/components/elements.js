@@ -1,5 +1,7 @@
 /** Con dấu chữ Q — official Legatus / Quizzman seal icon */
 import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
+import { handleNotificationClick } from "../core/deepLink.js";
+import { notificationItemHtml } from "./item.js";
 
 const BELL_SVG = `
 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -138,11 +140,8 @@ export function defineBell(cssText, runtime) {
       this.shadowRoot.querySelectorAll("[data-receiver]").forEach((el) => {
         el.addEventListener("click", () => {
           const id = el.getAttribute("data-receiver");
-          if (id) runtime.client.markRead(id).catch(() => {});
-          runtime.bus.emit("notification:click", {
-            receiver_id: id,
-            title: el.getAttribute("data-title"),
-          });
+          handleNotificationClick(runtime, id);
+          this.close();
         });
       });
     }
@@ -160,20 +159,7 @@ export function defineBell(cssText, runtime) {
       }
       return state.items
         .slice(0, 30)
-        .map((it) => {
-          const unread = !it.read_at;
-          return `
-            <button class="lg-item" type="button" data-unread="${unread}" data-receiver="${escapeAttr(
-            it.receiver_id
-          )}" data-title="${escapeAttr(it.title)}">
-              <span class="lg-dot"></span>
-              <span>
-                <p class="lg-item-title">${escapeHtml(it.title)}</p>
-                <p class="lg-item-body">${escapeHtml(it.body || "")}</p>
-                <div class="lg-item-meta">${escapeHtml(runtime.i18n.relativeTime(it.created_at))}</div>
-              </span>
-            </button>`;
-        })
+        .map((it) => notificationItemHtml(it, runtime.i18n))
         .join("");
     }
 

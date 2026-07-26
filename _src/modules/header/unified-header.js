@@ -8,7 +8,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.7.10';
+  const VERSION = '3.8.7';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   const CDN_NAV_BASE = 'https://ui.quizzman.com/qmf/dist/modules-v3/header';
   const JOIN_OVERLAY_BASE = 'https://ui.quizzman.com/qmf/dist/modules/join-overlay';
@@ -132,8 +132,8 @@
     joinOverlayBase: JOIN_OVERLAY_BASE,
     searchUrl: '',
     loginUrl: 'https://id.quizzman.com/login',
-    profileUrl: 'https://id.quizzman.com/profile',
-    settingsUrl: 'https://id.quizzman.com/settings',
+    profileUrl: 'https://id.quizzman.com/account',
+    settingsUrl: 'https://id.quizzman.com/account',
     mainLogoUrl: 'https://ui.quizzman.com/qmf/assets/logo/quizzman-logo.png',
     mainLogoDarkUrl: 'https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-dark.png',
     mainLogoLink: 'https://quizzman.com',
@@ -349,7 +349,7 @@
 
     return `
       <div class="lab-header__nav-item lab-header__nav-item--dropdown${isSectionActive ? ' is-active' : ''}" data-nav-id="${escapeHtml(item.id)}">
-        <button type="button" class="lab-header__nav-link lab-header__nav-trigger${isSectionActive ? ' is-active' : ''}" aria-expanded="false" aria-haspopup="true">
+        <button type="button" class="lab-header__nav-link lab-header__nav-trigger${isSectionActive ? ' is-active' : ''}" aria-expanded="false" aria-haspopup="true" aria-label="${escapeHtml(item.label)}" title="${escapeHtml(item.label)}">
           ${navSectionIcon(item.id)}
           <span class="lab-header__nav-text">${escapeHtml(item.label)}</span>
           <svg class="lab-header__nav-chevron" width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -371,7 +371,8 @@
         class="lab-header__nav-link${compact ? ' lab-header__nav-link--compact' : ''}${isSectionActive ? ' is-active' : ''}"
         href="${escapeHtml(item.href)}"
         data-nav-id="${escapeHtml(item.id)}"
-        ${compact ? `aria-label="${escapeHtml(item.label)}" title="${escapeHtml(item.label)}"` : ''}
+        aria-label="${escapeHtml(item.label)}"
+        title="${escapeHtml(item.label)}"
       >
         ${navSectionIcon(item.id)}
         <span class="${compact ? 'sr-only' : 'lab-header__nav-text'}">${escapeHtml(item.label)}</span>
@@ -447,6 +448,12 @@
     if (config.showSearch === false) return '';
 
     return `
+      <button type="button" class="lab-header__search-btn" data-qmf-search-toggle aria-label="Search" aria-expanded="false" aria-controls="qmf-global-search">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10.5 10.5 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
       <form class="lab-header__search" role="search" data-qmf-search>
         <label class="lab-header__search-label" for="qmf-global-search">
           <svg class="lab-header__search-icon" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
@@ -472,6 +479,9 @@
           </svg>
         </span>
         <kbd class="lab-header__search-kbd" aria-hidden="true">⌘K</kbd>
+        <button type="button" class="lab-header__search-dismiss" data-qmf-search-dismiss aria-label="Close search">
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 3l8 8M11 3 3 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
       </form>
     `;
   }
@@ -700,7 +710,22 @@
     setupSearch() {
       const form = this.headerEl?.querySelector('[data-qmf-search]');
       const input = form?.querySelector('.lab-header__search-input');
+      const toggle = this.headerEl?.querySelector('[data-qmf-search-toggle]');
+      const dismiss = form?.querySelector('[data-qmf-search-dismiss]');
       if (!form || !input) return;
+
+      const setSearchOpen = (open) => {
+        this.headerEl?.classList.toggle('lab-header--search-open', open);
+        toggle?.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+          requestAnimationFrame(() => {
+            input.focus();
+            input.select?.();
+          });
+        } else {
+          input.blur();
+        }
+      };
 
       const runSearch = (query) => {
         const q = String(query || '').trim();
@@ -727,6 +752,20 @@
         }
       };
 
+      toggle?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const open = !this.headerEl?.classList.contains('lab-header--search-open');
+        setSearchOpen(open);
+      });
+
+      dismiss?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setSearchOpen(false);
+        input.value = '';
+      });
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         runSearch(input.value);
@@ -734,8 +773,22 @@
 
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+          if (this.headerEl?.classList.contains('lab-header--search-open')) {
+            setSearchOpen(false);
+          }
           input.blur();
           input.value = '';
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          if (window.matchMedia('(max-width: 899px)').matches) {
+            setSearchOpen(true);
+          } else {
+            input.focus();
+          }
         }
       });
     }
@@ -805,6 +858,15 @@
       const backdrop = this.headerEl.querySelector('.lab-header__drawer-backdrop');
       const closeBtn = this.headerEl.querySelector('.lab-header__drawer-close');
 
+      // Portal to <body> so position:fixed is viewport-relative (header
+      // backdrop-filter / transforms must not become the containing block).
+      if (backdrop && backdrop.parentElement !== document.body) {
+        document.body.appendChild(backdrop);
+      }
+      if (drawer && drawer.parentElement !== document.body) {
+        document.body.appendChild(drawer);
+      }
+
       const openDrawer = () => {
         this.drawerOpen = true;
         drawer?.setAttribute('aria-hidden', 'false');
@@ -812,6 +874,7 @@
         backdrop?.removeAttribute('hidden');
         this.headerEl?.classList.add('lab-header--drawer-open');
         document.body.classList.add('lab-header-drawer-open');
+        try { if (drawer) drawer.scrollTop = 0; } catch (e) { /* ignore */ }
         closeBtn?.focus();
       };
 

@@ -4,6 +4,8 @@
  */
 
 import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
+import { handleNotificationClick } from "../core/deepLink.js";
+import { notificationItemHtml } from "./item.js";
 
 function escapeHtml(s) {
   return String(s ?? "")
@@ -275,28 +277,14 @@ export function defineCenter(cssText, runtime) {
         return;
       }
       list.innerHTML = state.items
-        .map(
-          (it) => `
-        <button class="lg-item" type="button" data-unread="${!it.read_at}" data-receiver="${escapeAttr(
-            it.receiver_id
-          )}" data-title="${escapeAttr(it.title)}">
-          <span class="lg-dot"></span>
-          <span>
-            <p class="lg-item-title">${escapeHtml(it.title)}</p>
-            <p class="lg-item-body">${escapeHtml(it.body || "")}</p>
-            <div class="lg-item-meta">${escapeHtml(runtime.i18n.relativeTime(it.created_at))}</div>
-          </span>
-        </button>`
-        )
+        .map((it) => notificationItemHtml(it, runtime.i18n))
         .join("");
       list.querySelectorAll("[data-receiver]").forEach((el) => {
         el.addEventListener("click", () => {
           const id = el.getAttribute("data-receiver");
-          if (id) runtime.client.markRead(id).catch(() => {});
-          runtime.bus.emit("notification:click", {
-            receiver_id: id,
-            title: el.getAttribute("data-title"),
-          });
+          handleNotificationClick(runtime, id);
+          this.close?.();
+          runtime.closeCenter?.();
         });
       });
     }

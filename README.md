@@ -1,6 +1,8 @@
-# QMF Framework
+# Quizzman Modular Framework (QMF)
 
-**Quizzman Modular Framework v3.0** — A production-ready frontend framework powering all Quizzman web applications.
+**Quizzman Modular Framework v3.0** — A production-ready frontend framework by [Quizzman.com](https://quizzman.com), powering all Quizzman web applications.
+
+License: [MIT](./LICENSE) · Copyright © Quizzman.com
 
 ## Features
 

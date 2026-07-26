@@ -9,54 +9,150 @@ const TOKEN_KEYS = [
   "token",
 ];
 
-async function refreshFromIdSys(force = false) {
-  if (typeof window === "undefined") return null;
+const ID_REFRESH_URL = "https://id.quizzman.com/api/auth/refresh";
+/** Refresh a bit before exp so clock skew / in-flight requests stay valid. */
+const EXPIRY_SKEW_SECS = 45;
 
-  const idsys = window.IdSysSSO;
-  if (idsys && typeof idsys.refreshAccessToken === "function") {
+export function decodeJwtPayload(token) {
+  try {
+    const part = String(token || "").split(".")[1];
+    if (!part) return null;
+    const json = atob(part.replace(/-/g, "+").replace(/_/g, "/"));
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+export function isTokenUsable(token) {
+  if (!token) return false;
+  const payload = decodeJwtPayload(token);
+  // Non-JWT opaque tokens: keep and let the API decide.
+  if (!payload || typeof payload.exp !== "number") return true;
+  return payload.exp > Math.floor(Date.now() / 1000) + EXPIRY_SKEW_SECS;
+}
+
+function clearStoredTokens() {
+  if (typeof window === "undefined") return;
+  for (const k of TOKEN_KEYS) {
     try {
-      const refreshed = await idsys.refreshAccessToken(force);
-      if (refreshed) return refreshed;
+      localStorage.removeItem(k);
     } catch {
-      /* ignore */
+      /* private mode */
     }
   }
-
-  if (idsys && typeof idsys.getAuth === "function") {
-    try {
-      const auth = await idsys.getAuth(force);
-      const token = auth?.token || auth?.accessToken || auth?.access_token || null;
-      if (token) return token;
-    } catch {
-      /* ignore */
-    }
+  try {
+    document.cookie =
+      "jwt_token=; path=/; domain=.quizzman.com; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    document.cookie = "jwt_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  } catch {
+    /* ignore */
   }
+}
 
-  if (window.QuizzmanAuth && typeof window.QuizzmanAuth.refreshAccessToken === "function") {
-    try {
-      const refreshed = await window.QuizzmanAuth.refreshAccessToken(force);
-      if (refreshed) return refreshed;
-    } catch {
-      /* ignore */
-    }
+function persistToken(token) {
+  if (!token || typeof window === "undefined") return;
+  try {
+    localStorage.setItem("jwt_token", token);
+  } catch {
+    /* ignore */
   }
+  try {
+    document.cookie = `jwt_token=${encodeURIComponent(token)}; path=/; domain=.quizzman.com; max-age=${90 * 24 * 60 * 60}; SameSite=Lax; Secure`;
+  } catch {
+    /* ignore */
+  }
+  try {
+    window.__QM_ACCESS_TOKEN__ = token;
+  } catch {
+    /* ignore */
+  }
+}
 
+async function refreshViaCookie() {
+  if (typeof window === "undefined" || typeof fetch !== "function") return null;
+  try {
+    const res = await fetch(ID_REFRESH_URL, {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: "{}",
+    });
+    if (!res.ok) return null;
+    const data = await res.json().catch(() => null);
+    const token = data?.token || data?.accessToken || data?.access_token || null;
+    if (data?.success && token) {
+      persistToken(token);
+      return token;
+    }
+  } catch {
+    /* ignore */
+  }
   return null;
 }
 
-function readVisibleToken() {
-  if (typeof window !== "undefined") {
-    if (window.IdSysSSO?.getToken) {
+function ssoOwners() {
+  if (typeof window === "undefined") return [];
+  const seen = new Set();
+  const out = [];
+  for (const owner of [window.IdSysSSO, window.QuizzmanAuth, window.QuizzmanSSO]) {
+    if (!owner || seen.has(owner)) continue;
+    seen.add(owner);
+    out.push(owner);
+  }
+  return out;
+}
+
+async function refreshFromIdSys(force = false) {
+  if (typeof window === "undefined") return null;
+
+  for (const owner of ssoOwners()) {
+    if (typeof owner.refreshAccessToken === "function") {
       try {
-        const t = window.IdSysSSO.getToken();
-        if (t) return t;
+        const refreshed = await owner.refreshAccessToken(force);
+        if (refreshed && isTokenUsable(refreshed)) {
+          persistToken(refreshed);
+          return refreshed;
+        }
       } catch {
         /* ignore */
       }
     }
-    if (window.QuizzmanAuth?.getToken) {
+    if (typeof owner.getAuth === "function") {
       try {
-        const t = window.QuizzmanAuth.getToken();
+        const auth = await owner.getAuth(force);
+        const token = auth?.token || auth?.accessToken || auth?.access_token || null;
+        if (token && isTokenUsable(token)) {
+          persistToken(token);
+          return token;
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+    if (typeof owner.ensureToken === "function") {
+      try {
+        const ensured = await owner.ensureToken();
+        if (ensured && isTokenUsable(ensured)) {
+          persistToken(ensured);
+          return ensured;
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
+  // Sites without SSO script — refresh via HttpOnly cookie.
+  return refreshViaCookie();
+}
+
+function readVisibleToken() {
+  if (typeof window !== "undefined") {
+    for (const owner of ssoOwners()) {
+      if (typeof owner.getToken !== "function") continue;
+      try {
+        const t = owner.getToken();
         if (t) return t;
       } catch {
         /* ignore */
@@ -89,6 +185,7 @@ function readVisibleToken() {
 
 /**
  * Resolve an access token from options / SSO / local storage.
+ * Never returns an expired JWT — refreshes via SSO or id.quizzman.com cookie first.
  * @param {object} opts
  * @returns {(requestOptions?: {forceRefresh?: boolean}) => Promise<string|null>}
  */
@@ -97,7 +194,7 @@ export function createTokenProvider(opts = {}) {
     return async (requestOptions) => opts.tokenProvider(requestOptions) || null;
   }
   if (opts.token) {
-    return async () => opts.token;
+    return async () => (isTokenUsable(opts.token) ? opts.token : null);
   }
 
   return async (requestOptions = {}) => {
@@ -107,20 +204,13 @@ export function createTokenProvider(opts = {}) {
     }
 
     const visible = readVisibleToken();
-    if (visible) return visible;
+    if (visible && isTokenUsable(visible)) return visible;
+
+    if (visible && !isTokenUsable(visible)) {
+      clearStoredTokens();
+    }
 
     // Session may already be authenticated via HttpOnly refresh cookie.
     return refreshFromIdSys(true);
   };
-}
-
-export function decodeJwtPayload(token) {
-  try {
-    const part = token.split(".")[1];
-    if (!part) return null;
-    const json = atob(part.replace(/-/g, "+").replace(/_/g, "/"));
-    return JSON.parse(json);
-  } catch {
-    return null;
-  }
 }

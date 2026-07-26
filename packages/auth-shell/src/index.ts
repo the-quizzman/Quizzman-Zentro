@@ -17,7 +17,7 @@ export const AuthShellConfigSchema = z.object({
   /** Profile URL */
   profileUrl: z.string().url().default('https://id.quizzman.com/account'),
   /** Settings URL */
-  settingsUrl: z.string().url().default('https://id.quizzman.com/settings'),
+  settingsUrl: z.string().url().default('https://id.quizzman.com/account'),
   /** Custom token getter (overrides default resolution) */
   getToken: z.function().args().returns(z.string().nullable()).optional(),
   /** Custom user getter */

@@ -16,6 +16,7 @@ coverage/
 # Environment
 .env
 .env.*
+.indexnow-key
 
 # Editor
 .vscode/
@@ -30,3 +31,5 @@ Thumbs.db
 # Other
 logs/
 *.log
+QMF
+reports/
