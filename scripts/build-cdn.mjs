@@ -187,6 +187,22 @@ async function main() {
 
   mirrorModulesV3();
 
+  // Fleet soft-reload signal (nginx: no-store for qmf-shell.rev)
+  try {
+    const shellLoader = readFileSync(join(SRC_MODULES, 'shell', 'qmf-shell.js'), 'utf8');
+    const revMatch = shellLoader.match(/var REV = '([^']+)'/);
+    if (revMatch) {
+      for (const dir of ['modules', 'modules-v3']) {
+        const revPath = join(DIST, dir, 'shell', 'qmf-shell.rev');
+        ensureDir(resolve(revPath, '..'));
+        writeFileSync(revPath, revMatch[1] + '\n');
+      }
+      console.log('  ✓ qmf-shell.rev =', revMatch[1]);
+    }
+  } catch (err) {
+    console.warn('  ⚠ could not write qmf-shell.rev:', err.message);
+  }
+
   console.log('\n[4/6] Bundle qmf.min.js');
   tryBundleQmfMin();
   if (!existsSync(join(DIST, 'qmf.min.js'))) {

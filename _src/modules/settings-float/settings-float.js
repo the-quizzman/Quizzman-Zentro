@@ -17,7 +17,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '1.0.3';
+  const VERSION = '1.0.4';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/settings-float';
   const ACCOUNT_PREFS_URL = 'https://id.quizzman.com/api/account/update-profile';
 
