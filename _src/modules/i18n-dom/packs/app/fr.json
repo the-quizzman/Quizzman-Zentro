@@ -1,0 +1,199 @@
+{
+  "_meta": {
+    "pack": "app",
+    "lang": "fr",
+    "status": "seed"
+  },
+  "app": {
+    "tab": {
+      "dashboard": "Tableau de bord",
+      "create": "Créer",
+      "present": "Présenter",
+      "games": "Jeux",
+      "assign": "Assigner",
+      "library": "Ma bibliothèque"
+    },
+    "section": {
+      "exploreApps": "Explorer les apps",
+      "createContent": "Créer du contenu",
+      "presentTeach": "Présenter & enseigner",
+      "gameLearning": "Apprentissage par le jeu",
+      "manageAssign": "Gérer & assigner",
+      "myLibrary": "Ma bibliothèque",
+      "coreTools": "Démarrer rapidement",
+      "coreStudio": "Outils Studio",
+      "continueWork": "Continuer",
+      "coreApps": "Apps principales"
+    },
+    "greeting": {
+      "night": "Bonne nuit",
+      "morning": "Bonjour",
+      "afternoon": "Bon après-midi",
+      "evening": "Bonsoir"
+    },
+    "cat": {
+      "teaching": "Enseignement",
+      "knowledge": "Savoir",
+      "utilities": "Utilitaires"
+    },
+    "action": {
+      "new": "Nouveau",
+      "createNew": "Créer",
+      "refresh": "Actualiser",
+      "login": "Se connecter",
+      "openAssignments": "Ouvrir Assignments",
+      "openAssignmentsCta": "Ouvrir Assignments →",
+      "firstContent": "Créer votre premier contenu",
+      "loginToLibrary": "Connectez-vous pour voir la bibliothèque"
+    },
+    "progress": {
+      "assigned": "Travaux assignés",
+      "newQuiz": "Nouveau quiz",
+      "newSlide": "Nouveau slide",
+      "emptyAssignedTitle": "Aucun devoir",
+      "emptyAssignedMeta": "Créez votre premier devoir",
+      "emptyQuizTitle": "Aucun quiz",
+      "emptyQuizMeta": "Ouvrir Quiz Editor",
+      "emptySlideTitle": "Aucun slide",
+      "emptySlideMeta": "Ouvrir Slide Studio",
+      "loginToView": "Connectez-vous pour voir",
+      "loading": "Chargement…",
+      "completed": "{done}/{total} terminés",
+      "people": "{n} personnes",
+      "pages": "{n} pages"
+    },
+    "intro": {
+      "create": "Slide Studio, Quiz Editor, modèles, prompts IA — tous les outils d’édition ici.",
+      "present": "Slide Player, mode présentation, plein écran, minuteur et animation.",
+      "games": "Créez des jeux et jeux de données sur play.quizzman.com.",
+      "assign": "Assignez quiz, jeux et activités aux élèves par catégorie.",
+      "libraryAuthed": "Contenu de votre compte (Slide Studio, Quiz Editor).",
+      "libraryGuest": "Connectez-vous pour voir votre bibliothèque."
+    },
+    "assign": {
+      "emptyTitle": "Ouvrir Assignments",
+      "emptyText": "La gestion complète des devoirs se trouve dans l’app Assignments."
+    },
+    "library": {
+      "searchPlaceholder": "Rechercher du contenu…",
+      "searchAria": "Rechercher du contenu",
+      "typeAll": "Tout",
+      "typeQuiz": "Quiz",
+      "typeSlide": "Slide",
+      "typeGame": "Jeu",
+      "typeArticle": "Article",
+      "emptyTitle": "Aucun contenu",
+      "emptyText": "Créez un quiz ou un slide depuis les outils Studio.",
+      "emptyGuestTitle": "Connectez-vous pour voir la bibliothèque",
+      "emptyGuestText": "Slide Studio et Quiz Editor n’affichent que le contenu de votre compte.",
+      "bucketSlides": "Mes slides",
+      "bucketQuizzes": "Mes quiz",
+      "bucketTemplates": "Mes modèles",
+      "bucketMedia": "Médias importés",
+      "bucketExports": "Historique d’export"
+    },
+    "emptyLibrary": "Créez un quiz ou un slide depuis les outils Studio.",
+    "menu": {
+      "newSlide": "Nouveau slide",
+      "newQuiz": "Nouveau quiz",
+      "newAssign": "Nouveau devoir",
+      "import": "Importer…",
+      "library": "Bibliothèque"
+    },
+    "launch": {
+      "slideStudio": "Slide Studio",
+      "slideStudioSub": "Présentations",
+      "quizEditor": "Quiz Editor",
+      "quizEditorSub": "Quiz interactifs",
+      "assignment": "Assignment",
+      "assignmentSub": "Assigner & noter",
+      "assignedWork": "Travaux assignés",
+      "assignedWorkSub": "Suivre les devoirs envoyés",
+      "examCollection": "Collection d’examens",
+      "examCollectionSub": "Examens & ressources Assignment",
+      "contentLibrary": "Bibliothèque",
+      "contentLibrarySub": "lib.quizzman.com",
+      "chineseNumber": "Nombres chinois",
+      "chineseNumberSub": "Pratiquer la lecture des nombres",
+      "chineseConvert": "Conversion chinoise",
+      "chineseConvertSub": "Nombres → caractères",
+      "jck": "JCK Font Engine",
+      "jckSub": "Composer des glyphes CJK",
+      "randomPicker": "Tirage au sort",
+      "randomPickerSub": "Choisir un élève au hasard",
+      "spreadsheet": "Tableur",
+      "spreadsheetSub": "Feuille de calcul en ligne",
+      "audioConverter": "Convertisseur audio",
+      "audioConverterSub": "MP3, WAV, OGG, FLAC"
+    },
+    "continue": {
+      "slide": "Slide",
+      "slideFallback": "Reprendre la dernière présentation",
+      "quiz": "Quiz",
+      "quizFallback": "Reprendre le dernier quiz",
+      "assignment": "Travaux assignés",
+      "assignmentFallback": "Voir les devoirs envoyés"
+    },
+    "quick": {
+      "mdSlide": "Markdown → Slide",
+      "mdSlideCap": "Brouillon rapide",
+      "importPptx": "Importer PPTX",
+      "importPptxCap": "Slide Studio",
+      "themes": "Bibliothèque de thèmes",
+      "themesCap": "Slide Studio",
+      "aiPrompt": "Générateur de prompts IA",
+      "aiPromptCap": "Slide Studio",
+      "assign": "Assigner un travail",
+      "assignCap": "Assignments",
+      "myContent": "Mon contenu",
+      "myContentCap": "Bibliothèque"
+    },
+    "tool": {
+      "slideStudioDesc": "Créez des slides, cours, thèmes/modèles et exportez PPTX, PNG, vidéo.",
+      "slideStudioCta": "Ouvrir Slide Studio",
+      "quizEditorDesc": "Créez QCM, Vrai/Faux, texte à trous, ordre avec scoring.",
+      "quizEditorCta": "Ouvrir Quiz Editor",
+      "slidePlayer": "Slide Player",
+      "slidePlayerDesc": "Présentation plein écran avec minuteur, animation et médias.",
+      "slidePlayerCta": "Ouvrir Slide Player",
+      "statusLive": "Live",
+      "statusNew": "Nouveau",
+      "statusBeta": "Bêta"
+    },
+    "game": {
+      "hanziMaster": "Éditeur Hanzi Master",
+      "hanziMasterDesc": "Vocabulaire de caractères — saisie, QCM, sceau, phrase.",
+      "idiomKing": "Éditeur Idiom King",
+      "idiomKingDesc": "Chengyu — modes solo et duel 1v1.",
+      "pikahans": "Éditeur Pikahans",
+      "pikahansDesc": "Composer des mots chinois — 2–4 caractères.",
+      "keynoteHero": "Éditeur Keynote Hero",
+      "keynoteHeroDesc": "Musique + quiz liés à chaque note.",
+      "quizUltimate": "Éditeur Quizzman Ultimate",
+      "quizUltimateDesc": "Quiz multijoueur style Kahoot.",
+      "quizRace": "Éditeur Quiz Race",
+      "quizRaceDesc": "Course quiz — répondez juste pour avancer."
+    },
+    "time": {
+      "minutesAgo": "il y a {n} min",
+      "hoursAgo": "il y a {n} h",
+      "daysAgo": "il y a {n} j"
+    },
+    "shell": {
+      "searchPlaceholder": "Rechercher apps, savoir…",
+      "pageTitle": "App"
+    },
+    "hero": {
+      "prompt": "Que souhaitez-vous créer aujourd’hui ?"
+    },
+    "workspace": {
+      "title": "Espace de travail",
+      "you": "Vous",
+      "youHere": "Vous êtes ici",
+      "nodeAssignment": "Devoir",
+      "nodeQuiz": "Quiz",
+      "nodeSlide": "Slide",
+      "nodeKnowledge": "Savoir"
+    }
+  }
+}

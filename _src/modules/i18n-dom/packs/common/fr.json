@@ -1,0 +1,35 @@
+{
+  "_meta": {
+    "pack": "common",
+    "lang": "fr",
+    "status": "seed"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "search": "Rechercher",
+    "loading": "Chargement…",
+    "settings": "Paramètres",
+    "account": "Compte",
+    "logout": "Se déconnecter",
+    "login": "Se connecter",
+    "language": "Langue",
+    "theme": "Apparence",
+    "region": "Région",
+    "light": "Clair",
+    "dark": "Sombre"
+  },
+  "nav": {
+    "home": "Accueil",
+    "lab": "Lab",
+    "library": "Bibliothèque",
+    "app": "App",
+    "play": "Play",
+    "wiki": "Wiki",
+    "class": "Classe"
+  }
+}

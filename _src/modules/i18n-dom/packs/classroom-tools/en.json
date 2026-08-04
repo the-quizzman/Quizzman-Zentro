@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "pack": "classroom-tools",
+    "lang": "en",
+    "status": "seed",
+    "note": "JCK Font Engine chrome strings"
+  },
+  "jck": {
+    "pageTitle": "JCK Font Engine — CJK / Hán-Nôm glyph synthesis",
+    "brandTitle": "JCK Font Engine",
+    "nav": {
+      "synth": "Synthesize",
+      "catalog": "Catalog",
+      "compose": "Compose",
+      "projects": "Projects",
+      "guide": "Guide"
+    },
+    "status": {
+      "connecting": "Connecting…",
+      "online": "Engine Online",
+      "offline": "Offline"
+    },
+    "auth": {
+      "login": "Sign in"
+    },
+    "stat": {
+      "components": "Components",
+      "characters": "Characters",
+      "imported": "Imported",
+      "engine": "Engine"
+    },
+    "synth": {
+      "input": "Input",
+      "character": "Character",
+      "idsOverride": "IDS Override",
+      "optional": "(optional)",
+      "synthesize": "Synthesize",
+      "guides": "Guides",
+      "structure": "Structure",
+      "ids": "IDS",
+      "source": "Source",
+      "codepoint": "Codepoint",
+      "quality": "Quality",
+      "qualityBreakdown": "Quality Breakdown",
+      "coverage": "Coverage",
+      "distortion": "Distortion",
+      "collision": "Collision",
+      "balance": "Balance",
+      "reference": "Reference",
+      "readyTitle": "Ready to Synthesize",
+      "readySubtitle": "Enter a character and click Synthesize to generate the glyph preview",
+      "downloadSvg": "SVG",
+      "copySvg": "Copy",
+      "toggleGuides": "Guides"
+    },
+    "catalog": {
+      "title": "Character Catalog",
+      "searchPlaceholder": "Search by character or U+codepoint…",
+      "sortCodepoint": "Unicode codepoint",
+      "sortStrokes": "Stroke count",
+      "strokesPlaceholder": "Strokes",
+      "filter": "Filter",
+      "filterAll": "All",
+      "filterImported": "Imported",
+      "filterComponent": "Component",
+      "copyHint": "Click to copy character to clipboard",
+      "loading": "Loading catalog…"
+    },
+    "compose": {
+      "pickStructure": "Choose structure operator",
+      "fillSlots": "Fill component slots",
+      "gap": "Gap between components",
+      "idsString": "IDS string",
+      "idsPlaceholder": "Pick a structure and fill components",
+      "exportFont": "Export font",
+      "fontName": "Font name",
+      "fontNamePh": "e.g. JCK Custom",
+      "codepoint": "Character / Codepoint",
+      "codepointPh": "天 or E000",
+      "format": "Format",
+      "batchLabel": "Multiple glyphs (one char per line)",
+      "create": "Create glyph",
+      "result": "Result",
+      "resultEmpty": "Composed glyph will appear here",
+      "quality": "Quality",
+      "source": "Source",
+      "qualityAnalysis": "Quality analysis",
+      "copySvg": "Copy SVG",
+      "downloadSvg": "Download SVG",
+      "downloadFont": "Download font",
+      "copyComponent": "Copy component",
+      "saveProject": "Save to project"
+    },
+    "projects": {
+      "loginPrompt": "Sign in to create and manage font projects",
+      "loginCta": "Sign in with Quizzman ID",
+      "title": "Font Projects",
+      "new": "New project",
+      "empty": "No projects yet. Create one to get started!",
+      "back": "Back",
+      "exportFont": "Export font",
+      "fontName": "Font name",
+      "format": "Format",
+      "exportMode": "Export mode",
+      "modeCustom": "Custom glyphs only",
+      "modeFull": "Full font (merge with base font)",
+      "baseFont": "Base font",
+      "save": "Save",
+      "colChar": "Char",
+      "colIds": "IDS",
+      "colCp": "Codepoint",
+      "glyphEmpty": "No glyphs yet. Use Compose to create and save into a project!",
+      "glyphMap": "Input code table (Alt+X in Word)",
+      "copyMap": "Copy",
+      "previewTitle": "Preview glyph",
+      "previewLoading": "Loading…",
+      "editGlyph": "Edit this glyph"
+    },
+    "footer": {
+      "about": "About / SEO",
+      "wiki": "Wiki guide",
+      "lab": "Quizzman Lab"
+    }
+  }
+}

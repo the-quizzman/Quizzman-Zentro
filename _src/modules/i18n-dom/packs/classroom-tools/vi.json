@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "pack": "classroom-tools",
+    "lang": "vi",
+    "status": "seed",
+    "note": "JCK Font Engine chrome strings"
+  },
+  "jck": {
+    "pageTitle": "JCK Font Engine — Tổng hợp glyph Hán-Nôm / CJK",
+    "brandTitle": "JCK Font Engine",
+    "nav": {
+      "synth": "Synthesize",
+      "catalog": "Catalog",
+      "compose": "Compose",
+      "projects": "Projects",
+      "guide": "Hướng dẫn"
+    },
+    "status": {
+      "connecting": "Đang kết nối…",
+      "online": "Engine Online",
+      "offline": "Offline"
+    },
+    "auth": {
+      "login": "Đăng nhập"
+    },
+    "stat": {
+      "components": "Components",
+      "characters": "Characters",
+      "imported": "Imported",
+      "engine": "Engine"
+    },
+    "synth": {
+      "input": "Input",
+      "character": "Ký tự",
+      "idsOverride": "IDS Override",
+      "optional": "(tuỳ chọn)",
+      "synthesize": "Synthesize",
+      "guides": "Guides",
+      "structure": "Cấu trúc",
+      "ids": "IDS",
+      "source": "Nguồn",
+      "codepoint": "Codepoint",
+      "quality": "Chất lượng",
+      "qualityBreakdown": "Phân tích chất lượng",
+      "coverage": "Coverage",
+      "distortion": "Distortion",
+      "collision": "Collision",
+      "balance": "Balance",
+      "reference": "Reference",
+      "readyTitle": "Sẵn sàng tổng hợp",
+      "readySubtitle": "Nhập ký tự rồi bấm Synthesize để xem trước glyph",
+      "downloadSvg": "SVG",
+      "copySvg": "Copy",
+      "toggleGuides": "Guides"
+    },
+    "catalog": {
+      "title": "Character Catalog",
+      "searchPlaceholder": "Tìm theo ký tự hoặc U+codepoint…",
+      "sortCodepoint": "Mã Unicode",
+      "sortStrokes": "Số nét",
+      "strokesPlaceholder": "Số nét",
+      "filter": "Lọc",
+      "filterAll": "All",
+      "filterImported": "Imported",
+      "filterComponent": "Component",
+      "copyHint": "Click để copy chữ vào clipboard",
+      "loading": "Đang tải catalog…"
+    },
+    "compose": {
+      "pickStructure": "Chọn hình thái cấu trúc",
+      "fillSlots": "Nhập bộ thành phần",
+      "gap": "Khoảng cách giữa các bộ",
+      "idsString": "Chuỗi IDS",
+      "idsPlaceholder": "Chọn hình thái và nhập bộ thành phần",
+      "exportFont": "Xuất font",
+      "fontName": "Tên font",
+      "fontNamePh": "Ví dụ: JCK Custom",
+      "codepoint": "Ký tự / Codepoint",
+      "codepointPh": "天 hoặc E000",
+      "format": "Định dạng",
+      "batchLabel": "Nhiều glyph (mỗi dòng: một chữ)",
+      "create": "Tạo chữ",
+      "result": "Kết quả",
+      "resultEmpty": "Chữ tổng hợp sẽ hiện ở đây",
+      "quality": "Chất lượng",
+      "source": "Nguồn",
+      "qualityAnalysis": "Phân tích chất lượng",
+      "copySvg": "Copy SVG",
+      "downloadSvg": "Tải SVG",
+      "downloadFont": "Tải font",
+      "copyComponent": "Copy bộ",
+      "saveProject": "Lưu vào project"
+    },
+    "projects": {
+      "loginPrompt": "Đăng nhập để tạo và quản lý font projects",
+      "loginCta": "Đăng nhập qua Quizzman ID",
+      "title": "Font Projects",
+      "new": "Tạo project mới",
+      "empty": "Chưa có project nào. Tạo một project mới để bắt đầu!",
+      "back": "Quay lại",
+      "exportFont": "Xuất font",
+      "fontName": "Tên font",
+      "format": "Định dạng",
+      "exportMode": "Chế độ xuất",
+      "modeCustom": "Chỉ các chữ đã tạo",
+      "modeFull": "Font đầy đủ (ghép với font nền)",
+      "baseFont": "Font nền",
+      "save": "Lưu",
+      "colChar": "Chữ",
+      "colIds": "IDS",
+      "colCp": "Codepoint",
+      "glyphEmpty": "Chưa có glyph. Vào Compose để tạo chữ và lưu vào project!",
+      "glyphMap": "Bảng mã nhập liệu (Alt+X trong Word)",
+      "copyMap": "Copy",
+      "previewTitle": "Preview glyph",
+      "previewLoading": "Đang tải…",
+      "editGlyph": "Chỉnh sửa glyph này"
+    },
+    "footer": {
+      "about": "About / SEO",
+      "wiki": "Hướng dẫn Wiki",
+      "lab": "Quizzman Lab"
+    }
+  }
+}

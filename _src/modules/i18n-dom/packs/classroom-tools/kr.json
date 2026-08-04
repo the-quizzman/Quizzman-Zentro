@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "pack": "classroom-tools",
+    "lang": "kr",
+    "status": "seed",
+    "note": "JCK Font Engine chrome strings"
+  },
+  "jck": {
+    "pageTitle": "JCK Font Engine — CJK / 한남 글리프 합성",
+    "brandTitle": "JCK Font Engine",
+    "nav": {
+      "synth": "Synthesize",
+      "catalog": "Catalog",
+      "compose": "Compose",
+      "projects": "Projects",
+      "guide": "가이드"
+    },
+    "status": {
+      "connecting": "연결 중…",
+      "online": "Engine Online",
+      "offline": "Offline"
+    },
+    "auth": {
+      "login": "로그인"
+    },
+    "stat": {
+      "components": "부품",
+      "characters": "문자",
+      "imported": "가져옴",
+      "engine": "엔진"
+    },
+    "synth": {
+      "input": "입력",
+      "character": "문자",
+      "idsOverride": "IDS 재정의",
+      "optional": "(선택)",
+      "synthesize": "Synthesize",
+      "guides": "가이드",
+      "structure": "구조",
+      "ids": "IDS",
+      "source": "출처",
+      "codepoint": "코드포인트",
+      "quality": "품질",
+      "qualityBreakdown": "품질 분석",
+      "coverage": "Coverage",
+      "distortion": "Distortion",
+      "collision": "Collision",
+      "balance": "Balance",
+      "reference": "Reference",
+      "readyTitle": "합성 준비 완료",
+      "readySubtitle": "문자를 입력하고 Synthesize를 눌러 미리보기",
+      "downloadSvg": "SVG",
+      "copySvg": "복사",
+      "toggleGuides": "가이드"
+    },
+    "catalog": {
+      "title": "문자 카탈로그",
+      "searchPlaceholder": "문자 또는 U+codepoint 검색…",
+      "sortCodepoint": "유니코드",
+      "sortStrokes": "획수",
+      "strokesPlaceholder": "획수",
+      "filter": "필터",
+      "filterAll": "전체",
+      "filterImported": "가져옴",
+      "filterComponent": "부품",
+      "copyHint": "클릭하여 클립보드에 복사",
+      "loading": "카탈로그 로딩 중…"
+    },
+    "compose": {
+      "pickStructure": "구조 연산자 선택",
+      "fillSlots": "부품 입력",
+      "gap": "부품 간격",
+      "idsString": "IDS 문자열",
+      "idsPlaceholder": "구조를 고르고 부품을 입력",
+      "exportFont": "폰트 내보내기",
+      "fontName": "폰트 이름",
+      "fontNamePh": "예: JCK Custom",
+      "codepoint": "문자 / 코드포인트",
+      "codepointPh": "天 또는 E000",
+      "format": "형식",
+      "batchLabel": "여러 글리프 (한 줄에 한 글자)",
+      "create": "글리프 생성",
+      "result": "결과",
+      "resultEmpty": "합성 글리프가 여기에 표시됩니다",
+      "quality": "품질",
+      "source": "출처",
+      "qualityAnalysis": "품질 분석",
+      "copySvg": "SVG 복사",
+      "downloadSvg": "SVG 다운로드",
+      "downloadFont": "폰트 다운로드",
+      "copyComponent": "부품 복사",
+      "saveProject": "프로젝트에 저장"
+    },
+    "projects": {
+      "loginPrompt": "로그인하여 폰트 프로젝트를 관리하세요",
+      "loginCta": "Quizzman ID로 로그인",
+      "title": "폰트 프로젝트",
+      "new": "새 프로젝트",
+      "empty": "프로젝트가 없습니다. 하나 만들어 시작하세요!",
+      "back": "뒤로",
+      "exportFont": "폰트 내보내기",
+      "fontName": "폰트 이름",
+      "format": "형식",
+      "exportMode": "내보내기 모드",
+      "modeCustom": "생성한 글자만",
+      "modeFull": "전체 폰트 (베이스와 병합)",
+      "baseFont": "베이스 폰트",
+      "save": "저장",
+      "colChar": "글자",
+      "colIds": "IDS",
+      "colCp": "코드",
+      "glyphEmpty": "글리프가 없습니다. Compose에서 만들어 저장하세요!",
+      "glyphMap": "입력 코드표 (Word Alt+X)",
+      "copyMap": "복사",
+      "previewTitle": "글리프 미리보기",
+      "previewLoading": "로딩 중…",
+      "editGlyph": "이 글리프 편집"
+    },
+    "footer": {
+      "about": "About / SEO",
+      "wiki": "Wiki 가이드",
+      "lab": "Quizzman Lab"
+    }
+  }
+}

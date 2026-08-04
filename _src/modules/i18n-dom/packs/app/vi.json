@@ -1,0 +1,199 @@
+{
+  "_meta": {
+    "pack": "app",
+    "lang": "vi",
+    "status": "seed"
+  },
+  "app": {
+    "tab": {
+      "dashboard": "Dashboard",
+      "create": "Tạo",
+      "present": "Trình chiếu",
+      "games": "Games",
+      "assign": "Giao bài",
+      "library": "Thư viện của tôi"
+    },
+    "section": {
+      "exploreApps": "Khám phá Apps",
+      "createContent": "Tạo nội dung",
+      "presentTeach": "Trình chiếu & dạy học",
+      "gameLearning": "Học qua game",
+      "manageAssign": "Quản lý & phân phối",
+      "myLibrary": "Thư viện của tôi",
+      "coreTools": "Bắt đầu nhanh",
+      "coreStudio": "Core Studio Tools",
+      "continueWork": "Tiếp tục công việc",
+      "coreApps": "Ứng dụng chính"
+    },
+    "greeting": {
+      "night": "Chào buổi tối",
+      "morning": "Chào buổi sáng",
+      "afternoon": "Chào buổi chiều",
+      "evening": "Chào buổi tối"
+    },
+    "cat": {
+      "teaching": "Giảng dạy",
+      "knowledge": "Tri thức",
+      "utilities": "Tiện ích"
+    },
+    "action": {
+      "new": "Mới",
+      "createNew": "Tạo mới",
+      "refresh": "Làm mới",
+      "login": "Đăng nhập",
+      "openAssignments": "Mở Assignments",
+      "openAssignmentsCta": "Mở Assignments →",
+      "firstContent": "Tạo nội dung đầu tiên",
+      "loginToLibrary": "Đăng nhập để xem thư viện"
+    },
+    "progress": {
+      "assigned": "Bài đã giao",
+      "newQuiz": "Quiz mới",
+      "newSlide": "Slide mới",
+      "emptyAssignedTitle": "Chưa có bài giao",
+      "emptyAssignedMeta": "Tạo assignment đầu tiên",
+      "emptyQuizTitle": "Chưa có quiz",
+      "emptyQuizMeta": "Mở Quiz Editor",
+      "emptySlideTitle": "Chưa có slide",
+      "emptySlideMeta": "Mở Slide Studio",
+      "loginToView": "Đăng nhập để xem",
+      "loading": "Đang tải…",
+      "completed": "{done}/{total} hoàn thành",
+      "people": "{n} người",
+      "pages": "{n} trang"
+    },
+    "intro": {
+      "create": "Slide Studio, Quiz Editor, template, AI prompt — mọi công cụ soạn thảo ở đây.",
+      "present": "Slide Player, present mode, fullscreen, timer và animation.",
+      "games": "Tạo bộ dữ liệu và cấu hình game trên play.quizzman.com.",
+      "assign": "Giao bài, quiz, game theo danh mục cho học sinh.",
+      "libraryAuthed": "Nội dung thuộc tài khoản bạn (Slide Studio, Quiz Editor).",
+      "libraryGuest": "Đăng nhập để xem thư viện của bạn."
+    },
+    "assign": {
+      "emptyTitle": "Mở Assignments",
+      "emptyText": "Quản lý giao bài đầy đủ nằm trong app Assignments."
+    },
+    "library": {
+      "searchPlaceholder": "Tìm kiếm nội dung…",
+      "searchAria": "Tìm kiếm nội dung",
+      "typeAll": "Tất cả",
+      "typeQuiz": "Quiz",
+      "typeSlide": "Slide",
+      "typeGame": "Game",
+      "typeArticle": "Bài viết",
+      "emptyTitle": "Chưa có nội dung",
+      "emptyText": "Tạo quiz hoặc slide từ Core Studio Tools.",
+      "emptyGuestTitle": "Đăng nhập để xem thư viện",
+      "emptyGuestText": "Slide Studio và Quiz Editor chỉ hiện nội dung thuộc tài khoản của bạn.",
+      "bucketSlides": "Slide của tôi",
+      "bucketQuizzes": "Quiz của tôi",
+      "bucketTemplates": "Template của tôi",
+      "bucketMedia": "Media đã tải lên",
+      "bucketExports": "Lịch sử xuất"
+    },
+    "emptyLibrary": "Tạo quiz hoặc slide từ Core Studio Tools.",
+    "menu": {
+      "newSlide": "Slide mới",
+      "newQuiz": "Quiz mới",
+      "newAssign": "Assignment mới",
+      "import": "Nhập…",
+      "library": "Thư viện"
+    },
+    "launch": {
+      "slideStudio": "Slide Studio",
+      "slideStudioSub": "Bài trình chiếu",
+      "quizEditor": "Quiz Editor",
+      "quizEditorSub": "Quiz tương tác",
+      "assignment": "Assignment",
+      "assignmentSub": "Giao bài & chấm",
+      "assignedWork": "Bài đã giao",
+      "assignedWorkSub": "Theo dõi assignment đã giao",
+      "examCollection": "Bộ sưu tập đề",
+      "examCollectionSub": "Đề & tài nguyên trong Assignment",
+      "contentLibrary": "Thư viện",
+      "contentLibrarySub": "lib.quizzman.com",
+      "chineseNumber": "Chinese Numbers",
+      "chineseNumberSub": "Luyện đọc số tiếng Trung",
+      "chineseConvert": "Chinese Convert",
+      "chineseConvertSub": "Số → chữ Hán",
+      "jck": "JCK Font Engine",
+      "jckSub": "Tổng hợp glyph CJK",
+      "randomPicker": "Random Picker",
+      "randomPickerSub": "Chọn học sinh ngẫu nhiên",
+      "spreadsheet": "Spreadsheet",
+      "spreadsheetSub": "Trang tính trực tuyến",
+      "audioConverter": "Audio Converter",
+      "audioConverterSub": "MP3, WAV, OGG, FLAC"
+    },
+    "continue": {
+      "slide": "Slide",
+      "slideFallback": "Tiếp tục bài trình chiếu",
+      "quiz": "Quiz",
+      "quizFallback": "Tiếp tục quiz gần nhất",
+      "assignment": "Bài đã giao",
+      "assignmentFallback": "Xem assignment đã giao"
+    },
+    "quick": {
+      "mdSlide": "Markdown → Slide",
+      "mdSlideCap": "Soạn nhanh",
+      "importPptx": "Import PPTX",
+      "importPptxCap": "Slide Studio",
+      "themes": "Theme Library",
+      "themesCap": "Slide Studio",
+      "aiPrompt": "AI Prompt Builder",
+      "aiPromptCap": "Slide Studio",
+      "assign": "Giao bài",
+      "assignCap": "Assignments",
+      "myContent": "Nội dung của tôi",
+      "myContentCap": "Thư viện"
+    },
+    "tool": {
+      "slideStudioDesc": "Soạn slide, thiết kế bài giảng, theme/template và xuất PPTX, PNG, video.",
+      "slideStudioCta": "Mở Slide Studio",
+      "quizEditorDesc": "Tạo MCQ, True/False, Fill-blank, Ordering với scoring engine.",
+      "quizEditorCta": "Mở Quiz Editor",
+      "slidePlayer": "Slide Player",
+      "slidePlayerDesc": "Trình chiếu fullscreen, timer, animation, media và present mode.",
+      "slidePlayerCta": "Mở Slide Player",
+      "statusLive": "Live",
+      "statusNew": "Mới",
+      "statusBeta": "Beta"
+    },
+    "game": {
+      "hanziMaster": "Hanzi Master Editor",
+      "hanziMasterDesc": "Từ vựng Hán tự — Type, MCQ, Seal Script, Full Sentence.",
+      "idiomKing": "Idiom King Editor",
+      "idiomKingDesc": "Thành ngữ 成語 — chế độ đơn & đối kháng 1v1.",
+      "pikahans": "Pikahans Editor",
+      "pikahansDesc": "Ghép chữ Hán — chọn 2–4 ký tự tạo từ hợp lệ.",
+      "keynoteHero": "Keynote Hero Editor",
+      "keynoteHeroDesc": "Nhạc + quiz gắn với từng nốt nhạc.",
+      "quizUltimate": "Quizzman Ultimate Editor",
+      "quizUltimateDesc": "Quiz multiplayer kiểu Kahoot.",
+      "quizRace": "Quiz Race Editor",
+      "quizRaceDesc": "Đường đua quiz — trả lời đúng để vượt chướng ngại."
+    },
+    "time": {
+      "minutesAgo": "{n} phút trước",
+      "hoursAgo": "{n} giờ trước",
+      "daysAgo": "{n} ngày trước"
+    },
+    "shell": {
+      "searchPlaceholder": "Tìm app, tri thức…",
+      "pageTitle": "App"
+    },
+    "hero": {
+      "prompt": "Hôm nay bạn muốn tạo gì?"
+    },
+    "workspace": {
+      "title": "Không gian làm việc",
+      "you": "Bạn",
+      "youHere": "Bạn đang ở đây",
+      "nodeAssignment": "Bài giao",
+      "nodeQuiz": "Quiz",
+      "nodeSlide": "Slide",
+      "nodeKnowledge": "Tri thức"
+    }
+  }
+}

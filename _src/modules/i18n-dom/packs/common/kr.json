@@ -1,0 +1,30 @@
+{
+  "common": {
+    "ok": "완료",
+    "cancel": "취소",
+    "save": "저장",
+    "close": "닫기",
+    "back": "뒤로",
+    "next": "다음",
+    "search": "검색",
+    "loading": "로딩 중…",
+    "settings": "설정",
+    "account": "계정",
+    "logout": "로그아웃",
+    "login": "로그인",
+    "language": "언어",
+    "theme": "모양",
+    "region": "지역",
+    "light": "라이트",
+    "dark": "다크"
+  },
+  "nav": {
+    "home": "홈",
+    "lab": "랩",
+    "library": "라이브러리",
+    "app": "앱",
+    "play": "플레이",
+    "wiki": "위키",
+    "class": "교실"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "common": {
+    "ok": "完成",
+    "cancel": "取消",
+    "save": "保存",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "search": "搜索",
+    "loading": "加载中…",
+    "settings": "设置",
+    "account": "账户",
+    "logout": "退出",
+    "login": "登录",
+    "language": "语言",
+    "theme": "外观",
+    "region": "地区",
+    "light": "浅色",
+    "dark": "深色"
+  },
+  "nav": {
+    "home": "首页",
+    "lab": "实验室",
+    "library": "图书馆",
+    "app": "应用",
+    "play": "游戏",
+    "wiki": "百科",
+    "class": "课堂"
+  }
+}

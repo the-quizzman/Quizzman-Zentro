@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "pack": "classroom-tools",
+    "lang": "zht",
+    "status": "seed",
+    "note": "JCK Font Engine chrome strings"
+  },
+  "jck": {
+    "pageTitle": "JCK Font Engine — CJK / 漢喃字形合成",
+    "brandTitle": "JCK Font Engine",
+    "nav": {
+      "synth": "Synthesize",
+      "catalog": "Catalog",
+      "compose": "Compose",
+      "projects": "Projects",
+      "guide": "指南"
+    },
+    "status": {
+      "connecting": "連線中…",
+      "online": "Engine Online",
+      "offline": "Offline"
+    },
+    "auth": {
+      "login": "登入"
+    },
+    "stat": {
+      "components": "部件",
+      "characters": "字元",
+      "imported": "已匯入",
+      "engine": "引擎"
+    },
+    "synth": {
+      "input": "輸入",
+      "character": "字元",
+      "idsOverride": "IDS 覆寫",
+      "optional": "（選用）",
+      "synthesize": "Synthesize",
+      "guides": "參考線",
+      "structure": "結構",
+      "ids": "IDS",
+      "source": "來源",
+      "codepoint": "碼位",
+      "quality": "品質",
+      "qualityBreakdown": "品質分析",
+      "coverage": "Coverage",
+      "distortion": "Distortion",
+      "collision": "Collision",
+      "balance": "Balance",
+      "reference": "Reference",
+      "readyTitle": "準備合成",
+      "readySubtitle": "輸入字元並點擊 Synthesize 產生字形預覽",
+      "downloadSvg": "SVG",
+      "copySvg": "複製",
+      "toggleGuides": "參考線"
+    },
+    "catalog": {
+      "title": "字元目錄",
+      "searchPlaceholder": "依字元或 U+碼位搜尋…",
+      "sortCodepoint": "Unicode 碼位",
+      "sortStrokes": "筆畫數",
+      "strokesPlaceholder": "筆畫",
+      "filter": "篩選",
+      "filterAll": "全部",
+      "filterImported": "已匯入",
+      "filterComponent": "部件",
+      "copyHint": "點擊複製到剪貼簿",
+      "loading": "正在載入目錄…"
+    },
+    "compose": {
+      "pickStructure": "選擇結構形態",
+      "fillSlots": "填寫部件",
+      "gap": "部件間距",
+      "idsString": "IDS 字串",
+      "idsPlaceholder": "選擇結構並填寫部件",
+      "exportFont": "匯出字型",
+      "fontName": "字型名稱",
+      "fontNamePh": "例如：JCK Custom",
+      "codepoint": "字元 / 碼位",
+      "codepointPh": "天 或 E000",
+      "format": "格式",
+      "batchLabel": "多字形（每行一字）",
+      "create": "產生字形",
+      "result": "結果",
+      "resultEmpty": "合成字形會顯示在這裡",
+      "quality": "品質",
+      "source": "來源",
+      "qualityAnalysis": "品質分析",
+      "copySvg": "複製 SVG",
+      "downloadSvg": "下載 SVG",
+      "downloadFont": "下載字型",
+      "copyComponent": "複製部件",
+      "saveProject": "儲存到專案"
+    },
+    "projects": {
+      "loginPrompt": "登入後可建立與管理字型專案",
+      "loginCta": "透過 Quizzman ID 登入",
+      "title": "字型專案",
+      "new": "新建專案",
+      "empty": "尚無專案。建立一個開始吧！",
+      "back": "返回",
+      "exportFont": "匯出字型",
+      "fontName": "字型名稱",
+      "format": "格式",
+      "exportMode": "匯出模式",
+      "modeCustom": "僅已建立字形",
+      "modeFull": "完整字型（與底字合併）",
+      "baseFont": "底字字型",
+      "save": "儲存",
+      "colChar": "字",
+      "colIds": "IDS",
+      "colCp": "碼位",
+      "glyphEmpty": "尚無字形。前往 Compose 建立並儲存到專案！",
+      "glyphMap": "輸入碼表（Word 中 Alt+X）",
+      "copyMap": "複製",
+      "previewTitle": "字形預覽",
+      "previewLoading": "載入中…",
+      "editGlyph": "編輯此字形"
+    },
+    "footer": {
+      "about": "About / SEO",
+      "wiki": "Wiki 指南",
+      "lab": "Quizzman Lab"
+    }
+  }
+}

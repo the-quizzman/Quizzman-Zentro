@@ -1,0 +1,199 @@
+{
+  "_meta": {
+    "pack": "app",
+    "lang": "zht",
+    "status": "seed"
+  },
+  "app": {
+    "tab": {
+      "dashboard": "首頁",
+      "create": "建立",
+      "present": "簡報",
+      "games": "遊戲",
+      "assign": "指派",
+      "library": "我的庫"
+    },
+    "section": {
+      "exploreApps": "探索應用",
+      "createContent": "建立內容",
+      "presentTeach": "簡報與教學",
+      "gameLearning": "遊戲化學習",
+      "manageAssign": "管理與指派",
+      "myLibrary": "我的庫",
+      "coreTools": "快速開始",
+      "coreStudio": "核心創作工具",
+      "continueWork": "繼續工作",
+      "coreApps": "核心應用"
+    },
+    "greeting": {
+      "night": "晚安",
+      "morning": "早安",
+      "afternoon": "午安",
+      "evening": "晚安"
+    },
+    "cat": {
+      "teaching": "教學",
+      "knowledge": "知識",
+      "utilities": "工具"
+    },
+    "action": {
+      "new": "新增",
+      "createNew": "新增",
+      "refresh": "重新整理",
+      "login": "登入",
+      "openAssignments": "開啟作業",
+      "openAssignmentsCta": "開啟作業 →",
+      "firstContent": "建立第一個內容",
+      "loginToLibrary": "登入以檢視資料庫"
+    },
+    "progress": {
+      "assigned": "已指派作業",
+      "newQuiz": "新測驗",
+      "newSlide": "新簡報",
+      "emptyAssignedTitle": "尚無作業",
+      "emptyAssignedMeta": "建立第一個作業",
+      "emptyQuizTitle": "尚無測驗",
+      "emptyQuizMeta": "開啟測驗編輯器",
+      "emptySlideTitle": "尚無簡報",
+      "emptySlideMeta": "開啟簡報工作室",
+      "loginToView": "登入後檢視",
+      "loading": "載入中…",
+      "completed": "已完成 {done}/{total}",
+      "people": "{n} 人",
+      "pages": "{n} 頁"
+    },
+    "intro": {
+      "create": "簡報、測驗、範本與 AI 提示——創作工具都在這裡。",
+      "present": "播放器、簡報模式、全螢幕、計時與動畫。",
+      "games": "在 play.quizzman.com 建立資料集並設定遊戲。",
+      "assign": "依類別向學生指派測驗、遊戲與活動。",
+      "libraryAuthed": "屬於您帳號的內容（簡報工作室、測驗編輯器）。",
+      "libraryGuest": "登入以檢視您的資料庫。"
+    },
+    "assign": {
+      "emptyTitle": "開啟作業",
+      "emptyText": "完整的作業管理在 Assignments 應用中。"
+    },
+    "library": {
+      "searchPlaceholder": "搜尋內容…",
+      "searchAria": "搜尋內容",
+      "typeAll": "全部",
+      "typeQuiz": "測驗",
+      "typeSlide": "簡報",
+      "typeGame": "遊戲",
+      "typeArticle": "文章",
+      "emptyTitle": "尚無內容",
+      "emptyText": "從核心工具建立測驗或簡報。",
+      "emptyGuestTitle": "登入以檢視資料庫",
+      "emptyGuestText": "簡報工作室與測驗編輯器僅顯示您帳號的內容。",
+      "bucketSlides": "我的簡報",
+      "bucketQuizzes": "我的測驗",
+      "bucketTemplates": "我的範本",
+      "bucketMedia": "已上傳媒體",
+      "bucketExports": "匯出紀錄"
+    },
+    "emptyLibrary": "從核心工具建立測驗或簡報。",
+    "menu": {
+      "newSlide": "新增簡報",
+      "newQuiz": "新增測驗",
+      "newAssign": "新增作業",
+      "import": "匯入…",
+      "library": "資料庫"
+    },
+    "launch": {
+      "slideStudio": "簡報工作室",
+      "slideStudioSub": "簡報",
+      "quizEditor": "測驗編輯器",
+      "quizEditorSub": "互動測驗",
+      "assignment": "作業",
+      "assignmentSub": "指派與評分",
+      "assignedWork": "已指派作業",
+      "assignedWorkSub": "追蹤已送出作業",
+      "examCollection": "試卷集",
+      "examCollectionSub": "作業中的試卷與資源",
+      "contentLibrary": "資料庫",
+      "contentLibrarySub": "lib.quizzman.com",
+      "chineseNumber": "中文數字",
+      "chineseNumberSub": "練習中文數字讀法",
+      "chineseConvert": "數字轉換",
+      "chineseConvertSub": "數字 → 漢字",
+      "jck": "JCK 字型引擎",
+      "jckSub": "合成 CJK 字形",
+      "randomPicker": "隨機點名",
+      "randomPickerSub": "隨機選擇學生",
+      "spreadsheet": "試算表",
+      "spreadsheetSub": "線上試算表",
+      "audioConverter": "音訊轉換",
+      "audioConverterSub": "MP3, WAV, OGG, FLAC"
+    },
+    "continue": {
+      "slide": "簡報",
+      "slideFallback": "繼續上次簡報",
+      "quiz": "測驗",
+      "quizFallback": "繼續上次測驗",
+      "assignment": "已指派作業",
+      "assignmentFallback": "檢視已送出作業"
+    },
+    "quick": {
+      "mdSlide": "Markdown → 簡報",
+      "mdSlideCap": "快速起草",
+      "importPptx": "匯入 PPTX",
+      "importPptxCap": "簡報工作室",
+      "themes": "主題庫",
+      "themesCap": "簡報工作室",
+      "aiPrompt": "AI 提示產生器",
+      "aiPromptCap": "簡報工作室",
+      "assign": "指派作業",
+      "assignCap": "作業",
+      "myContent": "我的內容",
+      "myContentCap": "資料庫"
+    },
+    "tool": {
+      "slideStudioDesc": "製作簡報、教材、主題／範本，並匯出 PPTX、PNG、影片。",
+      "slideStudioCta": "開啟簡報工作室",
+      "quizEditorDesc": "建立選擇、是非、填空、排序，並含評分引擎。",
+      "quizEditorCta": "開啟測驗編輯器",
+      "slidePlayer": "簡報播放器",
+      "slidePlayerDesc": "全螢幕簡報，含計時、動畫與媒體。",
+      "slidePlayerCta": "開啟播放器",
+      "statusLive": "上線",
+      "statusNew": "新",
+      "statusBeta": "測試"
+    },
+    "game": {
+      "hanziMaster": "漢字大師編輯器",
+      "hanziMasterDesc": "漢字詞彙——輸入、選擇、篆書、整句。",
+      "idiomKing": "成語王編輯器",
+      "idiomKingDesc": "成語——單人與 1v1 對戰。",
+      "pikahans": "拼字編輯器",
+      "pikahansDesc": "拼漢字——選 2–4 字組成詞。",
+      "keynoteHero": "音符英雄編輯器",
+      "keynoteHeroDesc": "音樂 + 與每個音符綁定的測驗。",
+      "quizUltimate": "Ultimate 測驗編輯器",
+      "quizUltimateDesc": "Kahoot 風格多人測驗。",
+      "quizRace": "測驗競速編輯器",
+      "quizRaceDesc": "競速測驗——答對前進。"
+    },
+    "time": {
+      "minutesAgo": "{n} 分鐘前",
+      "hoursAgo": "{n} 小時前",
+      "daysAgo": "{n} 天前"
+    },
+    "shell": {
+      "searchPlaceholder": "搜尋應用與知識…",
+      "pageTitle": "應用"
+    },
+    "hero": {
+      "prompt": "今天想建立什麼？"
+    },
+    "workspace": {
+      "title": "工作區",
+      "you": "你",
+      "youHere": "你在這裡",
+      "nodeAssignment": "作業",
+      "nodeQuiz": "測驗",
+      "nodeSlide": "簡報",
+      "nodeKnowledge": "知識"
+    }
+  }
+}

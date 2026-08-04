@@ -1,0 +1,30 @@
+{
+  "common": {
+    "ok": "Done",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "search": "Search",
+    "loading": "Loading…",
+    "settings": "Settings",
+    "account": "Account",
+    "logout": "Sign out",
+    "login": "Sign in",
+    "language": "Language",
+    "theme": "Appearance",
+    "region": "Region",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "nav": {
+    "home": "Home",
+    "lab": "Lab",
+    "library": "Library",
+    "app": "App",
+    "play": "Play",
+    "wiki": "Wiki",
+    "class": "Classroom"
+  }
+}

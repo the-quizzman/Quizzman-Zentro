@@ -8,7 +8,7 @@
  * <script>
  *   createSettingsFloat({
  *     lang: 'vi',
- *     languages: ['vi', 'en', 'zh', 'zht', 'kr', 'jp'],
+ *     languages: ['vi', 'en', 'zh', 'zht', 'kr', 'jp', 'fr', 'de', 'es', 'th', 'pt'],
  *     onLangChange: (lang) => console.log('Lang:', lang)
  *   });
  * </script>
@@ -17,8 +17,34 @@
 (function() {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.0.3';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/settings-float';
+  const ACCOUNT_PREFS_URL = 'https://id.quizzman.com/api/account/update-profile';
+
+  function persistAccountPrefs(partial) {
+    if (window.QmfAccountPrefs && typeof window.QmfAccountPrefs.save === 'function') {
+      return window.QmfAccountPrefs.save(partial);
+    }
+    if (!partial || typeof partial !== 'object') return Promise.resolve(null);
+    let token = null;
+    try {
+      token = window.QuizzmanSSO?.getToken?.()
+        || window.QuizzmanAuth?.getToken?.()
+        || localStorage.getItem('jwt_token')
+        || localStorage.getItem('authToken');
+    } catch (e) { /* ignore */ }
+    const hasSession = !!(token || /(?:^|; )(?:jwt_token|authToken|session_id)=/.test(document.cookie || ''));
+    if (!hasSession) return Promise.resolve(null);
+    const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
+    if (token) headers.Authorization = 'Bearer ' + token;
+    return fetch(ACCOUNT_PREFS_URL, {
+      method: 'POST',
+      credentials: 'include',
+      headers,
+      body: JSON.stringify(partial),
+    }).then((res) => (res.ok ? res.json().catch(() => ({ success: true })) : null))
+      .catch(() => null);
+  }
 
   // Default configuration
   const DEFAULT_CONFIG = {
@@ -26,20 +52,46 @@
     offset: { bottom: 24, right: 24, left: 'auto' },
     lang: 'vi',
     theme: 'light',
-    languages: ['vi', 'en', 'zh', 'zht', 'kr', 'jp'],
-    langLabels: { vi: 'VI', en: 'EN', zh: '中', zht: '繁', kr: '한', jp: '日' },
-    langNames: { 
-      vi: 'Tiếng Việt', 
-      en: 'English', 
-      zh: '简体中文', 
-      zht: '繁體中文', 
-      kr: '한국어', 
-      jp: '日本語' 
+    languages: ['vi', 'en', 'zh', 'zht', 'kr', 'jp', 'fr', 'de', 'es', 'th', 'pt'],
+    langLabels: {
+      vi: 'VI', en: 'EN', zh: '中', zht: '繁', kr: '한', jp: '日',
+      fr: 'FR', de: 'DE', es: 'ES', th: 'TH', pt: 'PT',
+    },
+    langNames: {
+      vi: 'Tiếng Việt',
+      en: 'English',
+      zh: '简体中文',
+      zht: '繁體中文',
+      kr: '한국어',
+      jp: '日本語',
+      fr: 'Français',
+      de: 'Deutsch',
+      es: 'Español',
+      th: 'ไทย',
+      pt: 'Português',
     },
     onLangChange: null,
     onThemeChange: null,
     autoInject: true
   };
+
+  const UI_LABELS = {
+    vi: { settings: 'Thiết lập', language: 'Ngôn ngữ', theme: 'Giao diện', light: 'Sáng', dark: 'Tối' },
+    en: { settings: 'Settings', language: 'Language', theme: 'Theme', light: 'Light', dark: 'Dark' },
+    zh: { settings: '设置', language: '语言', theme: '外观', light: '浅色', dark: '深色' },
+    zht: { settings: '設定', language: '語言', theme: '外觀', light: '淺色', dark: '深色' },
+    jp: { settings: '設定', language: '言語', theme: 'テーマ', light: 'ライト', dark: 'ダーク' },
+    kr: { settings: '설정', language: '언어', theme: '테마', light: '라이트', dark: '다크' },
+    fr: { settings: 'Paramètres', language: 'Langue', theme: 'Thème', light: 'Clair', dark: 'Sombre' },
+    de: { settings: 'Einstellungen', language: 'Sprache', theme: 'Design', light: 'Hell', dark: 'Dunkel' },
+    es: { settings: 'Ajustes', language: 'Idioma', theme: 'Tema', light: 'Claro', dark: 'Oscuro' },
+    th: { settings: 'การตั้งค่า', language: 'ภาษา', theme: 'ธีม', light: 'สว่าง', dark: 'มืด' },
+    pt: { settings: 'Configurações', language: 'Idioma', theme: 'Tema', light: 'Claro', dark: 'Escuro' },
+  };
+
+  function uiLabels(lang) {
+    return UI_LABELS[lang] || UI_LABELS.en;
+  }
 
   class SettingsFloat {
     constructor(config = {}) {
@@ -255,6 +307,7 @@
 
     render() {
       const { lang, theme, languages, langLabels, langNames } = this.config;
+      const t = uiLabels(lang);
       
       const container = document.createElement('div');
       container.className = `qmf-settings-float qmf-settings-float--${this.config.position}`;
@@ -262,12 +315,12 @@
       
       container.innerHTML = `
         <button class="qmf-settings__toggle" id="qmfSettingsToggle" 
-                aria-haspopup="true" aria-expanded="false" title="Settings">
+                aria-haspopup="true" aria-expanded="false" title="${t.settings}">
           <i class="fas fa-cog"></i>
         </button>
         <div class="qmf-settings__menu" id="qmfSettingsMenu" role="menu">
           <div class="qmf-settings__section">
-            <div class="qmf-settings__label">Language</div>
+            <div class="qmf-settings__label" data-qmf-settings-label="language">${t.language}</div>
             <div class="qmf-settings__langs">
               ${languages.map(l => `
                 <button class="qmf-settings__lang ${l === lang ? 'qmf-settings__lang--active' : ''}" 
@@ -278,17 +331,17 @@
             </div>
           </div>
           <div class="qmf-settings__section">
-            <div class="qmf-settings__label">Theme</div>
+            <div class="qmf-settings__label" data-qmf-settings-label="theme">${t.theme}</div>
             <div class="qmf-settings__themes">
               <button class="qmf-settings__theme ${theme === 'light' ? 'qmf-settings__theme--active' : ''}" 
                       data-theme="light" role="menuitem">
                 <i class="fas fa-sun"></i>
-                <span>Light</span>
+                <span data-qmf-settings-label="light">${t.light}</span>
               </button>
               <button class="qmf-settings__theme ${theme === 'dark' ? 'qmf-settings__theme--active' : ''}" 
                       data-theme="dark" role="menuitem">
                 <i class="fas fa-moon"></i>
-                <span>Dark</span>
+                <span data-qmf-settings-label="dark">${t.dark}</span>
               </button>
             </div>
           </div>
@@ -358,30 +411,77 @@
       if (!this.config.languages.includes(lang)) return;
       
       this.config.lang = lang;
-      localStorage.setItem('qmf-lang', lang);
-      localStorage.setItem('lab-lang', lang);
+      try {
+        localStorage.setItem('qmf-lang', lang);
+        localStorage.setItem('lab-lang', lang);
+        localStorage.setItem('lab-ui-lang', lang);
+        localStorage.setItem('qss_ui_lang', lang);
+        var host = location.hostname || '';
+        var base = 'qmf-lang=' + encodeURIComponent(lang)
+          + '; path=/; max-age=' + (365 * 24 * 60 * 60) + '; SameSite=Lax'
+          + (location.protocol === 'https:' ? '; Secure' : '');
+        document.cookie = (host === 'quizzman.com' || host.slice(-13) === '.quizzman.com')
+          ? base + '; domain=.quizzman.com'
+          : base;
+      } catch (e) { /* ignore */ }
       
       // Update UI
       this.elements.langButtons.forEach(btn => {
         btn.classList.toggle('qmf-settings__lang--active', btn.dataset.lang === lang);
       });
+      this.applyUiLabels(lang);
       
       // Callback
       if (typeof this.config.onLangChange === 'function') {
         this.config.onLangChange(lang);
       }
+
+      if (window.QmfI18n && typeof window.QmfI18n.setLanguage === 'function') {
+        window.QmfI18n.setLanguage(lang, { emit: false });
+      }
       
-      // Dispatch event
+      // Dual event names — Legatus listens to hyphen form
       window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang } }));
+      window.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang } }));
+      window.dispatchEvent(new CustomEvent('qmf:prefs-change', {
+        detail: { lang, theme: this.config.theme, region: localStorage.getItem('qmf-region') || null },
+      }));
+
+      const save = persistAccountPrefs({ language: lang });
+
+      /* Principle: lang resync via QMFShell soft-reload — never hard-refresh. */
+      Promise.race([
+        save,
+        new Promise((resolve) => setTimeout(resolve, 1500)),
+      ]).finally(() => {
+        if (window.QMFShell && typeof window.QMFShell.softReload === 'function') {
+          window.QMFShell.softReload('prefs:lang');
+        }
+      });
+    }
+
+    applyUiLabels(lang) {
+      const t = uiLabels(lang);
+      const root = this.elements.container || document.getElementById('qmfSettingsFloat');
+      if (!root) return;
+      const toggle = root.querySelector('#qmfSettingsToggle');
+      if (toggle) toggle.setAttribute('title', t.settings);
+      root.querySelectorAll('[data-qmf-settings-label]').forEach((el) => {
+        const key = el.getAttribute('data-qmf-settings-label');
+        if (t[key]) el.textContent = t[key];
+      });
     }
 
     setTheme(theme) {
       this.config.theme = theme;
-      localStorage.setItem('qmf-theme', theme);
-      localStorage.setItem('lab-theme', theme);
+      try {
+        localStorage.setItem('qmf-theme', theme);
+        localStorage.setItem('lab-theme', theme);
+      } catch (e) { /* ignore */ }
       
       // Apply theme
       document.documentElement.setAttribute('data-theme', theme);
+      try { document.documentElement.style.colorScheme = theme; } catch (e) { /* ignore */ }
       
       // Update UI
       this.elements.themeButtons.forEach(btn => {
@@ -392,9 +492,18 @@
       if (typeof this.config.onThemeChange === 'function') {
         this.config.onThemeChange(theme);
       }
+
+      if (window.QmfI18n && typeof window.QmfI18n.setTheme === 'function') {
+        window.QmfI18n.setTheme(theme, { emit: false });
+      }
       
       // Dispatch event
       window.dispatchEvent(new CustomEvent('qmf:themechange', { detail: { theme } }));
+      window.dispatchEvent(new CustomEvent('qmf:prefs-change', {
+        detail: { lang: this.config.lang, theme, region: localStorage.getItem('qmf-region') || null },
+      }));
+
+      persistAccountPrefs({ theme });
     }
 
     // Public API

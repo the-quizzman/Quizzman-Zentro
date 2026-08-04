@@ -1,0 +1,199 @@
+{
+  "_meta": {
+    "pack": "app",
+    "lang": "en",
+    "status": "seed"
+  },
+  "app": {
+    "tab": {
+      "dashboard": "Dashboard",
+      "create": "Create",
+      "present": "Present",
+      "games": "Games",
+      "assign": "Assign",
+      "library": "My Library"
+    },
+    "section": {
+      "exploreApps": "Explore Apps",
+      "createContent": "Create content",
+      "presentTeach": "Present & teach",
+      "gameLearning": "Game-based Learning",
+      "manageAssign": "Manage & assign",
+      "myLibrary": "My Library",
+      "coreTools": "Start quickly",
+      "coreStudio": "Core Studio Tools",
+      "continueWork": "Continue working",
+      "coreApps": "Core apps"
+    },
+    "greeting": {
+      "night": "Good night",
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "cat": {
+      "teaching": "Teaching",
+      "knowledge": "Knowledge",
+      "utilities": "Utilities"
+    },
+    "action": {
+      "new": "New",
+      "createNew": "Create new",
+      "refresh": "Refresh",
+      "login": "Sign in",
+      "openAssignments": "Open Assignments",
+      "openAssignmentsCta": "Open Assignments →",
+      "firstContent": "Create your first content",
+      "loginToLibrary": "Sign in to view your library"
+    },
+    "progress": {
+      "assigned": "Assigned work",
+      "newQuiz": "New quiz",
+      "newSlide": "New slide",
+      "emptyAssignedTitle": "No assignments yet",
+      "emptyAssignedMeta": "Create your first assignment",
+      "emptyQuizTitle": "No quizzes yet",
+      "emptyQuizMeta": "Open Quiz Editor",
+      "emptySlideTitle": "No slides yet",
+      "emptySlideMeta": "Open Slide Studio",
+      "loginToView": "Sign in to view",
+      "loading": "Loading…",
+      "completed": "{done}/{total} completed",
+      "people": "{n} people",
+      "pages": "{n} pages"
+    },
+    "intro": {
+      "create": "Slide Studio, Quiz Editor, templates, AI prompts — all authoring tools here.",
+      "present": "Slide Player, present mode, fullscreen, timer, and animation.",
+      "games": "Build datasets and configure games on play.quizzman.com.",
+      "assign": "Assign quizzes, games, and activities to students by category.",
+      "libraryAuthed": "Content belonging to your account (Slide Studio, Quiz Editor).",
+      "libraryGuest": "Sign in to view your library."
+    },
+    "assign": {
+      "emptyTitle": "Open Assignments",
+      "emptyText": "Full assignment management lives in the Assignments app."
+    },
+    "library": {
+      "searchPlaceholder": "Search content…",
+      "searchAria": "Search content",
+      "typeAll": "All",
+      "typeQuiz": "Quiz",
+      "typeSlide": "Slide",
+      "typeGame": "Game",
+      "typeArticle": "Article",
+      "emptyTitle": "No content yet",
+      "emptyText": "Create a quiz or slide from Core Studio Tools.",
+      "emptyGuestTitle": "Sign in to view your library",
+      "emptyGuestText": "Slide Studio and Quiz Editor only show content for your account.",
+      "bucketSlides": "My slides",
+      "bucketQuizzes": "My quizzes",
+      "bucketTemplates": "My templates",
+      "bucketMedia": "Uploaded media",
+      "bucketExports": "Export history"
+    },
+    "emptyLibrary": "Create a quiz or slide from Core Studio Tools.",
+    "menu": {
+      "newSlide": "New Slide",
+      "newQuiz": "New Quiz",
+      "newAssign": "New Assignment",
+      "import": "Import…",
+      "library": "Library"
+    },
+    "launch": {
+      "slideStudio": "Slide Studio",
+      "slideStudioSub": "Presentations",
+      "quizEditor": "Quiz Editor",
+      "quizEditorSub": "Interactive quizzes",
+      "assignment": "Assignment",
+      "assignmentSub": "Assign & grade",
+      "assignedWork": "Assigned work",
+      "assignedWorkSub": "Track assignments you sent",
+      "examCollection": "Exam collection",
+      "examCollectionSub": "Exams & resources in Assignment",
+      "contentLibrary": "Library",
+      "contentLibrarySub": "lib.quizzman.com",
+      "chineseNumber": "Chinese Numbers",
+      "chineseNumberSub": "Practice reading Chinese numbers",
+      "chineseConvert": "Chinese Convert",
+      "chineseConvertSub": "Numbers → Chinese characters",
+      "jck": "JCK Font Engine",
+      "jckSub": "Compose CJK glyphs",
+      "randomPicker": "Random Picker",
+      "randomPickerSub": "Pick a student at random",
+      "spreadsheet": "Spreadsheet",
+      "spreadsheetSub": "Online spreadsheet",
+      "audioConverter": "Audio Converter",
+      "audioConverterSub": "MP3, WAV, OGG, FLAC"
+    },
+    "continue": {
+      "slide": "Slide",
+      "slideFallback": "Resume last presentation",
+      "quiz": "Quiz",
+      "quizFallback": "Resume last quiz",
+      "assignment": "Assigned work",
+      "assignmentFallback": "View sent assignments"
+    },
+    "quick": {
+      "mdSlide": "Markdown → Slide",
+      "mdSlideCap": "Quick draft",
+      "importPptx": "Import PPTX",
+      "importPptxCap": "Slide Studio",
+      "themes": "Theme Library",
+      "themesCap": "Slide Studio",
+      "aiPrompt": "AI Prompt Builder",
+      "aiPromptCap": "Slide Studio",
+      "assign": "Assign Work",
+      "assignCap": "Assignments",
+      "myContent": "My Content",
+      "myContentCap": "Library"
+    },
+    "tool": {
+      "slideStudioDesc": "Build slides, lesson decks, themes/templates, and export PPTX, PNG, video.",
+      "slideStudioCta": "Open Slide Studio",
+      "quizEditorDesc": "Create MCQ, True/False, Fill-blank, Ordering with a scoring engine.",
+      "quizEditorCta": "Open Quiz Editor",
+      "slidePlayer": "Slide Player",
+      "slidePlayerDesc": "Fullscreen present mode with timer, animation, and media.",
+      "slidePlayerCta": "Open Slide Player",
+      "statusLive": "Live",
+      "statusNew": "New",
+      "statusBeta": "Beta"
+    },
+    "game": {
+      "hanziMaster": "Hanzi Master Editor",
+      "hanziMasterDesc": "Chinese character vocabulary — Type, MCQ, Seal Script, Full Sentence.",
+      "idiomKing": "Idiom King Editor",
+      "idiomKingDesc": "Chengyu idioms — solo & 1v1 battle modes.",
+      "pikahans": "Pikahans Editor",
+      "pikahansDesc": "Compose Chinese words — pick 2–4 characters to form valid words.",
+      "keynoteHero": "Keynote Hero Editor",
+      "keynoteHeroDesc": "Music + quiz tied to each note.",
+      "quizUltimate": "Quizzman Ultimate Editor",
+      "quizUltimateDesc": "Kahoot-style multiplayer quizzes.",
+      "quizRace": "Quiz Race Editor",
+      "quizRaceDesc": "Quiz race — answer correctly to clear obstacles."
+    },
+    "time": {
+      "minutesAgo": "{n} minutes ago",
+      "hoursAgo": "{n} hours ago",
+      "daysAgo": "{n} days ago"
+    },
+    "shell": {
+      "searchPlaceholder": "Search apps, knowledge…",
+      "pageTitle": "App"
+    },
+    "hero": {
+      "prompt": "What would you like to create today?"
+    },
+    "workspace": {
+      "title": "Workspace",
+      "you": "You",
+      "youHere": "You are here",
+      "nodeAssignment": "Assignment",
+      "nodeQuiz": "Quiz",
+      "nodeSlide": "Slide",
+      "nodeKnowledge": "Knowledge"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "pack": "lms",
+    "lang": "en",
+    "status": "empty",
+    "note": "Add data-i18n keys later"
+  },
+  "lms": {}
+}

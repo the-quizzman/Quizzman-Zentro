@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "pack": "classroom-tools",
+    "lang": "jp",
+    "status": "seed",
+    "note": "JCK Font Engine chrome strings"
+  },
+  "jck": {
+    "pageTitle": "JCK Font Engine — CJK / 漢喃グリフ合成",
+    "brandTitle": "JCK Font Engine",
+    "nav": {
+      "synth": "Synthesize",
+      "catalog": "Catalog",
+      "compose": "Compose",
+      "projects": "Projects",
+      "guide": "ガイド"
+    },
+    "status": {
+      "connecting": "接続中…",
+      "online": "Engine Online",
+      "offline": "Offline"
+    },
+    "auth": {
+      "login": "ログイン"
+    },
+    "stat": {
+      "components": "部品",
+      "characters": "文字",
+      "imported": "インポート済",
+      "engine": "エンジン"
+    },
+    "synth": {
+      "input": "入力",
+      "character": "文字",
+      "idsOverride": "IDS 上書き",
+      "optional": "（任意）",
+      "synthesize": "Synthesize",
+      "guides": "ガイド",
+      "structure": "構造",
+      "ids": "IDS",
+      "source": "ソース",
+      "codepoint": "コードポイント",
+      "quality": "品質",
+      "qualityBreakdown": "品質内訳",
+      "coverage": "Coverage",
+      "distortion": "Distortion",
+      "collision": "Collision",
+      "balance": "Balance",
+      "reference": "Reference",
+      "readyTitle": "合成の準備完了",
+      "readySubtitle": "文字を入力し Synthesize をクリックしてプレビュー",
+      "downloadSvg": "SVG",
+      "copySvg": "コピー",
+      "toggleGuides": "ガイド"
+    },
+    "catalog": {
+      "title": "文字カタログ",
+      "searchPlaceholder": "文字または U+codepoint で検索…",
+      "sortCodepoint": "Unicode コード",
+      "sortStrokes": "画数",
+      "strokesPlaceholder": "画数",
+      "filter": "フィルタ",
+      "filterAll": "すべて",
+      "filterImported": "インポート済",
+      "filterComponent": "部品",
+      "copyHint": "クリックでクリップボードにコピー",
+      "loading": "カタログ読込中…"
+    },
+    "compose": {
+      "pickStructure": "構造演算子を選択",
+      "fillSlots": "部品を入力",
+      "gap": "部品間の間隔",
+      "idsString": "IDS 文字列",
+      "idsPlaceholder": "構造を選び部品を入力",
+      "exportFont": "フォント出力",
+      "fontName": "フォント名",
+      "fontNamePh": "例: JCK Custom",
+      "codepoint": "文字 / コードポイント",
+      "codepointPh": "天 または E000",
+      "format": "形式",
+      "batchLabel": "複数グリフ（1行1文字）",
+      "create": "グリフ作成",
+      "result": "結果",
+      "resultEmpty": "合成グリフがここに表示されます",
+      "quality": "品質",
+      "source": "ソース",
+      "qualityAnalysis": "品質分析",
+      "copySvg": "SVG コピー",
+      "downloadSvg": "SVG ダウンロード",
+      "downloadFont": "フォントDL",
+      "copyComponent": "部品コピー",
+      "saveProject": "プロジェクトへ保存"
+    },
+    "projects": {
+      "loginPrompt": "ログインしてフォントプロジェクトを管理",
+      "loginCta": "Quizzman ID でログイン",
+      "title": "フォントプロジェクト",
+      "new": "新規プロジェクト",
+      "empty": "プロジェクトがありません。作成して始めましょう！",
+      "back": "戻る",
+      "exportFont": "フォント出力",
+      "fontName": "フォント名",
+      "format": "形式",
+      "exportMode": "出力モード",
+      "modeCustom": "作成済みのみ",
+      "modeFull": "フルフォント（ベースと結合）",
+      "baseFont": "ベースフォント",
+      "save": "保存",
+      "colChar": "字",
+      "colIds": "IDS",
+      "colCp": "コード",
+      "glyphEmpty": "グリフがありません。Compose で作成して保存！",
+      "glyphMap": "入力コード表（Word の Alt+X）",
+      "copyMap": "コピー",
+      "previewTitle": "グリフプレビュー",
+      "previewLoading": "読込中…",
+      "editGlyph": "このグリフを編集"
+    },
+    "footer": {
+      "about": "About / SEO",
+      "wiki": "Wiki ガイド",
+      "lab": "Quizzman Lab"
+    }
+  }
+}

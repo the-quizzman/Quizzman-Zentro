@@ -1,0 +1,199 @@
+{
+  "_meta": {
+    "pack": "app",
+    "lang": "jp",
+    "status": "seed"
+  },
+  "app": {
+    "tab": {
+      "dashboard": "ダッシュボード",
+      "create": "作成",
+      "present": "発表",
+      "games": "ゲーム",
+      "assign": "課題",
+      "library": "マイライブラリ"
+    },
+    "section": {
+      "exploreApps": "アプリを探す",
+      "createContent": "コンテンツ作成",
+      "presentTeach": "発表と授業",
+      "gameLearning": "ゲーム学習",
+      "manageAssign": "管理と配布",
+      "myLibrary": "マイライブラリ",
+      "coreTools": "クイックスタート",
+      "coreStudio": "コアスタジオツール",
+      "continueWork": "作業を続ける",
+      "coreApps": "コアアプリ"
+    },
+    "greeting": {
+      "night": "こんばんは",
+      "morning": "おはようございます",
+      "afternoon": "こんにちは",
+      "evening": "こんばんは"
+    },
+    "cat": {
+      "teaching": "授業",
+      "knowledge": "知識",
+      "utilities": "ユーティリティ"
+    },
+    "action": {
+      "new": "新規",
+      "createNew": "新規作成",
+      "refresh": "更新",
+      "login": "ログイン",
+      "openAssignments": "課題を開く",
+      "openAssignmentsCta": "課題を開く →",
+      "firstContent": "最初のコンテンツを作成",
+      "loginToLibrary": "ログインしてライブラリを表示"
+    },
+    "progress": {
+      "assigned": "配布済み課題",
+      "newQuiz": "新しいクイズ",
+      "newSlide": "新しいスライド",
+      "emptyAssignedTitle": "課題はまだありません",
+      "emptyAssignedMeta": "最初の課題を作成",
+      "emptyQuizTitle": "クイズはまだありません",
+      "emptyQuizMeta": "Quiz Editor を開く",
+      "emptySlideTitle": "スライドはまだありません",
+      "emptySlideMeta": "Slide Studio を開く",
+      "loginToView": "ログインして表示",
+      "loading": "読み込み中…",
+      "completed": "{done}/{total} 完了",
+      "people": "{n} 人",
+      "pages": "{n} ページ"
+    },
+    "intro": {
+      "create": "Slide Studio、Quiz Editor、テンプレート、AI プロンプト——編集ツールはここに。",
+      "present": "スライドプレイヤー、発表モード、全画面、タイマー、アニメーション。",
+      "games": "play.quizzman.com でデータセットとゲームを設定。",
+      "assign": "カテゴリ別にクイズ・ゲーム・課題を生徒へ配布。",
+      "libraryAuthed": "アカウントのコンテンツ（Slide Studio、Quiz Editor）。",
+      "libraryGuest": "ログインしてライブラリを表示。"
+    },
+    "assign": {
+      "emptyTitle": "課題を開く",
+      "emptyText": "課題の完全な管理は Assignments アプリにあります。"
+    },
+    "library": {
+      "searchPlaceholder": "コンテンツを検索…",
+      "searchAria": "コンテンツを検索",
+      "typeAll": "すべて",
+      "typeQuiz": "クイズ",
+      "typeSlide": "スライド",
+      "typeGame": "ゲーム",
+      "typeArticle": "記事",
+      "emptyTitle": "コンテンツはまだありません",
+      "emptyText": "コアツールからクイズまたはスライドを作成。",
+      "emptyGuestTitle": "ログインしてライブラリを表示",
+      "emptyGuestText": "Slide Studio と Quiz Editor はアカウントの内容のみ表示します。",
+      "bucketSlides": "マイスライド",
+      "bucketQuizzes": "マイクイズ",
+      "bucketTemplates": "マイテンプレート",
+      "bucketMedia": "アップロード済みメディア",
+      "bucketExports": "エクスポート履歴"
+    },
+    "emptyLibrary": "コアツールからクイズまたはスライドを作成。",
+    "menu": {
+      "newSlide": "新しいスライド",
+      "newQuiz": "新しいクイズ",
+      "newAssign": "新しい課題",
+      "import": "インポート…",
+      "library": "ライブラリ"
+    },
+    "launch": {
+      "slideStudio": "Slide Studio",
+      "slideStudioSub": "プレゼン",
+      "quizEditor": "Quiz Editor",
+      "quizEditorSub": "インタラクティブクイズ",
+      "assignment": "Assignment",
+      "assignmentSub": "配布と採点",
+      "assignedWork": "配布済み課題",
+      "assignedWorkSub": "送信した課題を追跡",
+      "examCollection": "試験コレクション",
+      "examCollectionSub": "Assignment の試験と教材",
+      "contentLibrary": "ライブラリ",
+      "contentLibrarySub": "lib.quizzman.com",
+      "chineseNumber": "中国語の数字",
+      "chineseNumberSub": "中国語の数字の読み練習",
+      "chineseConvert": "数字変換",
+      "chineseConvertSub": "数字 → 漢字",
+      "jck": "JCK Font Engine",
+      "jckSub": "CJK グリフ合成",
+      "randomPicker": "ランダム選択",
+      "randomPickerSub": "生徒をランダムに選ぶ",
+      "spreadsheet": "スプレッドシート",
+      "spreadsheetSub": "オンライン表計算",
+      "audioConverter": "オーディオ変換",
+      "audioConverterSub": "MP3, WAV, OGG, FLAC"
+    },
+    "continue": {
+      "slide": "スライド",
+      "slideFallback": "前回のプレゼンを再開",
+      "quiz": "クイズ",
+      "quizFallback": "前回のクイズを再開",
+      "assignment": "配布済み課題",
+      "assignmentFallback": "送信した課題を表示"
+    },
+    "quick": {
+      "mdSlide": "Markdown → スライド",
+      "mdSlideCap": "素早く下書き",
+      "importPptx": "PPTX をインポート",
+      "importPptxCap": "Slide Studio",
+      "themes": "テーマライブラリ",
+      "themesCap": "Slide Studio",
+      "aiPrompt": "AI プロンプトビルダー",
+      "aiPromptCap": "Slide Studio",
+      "assign": "課題を配布",
+      "assignCap": "Assignments",
+      "myContent": "マイコンテンツ",
+      "myContentCap": "ライブラリ"
+    },
+    "tool": {
+      "slideStudioDesc": "スライド、教材、テーマ／テンプレートを作成し、PPTX・PNG・動画を書き出し。",
+      "slideStudioCta": "Slide Studio を開く",
+      "quizEditorDesc": "選択・正誤・穴埋め・並べ替えをスコアリング付きで作成。",
+      "quizEditorCta": "Quiz Editor を開く",
+      "slidePlayer": "Slide Player",
+      "slidePlayerDesc": "タイマー・アニメ・メディア付きフルスクリーン発表。",
+      "slidePlayerCta": "プレイヤーを開く",
+      "statusLive": "公開中",
+      "statusNew": "新着",
+      "statusBeta": "ベータ"
+    },
+    "game": {
+      "hanziMaster": "Hanzi Master エディタ",
+      "hanziMasterDesc": "漢字語彙——入力、選択、篆書、全文。",
+      "idiomKing": "Idiom King エディタ",
+      "idiomKingDesc": "成語——ソロと 1v1 対戦。",
+      "pikahans": "Pikahans エディタ",
+      "pikahansDesc": "漢字をつなげる——2〜4 字で語を作る。",
+      "keynoteHero": "Keynote Hero エディタ",
+      "keynoteHeroDesc": "音楽＋各音符に紐づくクイズ。",
+      "quizUltimate": "Quizzman Ultimate エディタ",
+      "quizUltimateDesc": "Kahoot 風マルチプレイクイズ。",
+      "quizRace": "Quiz Race エディタ",
+      "quizRaceDesc": "クイズレース——正解して進む。"
+    },
+    "time": {
+      "minutesAgo": "{n} 分前",
+      "hoursAgo": "{n} 時間前",
+      "daysAgo": "{n} 日前"
+    },
+    "shell": {
+      "searchPlaceholder": "アプリや知識を検索…",
+      "pageTitle": "App"
+    },
+    "hero": {
+      "prompt": "今日は何を作りますか？"
+    },
+    "workspace": {
+      "title": "ワークスペース",
+      "you": "あなた",
+      "youHere": "いまここ",
+      "nodeAssignment": "課題",
+      "nodeQuiz": "クイズ",
+      "nodeSlide": "スライド",
+      "nodeKnowledge": "ナレッジ"
+    }
+  }
+}

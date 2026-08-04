@@ -1,0 +1,35 @@
+{
+  "_meta": {
+    "pack": "common",
+    "lang": "th",
+    "status": "seed"
+  },
+  "common": {
+    "ok": "เสร็จ",
+    "cancel": "ยกเลิก",
+    "save": "บันทึก",
+    "close": "ปิด",
+    "back": "กลับ",
+    "next": "ถัดไป",
+    "search": "ค้นหา",
+    "loading": "กำลังโหลด…",
+    "settings": "การตั้งค่า",
+    "account": "บัญชี",
+    "logout": "ออกจากระบบ",
+    "login": "เข้าสู่ระบบ",
+    "language": "ภาษา",
+    "theme": "ธีม",
+    "region": "ภูมิภาค",
+    "light": "สว่าง",
+    "dark": "มืด"
+  },
+  "nav": {
+    "home": "หน้าแรก",
+    "lab": "Lab",
+    "library": "ห้องสมุด",
+    "app": "แอป",
+    "play": "Play",
+    "wiki": "Wiki",
+    "class": "ชั้นเรียน"
+  }
+}

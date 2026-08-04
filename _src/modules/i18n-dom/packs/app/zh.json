@@ -1,0 +1,199 @@
+{
+  "_meta": {
+    "pack": "app",
+    "lang": "zh",
+    "status": "seed"
+  },
+  "app": {
+    "tab": {
+      "dashboard": "首页",
+      "create": "创建",
+      "present": "演示",
+      "games": "游戏",
+      "assign": "布置",
+      "library": "我的库"
+    },
+    "section": {
+      "exploreApps": "探索应用",
+      "createContent": "创建内容",
+      "presentTeach": "演示与教学",
+      "gameLearning": "游戏化学习",
+      "manageAssign": "管理与布置",
+      "myLibrary": "我的库",
+      "coreTools": "快速开始",
+      "coreStudio": "核心创作工具",
+      "continueWork": "继续工作",
+      "coreApps": "核心应用"
+    },
+    "greeting": {
+      "night": "晚安",
+      "morning": "早上好",
+      "afternoon": "下午好",
+      "evening": "晚上好"
+    },
+    "cat": {
+      "teaching": "教学",
+      "knowledge": "知识",
+      "utilities": "工具"
+    },
+    "action": {
+      "new": "新建",
+      "createNew": "新建",
+      "refresh": "刷新",
+      "login": "登录",
+      "openAssignments": "打开作业",
+      "openAssignmentsCta": "打开作业 →",
+      "firstContent": "创建第一个内容",
+      "loginToLibrary": "登录以查看资料库"
+    },
+    "progress": {
+      "assigned": "已布置作业",
+      "newQuiz": "新测验",
+      "newSlide": "新幻灯片",
+      "emptyAssignedTitle": "暂无作业",
+      "emptyAssignedMeta": "创建第一个作业",
+      "emptyQuizTitle": "暂无测验",
+      "emptyQuizMeta": "打开测验编辑器",
+      "emptySlideTitle": "暂无幻灯片",
+      "emptySlideMeta": "打开幻灯片工作室",
+      "loginToView": "登录后查看",
+      "loading": "加载中…",
+      "completed": "已完成 {done}/{total}",
+      "people": "{n} 人",
+      "pages": "{n} 页"
+    },
+    "intro": {
+      "create": "幻灯片、测验、模板与 AI 提示——创作工具都在这里。",
+      "present": "播放器、演示模式、全屏、计时与动画。",
+      "games": "在 play.quizzman.com 创建数据集并配置游戏。",
+      "assign": "按类别向学生布置测验、游戏与活动。",
+      "libraryAuthed": "属于您账户的内容（幻灯片工作室、测验编辑器）。",
+      "libraryGuest": "登录以查看您的资料库。"
+    },
+    "assign": {
+      "emptyTitle": "打开作业",
+      "emptyText": "完整的作业管理在 Assignments 应用中。"
+    },
+    "library": {
+      "searchPlaceholder": "搜索内容…",
+      "searchAria": "搜索内容",
+      "typeAll": "全部",
+      "typeQuiz": "测验",
+      "typeSlide": "幻灯片",
+      "typeGame": "游戏",
+      "typeArticle": "文章",
+      "emptyTitle": "暂无内容",
+      "emptyText": "从核心工具创建测验或幻灯片。",
+      "emptyGuestTitle": "登录以查看资料库",
+      "emptyGuestText": "幻灯片工作室与测验编辑器仅显示您账户的内容。",
+      "bucketSlides": "我的幻灯片",
+      "bucketQuizzes": "我的测验",
+      "bucketTemplates": "我的模板",
+      "bucketMedia": "已上传媒体",
+      "bucketExports": "导出历史"
+    },
+    "emptyLibrary": "从核心工具创建测验或幻灯片。",
+    "menu": {
+      "newSlide": "新建幻灯片",
+      "newQuiz": "新建测验",
+      "newAssign": "新建作业",
+      "import": "导入…",
+      "library": "资料库"
+    },
+    "launch": {
+      "slideStudio": "幻灯片工作室",
+      "slideStudioSub": "演示文稿",
+      "quizEditor": "测验编辑器",
+      "quizEditorSub": "互动测验",
+      "assignment": "作业",
+      "assignmentSub": "布置与批改",
+      "assignedWork": "已布置作业",
+      "assignedWorkSub": "跟踪已发作业",
+      "examCollection": "试卷集",
+      "examCollectionSub": "作业中的试卷与资源",
+      "contentLibrary": "资料库",
+      "contentLibrarySub": "lib.quizzman.com",
+      "chineseNumber": "中文数字",
+      "chineseNumberSub": "练习中文数字读法",
+      "chineseConvert": "数字转换",
+      "chineseConvertSub": "数字 → 汉字",
+      "jck": "JCK 字体引擎",
+      "jckSub": "合成 CJK 字形",
+      "randomPicker": "随机点名",
+      "randomPickerSub": "随机选择学生",
+      "spreadsheet": "电子表格",
+      "spreadsheetSub": "在线表格",
+      "audioConverter": "音频转换",
+      "audioConverterSub": "MP3, WAV, OGG, FLAC"
+    },
+    "continue": {
+      "slide": "幻灯片",
+      "slideFallback": "继续上次演示",
+      "quiz": "测验",
+      "quizFallback": "继续上次测验",
+      "assignment": "已布置作业",
+      "assignmentFallback": "查看已发作业"
+    },
+    "quick": {
+      "mdSlide": "Markdown → 幻灯片",
+      "mdSlideCap": "快速起草",
+      "importPptx": "导入 PPTX",
+      "importPptxCap": "幻灯片工作室",
+      "themes": "主题库",
+      "themesCap": "幻灯片工作室",
+      "aiPrompt": "AI 提示生成器",
+      "aiPromptCap": "幻灯片工作室",
+      "assign": "布置作业",
+      "assignCap": "作业",
+      "myContent": "我的内容",
+      "myContentCap": "资料库"
+    },
+    "tool": {
+      "slideStudioDesc": "制作幻灯片、课件、主题/模板，并导出 PPTX、PNG、视频。",
+      "slideStudioCta": "打开幻灯片工作室",
+      "quizEditorDesc": "创建选择题、判断、填空、排序，并带评分引擎。",
+      "quizEditorCta": "打开测验编辑器",
+      "slidePlayer": "幻灯片播放器",
+      "slidePlayerDesc": "全屏演示，含计时、动画与媒体。",
+      "slidePlayerCta": "打开播放器",
+      "statusLive": "上线",
+      "statusNew": "新",
+      "statusBeta": "测试"
+    },
+    "game": {
+      "hanziMaster": "汉字大师编辑器",
+      "hanziMasterDesc": "汉字词汇——输入、选择题、篆书、整句。",
+      "idiomKing": "成语王编辑器",
+      "idiomKingDesc": "成语——单人与 1v1 对战。",
+      "pikahans": "拼字编辑器",
+      "pikahansDesc": "拼汉字——选 2–4 字组成词。",
+      "keynoteHero": "音符英雄编辑器",
+      "keynoteHeroDesc": "音乐 + 与每个音符绑定的测验。",
+      "quizUltimate": "Ultimate 测验编辑器",
+      "quizUltimateDesc": "Kahoot 风格多人测验。",
+      "quizRace": "测验竞速编辑器",
+      "quizRaceDesc": "竞速测验——答对前进。"
+    },
+    "time": {
+      "minutesAgo": "{n} 分钟前",
+      "hoursAgo": "{n} 小时前",
+      "daysAgo": "{n} 天前"
+    },
+    "shell": {
+      "searchPlaceholder": "搜索应用与知识…",
+      "pageTitle": "应用"
+    },
+    "hero": {
+      "prompt": "今天想创建什么？"
+    },
+    "workspace": {
+      "title": "工作区",
+      "you": "你",
+      "youHere": "你在这里",
+      "nodeAssignment": "作业",
+      "nodeQuiz": "测验",
+      "nodeSlide": "幻灯",
+      "nodeKnowledge": "知识"
+    }
+  }
+}

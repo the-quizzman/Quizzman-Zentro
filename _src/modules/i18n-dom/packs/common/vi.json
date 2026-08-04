@@ -1,0 +1,30 @@
+{
+  "common": {
+    "ok": "Xong",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "close": "Đóng",
+    "back": "Quay lại",
+    "next": "Tiếp",
+    "search": "Tìm kiếm",
+    "loading": "Đang tải…",
+    "settings": "Thiết lập",
+    "account": "Tài khoản",
+    "logout": "Đăng xuất",
+    "login": "Đăng nhập",
+    "language": "Ngôn ngữ",
+    "theme": "Giao diện",
+    "region": "Khu vực",
+    "light": "Sáng",
+    "dark": "Tối"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "lab": "Lab",
+    "library": "Thư viện",
+    "app": "App",
+    "play": "Play",
+    "wiki": "Wiki",
+    "class": "Lớp học"
+  }
+}
