@@ -1,4 +1,4 @@
-/** UI strings for Legatus chrome (not notification payloads). */
+/** UI strings for Legatus chrome (not notification payloads — those come localized from API). */
 const STRINGS = {
   en: {
     brand: "Legatus",
@@ -78,7 +78,7 @@ const STRINGS = {
     justNow: "刚刚",
     orbLabel: "打开 Legatus",
   },
-  "zh-TW": {
+  zht: {
     brand: "Legatus",
     notifications: "Legatus",
     markAllRead: "全部標為已讀",
@@ -104,7 +104,7 @@ const STRINGS = {
     justNow: "剛剛",
     orbLabel: "開啟 Legatus",
   },
-  ja: {
+  jp: {
     brand: "Legatus",
     notifications: "Legatus",
     markAllRead: "すべて既読にする",
@@ -130,7 +130,7 @@ const STRINGS = {
     justNow: "たった今",
     orbLabel: "Legatus を開く",
   },
-  ko: {
+  kr: {
     brand: "Legatus",
     notifications: "Legatus",
     markAllRead: "모두 읽음으로 표시",
@@ -156,7 +156,142 @@ const STRINGS = {
     justNow: "방금",
     orbLabel: "Legatus 열기",
   },
+  fr: {
+    brand: "Legatus",
+    notifications: "Legatus",
+    markAllRead: "Tout marquer comme lu",
+    viewAll: "Ouvrir Legatus",
+    loading: "Chargement…",
+    empty: "Vous êtes à jour",
+    emptyCenter: "Aucune activité pour le moment",
+    emptyTasks: "Aucune tâche en arrière-plan",
+    centerTitle: "Legatus",
+    tabActivity: "Activité",
+    tabMentis: "Mentis",
+    tabTasks: "Tâches",
+    mentisHint: "Demander à Mentis…",
+    mentisEmpty: "Mentis est prêt. Essayez une suggestion ci-dessous.",
+    mentisWorkspace: "Ouvrir Mentis Workspace",
+    promptQuiz: "Générer un quiz",
+    promptExplain: "Expliquer cette diapositive",
+    promptSummarize: "Résumer le document",
+    promptTranslate: "Traduire",
+    promptImprove: "Améliorer le contenu",
+    notice: "Avis",
+    dismiss: "Fermer",
+    justNow: "à l'instant",
+    orbLabel: "Ouvrir Legatus",
+  },
+  de: {
+    brand: "Legatus",
+    notifications: "Legatus",
+    markAllRead: "Alle als gelesen markieren",
+    viewAll: "Legatus öffnen",
+    loading: "Laden…",
+    empty: "Alles erledigt",
+    emptyCenter: "Noch keine Aktivität",
+    emptyTasks: "Keine Hintergrundaufgaben",
+    centerTitle: "Legatus",
+    tabActivity: "Aktivität",
+    tabMentis: "Mentis",
+    tabTasks: "Aufgaben",
+    mentisHint: "Mentis fragen…",
+    mentisEmpty: "Mentis ist bereit. Probieren Sie einen Vorschlag unten.",
+    mentisWorkspace: "Mentis Workspace öffnen",
+    promptQuiz: "Quiz erstellen",
+    promptExplain: "Diese Folie erklären",
+    promptSummarize: "Dokument zusammenfassen",
+    promptTranslate: "Übersetzen",
+    promptImprove: "Inhalt verbessern",
+    notice: "Hinweis",
+    dismiss: "Schließen",
+    justNow: "gerade eben",
+    orbLabel: "Legatus öffnen",
+  },
+  es: {
+    brand: "Legatus",
+    notifications: "Legatus",
+    markAllRead: "Marcar todo como leído",
+    viewAll: "Abrir Legatus",
+    loading: "Cargando…",
+    empty: "Estás al día",
+    emptyCenter: "Aún no hay actividad",
+    emptyTasks: "No hay tareas en segundo plano",
+    centerTitle: "Legatus",
+    tabActivity: "Actividad",
+    tabMentis: "Mentis",
+    tabTasks: "Tareas",
+    mentisHint: "Preguntar a Mentis…",
+    mentisEmpty: "Mentis está listo. Prueba una sugerencia abajo.",
+    mentisWorkspace: "Abrir Mentis Workspace",
+    promptQuiz: "Generar cuestionario",
+    promptExplain: "Explicar esta diapositiva",
+    promptSummarize: "Resumir documento",
+    promptTranslate: "Traducir",
+    promptImprove: "Mejorar contenido",
+    notice: "Aviso",
+    dismiss: "Cerrar",
+    justNow: "ahora mismo",
+    orbLabel: "Abrir Legatus",
+  },
+  th: {
+    brand: "Legatus",
+    notifications: "Legatus",
+    markAllRead: "ทำเครื่องหมายว่าอ่านแล้วทั้งหมด",
+    viewAll: "เปิด Legatus",
+    loading: "กำลังโหลด…",
+    empty: "ไม่มีกิจกรรมใหม่",
+    emptyCenter: "ยังไม่มีกิจกรรม",
+    emptyTasks: "ไม่มีงานพื้นหลัง",
+    centerTitle: "Legatus",
+    tabActivity: "กิจกรรม",
+    tabMentis: "Mentis",
+    tabTasks: "งาน",
+    mentisHint: "ถาม Mentis…",
+    mentisEmpty: "Mentis พร้อมแล้ว ลองคำแนะนำด้านล่าง",
+    mentisWorkspace: "เปิด Mentis Workspace",
+    promptQuiz: "สร้างควิซ",
+    promptExplain: "อธิบายสไลด์นี้",
+    promptSummarize: "สรุปเอกสาร",
+    promptTranslate: "แปล",
+    promptImprove: "ปรับปรุงเนื้อหา",
+    notice: "ประกาศ",
+    dismiss: "ปิด",
+    justNow: "เมื่อกี้",
+    orbLabel: "เปิด Legatus",
+  },
+  pt: {
+    brand: "Legatus",
+    notifications: "Legatus",
+    markAllRead: "Marcar tudo como lido",
+    viewAll: "Abrir Legatus",
+    loading: "Carregando…",
+    empty: "Você está em dia",
+    emptyCenter: "Nenhuma atividade ainda",
+    emptyTasks: "Nenhuma tarefa em segundo plano",
+    centerTitle: "Legatus",
+    tabActivity: "Atividade",
+    tabMentis: "Mentis",
+    tabTasks: "Tarefas",
+    mentisHint: "Perguntar ao Mentis…",
+    mentisEmpty: "Mentis está pronto. Experimente uma sugestão abaixo.",
+    mentisWorkspace: "Abrir Mentis Workspace",
+    promptQuiz: "Gerar quiz",
+    promptExplain: "Explicar este slide",
+    promptSummarize: "Resumir documento",
+    promptTranslate: "Traduzir",
+    promptImprove: "Melhorar conteúdo",
+    notice: "Aviso",
+    dismiss: "Fechar",
+    justNow: "agora mesmo",
+    orbLabel: "Abrir Legatus",
+  },
 };
+
+// Legacy aliases → canonical packs
+STRINGS["zh-TW"] = STRINGS.zht;
+STRINGS.ja = STRINGS.jp;
+STRINGS.ko = STRINGS.kr;
 
 const STORAGE_KEYS = [
   "qmf-lang",
@@ -168,6 +303,20 @@ const STORAGE_KEYS = [
   "qm.locale",
 ];
 
+const INTL_LOCALE = {
+  en: "en",
+  vi: "vi",
+  zh: "zh-CN",
+  zht: "zh-TW",
+  jp: "ja",
+  kr: "ko",
+  fr: "fr",
+  de: "de",
+  es: "es",
+  th: "th",
+  pt: "pt-BR",
+};
+
 /**
  * @param {unknown} raw
  * @returns {keyof typeof STRINGS}
@@ -176,10 +325,15 @@ export function normalizeLang(raw) {
   if (raw == null || raw === "") return "en";
   const s = String(raw).trim().replace(/_/g, "-").toLowerCase();
   if (s.startsWith("vi")) return "vi";
-  if (s === "zh-tw" || s === "zh-hant" || s === "zht" || s.startsWith("zh-hant")) return "zh-TW";
+  if (s === "zh-tw" || s === "zh-hant" || s === "zht" || s.startsWith("zh-hant")) return "zht";
   if (s.startsWith("zh")) return "zh";
-  if (s.startsWith("ja")) return "ja";
-  if (s.startsWith("ko")) return "ko";
+  if (s.startsWith("ja") || s === "jp") return "jp";
+  if (s.startsWith("ko") || s === "kr") return "kr";
+  if (s.startsWith("fr")) return "fr";
+  if (s.startsWith("de") || s === "german") return "de";
+  if (s.startsWith("es") || s === "spanish") return "es";
+  if (s.startsWith("th") || s === "thai") return "th";
+  if (s.startsWith("pt") || s === "portuguese" || s === "portu") return "pt";
   if (s.startsWith("en")) return "en";
   return "en";
 }
@@ -218,7 +372,7 @@ export function createI18n(getLang) {
       const t = new Date(iso).getTime();
       if (Number.isNaN(t)) return "";
       const lang = getLang();
-      const locale = lang === "zh-TW" ? "zh-TW" : lang;
+      const locale = INTL_LOCALE[lang] || lang;
       const sec = Math.round((Date.now() - t) / 1000);
       if (Math.abs(sec) < 45) return STRINGS[lang]?.justNow || STRINGS.en.justNow;
       try {
@@ -261,6 +415,7 @@ export function watchLang(onChange) {
     emit(raw);
   };
   window.addEventListener("qmf:lang-change", onCustom);
+  window.addEventListener("qmf:langchange", onCustom);
   window.addEventListener("lab:lang-change", onCustom);
   const onNavLang = () => emit(navigator.language);
   window.addEventListener("languagechange", onNavLang);
@@ -276,6 +431,7 @@ export function watchLang(onChange) {
   return () => {
     window.removeEventListener("storage", onStorage);
     window.removeEventListener("qmf:lang-change", onCustom);
+    window.removeEventListener("qmf:langchange", onCustom);
     window.removeEventListener("lab:lang-change", onCustom);
     window.removeEventListener("languagechange", onNavLang);
     mo?.disconnect();

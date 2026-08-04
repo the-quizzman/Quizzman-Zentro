@@ -1,23 +1,25 @@
 /**
  * QMF Shell — thin bootstrap (not a God Object).
  *
- * Pipeline: resolveBase → resolveVersion → loadModules → waitSSO
+ * Pipeline: resolveBase → prefs-detect → waitSSO
  *           → mountHeader → mountWidget → runPlugins → emit qmf:auth
  *
  * UI (Lumen bar, plan ring, menus) lives in auth-widget / header modules.
  *
- * @version 2.1.3
+ * @version 2.2.9
  */
 (function (global) {
   'use strict';
 
   var Runtime = {
-    shell: '2.1.3',
+    shell: '2.2.9',
     packages: {
-      header: '3.8.7',
-      auth: '1.4.4',
-      legatus: '1.2.8',
+      header: '3.10.2',
+      auth: '1.5.5',
+      legatus: '1.3.1',
       sso: '20260721',
+      i18n: '1.0.3',
+      prefs: '1.0.0',
     },
   };
 
@@ -129,6 +131,10 @@
 
   function registerBuiltins() {
     var pk = Runtime.packages;
+    register('prefs', {
+      version: pk.prefs,
+      url: moduleUrl('modules/prefs-detect/prefs-detect.js', pk.prefs),
+    });
     register('sso', {
       version: pk.sso,
       url: resolveIdBase() + '/module/sso-refresh.js?v=' + pk.sso,
@@ -142,7 +148,7 @@
     });
     register('auth', {
       version: pk.auth,
-      url: moduleUrl('modules/auth-widget/auth-widget.js', pk.header),
+      url: moduleUrl('modules/auth-widget/auth-widget.js', pk.auth),
     });
     register('legatus', {
       version: pk.legatus,
@@ -215,6 +221,38 @@
 
   /* ─── mount steps ─────────────────────────────────────────── */
 
+  /**
+   * First-visit lang/theme/region detect — runs before chrome/auth so
+   * account hydrate can still override afterward.
+   */
+  async function bootstrapPrefs(opts) {
+    if (opts.prefs === false || opts.prefsDetect === false) return null;
+    try {
+      await loadEntry('prefs');
+    } catch (err) {
+      console.warn('[QMFShell] prefs-detect load failed:', err && err.message);
+      return null;
+    }
+    var detectOpts = opts.prefsDetect || opts.prefs;
+    if (detectOpts && typeof detectOpts === 'object') {
+      /* keep */
+    } else {
+      detectOpts = {};
+    }
+    if (opts.lang && detectOpts.lang == null) detectOpts.lang = opts.lang;
+    if (opts.theme && detectOpts.theme == null) detectOpts.theme = opts.theme;
+    if (opts.region && detectOpts.region == null) detectOpts.region = opts.region;
+
+    if (global.QmfPrefsDetect && typeof global.QmfPrefsDetect.mount === 'function') {
+      try {
+        return global.QmfPrefsDetect.mount(detectOpts);
+      } catch (e) {
+        console.warn('[QMFShell] prefs-detect mount failed:', e && e.message);
+      }
+    }
+    return null;
+  }
+
   async function mountHeader(opts) {
     await loadEntry('header');
     if (typeof global.createUnifiedHeader !== 'function') {
@@ -233,7 +271,7 @@
     // Allow top-level brand fields
     ['brandName', 'pageTitle', 'productSub', 'logoSrc', 'logoSrcDark', 'mainLogoLink',
       'brandHref', 'showGlobalNav', 'showSearch', 'showChat', 'showFriend', 'showJoinQuiz',
-      'headerInFlow', 'searchPlaceholder', 'navItems'].forEach(function (k) {
+      'headerInFlow', 'searchPlaceholder', 'searchUrl', 'navItems'].forEach(function (k) {
       if (opts[k] !== undefined && headerOpts[k] === undefined) headerOpts[k] = opts[k];
     });
 
@@ -264,9 +302,11 @@
     var redirectLogin = opts.loginUrl ||
       (resolveIdBase() + '/login?redirect_uri=' + encodeURIComponent(global.location.href));
 
+    var detectedLang = (global.QmfPrefsDetect && global.QmfPrefsDetect.getLang && global.QmfPrefsDetect.getLang()) || null;
+
     state.widget = global.createAuthWidget({
       container: container,
-      lang: opts.lang || undefined,
+      lang: opts.lang || detectedLang || undefined,
       apiEndpoint: opts.apiEndpoint || (resolveIdBase() + '/api/auth/me'),
       loginUrl: redirectLogin,
       accountUrl: accountUrl,
@@ -354,6 +394,8 @@
       opts.register(api.registry);
     }
 
+    // Prefs detect before SSO/header/auth — account settings win later.
+    await bootstrapPrefs(opts);
     await waitSSO(opts);
     if (!opts.authOnly) {
       await mountHeader(opts);
@@ -393,16 +435,42 @@
     return Promise.resolve(null);
   }
 
+  /** Soft-reload principle — replace navigation with ?_qmf=, never ask users to hard refresh. */
+  function softReload(reason, nextRev) {
+    try {
+      var rev = nextRev || Runtime.shell;
+      console.warn('[QMFShell] soft-reload:', reason || 'manual', rev);
+      var u = new URL(global.location.href);
+      u.searchParams.set('_qmf', rev);
+      if (reason) u.searchParams.set('_qmf_why', String(reason).slice(0, 48));
+      u.searchParams.set('_t', String(Date.now()));
+      global.location.replace(u.toString());
+    } catch (e) {
+      try { global.location.reload(); } catch (e2) { /* ignore */ }
+    }
+  }
+
   function logout() {
-    if (state.widget && state.widget.elements && state.widget.elements.wrap) {
-      var btn = state.widget.elements.wrap.querySelector('.qmf-auth-logout-btn');
-      if (btn) {
-        btn.click();
+    // Call widget.logout() directly — dropdown may be portaled to <body>,
+    // so wrap.querySelector('.qmf-auth-logout-btn') often misses the button.
+    if (state.widget && typeof state.widget.logout === 'function') {
+      try {
+        state.widget.logout();
         return;
+      } catch (e) {
+        console.warn('[QMFShell] widget.logout failed', e);
       }
     }
     emitAuth('logout');
-    global.location.href = (state.opts && state.opts.logoutUrl) || (resolveIdBase() + '/logout');
+    var dest = (state.opts && state.opts.logoutUrl) || (resolveIdBase() + '/logout');
+    try {
+      var u = new URL(dest, global.location.origin);
+      u.searchParams.set('redirect_uri', global.location.href);
+      u.searchParams.set('redirect', global.location.href);
+      global.location.assign(u.toString());
+    } catch (e2) {
+      global.location.href = dest;
+    }
   }
 
   function destroy() {
@@ -423,6 +491,7 @@
     version: version,
     user: user,
     refresh: refresh,
+    softReload: softReload,
     logout: logout,
     destroy: destroy,
     get base() { return resolveBase(); },

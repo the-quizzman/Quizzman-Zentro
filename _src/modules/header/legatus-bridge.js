@@ -7,7 +7,7 @@
   'use strict';
 
   var CDN = 'https://ui.quizzman.com/qmf/dist/legatus';
-  var VERSION = '1.2.9';
+  var VERSION = '1.3.1';
   var ID_REFRESH_URL = 'https://id.quizzman.com/api/auth/refresh';
   var EXPIRY_SKEW_SECS = 45;
   var loading = null;

@@ -85,6 +85,74 @@
         "256": "calendar/calendar-logo-256.png"
       }
     },
+    "astro": {
+      "hasCustomLogo": true,
+      "logo": "astro/astro-logo.png",
+      "favicon": "astro/favicon.ico",
+      "appleTouchIcon": "astro/apple-touch-icon.png",
+      "sizes": {
+        "16": "astro/favicon-16x16.png",
+        "32": "astro/astro-logo-32.png",
+        "48": "astro/astro-logo-48.png",
+        "64": "astro/astro-logo-64.png",
+        "128": "astro/astro-logo-128.png",
+        "180": "astro/astro-logo-180.png",
+        "192": "astro/astro-logo-192.png",
+        "256": "astro/astro-logo-256.png",
+        "512": "astro/astro-logo-512.png"
+      }
+    },
+    "zodiac-sign": {
+      "hasCustomLogo": true,
+      "logo": "zodiac-sign/zodiac-sign-logo.png",
+      "favicon": "zodiac-sign/favicon.ico",
+      "appleTouchIcon": "zodiac-sign/apple-touch-icon.png",
+      "sizes": {
+        "16": "zodiac-sign/favicon-16x16.png",
+        "32": "zodiac-sign/zodiac-sign-logo-32.png",
+        "48": "zodiac-sign/zodiac-sign-logo-48.png",
+        "64": "zodiac-sign/zodiac-sign-logo-64.png",
+        "128": "zodiac-sign/zodiac-sign-logo-128.png",
+        "180": "zodiac-sign/zodiac-sign-logo-180.png",
+        "192": "zodiac-sign/zodiac-sign-logo-192.png",
+        "256": "zodiac-sign/zodiac-sign-logo-256.png",
+        "512": "zodiac-sign/zodiac-sign-logo-512.png"
+      }
+    },
+    "tarot": {
+      "hasCustomLogo": true,
+      "logo": "tarot/tarot-logo.png",
+      "favicon": "tarot/favicon.ico",
+      "appleTouchIcon": "tarot/apple-touch-icon.png",
+      "sizes": {
+        "16": "tarot/favicon-16x16.png",
+        "32": "tarot/tarot-logo-32.png",
+        "48": "tarot/tarot-logo-48.png",
+        "64": "tarot/tarot-logo-64.png",
+        "128": "tarot/tarot-logo-128.png",
+        "180": "tarot/tarot-logo-180.png",
+        "192": "tarot/tarot-logo-192.png",
+        "256": "tarot/tarot-logo-256.png",
+        "512": "tarot/tarot-logo-512.png"
+      }
+    },
+    "vedic": {
+      "hasCustomLogo": true,
+      "logo": "vedic/vedic-logo.png",
+      "favicon": "vedic/favicon.ico",
+      "appleTouchIcon": "vedic/apple-touch-icon.png",
+      "sizes": {
+        "16": "vedic/favicon-16x16.png",
+        "32": "vedic/vedic-logo-32.png",
+        "48": "vedic/vedic-logo-48.png",
+        "64": "vedic/vedic-logo-64.png",
+        "128": "vedic/vedic-logo-128.png",
+        "180": "vedic/vedic-logo-180.png",
+        "192": "vedic/vedic-logo-192.png",
+        "256": "vedic/vedic-logo-256.png",
+        "512": "vedic/vedic-logo-512.png"
+      }
+    },
     "assignment": {
       "hasCustomLogo": true,
       "logo": "assignment/assignment-logo.png",
@@ -139,8 +207,28 @@
       "hasCustomLogo": true,
       "description": "Compressed header mega-menu thumbnails (40/80 + webp)",
       "cdnPath": "nav",
-      "version": "20260719-3",
+      "version": "20260801",
       "items": {
+        "astro": {
+          "40": "nav/astro-40.webp",
+          "80": "nav/astro-80.webp",
+          "png40": "nav/astro-40.png"
+        },
+        "zodiac-sign": {
+          "40": "nav/zodiac-sign-40.webp",
+          "80": "nav/zodiac-sign-80.webp",
+          "png40": "nav/zodiac-sign-40.png"
+        },
+        "tarot": {
+          "40": "nav/tarot-40.webp",
+          "80": "nav/tarot-80.webp",
+          "png40": "nav/tarot-40.png"
+        },
+        "vedic": {
+          "40": "nav/vedic-40.webp",
+          "80": "nav/vedic-80.webp",
+          "png40": "nav/vedic-40.png"
+        },
         "slide-studio": {
           "40": "nav/slide-studio-40.webp",
           "80": "nav/slide-studio-80.webp",

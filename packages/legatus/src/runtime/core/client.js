@@ -97,6 +97,19 @@ export class LegatusClient {
     return data.count;
   }
 
+  /** Push UI locale to Legatus account prefs (source of truth for payload language). */
+  async syncLocale(locale) {
+    if (!locale) return null;
+    try {
+      return await this.request("/preferences", {
+        method: "PATCH",
+        body: JSON.stringify({ locale }),
+      });
+    } catch {
+      return null;
+    }
+  }
+
   async fetchNotifications({ cursor, limit = 20 } = {}) {
     this.store.set({ loading: true, error: null });
     try {

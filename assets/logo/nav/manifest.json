@@ -1,9 +1,13 @@
 {
-  "version": "20260719-3",
+  "version": "20260801",
   "cdnBase": "https://ui.quizzman.com/qmf/assets/logo/nav",
   "size": 40,
   "retina": 80,
   "items": [
+    "astro",
+    "zodiac-sign",
+    "tarot",
+    "vedic",
     "slide-studio",
     "quiz-editor",
     "assignment",

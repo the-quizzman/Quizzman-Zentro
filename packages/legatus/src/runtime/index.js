@@ -70,6 +70,12 @@ function createRuntime(options) {
       if (next === locale) return;
       locale = next;
       bus.emit("locale:change", locale);
+      // Keep Legatus prefs in sync with UI lang, then re-fetch localized payloads.
+      void (async () => {
+        await client.syncLocale?.(next);
+        await client.fetchNotifications?.({ limit: 20 }).catch(() => {});
+        await client.fetchUnread?.().catch(() => {});
+      })();
     },
     rebindAuth(nextOptions = {}) {
       Object.assign(options, nextOptions || {});
@@ -86,6 +92,7 @@ function createRuntime(options) {
       startPromise = (async () => {
         store.set({ error: null });
         try {
+          await client.syncLocale?.(locale);
           await client.fetchUnread();
         } catch {
           /* anonymous / offline */
