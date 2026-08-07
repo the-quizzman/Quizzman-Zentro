@@ -6,16 +6,16 @@
  *
  * UI (Lumen bar, plan ring, menus) lives in auth-widget / header modules.
  *
- * @version 2.2.11
+ * @version 2.2.16
  */
 (function (global) {
   'use strict';
 
   var Runtime = {
-    shell: '2.2.11',
+    shell: '2.2.16',
     packages: {
-      header: '3.10.3',
-      auth: '1.5.5',
+      header: '3.10.4',
+      auth: '1.5.9',
       legatus: '1.3.1',
       sso: '20260721',
       i18n: '1.0.3',
@@ -462,14 +462,24 @@
       }
     }
     emitAuth('logout');
+    // Fallback: clear on id-sys then land on /login?logged_out=1 (no silent refresh).
     var dest = (state.opts && state.opts.logoutUrl) || (resolveIdBase() + '/logout');
     try {
+      var land = new URL(resolveIdBase() + '/login');
+      land.searchParams.set('logged_out', '1');
+      try {
+        var here = new URL(global.location.href);
+        if (here.hostname.endsWith('quizzman.com')
+            && !(here.hostname === 'id.quizzman.com' && here.pathname.indexOf('/login') === 0)) {
+          land.searchParams.set('redirect', global.location.href);
+        }
+      } catch (e0) { /* ignore */ }
       var u = new URL(dest, global.location.origin);
-      u.searchParams.set('redirect_uri', global.location.href);
-      u.searchParams.set('redirect', global.location.href);
+      u.searchParams.set('redirect_uri', land.toString());
+      u.searchParams.set('redirect', land.toString());
       global.location.assign(u.toString());
     } catch (e2) {
-      global.location.href = dest;
+      global.location.href = resolveIdBase() + '/logout?redirect=' + encodeURIComponent(resolveIdBase() + '/login?logged_out=1');
     }
   }
 

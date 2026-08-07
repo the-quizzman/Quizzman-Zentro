@@ -8,7 +8,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.10.3';
+  const VERSION = '3.10.4';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   const CDN_NAV_BASE = 'https://ui.quizzman.com/qmf/dist/modules-v3/header';
   const JOIN_OVERLAY_BASE = 'https://ui.quizzman.com/qmf/dist/modules/join-overlay';

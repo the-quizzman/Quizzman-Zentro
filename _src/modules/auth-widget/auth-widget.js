@@ -1,7 +1,7 @@
 /**
  * QMF Auth Widget Component
  * User chip + macOS-style account menu + preferences sheet
- * @version 1.5.0
+ * @version 1.5.9
  *
  * Usage:
  * <script src="https://ui.quizzman.com/qmf/dist/modules/auth-widget/auth-widget.js"></script>
@@ -16,7 +16,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '1.5.5';
+  const VERSION = '1.5.9';
   /* System UI stack — SF Pro on Apple, Segoe on Windows; no Inter-first */
   const FONT_STACK = 'var(--qmf-font-system, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, "Segoe UI", sans-serif)';
   const ID_SYS = 'https://id.quizzman.com';
@@ -283,12 +283,13 @@
     { id: 'student', label: { vi: 'Học sinh', en: 'Student', zh: '学生', zht: '學生', kr: '학생', jp: '生徒', fr: 'Élève', de: 'Schüler', es: 'Estudiante', th: 'นักเรียน', pt: 'Aluno' } },
   ];
 
+  /* Solid 20×20 glyphs, optically centered in the viewBox (Heroicons-style). */
   const ICONS = {
-    account: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm0 1.75c-3.2 0-6 1.68-6 3.75V17h12v-1.5c0-2.07-2.8-3.75-6-3.75Z"/></svg>',
-    settings: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10.7 2.1a1 1 0 0 0-1.4 0l-.7.7a1 1 0 0 1-1.1.22l-.95-.4a1 1 0 0 0-1.25.45l-.5.95a1 1 0 0 1-.85.55l-1.05.1a1 1 0 0 0-.9 1.05l.05 1.05a1 1 0 0 1-.35.85l-.75.7a1 1 0 0 0 0 1.4l.75.7a1 1 0 0 1 .35.85l-.05 1.05a1 1 0 0 0 .9 1.05l1.05.1a1 1 0 0 1 .85.55l.5.95a1 1 0 0 0 1.25.45l.95-.4a1 1 0 0 1 1.1.22l.7.7a1 1 0 0 0 1.4 0l.7-.7a1 1 0 0 1 1.1-.22l.95.4a1 1 0 0 0 1.25-.45l.5-.95a1 1 0 0 1 .85-.55l1.05-.1a1 1 0 0 0 .9-1.05l-.05-1.05a1 1 0 0 1 .35-.85l.75-.7a1 1 0 0 0 0-1.4l-.75-.7a1 1 0 0 1-.35-.85l.05-1.05a1 1 0 0 0-.9-1.05l-1.05-.1a1 1 0 0 1-.85-.55l-.5-.95a1 1 0 0 0-1.25-.45l-.95.4a1 1 0 0 1-1.1-.22l-.7-.7ZM10 13.25A3.25 3.25 0 1 1 10 6.75a3.25 3.25 0 0 1 0 6.5Z"/></svg>',
-    logout: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M8 3.5a.75.75 0 0 0-.75.75v11.5a.75.75 0 0 0 1.5 0V4.25A.75.75 0 0 0 8 3.5Zm5.78 6.22a.75.75 0 0 0 0-1.06l-2.5-2.5a.75.75 0 1 0-1.06 1.06l1.22 1.22H4.75a.75.75 0 0 0 0 1.5h6.69l-1.22 1.22a.75.75 0 1 0 1.06 1.06l2.5-2.5Z"/></svg>',
-    chevron: '<svg class="qmf-auth-chevron" viewBox="0 0 12 12" aria-hidden="true"><path fill="currentColor" d="M2.7 4.3a.75.75 0 0 1 1.06 0L6 6.54l2.24-2.24a.75.75 0 1 1 1.06 1.06l-2.77 2.77a.75.75 0 0 1-1.06 0L2.7 5.36a.75.75 0 0 1 0-1.06Z"/></svg>',
-    close: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M5.22 5.22a.75.75 0 0 1 1.06 0L10 8.94l3.72-3.72a.75.75 0 1 1 1.06 1.06L11.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06L10 11.06l-3.72 3.72a.75.75 0 0 1-1.06-1.06L8.94 10 5.22 6.28a.75.75 0 0 1 0-1.06Z"/></svg>',
+    account: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z"/></svg>',
+    settings: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a5.993 5.993 0 0 1 1.585.91l1.55-.572a1 1 0 0 1 1.188.392l1.18 2.044a1 1 0 0 1-.205 1.251l-1.22 1.05c.10.0.1.2.074.81s-.025.54-.074.802l1.22 1.05a1 1 0 0 1 .205 1.251l-1.18 2.044a1 1 0 0 1-1.188.392l-1.55-.572a5.993 5.993 0 0 1-1.585.91l-.331 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a5.993 5.993 0 0 1-1.585-.91l-1.55.572a1 1 0 0 1-1.188-.392l-1.18-2.044a1 1 0 0 1 .205-1.251l1.22-1.05A6.04 6.04 0 0 1 3.357 10c0-.273.025-.54.074-.802l-1.22-1.05a1 1 0 0 1-.205-1.251l1.18-2.044a1 1 0 0 1 1.188-.392l1.55.572a5.993 5.993 0 0 1 1.585-.91l.331-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>',
+    logout: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .192.168.1.5.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"/><path fill="currentColor" d="M12.288 9.22a.75.75 0 0 1 1.06 0l1.97 1.97a.75.75 0 0 1 0 1.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06l.69-.69H6.75a.75.75 0 0 1 0-1.5h6.228l-.69-.69a.75.75 0 0 1 0-1.06Z"/></svg>',
+    chevron: '<svg class="qmf-auth-chevron" viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path fill="currentColor" d="M2.7 4.3a.75.75 0 0 1 1.06 0L6 6.54l2.24-2.24a.75.75 0 1 1 1.06 1.06l-2.77 2.77a.75.75 0 0 1-1.06 0L2.7 5.36a.75.75 0 0 1 0-1.06Z"/></svg>',
+    close: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/></svg>',
   };
 
   const DEFAULT_CONFIG = {
@@ -440,12 +441,12 @@
         }
 
         .qmf-auth-login {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
+          display: inline-grid;
+          place-items: center;
           width: 36px;
           height: 36px;
           padding: 0;
+          line-height: 0;
           border-radius: 10px;
           border: 1px solid rgba(0, 0, 0, 0.12);
           background: rgba(255, 255, 255, 0.72);
@@ -456,6 +457,12 @@
           transition: background 0.18s ease, border-color 0.18s ease;
           backdrop-filter: blur(16px) saturate(1.4);
           -webkit-backdrop-filter: blur(16px) saturate(1.4);
+        }
+        .qmf-auth-login .qmf-auth-ico {
+          width: 18px;
+          height: 18px;
+          margin: 0;
+          display: block;
         }
         .qmf-auth-login:hover {
           background: rgba(0, 0, 0, 0.04);
@@ -635,8 +642,10 @@
         .qmf-auth-chevron {
           width: 10px;
           height: 10px;
+          display: block;
+          flex-shrink: 0;
           opacity: 0.45;
-          margin-left: 1px;
+          margin: 0 0 0 1px;
           transition: transform 0.18s ease, opacity 0.18s ease;
         }
         .qmf-auth-wrap--open .qmf-auth-chevron {
@@ -801,8 +810,26 @@
         .qmf-auth-ico {
           width: 16px;
           height: 16px;
-          flex-shrink: 0;
+          flex: 0 0 16px;
+          display: block;
+          overflow: visible;
+          margin: 0;
+          padding: 0;
           color: var(--drop-icon);
+          vertical-align: middle;
+          shape-rendering: geometricPrecision;
+        }
+        .qmf-auth-drop .qmf-auth-item > .qmf-auth-ico {
+          /* Keep glyphs in a fixed optical column so they don't drift right */
+          width: 16px;
+          height: 16px;
+          flex: 0 0 16px;
+        }
+        .qmf-auth-sheet__close .qmf-auth-ico {
+          width: 14px;
+          height: 14px;
+          display: block;
+          margin: 0;
         }
         .qmf-auth-item__label { flex: 1; min-width: 0; }
         .qmf-auth-item__hint {
@@ -819,8 +846,14 @@
           color: var(--drop-danger);
         }
 
-        /* —— Preferences sheet —— */
+        /* —— Preferences sheet (terracotta / card style) —— */
         .qmf-auth-sheet-root {
+          --sheet-accent: #C88141;
+          --sheet-accent-soft: rgba(200, 129, 65, 0.12);
+          --sheet-label: #808080;
+          --sheet-text: #222222;
+          --sheet-border: #E8E8E8;
+          --sheet-card: #FFFFFF;
           position: fixed;
           inset: 0;
           z-index: 10050;
@@ -850,34 +883,40 @@
         }
         .qmf-auth-sheet {
           position: relative;
-          width: min(400px, 100%);
+          width: min(360px, 100%);
           max-height: min(84vh, 640px);
           overflow: auto;
           border-radius: 16px;
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          background: rgba(246, 246, 246, 0.94);
-          box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
-          backdrop-filter: blur(40px) saturate(1.6);
-          -webkit-backdrop-filter: blur(40px) saturate(1.6);
-          color: #1d1d1f;
+          border: 1px solid var(--sheet-border);
+          background: #FFFFFF;
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+          color: var(--sheet-text);
           transform: scale(0.96) translateY(8px);
           transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.05);
         }
         .qmf-auth-sheet-root--open .qmf-auth-sheet {
           transform: scale(1) translateY(0);
         }
+        :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-sheet-root {
+          --sheet-accent: #E0A06A;
+          --sheet-accent-soft: rgba(224, 160, 106, 0.16);
+          --sheet-label: #9A9A9E;
+          --sheet-text: #F2F2F7;
+          --sheet-border: rgba(255, 255, 255, 0.12);
+          --sheet-card: #2C2C2E;
+        }
         :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-sheet {
-          border-color: rgba(255, 255, 255, 0.12);
-          background: rgba(36, 36, 38, 0.94);
-          color: #f5f5f7;
-          box-shadow: 0 28px 72px rgba(0, 0, 0, 0.55);
+          border-color: var(--sheet-border);
+          background: #1C1C1E;
+          color: var(--sheet-text);
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
         }
         .qmf-auth-sheet__head {
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 12px;
-          padding: 16px 18px 10px;
+          padding: 16px 16px 10px;
           position: sticky;
           top: 0;
           background: inherit;
@@ -885,8 +924,9 @@
         }
         .qmf-auth-sheet__title {
           margin: 0;
-          font: 600 17px/1.25 ${FONT_STACK};
+          font: 700 17px/1.25 ${FONT_STACK};
           letter-spacing: -0.02em;
+          color: var(--sheet-text);
         }
         .qmf-auth-sheet__close {
           width: 28px;
@@ -896,39 +936,39 @@
           border: none;
           border-radius: 50%;
           background: rgba(0, 0, 0, 0.06);
-          color: #636366;
+          color: var(--sheet-label);
           cursor: pointer;
           padding: 0;
         }
         :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-sheet__close {
           background: rgba(255, 255, 255, 0.1);
-          color: #aeaeb2;
+          color: var(--sheet-label);
         }
         .qmf-auth-sheet__close:hover { opacity: 0.85; }
-        .qmf-auth-sheet__body { padding: 4px 14px 18px; }
+        .qmf-auth-sheet__body { padding: 4px 14px 10px; display: flex; flex-direction: column; gap: 10px; }
 
         .qmf-auth-pref {
-          margin-bottom: 14px;
+          margin: 0;
           border-radius: 12px;
-          background: rgba(255, 255, 255, 0.72);
-          border: 1px solid rgba(0, 0, 0, 0.06);
+          background: var(--sheet-card);
+          border: 1px solid var(--sheet-border);
           overflow: hidden;
         }
         :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-pref {
-          background: rgba(44, 44, 46, 0.72);
-          border-color: rgba(255, 255, 255, 0.08);
+          background: var(--sheet-card);
+          border-color: var(--sheet-border);
         }
         .qmf-auth-pref__label {
-          padding: 10px 12px 0;
-          font: 600 11px/1.2 ${FONT_STACK};
-          letter-spacing: 0.02em;
+          padding: 12px 12px 0;
+          font: 700 11px/1.2 ${FONT_STACK};
+          letter-spacing: 0.04em;
           text-transform: uppercase;
-          color: #86868b;
+          color: var(--sheet-label);
         }
         .qmf-auth-pref__row {
           display: flex;
           flex-wrap: wrap;
-          gap: 6px;
+          gap: 4px;
           padding: 10px 12px 12px;
         }
         .qmf-auth-seg {
@@ -938,36 +978,37 @@
           align-items: center;
           justify-content: center;
           gap: 6px;
-          min-height: 34px;
-          padding: 0 12px;
+          min-height: 32px;
+          padding: 0 10px;
           border-radius: 8px;
-          border: 1px solid transparent;
-          background: rgba(0, 0, 0, 0.04);
-          color: inherit;
-          font: 500 12px/1 ${FONT_STACK};
+          border: none;
+          background: transparent;
+          color: var(--sheet-text);
+          font: 500 13px/1 ${FONT_STACK};
           cursor: pointer;
-          transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+          transition: color 0.12s ease, background 0.12s ease;
         }
         :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-seg {
-          background: rgba(255, 255, 255, 0.06);
+          background: transparent;
         }
         .qmf-auth-seg:hover {
-          background: rgba(0, 122, 255, 0.08);
+          color: var(--sheet-accent);
+          background: var(--sheet-accent-soft);
         }
         .qmf-auth-seg--active {
-          background: rgba(0, 122, 255, 0.12);
-          border-color: rgba(0, 122, 255, 0.35);
-          color: #007aff;
+          background: transparent;
+          border: none;
+          color: var(--sheet-accent);
+          font-weight: 700;
         }
         :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-seg--active {
-          color: #0a84ff;
-          background: rgba(10, 132, 255, 0.18);
-          border-color: rgba(10, 132, 255, 0.4);
+          color: var(--sheet-accent);
+          background: transparent;
         }
         .qmf-auth-lang-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 6px;
+          gap: 4px;
           padding: 10px 12px 12px;
         }
         .qmf-auth-lang-grid .qmf-auth-seg {
@@ -978,9 +1019,9 @@
         }
         .qmf-auth-lang-grid .qmf-auth-seg small {
           font: 400 10px/1 ${FONT_STACK};
-          color: #86868b;
+          color: var(--sheet-label);
         }
-        .qmf-auth-seg--active small { color: inherit; opacity: 0.75; }
+        .qmf-auth-seg--active small { color: inherit; opacity: 0.8; }
 
         .qmf-auth-role-note {
           display: flex;
@@ -990,12 +1031,12 @@
           padding: 0 12px 12px;
         }
         .qmf-auth-role-note a {
-          font: 500 12px/1.3 ${FONT_STACK};
-          color: #007aff;
+          font: 600 12px/1.3 ${FONT_STACK};
+          color: var(--sheet-accent);
           text-decoration: none;
         }
         :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-role-note a {
-          color: #0a84ff;
+          color: var(--sheet-accent);
         }
         .qmf-auth-role-note a:hover { text-decoration: underline; }
 
@@ -1009,15 +1050,16 @@
           height: 34px;
           padding: 0 16px;
           border: none;
-          border-radius: 8px;
-          background: #007aff;
+          border-radius: 10px;
+          background: var(--sheet-accent);
           color: #fff;
           font: 600 13px/1 ${FONT_STACK};
           cursor: pointer;
         }
         .qmf-auth-sheet__done:hover { filter: brightness(1.05); }
         :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-sheet__done {
-          background: #0a84ff;
+          background: var(--sheet-accent);
+          color: #1C1C1E;
         }
 
         @media (max-width: 480px) {
@@ -1078,19 +1120,31 @@
     }
 
     getLogoutUrl() {
+      // Always land on id /login?logged_out=1 so HttpOnly refresh cannot resurrect
+      // the session via silent refresh on the previous app page.
       const returnTo = window.location.href;
       try {
-        const logoutBase = new URL(this.config.logoutUrl, window.location.origin);
-        // Prefer redirect_uri (id-sys + wiki/home convention); keep redirect as alias.
-        logoutBase.searchParams.set('redirect_uri', returnTo);
-        logoutBase.searchParams.set('redirect', returnTo);
+        const land = new URL((this.config.loginUrl || (ID_SYS + '/login')), window.location.origin);
+        land.searchParams.set('logged_out', '1');
+        try {
+          const here = new URL(returnTo);
+          if (here.hostname.endsWith('quizzman.com')
+              && !(here.hostname === 'id.quizzman.com' && here.pathname.startsWith('/login'))) {
+            land.searchParams.set('redirect', returnTo);
+          }
+        } catch (e0) { /* ignore */ }
+
+        const logoutBase = new URL(this.config.logoutUrl || (ID_SYS + '/logout'), window.location.origin);
+        logoutBase.searchParams.set('redirect_uri', land.toString());
+        logoutBase.searchParams.set('redirect', land.toString());
         if (logoutBase.origin === window.location.origin) {
           return logoutBase.pathname + logoutBase.search;
         }
         return logoutBase.toString();
       } catch (e) { /* fall through */ }
+      const land = ID_SYS + '/login?logged_out=1';
       const sep = String(this.config.logoutUrl || '').includes('?') ? '&' : '?';
-      return this.config.logoutUrl + sep + 'redirect_uri=' + encodeURIComponent(returnTo);
+      return (this.config.logoutUrl || (ID_SYS + '/logout')) + sep + 'redirect=' + encodeURIComponent(land);
     }
 
     getAccountUrl() {
@@ -1870,9 +1924,13 @@
 
     clearLocalSession() {
       const expire = 'Thu, 01 Jan 1970 00:00:00 GMT';
-      ['jwt_token', 'authToken', 'session_id'].forEach((name) => {
-        document.cookie = `${name}=; path=/; domain=.quizzman.com; expires=${expire}`;
-        document.cookie = `${name}=; path=/; expires=${expire}`;
+      const domains = ['.quizzman.com', 'quizzman.com', window.location.hostname, ''];
+      ['jwt_token', 'authToken', 'session_id', 'refresh_token'].forEach((name) => {
+        domains.forEach((domain) => {
+          const d = domain ? `; domain=${domain}` : '';
+          document.cookie = `${name}=; path=/${d}; expires=${expire}; max-age=0; Secure; SameSite=Lax`;
+          document.cookie = `${name}=; path=/${d}; expires=${expire}; max-age=0`;
+        });
       });
 
       [
@@ -1883,22 +1941,40 @@
         try { sessionStorage.removeItem(key); } catch (e) { /* ignore */ }
       });
 
+      try { sessionStorage.setItem('qm_force_logged_out', String(Date.now())); } catch (e) { /* ignore */ }
       try { window.__QM_ACCESS_TOKEN__ = null; } catch (e) { /* ignore */ }
       this.user = null;
     }
 
-    logout() {
+    async logout() {
       const url = this.getLogoutUrl();
+      const token = this.getToken && this.getToken();
 
-      // Notify SSO while token still present, then clear local state.
-      // Do not await — id-sys GET /logout clears HttpOnly refresh_token.
+      // 1) Revoke session + clear HttpOnly refresh_token on id.quizzman.com
+      //    (Set-Cookie only works from that origin; await briefly so it isn't aborted).
       try {
         const sso = window.QuizzmanSSO || window.IdSysSSO || window.QuizzmanAuth;
         if (sso && typeof sso.logout === 'function') {
-          Promise.resolve(sso.logout(false)).catch(() => {});
+          await Promise.race([
+            Promise.resolve(sso.logout(false)),
+            new Promise((resolve) => setTimeout(resolve, 2000)),
+          ]);
+        } else {
+          const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
+          if (token) headers.Authorization = 'Bearer ' + token;
+          await Promise.race([
+            fetch('https://id.quizzman.com/api/auth/logout', {
+              method: 'POST',
+              credentials: 'include',
+              headers,
+              body: '{}',
+            }).catch(() => null),
+            new Promise((resolve) => setTimeout(resolve, 2000)),
+          ]);
         }
       } catch (e) { /* ignore */ }
 
+      // 2) Clear visible local cookies / storage on this subdomain
       try { this.clearLocalSession(); } catch (e) { /* ignore */ }
 
       try {
@@ -1909,6 +1985,7 @@
 
       try { this.setLegatusAuthVisible(false); } catch (e) { /* ignore */ }
 
+      // 3) Navigate to GET /logout as belt-and-suspenders cookie clear + redirect
       try {
         window.location.assign(url);
       } catch (e) {

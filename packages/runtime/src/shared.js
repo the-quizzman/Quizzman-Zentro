@@ -57,8 +57,33 @@ export function createModuleStore(moduleId, initial, schema) {
 }
 
 /**
+ * HTML boolean attributes are presence-based: `disabled="false"` still disables.
+ * Only omit/remove when the value is strictly false/null/undefined.
+ * @param {Element} el
+ * @param {string} name
+ * @param {unknown} value
+ */
+function applyAttribute(el, name, value) {
+  if (value === false || value == null) {
+    el.removeAttribute(name);
+    if (name in el && typeof /** @type {any} */ (el)[name] === 'boolean') {
+      /** @type {any} */ (el)[name] = false;
+    }
+    return;
+  }
+  if (value === true) {
+    el.setAttribute(name, '');
+    if (name in el && typeof /** @type {any} */ (el)[name] === 'boolean') {
+      /** @type {any} */ (el)[name] = true;
+    }
+    return;
+  }
+  el.setAttribute(name, String(value));
+}
+
+/**
  * @param {string} tag
- * @param {Record<string, string>} [attrs]
+ * @param {Record<string, any>} [attrs]
  * @param {(Node|string)[]} [children]
  */
 export function createElement(tag, attrs = {}, children = []) {
@@ -68,7 +93,7 @@ export function createElement(tag, attrs = {}, children = []) {
   const el = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
     if (k === 'className') el.className = v;
-    else el.setAttribute(k, v);
+    else applyAttribute(el, k, v);
   }
   for (const c of children) {
     el.append(typeof c === 'string' ? document.createTextNode(c) : c);

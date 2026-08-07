@@ -370,13 +370,18 @@ body.dark-mode .lab-header__badge {
 }
 
 .lab-header__actions > .qmf-auth-wrap,
-.lab-header__actions > .qmf-auth-login,
 .lab-header__actions > .lah-wrap,
 .lab-header__actions > .lah-login {
     order: 100;
     margin-left: 4px;
     padding-left: 8px;
     border-left: 1px solid var(--qmf-header-border);
+}
+
+.lab-header__actions > .qmf-auth-login {
+    order: 100;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 /* Compact avatar chip — hide badges that clutter the bar */
