@@ -1,10 +1,10 @@
-# Quizzman Fabric
+# Zentro
 > Modular Framework + Runtime for composable Quizzman web apps (tokens, UI, header, chat embed).
 > Formerly QMF (Quizzman Modular Framework). Package scope `@qmf/*` and CDN path `/qmf/` are unchanged.
 > Use this file to discover public documentation for AI agents and crawlers.
 
 ## Product
-- Name: Quizzman Fabric (Modular Framework + Runtime)
+- Name: Zentro (Modular Framework + Runtime)
 - Short / code: QMF (legacy acronym — still used in `@qmf/*`, `/qmf/`, `QMF` global)
 - CDN home: https://ui.quizzman.com/
 - Docs shell: https://ui.quizzman.com/qmf/docs.html

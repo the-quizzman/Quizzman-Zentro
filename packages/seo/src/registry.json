@@ -1,0 +1,176 @@
+{
+  "$schema": "./sites.registry.schema.json",
+  "version": "1.0.0",
+  "organization": {
+    "@id": "https://quizzman.com/#organization",
+    "@type": "EducationalOrganization",
+    "name": "Quizzman",
+    "url": "https://quizzman.com/",
+    "logo": "https://ui.quizzman.com/qmf/assets/logo/quizzman-logo.png",
+    "sameAs": [
+      "https://github.com/the-quizzman",
+      "https://www.tiktok.com/@quizzman.com",
+      "https://www.youtube.com/@quizzman.official",
+      "https://www.facebook.com/quizzman.official"
+    ]
+  },
+  "sites": {
+    "home": {
+      "id": "home",
+      "host": "quizzman.com",
+      "name": "Quizzman",
+      "url": "https://quizzman.com/",
+      "websiteId": "https://quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "emitOrganization": true,
+      "classification": "brand-root"
+    },
+    "app": {
+      "id": "app",
+      "host": "app.quizzman.com",
+      "name": "Quizzman App",
+      "url": "https://app.quizzman.com/",
+      "websiteId": "https://app.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface"
+    },
+    "study": {
+      "id": "study",
+      "host": "study.quizzman.com",
+      "name": "Quizzman Study",
+      "url": "https://study.quizzman.com/",
+      "websiteId": "https://study.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface"
+    },
+    "lib": {
+      "id": "lib",
+      "host": "lib.quizzman.com",
+      "name": "Quizzman Library",
+      "url": "https://lib.quizzman.com/",
+      "websiteId": "https://lib.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface"
+    },
+    "lab": {
+      "id": "lab",
+      "host": "lab.quizzman.com",
+      "name": "Quizzman Lab",
+      "url": "https://lab.quizzman.com/",
+      "websiteId": "https://lab.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface"
+    },
+    "lms": {
+      "id": "lms",
+      "host": "lms.quizzman.com",
+      "name": "Quizzman LMS",
+      "url": "https://lms.quizzman.com/",
+      "websiteId": "https://lms.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": false,
+      "classification": "authenticated-app",
+      "notes": "Learning World shell — authenticated application surface; do not sitemap private routes."
+    },
+    "class": {
+      "id": "class",
+      "host": "class.quizzman.com",
+      "name": "Quizzman Class",
+      "url": "https://class.quizzman.com/",
+      "websiteId": "https://class.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": false,
+      "classification": "authenticated-app",
+      "notes": "Classroom SPA — social learning hub behind auth; noindex homepage shell."
+    },
+    "astro": {
+      "id": "astro",
+      "host": "astro.quizzman.com",
+      "name": "Quizzman Astro",
+      "url": "https://astro.quizzman.com/",
+      "websiteId": "https://astro.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface"
+    },
+    "search": {
+      "id": "search",
+      "host": "search.quizzman.com",
+      "name": "Quizzman Search",
+      "url": "https://search.quizzman.com/",
+      "websiteId": "https://search.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface"
+    },
+    "legatus": {
+      "id": "legatus",
+      "host": "legatus.quizzman.com",
+      "name": "Quizzman Legatus",
+      "url": "https://legatus.quizzman.com/",
+      "websiteId": "https://legatus.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface",
+      "notes": "Public notification-center landing; app inbox remains authenticated."
+    },
+    "dict": {
+      "id": "dict",
+      "host": "dict.quizzman.com",
+      "name": "Quizzman Dictionary",
+      "url": "https://dict.quizzman.com/",
+      "websiteId": "https://dict.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface"
+    },
+    "mentis": {
+      "id": "mentis",
+      "host": "mentis.quizzman.com",
+      "name": "Quizzman Mentis",
+      "url": "https://mentis.quizzman.com/",
+      "websiteId": "https://mentis.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": false,
+      "classification": "authenticated-app",
+      "notes": "AI knowledge workspace — treat shell as private/application surface."
+    },
+    "play": {
+      "id": "play",
+      "host": "play.quizzman.com",
+      "name": "Quizzman Play",
+      "url": "https://play.quizzman.com/",
+      "websiteId": "https://play.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface"
+    },
+    "wiki": {
+      "id": "wiki",
+      "host": "wiki.quizzman.com",
+      "name": "Quizzman Wiki",
+      "url": "https://wiki.quizzman.com/",
+      "websiteId": "https://wiki.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "product-surface",
+      "notes": "Quizzman Knowledge / Wiki — public SSR content surface."
+    },
+    "ui": {
+      "id": "ui",
+      "host": "ui.quizzman.com",
+      "name": "Zentro",
+      "url": "https://ui.quizzman.com/",
+      "websiteId": "https://ui.quizzman.com/#website",
+      "type": "WebSite",
+      "indexable": true,
+      "classification": "public-docs-and-cdn",
+      "notes": "Zentro (Modular Framework + Runtime) — public docs portal + CDN/runtime host. Package scope @qmf/* and path /qmf/ unchanged."
+    }
+  }
+}

@@ -2,16 +2,16 @@
   "name": "@qmf/monorepo",
   "version": "3.0.0",
   "private": true,
-  "description": "Quizzman Fabric — Modular Framework + Runtime by Quizzman.com",
+  "description": "Zentro \u2014 Modular Framework + Runtime by Quizzman.com",
   "author": "Quizzman.com",
   "license": "MIT",
   "homepage": "https://ui.quizzman.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/the-quizzman/Quizzman-Fabric.git"
+    "url": "https://github.com/the-quizzman/Quizzman-Zentro.git"
   },
   "bugs": {
-    "url": "https://github.com/the-quizzman/Quizzman-Fabric/issues"
+    "url": "https://github.com/the-quizzman/Quizzman-Zentro/issues"
   },
   "engines": {
     "node": ">=18.0.0",

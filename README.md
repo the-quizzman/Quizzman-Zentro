@@ -1,6 +1,6 @@
-# Quizzman Fabric
+# Zentro
 
-**Quizzman Fabric** — Modular Framework + Runtime by [Quizzman.com](https://quizzman.com).
+**Zentro** — Modular Framework + Runtime by [Quizzman.com](https://quizzman.com).
 
 Formerly **QMF (Quizzman Modular Framework)**. The short code name **QMF** remains in package scopes (`@qmf/*`), CDN paths (`/qmf/`), and the global `QMF` runtime API.
 
@@ -10,7 +10,7 @@ License: [MIT](./LICENSE) · Copyright © Quizzman.com
 
 | | |
 |---|---|
-| **Name** | Quizzman Fabric |
+| **Name** | Zentro |
 | **Subtitle** | Modular Framework + Runtime |
 | **Docs / CDN** | https://ui.quizzman.com/ |
 | **Packages** | `@qmf/core`, `@qmf/tokens`, `@qmf/ui`, `@qmf/header`, `@qmf/runtime`, … |
@@ -76,8 +76,8 @@ QMF.use(lazy(() => import('@qmf/chat-embed')));
 - Usage: https://ui.quizzman.com/qmf/docs/USAGE.md
 - API: https://ui.quizzman.com/qmf/docs/API.md
 - Architecture: https://ui.quizzman.com/qmf/docs/ARCHITECTURE.md
-- Fabric 4.0 (alpha): https://ui.quizzman.com/qmf/docs/v4/README.md
+- Zentro 4.0 (alpha): https://ui.quizzman.com/qmf/docs/v4/README.md
 
 ## Repository
 
-https://github.com/the-quizzman/Quizzman-Fabric
+https://github.com/the-quizzman/Quizzman-Zentro

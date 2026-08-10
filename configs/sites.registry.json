@@ -164,13 +164,13 @@
     "ui": {
       "id": "ui",
       "host": "ui.quizzman.com",
-      "name": "Quizzman Fabric",
+      "name": "Zentro",
       "url": "https://ui.quizzman.com/",
       "websiteId": "https://ui.quizzman.com/#website",
       "type": "WebSite",
       "indexable": true,
       "classification": "public-docs-and-cdn",
-      "notes": "Quizzman Fabric (Modular Framework + Runtime) — public docs portal + CDN/runtime host. Package scope @qmf/* and path /qmf/ unchanged."
+      "notes": "Zentro (Modular Framework + Runtime) — public docs portal + CDN/runtime host. Package scope @qmf/* and path /qmf/ unchanged."
     }
   }
 }
