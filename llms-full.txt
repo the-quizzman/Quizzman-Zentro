@@ -1,9 +1,10 @@
-# QMF — Full LLM Index
+# Quizzman Fabric — Full LLM Index
 > Expanded documentation map for AI agents (ChatGPT, Claude, Gemini, Cursor, Copilot, Codex, OpenHands, OpenRouter).
 > Prefer this file when you need exhaustive links. For a short overview use /qmf/llms.txt.
 
 ## Identity
-- Product: QMF (Quizzman Modular Framework)
+- Product: Quizzman Fabric (Modular Framework + Runtime)
+- Short / code: QMF (legacy — `@qmf/*`, `/qmf/`, `QMF` global)
 - Stable: 3.0.0 (CDN / @qmf/core stack)
 - Alpha: 4.0.0-alpha.1 (vanilla JS contract runtime — @qmf/contract, @qmf/events, @qmf/runtime, @qmf/inspect, @qmf/qmf-cli)
 - Home: https://ui.quizzman.com/

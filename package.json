@@ -2,16 +2,16 @@
   "name": "@qmf/monorepo",
   "version": "3.0.0",
   "private": true,
-  "description": "Quizzman Modular Framework (QMF) — modular frontend framework by Quizzman.com",
+  "description": "Quizzman Fabric — Modular Framework + Runtime by Quizzman.com",
   "author": "Quizzman.com",
   "license": "MIT",
-  "homepage": "https://quizzman.com",
+  "homepage": "https://ui.quizzman.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/the-quizzman/Quizzman-Modular-Framework.git"
+    "url": "https://github.com/the-quizzman/Quizzman-Fabric.git"
   },
   "bugs": {
-    "url": "https://github.com/the-quizzman/Quizzman-Modular-Framework/issues"
+    "url": "https://github.com/the-quizzman/Quizzman-Fabric/issues"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -50,7 +50,8 @@
     "format": "prettier --write \"packages/*/src/**/*.{ts,js,css}\"",
     "bundle:check": "node scripts/bundle-size-check.mjs",
     "playground": "turbo run dev --filter=@qmf/playground",
-    "docs": "turbo run dev --filter=@qmf/docs"
+    "docs": "turbo run dev --filter=@qmf/docs",
+    "seo:inject-identity": "node scripts/inject-site-identity.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0",
