@@ -165,26 +165,44 @@ export function resolveNotificationUrl(item) {
     }
   }
 
+  // Last resort: first http(s) URL embedded in body/title (shown as icon, not text).
+  const blob = `${item?.body || ""} ${item?.title || ""}`;
+  const embedded = blob.match(/https?:\/\/[^\s<>"'）】)\]]+/i);
+  if (embedded?.[0]) {
+    return sanitizeDeepLink(embedded[0]);
+  }
+
   return null;
 }
 
 /**
- * Mark read + emit + navigate when a deep link exists.
+ * Resolve inbox/realtime item by receiver or notification id.
  * @param {import('./index.js').LegatusRuntime | object} runtime
  * @param {string|null} receiverId
  * @param {object} [item]
  */
-export function handleNotificationClick(runtime, receiverId, item) {
-  const found =
-    item ||
+export function findNotificationItem(runtime, receiverId, item) {
+  if (item) return item;
+  return (
     runtime?.store
       ?.get()
       ?.items?.find(
         (it) =>
           String(it.receiver_id || "") === String(receiverId || "") ||
           String(it.notification_id || "") === String(receiverId || "")
-      ) ||
-    null;
+      ) || null
+  );
+}
+
+/**
+ * Mark read + emit click (does not navigate). Link opens via openNotificationLink.
+ * @param {import('./index.js').LegatusRuntime | object} runtime
+ * @param {string|null} receiverId
+ * @param {object} [item]
+ * @param {{ openLink?: boolean }} [opts] — legacy: pass openLink:true to also navigate
+ */
+export function handleNotificationClick(runtime, receiverId, item, opts = {}) {
+  const found = findNotificationItem(runtime, receiverId, item);
 
   if (receiverId && runtime?.client?.markRead) {
     runtime.client.markRead(receiverId).catch(() => {});
@@ -205,12 +223,43 @@ export function handleNotificationClick(runtime, receiverId, item) {
     /* ignore */
   }
 
+  if (opts.openLink === true) {
+    return openNotificationLink(runtime, found || { data }, { receiverId });
+  }
+  return false;
+}
+
+/**
+ * Open the notification deep link only (separate from “read message”).
+ * @param {import('./index.js').LegatusRuntime | object} runtime
+ * @param {object|null} item
+ * @param {{ receiverId?: string|null }} [opts]
+ */
+export function openNotificationLink(runtime, item, opts = {}) {
+  const found = findNotificationItem(runtime, opts.receiverId || null, item);
+  const data = asRecord(found?.data);
+  const url = resolveNotificationUrl(found || { data });
   if (!url) return false;
+
+  if (opts.receiverId && runtime?.client?.markRead) {
+    runtime.client.markRead(opts.receiverId).catch(() => {});
+  }
 
   const openNew =
     data.open_in_new_tab === true ||
     data.openInNewTab === true ||
     data.target === "_blank";
+
+  try {
+    runtime?.bus?.emit("notification:open-link", {
+      receiver_id: opts.receiverId || found?.receiver_id || null,
+      url,
+      title: found?.title || null,
+      data,
+    });
+  } catch {
+    /* ignore */
+  }
 
   try {
     if (openNew) {

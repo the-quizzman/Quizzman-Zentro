@@ -138,6 +138,20 @@ function createRuntime(options) {
     document.documentElement.appendChild(host);
   }
 
+  // Realtime notifications → toast popup (expand to read; link is a separate control).
+  bus.on("notification", (item) => {
+    if (!item || options.toastHost === false) return;
+    bus.emit("toast", {
+      kind: "info",
+      title: item.title,
+      body: item.body,
+      item,
+      receiver_id: item.receiver_id,
+      data: item.data,
+      ttl: bodyNeedsExpandToast(item.body) ? 12000 : 8000,
+    });
+  });
+
   // Mobile: always mount the floating orb once runtime exists.
   if (typeof window !== "undefined" && window.matchMedia("(max-width: 720px)").matches) {
     rt.ensureOrb();
@@ -146,6 +160,12 @@ function createRuntime(options) {
   watchLang((lang) => rt.setLocale(lang));
 
   return rt;
+}
+
+function bodyNeedsExpandToast(body) {
+  const s = String(body || "").trim();
+  if (!s) return false;
+  return s.includes("\n") || s.length > 110;
 }
 
 const api = {

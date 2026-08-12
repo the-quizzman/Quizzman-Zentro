@@ -4,8 +4,7 @@
  */
 
 import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
-import { handleNotificationClick } from "../core/deepLink.js";
-import { notificationItemHtml } from "./item.js";
+import { bindNotificationList, notificationItemHtml } from "./item.js";
 
 function escapeHtml(s) {
   return String(s ?? "")
@@ -279,13 +278,11 @@ export function defineCenter(cssText, runtime) {
       list.innerHTML = state.items
         .map((it) => notificationItemHtml(it, runtime.i18n))
         .join("");
-      list.querySelectorAll("[data-receiver]").forEach((el) => {
-        el.addEventListener("click", () => {
-          const id = el.getAttribute("data-receiver");
-          handleNotificationClick(runtime, id);
+      bindNotificationList(list, runtime, {
+        onActivate: () => {
           this.close?.();
           runtime.closeCenter?.();
-        });
+        },
       });
     }
 

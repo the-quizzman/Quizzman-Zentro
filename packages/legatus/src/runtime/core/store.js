@@ -44,12 +44,29 @@ export function createStore(bus) {
       notify();
     },
     prepend(item) {
-      const id = item.receiver_id || item.notification_id || item.id;
+      const rid = item.receiver_id != null ? String(item.receiver_id) : "";
+      const nid = item.notification_id != null
+        ? String(item.notification_id)
+        : item.id != null
+          ? String(item.id)
+          : "";
       state.items = [
         item,
-        ...state.items.filter(
-          (x) => (x.receiver_id || x.notification_id || x.id) !== id
-        ),
+        ...state.items.filter((x) => {
+          const xRid = x.receiver_id != null ? String(x.receiver_id) : "";
+          const xNid =
+            x.notification_id != null
+              ? String(x.notification_id)
+              : x.id != null
+                ? String(x.id)
+                : "";
+          if (rid && xRid && xRid === rid) return false;
+          if (nid && xNid && xNid === nid) return false;
+          // WS upsert may temporarily use notification id as receiver_id
+          if (nid && xRid && xRid === nid) return false;
+          if (rid && xNid && xNid === rid) return false;
+          return true;
+        }),
       ];
       notify();
     },

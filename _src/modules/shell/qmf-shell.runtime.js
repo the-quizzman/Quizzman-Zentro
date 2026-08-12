@@ -6,20 +6,21 @@
  *
  * UI (Lumen bar, plan ring, menus) lives in auth-widget / header modules.
  *
- * @version 2.2.16
+ * @version 2.2.33
  */
 (function (global) {
   'use strict';
 
   var Runtime = {
-    shell: '2.2.16',
+    shell: '2.2.33',
     packages: {
-      header: '3.10.4',
+      header: '3.10.15',
       auth: '1.5.9',
-      legatus: '1.3.1',
+      legatus: '1.3.6',
       sso: '20260721',
       i18n: '1.0.3',
       prefs: '1.0.0',
+      analytics: '1.0.0',
     },
   };
 
@@ -152,7 +153,8 @@
     });
     register('legatus', {
       version: pk.legatus,
-      url: moduleUrl('modules/header/legatus-bridge.js', pk.header),
+      // Bust bridge + SDK together (do not pin bridge to header rev — CF immutable).
+      url: moduleUrl('modules/header/legatus-bridge.js', pk.legatus),
       plugin: true,
     });
   }
@@ -271,7 +273,7 @@
     // Allow top-level brand fields
     ['brandName', 'pageTitle', 'productSub', 'logoSrc', 'logoSrcDark', 'mainLogoLink',
       'brandHref', 'showGlobalNav', 'showSearch', 'showChat', 'showFriend', 'showJoinQuiz',
-      'headerInFlow', 'searchPlaceholder', 'searchUrl', 'navItems'].forEach(function (k) {
+      'headerInFlow', 'searchPlaceholder', 'searchUrl', 'searchApiUrl', 'navItems'].forEach(function (k) {
       if (opts[k] !== undefined && headerOpts[k] === undefined) headerOpts[k] = opts[k];
     });
 
@@ -435,10 +437,39 @@
     return Promise.resolve(null);
   }
 
+  function isTypingContext() {
+    try {
+      var el = document.activeElement;
+      if (!el) return false;
+      var tag = String(el.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return true;
+      if (el.isContentEditable) return true;
+      return !!(el.closest && el.closest('[contenteditable=""], [contenteditable="true"]'));
+    } catch (e) {
+      return false;
+    }
+  }
+
   /** Soft-reload principle — replace navigation with ?_qmf=, never ask users to hard refresh. */
   function softReload(reason, nextRev) {
+    var rev = nextRev || Runtime.shell;
+    if (isTypingContext()) {
+      try {
+        console.info('[QMFShell] soft-reload deferred (typing):', reason || 'manual', rev);
+      } catch (e0) { /* ignore */ }
+      var pending = { reason: reason || 'manual', nextRev: rev };
+      var onOut = function () {
+        setTimeout(function () {
+          if (isTypingContext()) return;
+          document.removeEventListener('focusout', onOut, true);
+          softReload(pending.reason, pending.nextRev);
+        }, 50);
+      };
+      document.addEventListener('focusout', onOut, true);
+      return;
+    }
+
     try {
-      var rev = nextRev || Runtime.shell;
       console.warn('[QMFShell] soft-reload:', reason || 'manual', rev);
       var u = new URL(global.location.href);
       u.searchParams.set('_qmf', rev);

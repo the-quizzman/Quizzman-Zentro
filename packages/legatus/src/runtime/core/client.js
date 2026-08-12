@@ -237,9 +237,10 @@ export class LegatusClient {
     if (type === "heartbeat.ack") return;
 
     if (type === "notification") {
+      const notificationId = msg.notification_id || msg.id;
       const item = {
-        receiver_id: msg.receiver_id || msg.id,
-        notification_id: msg.id || msg.notification_id,
+        receiver_id: msg.receiver_id || notificationId,
+        notification_id: notificationId,
         title: msg.title || "Notification",
         body: msg.body || "",
         data: msg.data || {},

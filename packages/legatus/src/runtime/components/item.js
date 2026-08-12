@@ -3,6 +3,12 @@
  * Actors come from notification.data.actors | people | faces.
  */
 
+import {
+  handleNotificationClick,
+  openNotificationLink,
+  resolveNotificationUrl,
+} from "../core/deepLink.js";
+
 const SPECIES_TINT = {
   panda: { soft: "#eef2ff", accent: "#4338ca" },
   fox: { soft: "#fff7ed", accent: "#c2410c" },
@@ -127,25 +133,156 @@ export function facesHtml(actors, { max = 3 } = {}) {
 }
 
 /**
+ * Strip raw URLs from body text (shown as an open-link control instead).
+ * Preserves paragraph newlines — do not collapse `\n` via `\s`.
+ * @param {string} text
+ */
+export function bodyWithoutUrls(text) {
+  return String(text || "")
+    .replace(/https?:\/\/[^\s<>"'）】)\]]+/gi, "")
+    .replace(/[^\S\n]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+/** Long enough that a 2-line clamp likely hides content. */
+export function bodyNeedsExpand(text) {
+  const s = bodyWithoutUrls(text);
+  if (!s) return false;
+  if (s.includes("\n")) return true;
+  return s.length > 110;
+}
+
+/**
+ * Render body with paragraph breaks (`\n\n` → blocks, `\n` → <br>).
+ * @param {string} text
+ * @param {string} [className]
+ */
+export function formatBodyHtml(text, className = "lg-item-body") {
+  const clean = bodyWithoutUrls(text);
+  if (!clean) return "";
+  const paras = clean
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => escapeHtml(p).replace(/\n/g, "<br>"));
+  if (!paras.length) return "";
+  if (paras.length === 1) {
+    return `<div class="${className}">${paras[0]}</div>`;
+  }
+  return `<div class="${className} ${className}--rich">${paras
+    .map((p) => `<p>${p}</p>`)
+    .join("")}</div>`;
+}
+
+const OPEN_LINK_SVG = `<svg class="lg-link-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h6v2H7v10h10v-4h2v6H5V5z"/></svg>`;
+
+/** Survives list re-paints triggered by markRead / unread updates. */
+const expandedReceivers = new Set();
+
+/**
  * One inbox row HTML (bell + hub).
  * @param {object} it
- * @param {{ relativeTime: (iso:string)=>string }} i18n
+ * @param {{ relativeTime: (iso:string)=>string, t?: (key:string)=>string }} i18n
  */
 export function notificationItemHtml(it, i18n) {
   const actors = actorsFromItem(it);
   const faces = facesHtml(actors);
   const unread = !it.read_at;
   const hasFaces = Boolean(faces);
+  const url = resolveNotificationUrl(it);
+  const bodyText = bodyWithoutUrls(it.body || "");
+  const canExpand = bodyNeedsExpand(bodyText);
+  const receiverKey = String(it.receiver_id || "");
+  const isExpanded = receiverKey && expandedReceivers.has(receiverKey);
+  const t = typeof i18n?.t === "function" ? i18n.t.bind(i18n) : (k) => k;
+  const openLabel = t("openLink");
+  const moreLabel = t(isExpanded ? "readLess" : "readMore");
+  const bodyHtml = formatBodyHtml(it.body || "", "lg-item-body");
+  const expandHtml = canExpand
+    ? `<button class="lg-item-more" type="button" data-action="expand">${escapeHtml(moreLabel)}</button>`
+    : "";
+  const linkHtml = url
+    ? `<button class="lg-item-open" type="button" data-action="open-link" title="${escapeAttr(openLabel)}" aria-label="${escapeAttr(openLabel)}">${OPEN_LINK_SVG}</button>`
+    : "";
+  const expandedClass = isExpanded ? " lg-item--expanded" : "";
   return `
-    <button class="lg-item${hasFaces ? " lg-item--faces" : ""}" type="button" data-unread="${unread}" data-receiver="${escapeAttr(
+    <div class="lg-item${hasFaces ? " lg-item--faces" : ""}${url ? " lg-item--link" : ""}${canExpand ? " lg-item--expandable" : ""}${expandedClass}" data-unread="${unread}" data-receiver="${escapeAttr(
     it.receiver_id
-  )}" data-title="${escapeAttr(it.title)}">
+  )}" data-title="${escapeAttr(it.title)}"${url ? ` data-has-link="true"` : ""} role="button" tabindex="0">
       <span class="lg-dot"></span>
       ${hasFaces ? faces : ""}
       <span class="lg-item-copy">
-        <p class="lg-item-title">${escapeHtml(it.title)}</p>
-        <p class="lg-item-body">${escapeHtml(it.body || "")}</p>
+        <p class="lg-item-title">${escapeHtml(it.title)}${linkHtml}</p>
+        ${bodyHtml}
+        ${expandHtml}
         <div class="lg-item-meta">${escapeHtml(i18n.relativeTime(it.created_at))}</div>
       </span>
-    </button>`;
+    </div>`;
+}
+
+/**
+ * Bind expand / open-link / mark-read on a list root.
+ * @param {ParentNode} root
+ * @param {import('../index.js').LegatusRuntime} runtime
+ * @param {{ onActivate?: (receiverId:string)=>void }} [opts]
+ */
+export function bindNotificationList(root, runtime, opts = {}) {
+  if (!root) return;
+
+  root.querySelectorAll(".lg-item[data-receiver]").forEach((el) => {
+    const receiverId = el.getAttribute("data-receiver");
+    const receiverKey = String(receiverId || "");
+
+    el.querySelectorAll('[data-action="expand"]').forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const expanded = el.classList.toggle("lg-item--expanded");
+        btn.textContent = runtime.i18n.t(expanded ? "readLess" : "readMore");
+        if (receiverKey) {
+          if (expanded) expandedReceivers.add(receiverKey);
+          else expandedReceivers.delete(receiverKey);
+        }
+        // Mark read only — do not navigate / close. Expand state is sticky across re-paint.
+        if (expanded && receiverId && runtime?.client?.markRead) {
+          runtime.client.markRead(receiverId).catch(() => {});
+        }
+      });
+    });
+
+    el.querySelectorAll('[data-action="open-link"]').forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openNotificationLink(runtime, null, { receiverId });
+        opts.onActivate?.(receiverId);
+      });
+    });
+
+    el.addEventListener("click", (e) => {
+      if (e.target.closest("[data-action]")) return;
+      // Expandable rows: first click expands full message instead of closing panel.
+      if (el.classList.contains("lg-item--expandable") && !el.classList.contains("lg-item--expanded")) {
+        el.classList.add("lg-item--expanded");
+        if (receiverKey) expandedReceivers.add(receiverKey);
+        const btn = el.querySelector('[data-action="expand"]');
+        if (btn) btn.textContent = runtime.i18n.t("readLess");
+        if (receiverId && runtime?.client?.markRead) {
+          runtime.client.markRead(receiverId).catch(() => {});
+        }
+        return;
+      }
+      if (receiverId) handleNotificationClick(runtime, receiverId);
+      opts.onActivate?.(receiverId);
+    });
+
+    el.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      if (e.target.closest("[data-action]")) return;
+      e.preventDefault();
+      el.click();
+    });
+  });
 }

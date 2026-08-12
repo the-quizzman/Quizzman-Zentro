@@ -12,16 +12,39 @@
 (function (global) {
   'use strict';
 
-  var REV = '2.2.16';
+  var REV = '2.2.33';
   var pending = [];
   var loading = false;
   var revWatchStarted = false;
   var revCheckInflight = false;
   var REV_POLL_MS = 60000;
+  var gtagStarted = false;
+  /** @type {{ reason: string, nextRev: string }|null} */
+  var pendingSoft = null;
+  var pendingFlushBound = false;
 
   function base() {
     if (global.QMF_BASE) return String(global.QMF_BASE).replace(/\/+$/, '');
     return 'https://ui.quizzman.com';
+  }
+
+  /**
+   * GA4 for every shell consumer (home / lab / tools / …).
+   * Non-blocking — does not wait for runtime mount.
+   * Standalone: /qmf/dist/modules/analytics/gtag.js
+   */
+  function ensureGtag() {
+    if (gtagStarted) return;
+    gtagStarted = true;
+    if (global.QMF_DISABLE_ANALYTICS === true || global.QMF_GTAG === false) return;
+    if (global.__QMF_GTAG_INIT__ || global.QmfGtag) return;
+    try {
+      var s = document.createElement('script');
+      s.id = 'qmf-analytics-gtag';
+      s.async = true;
+      s.src = base() + '/qmf/dist/modules/analytics/gtag.js?v=1.0.0';
+      (document.head || document.documentElement).appendChild(s);
+    } catch (e) { /* ignore */ }
   }
 
   function runtimeSrc() {
@@ -32,12 +55,21 @@
     return base() + '/qmf/dist/modules/shell/qmf-shell.rev?_=' + Date.now();
   }
 
-  /**
-   * Soft-reload principle: location.replace with ?_qmf= — no hard refresh,
-   * no cache-bust instruction to end users. Used after prefs / package bumps
-   * and fleet REV publishes.
-   */
-  function softReload(reason, nextRev) {
+  /** True while the user is editing a field — never steal focus via soft-reload. */
+  function isTypingContext() {
+    try {
+      var el = document.activeElement;
+      if (!el) return false;
+      var tag = String(el.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return true;
+      if (el.isContentEditable) return true;
+      return !!(el.closest && el.closest('[contenteditable=""], [contenteditable="true"]'));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function performSoftReload(reason, nextRev) {
     try {
       var rev = nextRev || REV;
       console.warn('[QMFShell] soft-reload:', reason || 'manual', rev);
@@ -49,6 +81,51 @@
     } catch (e) {
       try { global.location.reload(); } catch (e2) { /* ignore */ }
     }
+  }
+
+  function flushPendingSoftReload() {
+    if (!pendingSoft) return;
+    if (isTypingContext()) return;
+    var job = pendingSoft;
+    pendingSoft = null;
+    performSoftReload(job.reason, job.nextRev);
+  }
+
+  function bindPendingSoftFlush() {
+    if (pendingFlushBound) return;
+    pendingFlushBound = true;
+    try {
+      document.addEventListener(
+        'focusout',
+        function () {
+          setTimeout(flushPendingSoftReload, 50);
+        },
+        true,
+      );
+      global.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'hidden') flushPendingSoftReload();
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  /**
+   * Soft-reload principle: location.replace with ?_qmf= — no hard refresh,
+   * no cache-bust instruction to end users. Used after prefs / package bumps
+   * and fleet REV publishes.
+   * Deferred while an input/textarea has focus (create forms, editor, etc.).
+   */
+  function softReload(reason, nextRev) {
+    var rev = nextRev || REV;
+    if (isTypingContext()) {
+      pendingSoft = { reason: reason || 'manual', nextRev: rev };
+      bindPendingSoftFlush();
+      try {
+        console.info('[QMFShell] soft-reload deferred (typing):', reason || 'manual', rev);
+      } catch (e0) { /* ignore */ }
+      return;
+    }
+    pendingSoft = null;
+    performSoftReload(reason, rev);
   }
 
   /** One-shot soft-reload (guarded per target REV). */
@@ -130,10 +207,11 @@
     } catch (e) { /* ignore */ }
 
     try {
+      // Tab visible again — check fleet REV. Do NOT hook window `focus`:
+      // that races with clicking into inputs and can soft-reload mid-keystroke.
       global.addEventListener('visibilitychange', function () {
         if (document.visibilityState === 'visible') checkRemoteRev();
       });
-      global.addEventListener('focus', checkRemoteRev);
     } catch (e) { /* ignore */ }
 
     // Initial + periodic poll so long-lived tabs pick up publishes.
@@ -224,6 +302,7 @@
   if (!global.QMFShell || !global.QMFShell.Runtime) {
     installStub();
   }
+  ensureGtag();
   ensureRuntime();
   startRevWatch();
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -1,7 +1,12 @@
 /** Con dấu chữ Q — official Legatus / Quizzman seal icon */
 import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
-import { handleNotificationClick } from "../core/deepLink.js";
-import { notificationItemHtml } from "./item.js";
+import { openNotificationLink, resolveNotificationUrl } from "../core/deepLink.js";
+import {
+  bindNotificationList,
+  bodyNeedsExpand,
+  formatBodyHtml,
+  notificationItemHtml,
+} from "./item.js";
 
 const BELL_SVG = `
 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -137,13 +142,9 @@ export function defineBell(cssText, runtime) {
       const mob = this.shadowRoot.querySelector("[data-list-mobile]");
       if (desk) desk.innerHTML = html;
       if (mob) mob.innerHTML = html;
-      this.shadowRoot.querySelectorAll("[data-receiver]").forEach((el) => {
-        el.addEventListener("click", () => {
-          const id = el.getAttribute("data-receiver");
-          handleNotificationClick(runtime, id);
-          this.close();
-        });
-      });
+      const onActivate = () => this.close();
+      if (desk) bindNotificationList(desk, runtime, { onActivate });
+      if (mob) bindNotificationList(mob, runtime, { onActivate });
     }
 
     _listHtml(state) {
@@ -264,16 +265,68 @@ export function defineToastHost(cssText, runtime) {
       const el = document.createElement("div");
       el.className = "lg-toast";
       el.dataset.kind = payload.kind || "info";
+      el.dataset.expanded = "false";
       const t = runtime.i18n.t.bind(runtime.i18n);
+      const item = payload.item || null;
+      const rawBody = payload.body || item?.body || "";
+      const url = resolveNotificationUrl(item || payload);
+      const canExpand = bodyNeedsExpand(rawBody);
+      const openLabel = t("openLink");
+      const linkHtml = url
+        ? `<button class="lg-toast-open" type="button" data-action="open-link" title="${escapeAttr(openLabel)}" aria-label="${escapeAttr(openLabel)}"><svg class="lg-link-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h6v2H7v10h10v-4h2v6H5V5z"/></svg></button>`
+        : "";
+      const expandHtml = canExpand
+        ? `<button class="lg-toast-more" type="button" data-action="expand">${escapeHtml(t("readMore"))}</button>`
+        : "";
+      const bodyHtml = formatBodyHtml(rawBody, "lg-toast-body");
       el.innerHTML = `
-        <p class="lg-toast-title">${escapeHtml(payload.title || t("notice"))}</p>
-        <button type="button" aria-label="${escapeAttr(t("dismiss"))}">✕</button>
-        ${payload.body ? `<p class="lg-toast-body">${escapeHtml(payload.body)}</p>` : ""}
+        <p class="lg-toast-title">${escapeHtml(payload.title || item?.title || t("notice"))}${linkHtml}</p>
+        <button type="button" class="lg-toast-dismiss" aria-label="${escapeAttr(t("dismiss"))}">✕</button>
+        ${bodyHtml}
+        ${expandHtml}
       `;
-      el.querySelector("button").addEventListener("click", () => el.remove());
+
+      let timer = null;
+      const clearTimer = () => {
+        if (timer) clearTimeout(timer);
+        timer = null;
+      };
+      const scheduleRemove = (ms) => {
+        clearTimer();
+        timer = setTimeout(() => el.remove(), ms);
+      };
+
+      el.querySelector(".lg-toast-dismiss")?.addEventListener("click", () => {
+        clearTimer();
+        el.remove();
+      });
+
+      el.querySelector('[data-action="expand"]')?.addEventListener("click", () => {
+        const expanded = el.dataset.expanded === "true";
+        el.dataset.expanded = expanded ? "false" : "true";
+        const btn = el.querySelector('[data-action="expand"]');
+        if (btn) btn.textContent = t(expanded ? "readMore" : "readLess");
+        // Keep open while reading the full message.
+        if (!expanded) clearTimer();
+        else scheduleRemove(Number(payload.ttl || 8000));
+      });
+
+      el.querySelector('[data-action="open-link"]')?.addEventListener("click", () => {
+        openNotificationLink(runtime, item || payload, {
+          receiverId: item?.receiver_id || payload.receiver_id || null,
+        });
+        clearTimer();
+        el.remove();
+      });
+
+      // Pause auto-dismiss while hovering / focusing.
+      el.addEventListener("mouseenter", clearTimer);
+      el.addEventListener("mouseleave", () => {
+        if (el.dataset.expanded !== "true") scheduleRemove(Number(payload.ttl || 8000));
+      });
+
       host.appendChild(el);
-      const ttl = Number(payload.ttl || 4200);
-      setTimeout(() => el.remove(), ttl);
+      scheduleRemove(Number(payload.ttl || (canExpand ? 10000 : 6500)));
     }
   }
 
