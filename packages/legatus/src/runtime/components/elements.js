@@ -1,6 +1,7 @@
 /** Con dấu chữ Q — official Legatus / Quizzman seal icon */
 import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
 import { openNotificationLink, resolveNotificationUrl } from "../core/deepLink.js";
+import { connectionBarHtml, connectionStatusOf, paintConnection } from "../core/connection-ui.js";
 import {
   bindNotificationList,
   bodyNeedsExpand,
@@ -79,13 +80,17 @@ export function defineBell(cssText, runtime) {
       this.shadowRoot.innerHTML = `
         <style>${cssText}</style>
         <div class="lg-root lg-wrap">
-          <button class="lg-bell" type="button" part="bell" aria-label="${escapeAttr(label)}" aria-expanded="false">
+          <button class="lg-bell" type="button" part="bell" aria-label="${escapeAttr(label)}" aria-expanded="false" data-conn="idle">
             ${BELL_SVG}
             <span class="lg-badge" hidden part="badge">0</span>
+            <span class="lg-conn-pip" aria-hidden="true"></span>
           </button>
           <div class="lg-panel" part="panel" data-open="false" role="dialog" aria-label="${escapeAttr(label)}">
             <div class="lg-panel-head">
-              <h3 class="lg-panel-title">${escapeHtml(label)}</h3>
+              <div class="lg-panel-head-main">
+                <h3 class="lg-panel-title">${escapeHtml(label)}</h3>
+                ${connectionBarHtml(t)}
+              </div>
               <button class="lg-link" type="button" data-action="read-all">${escapeHtml(t("markAllRead"))}</button>
             </div>
             <div class="lg-list" data-list></div>
@@ -97,7 +102,10 @@ export function defineBell(cssText, runtime) {
           <div class="lg-sheet" data-open="false" hidden aria-hidden="true" role="dialog" aria-label="${escapeAttr(label)}">
             <div class="lg-sheet-handle"></div>
             <div class="lg-panel-head">
-              <h3 class="lg-panel-title">${escapeHtml(label)}</h3>
+              <div class="lg-panel-head-main">
+                <h3 class="lg-panel-title">${escapeHtml(label)}</h3>
+                ${connectionBarHtml(t)}
+              </div>
               <button class="lg-link" type="button" data-action="read-all">${escapeHtml(t("markAllRead"))}</button>
             </div>
             <div class="lg-list" data-list-mobile></div>
@@ -114,6 +122,9 @@ export function defineBell(cssText, runtime) {
       root.querySelector(".lg-sheet-backdrop").addEventListener("click", () => this.close());
       root.querySelectorAll('[data-action="read-all"]').forEach((el) =>
         el.addEventListener("click", () => runtime.client.markAllRead().catch(() => {}))
+      );
+      root.querySelectorAll('[data-action="reconnect"]').forEach((el) =>
+        el.addEventListener("click", () => runtime.client.reconnect().catch(() => {}))
       );
       root.querySelectorAll('[data-action="open-center"]').forEach((el) =>
         el.addEventListener("click", () => {
@@ -133,6 +144,13 @@ export function defineBell(cssText, runtime) {
       } else {
         badge.hidden = true;
       }
+      const status = connectionStatusOf(state);
+      const bell = this.shadowRoot.querySelector(".lg-bell");
+      if (bell) bell.dataset.conn = status;
+      const t = runtime.i18n.t.bind(runtime.i18n);
+      this.shadowRoot.querySelectorAll(".lg-panel, .lg-sheet").forEach((el) => {
+        paintConnection(el, state, t);
+      });
       this._paintLists(state);
     }
 

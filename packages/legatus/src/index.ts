@@ -1,7 +1,7 @@
 /**
  * @qmf/legatus — Official QMF module for Legatus communication UI.
  *
- * Backend: https://legatus.quizzman.com (REST + WebSocket only)
+ * Backend: https://legatus.quizzman.com (REST + SSE stream; WebSocket for rooms)
  * Assets:  https://ui.quizzman.com/qmf/dist/legatus/
  */
 
@@ -15,8 +15,14 @@ export const LegatusConfigSchema = z.object({
   token: z.string().optional(),
   /** Async token provider (SSO / localStorage). */
   tokenProvider: z.function().optional(),
-  /** Open WebSocket on init. */
+  /** Open live channel on init (SSE by default; WS only if realtime). */
   autoConnect: z.boolean().default(true),
+  /** `auto` prefers SSE; `ws` for rooms/presence; `poll` never holds a socket. */
+  transport: z.enum(['auto', 'sse', 'ws', 'poll']).default('auto'),
+  /** When true, use WebSocket (rooms / presence) instead of SSE. */
+  realtime: z.boolean().default(false),
+  /** Drop the live socket this many ms after the tab is hidden. */
+  pauseHiddenMs: z.number().default(15000),
   /** Mount global toast host. */
   toastHost: z.boolean().default(true),
   /** CSS URL for plugin loader injection (CDN). */
@@ -57,6 +63,9 @@ export function createLegatusPlugin(config: Partial<LegatusConfig> = {}): QMFPlu
           tokenProvider: cfg.tokenProvider as (() => string | null | Promise<string | null>) | undefined,
           autoConnect: cfg.autoConnect,
           toastHost: cfg.toastHost,
+          transport: cfg.transport,
+          realtime: cfg.realtime,
+          pauseHiddenMs: cfg.pauseHiddenMs,
         });
         if (cfg.mountTo) {
           Legatus.mount(cfg.mountTo);
@@ -84,6 +93,7 @@ export function createLegatusPlugin(config: Partial<LegatusConfig> = {}): QMFPlu
       ctx.expose('off', Legatus.off.bind(Legatus));
       ctx.expose('emit', Legatus.emit.bind(Legatus));
       ctx.expose('refresh', Legatus.refresh.bind(Legatus));
+      ctx.expose('reconnect', Legatus.reconnect.bind(Legatus));
       ctx.expose('getState', Legatus.getState.bind(Legatus));
       ctx.expose('client', () => Legatus.client);
     },

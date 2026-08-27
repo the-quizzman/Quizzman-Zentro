@@ -23,6 +23,9 @@ let runtime = null;
  * @property {string} [lang]
  * @property {boolean} [autoConnect]
  * @property {boolean} [toastHost]
+ * @property {'auto'|'sse'|'ws'|'poll'} [transport]
+ * @property {boolean} [realtime]
+ * @property {number} [pauseHiddenMs]
  */
 
 /**
@@ -48,6 +51,9 @@ function createRuntime(options) {
     getToken: (requestOptions) => getToken(requestOptions),
     bus,
     store,
+    transport: options.transport || "auto",
+    realtime: !!options.realtime,
+    pauseHiddenMs: options.pauseHiddenMs,
   });
 
   let locale = detectLang(options.locale || options.lang);
@@ -191,6 +197,8 @@ const api = {
       endpoint: options.endpoint || inferEndpoint(),
       autoConnect: options.autoConnect !== false,
       toastHost: options.toastHost !== false,
+      transport: options.transport || "auto",
+      realtime: !!options.realtime,
       ...options,
     });
     runtime.ensureStarted();
@@ -251,6 +259,11 @@ const api = {
     this.init();
     await runtime.client.fetchUnread();
     return runtime.client.fetchNotifications();
+  },
+
+  reconnect() {
+    this.init();
+    return runtime.client.reconnect();
   },
 
   openCenter(opts) {

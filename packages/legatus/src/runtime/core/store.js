@@ -12,6 +12,8 @@ export function createStore(bus) {
     nextCursor: null,
     hasMore: false,
     connected: false,
+    connectionStatus: "idle",
+    transport: null,
     open: false,
   };
 

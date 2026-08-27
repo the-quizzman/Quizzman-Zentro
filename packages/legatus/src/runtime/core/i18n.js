@@ -326,6 +326,112 @@ STRINGS["zh-TW"] = STRINGS.zht;
 STRINGS.ja = STRINGS.jp;
 STRINGS.ko = STRINGS.kr;
 
+const CONNECTION_STRINGS = {
+  en: {
+    connLive: "Live",
+    connConnecting: "Connecting…",
+    connReconnecting: "Reconnecting…",
+    connPaused: "Paused",
+    connOffline: "Offline",
+    connError: "Disconnected",
+    reconnect: "Reconnect",
+  },
+  vi: {
+    connLive: "Trực tuyến",
+    connConnecting: "Đang kết nối…",
+    connReconnecting: "Đang kết nối lại…",
+    connPaused: "Tạm dừng",
+    connOffline: "Ngoại tuyến",
+    connError: "Mất kết nối",
+    reconnect: "Kết nối lại",
+  },
+  zh: {
+    connLive: "已连接",
+    connConnecting: "正在连接…",
+    connReconnecting: "正在重连…",
+    connPaused: "已暂停",
+    connOffline: "离线",
+    connError: "已断开",
+    reconnect: "重新连接",
+  },
+  zht: {
+    connLive: "已連線",
+    connConnecting: "正在連線…",
+    connReconnecting: "正在重連…",
+    connPaused: "已暫停",
+    connOffline: "離線",
+    connError: "已中斷",
+    reconnect: "重新連線",
+  },
+  jp: {
+    connLive: "オンライン",
+    connConnecting: "接続中…",
+    connReconnecting: "再接続中…",
+    connPaused: "一時停止",
+    connOffline: "オフライン",
+    connError: "切断",
+    reconnect: "再接続",
+  },
+  kr: {
+    connLive: "연결됨",
+    connConnecting: "연결 중…",
+    connReconnecting: "다시 연결 중…",
+    connPaused: "일시 중지",
+    connOffline: "오프라인",
+    connError: "연결 끊김",
+    reconnect: "다시 연결",
+  },
+  fr: {
+    connLive: "En ligne",
+    connConnecting: "Connexion…",
+    connReconnecting: "Reconnexion…",
+    connPaused: "En pause",
+    connOffline: "Hors ligne",
+    connError: "Déconnecté",
+    reconnect: "Reconnecter",
+  },
+  de: {
+    connLive: "Live",
+    connConnecting: "Verbinden…",
+    connReconnecting: "Erneut verbinden…",
+    connPaused: "Pausiert",
+    connOffline: "Offline",
+    connError: "Getrennt",
+    reconnect: "Neu verbinden",
+  },
+  es: {
+    connLive: "En vivo",
+    connConnecting: "Conectando…",
+    connReconnecting: "Reconectando…",
+    connPaused: "En pausa",
+    connOffline: "Sin conexión",
+    connError: "Desconectado",
+    reconnect: "Reconectar",
+  },
+  th: {
+    connLive: "ออนไลน์",
+    connConnecting: "กำลังเชื่อมต่อ…",
+    connReconnecting: "กำลังเชื่อมต่อใหม่…",
+    connPaused: "หยุดชั่วคราว",
+    connOffline: "ออฟไลน์",
+    connError: "หลุดการเชื่อมต่อ",
+    reconnect: "เชื่อมต่ออีกครั้ง",
+  },
+  pt: {
+    connLive: "Ao vivo",
+    connConnecting: "Conectando…",
+    connReconnecting: "Reconectando…",
+    connPaused: "Pausado",
+    connOffline: "Offline",
+    connError: "Desconectado",
+    reconnect: "Reconectar",
+  },
+};
+
+for (const [lang, extra] of Object.entries(CONNECTION_STRINGS)) {
+  if (STRINGS[lang]) Object.assign(STRINGS[lang], extra);
+}
+
 const STORAGE_KEYS = [
   "qmf-lang",
   "lab-ui-lang",

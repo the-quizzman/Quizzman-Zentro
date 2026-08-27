@@ -5,6 +5,7 @@
 
 import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
 import { bindNotificationList, notificationItemHtml } from "./item.js";
+import { connectionBarHtml, paintConnection } from "../core/connection-ui.js";
 
 function escapeHtml(s) {
   return String(s ?? "")
@@ -51,13 +52,17 @@ export function defineCenter(cssText, runtime) {
       this.setAttribute("data-role", "hub");
       ensureQuizFont();
       this._paintShell();
-      this._unsub = runtime.store.subscribe((s) => this.paintActivity(s));
+      this._unsub = runtime.store.subscribe((s) => {
+        this.paintActivity(s);
+        paintConnection(this.shadowRoot, s, runtime.i18n.t.bind(runtime.i18n));
+      });
       this._unsubLocale = runtime.bus.on("locale:change", () => {
         const wasOpen = this._open;
         const tab = this._tab;
         this._paintShell();
         this._setTab(tab);
         this.paintActivity(runtime.store.get());
+        paintConnection(this.shadowRoot, runtime.store.get(), runtime.i18n.t.bind(runtime.i18n));
         this.paintMentis();
         if (wasOpen) this.open({ tab });
       });
@@ -89,7 +94,10 @@ export function defineCenter(cssText, runtime) {
           <div class="lg-center-backdrop" data-close></div>
           <div class="lg-center-dialog" role="dialog" aria-modal="true" aria-label="${escapeAttr(title)}">
             <div class="lg-panel-head">
-              <h3 class="lg-panel-title">${escapeHtml(title)}</h3>
+              <div class="lg-panel-head-main">
+                <h3 class="lg-panel-title">${escapeHtml(title)}</h3>
+                ${connectionBarHtml(t)}
+              </div>
               <div class="lg-center-actions">
                 <button class="lg-link lg-hub-readall" type="button" data-action="read-all">${escapeHtml(t("markAllRead"))}</button>
                 <button class="lg-center-close" type="button" data-close aria-label="${escapeAttr(t("dismiss"))}">✕</button>
@@ -132,6 +140,9 @@ export function defineCenter(cssText, runtime) {
       this.shadowRoot
         .querySelector('[data-action="read-all"]')
         ?.addEventListener("click", () => runtime.client.markAllRead().catch(() => {}));
+      this.shadowRoot
+        .querySelector('[data-action="reconnect"]')
+        ?.addEventListener("click", () => runtime.client.reconnect().catch(() => {}));
       this.shadowRoot.querySelectorAll(".lg-hub-tab").forEach((tab) => {
         tab.addEventListener("click", () => this._setTab(tab.getAttribute("data-tab")));
       });
