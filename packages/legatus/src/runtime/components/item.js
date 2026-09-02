@@ -176,7 +176,7 @@ export function formatBodyHtml(text, className = "lg-item-body") {
     .join("")}</div>`;
 }
 
-const OPEN_LINK_SVG = `<svg class="lg-link-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h6v2H7v10h10v-4h2v6H5V5z"/></svg>`;
+const OPEN_LINK_SVG = `<svg class="lg-link-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 4 10.59 5.41 16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>`;
 
 /** Survives list re-paints triggered by markRead / unread updates. */
 const expandedReceivers = new Set();

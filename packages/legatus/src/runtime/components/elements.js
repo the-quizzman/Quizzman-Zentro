@@ -291,7 +291,7 @@ export function defineToastHost(cssText, runtime) {
       const canExpand = bodyNeedsExpand(rawBody);
       const openLabel = t("openLink");
       const linkHtml = url
-        ? `<button class="lg-toast-open" type="button" data-action="open-link" title="${escapeAttr(openLabel)}" aria-label="${escapeAttr(openLabel)}"><svg class="lg-link-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h6v2H7v10h10v-4h2v6H5V5z"/></svg></button>`
+        ? `<button class="lg-toast-open" type="button" data-action="open-link" title="${escapeAttr(openLabel)}" aria-label="${escapeAttr(openLabel)}"><svg class="lg-link-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 4 10.59 5.41 16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></button>`
         : "";
       const expandHtml = canExpand
         ? `<button class="lg-toast-more" type="button" data-action="expand">${escapeHtml(t("readMore"))}</button>`

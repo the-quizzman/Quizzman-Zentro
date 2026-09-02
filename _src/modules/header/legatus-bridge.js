@@ -6,7 +6,7 @@
   'use strict';
 
   var CDN = 'https://ui.quizzman.com/qmf/dist/legatus';
-  var VERSION = '1.3.7';
+  var VERSION = '1.3.8';
   var loading = null;
   var authWired = false;
 

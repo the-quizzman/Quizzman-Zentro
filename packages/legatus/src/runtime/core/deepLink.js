@@ -245,11 +245,6 @@ export function openNotificationLink(runtime, item, opts = {}) {
     runtime.client.markRead(opts.receiverId).catch(() => {});
   }
 
-  const openNew =
-    data.open_in_new_tab === true ||
-    data.openInNewTab === true ||
-    data.target === "_blank";
-
   try {
     runtime?.bus?.emit("notification:open-link", {
       receiver_id: opts.receiverId || found?.receiver_id || null,
@@ -261,12 +256,10 @@ export function openNotificationLink(runtime, item, opts = {}) {
     /* ignore */
   }
 
+  // Same tab: the inbox is already open here. Ignore payload target=_blank so
+  // a notification never spawns a second Quizzman tab.
   try {
-    if (openNew) {
-      window.open(url, "_blank", "noopener,noreferrer");
-    } else {
-      window.location.assign(url);
-    }
+    window.location.assign(url);
     return true;
   } catch {
     return false;
