@@ -8,12 +8,13 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.10.4';
+  const VERSION = '3.10.24';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
-  const CDN_NAV_BASE = 'https://ui.quizzman.com/qmf/dist/modules-v3/header';
+  /* Same origin path as CDN_BASE — avoid dual modules/ vs modules-v3/ caches */
+  const CDN_NAV_BASE = CDN_BASE;
   const JOIN_OVERLAY_BASE = 'https://ui.quizzman.com/qmf/dist/modules/join-overlay';
 
-  const JOIN_OVERLAY_VERSION = '1.0.4';
+  const JOIN_OVERLAY_VERSION = '1.0.5';
 
 /* generated — header chrome strings */
 const HEADER_I18N = {
@@ -34,7 +35,7 @@ const HEADER_I18N = {
     "search.empty": "Không có kết quả",
     "search.apps": "Ứng dụng",
     "search.results": "Kết quả",
-    "search.viewAll": "Xem tất cả trên Library",
+    "search.viewAll": "Xem tất cả trên Search",
     "join": "Vào Quiz",
     "join.error": "Không mở được Join Quiz",
     "notify": "Thông báo",
@@ -49,7 +50,7 @@ const HEADER_I18N = {
     "desc.classroom": "Lớp học và nhóm học",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Soạn bài trình chiếu",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Thí nghiệm và công cụ",
     "item.app-platform": "Nền tảng App",
     "desc.app-platform": "Tất cả ứng dụng Quizzman",
@@ -83,6 +84,8 @@ const HEADER_I18N = {
     "desc.search": "Tìm trên Quizzman",
     "item.live-quiz": "Quiz trực tiếp",
     "desc.live-quiz": "Quiz lớp học realtime",
+    "item.present": "Present",
+    "desc.present": "Trình chiếu tương tác",
     "item.homework": "Bài tập",
     "desc.homework": "Bài tập và nộp bài",
     "item.classes": "Lớp học",
@@ -96,7 +99,11 @@ const HEADER_I18N = {
     "item.practice": "Luyện tập",
     "desc.practice": "Luyện từ Pikahans",
     "item.challenges": "Thử thách",
-    "desc.challenges": "Thử thách Idiom King"
+    "desc.challenges": "Thử thách Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Xây khu đô thị tri thức, đổ xúc xắc, quiz đối thủ",
+    "item.vault": "The Vault",
+    "desc.vault": "Mở rương, đặt cược, hơn đối thủ trong phòng"
   },
   "en": {
     "nav.home": "Home",
@@ -115,7 +122,7 @@ const HEADER_I18N = {
     "search.empty": "No results",
     "search.apps": "Apps",
     "search.results": "Results",
-    "search.viewAll": "See all on Library",
+    "search.viewAll": "See all on Search",
     "join": "Join Quiz",
     "join.error": "Unable to open Join Quiz",
     "notify": "Notifications",
@@ -130,7 +137,7 @@ const HEADER_I18N = {
     "desc.classroom": "Classes and learning groups",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Presentation editor",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Experiments and tools",
     "item.app-platform": "App Platform",
     "desc.app-platform": "All Quizzman apps",
@@ -164,6 +171,8 @@ const HEADER_I18N = {
     "desc.search": "Search across Quizzman",
     "item.live-quiz": "Live Quiz",
     "desc.live-quiz": "Realtime classroom quizzes",
+    "item.present": "Present",
+    "desc.present": "Interactive live slides",
     "item.homework": "Homework",
     "desc.homework": "Assignments and submissions",
     "item.classes": "Classes",
@@ -177,7 +186,11 @@ const HEADER_I18N = {
     "item.practice": "Practice",
     "desc.practice": "Pikahans word practice",
     "item.challenges": "Challenges",
-    "desc.challenges": "Idiom King challenges"
+    "desc.challenges": "Idiom King challenges",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Build knowledge districts, roll the die, quiz rivals",
+    "item.vault": "The Vault",
+    "desc.vault": "Crack chests, stake cash, outsmart the room"
   },
   "zh": {
     "nav.home": "首页",
@@ -196,7 +209,7 @@ const HEADER_I18N = {
     "search.empty": "无结果",
     "search.apps": "应用",
     "search.results": "结果",
-    "search.viewAll": "在 Library 查看全部",
+    "search.viewAll": "在 Search 查看全部",
     "join": "加入测验",
     "join.error": "无法打开加入测验",
     "notify": "通知",
@@ -211,7 +224,7 @@ const HEADER_I18N = {
     "desc.classroom": "班级与学习小组",
     "item.slide-studio": "幻灯片工作室",
     "desc.slide-studio": "演示文稿编辑器",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "实验与工具",
     "item.app-platform": "应用平台",
     "desc.app-platform": "全部 Quizzman 应用",
@@ -245,6 +258,8 @@ const HEADER_I18N = {
     "desc.search": "全站搜索",
     "item.live-quiz": "实时测验",
     "desc.live-quiz": "实时课堂测验",
+    "item.present": "Present",
+    "desc.present": "实时互动演示",
     "item.homework": "作业",
     "desc.homework": "作业与提交",
     "item.classes": "班级",
@@ -258,7 +273,11 @@ const HEADER_I18N = {
     "item.practice": "练习",
     "desc.practice": "Pikahans 单词练习",
     "item.challenges": "挑战",
-    "desc.challenges": "成语王挑战"
+    "desc.challenges": "成语王挑战",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "建造知识城区，掷骰答题对决",
+    "item.vault": "The Vault",
+    "desc.vault": "开宝箱、下注对决、智胜全场"
   },
   "zht": {
     "nav.home": "首頁",
@@ -277,7 +296,7 @@ const HEADER_I18N = {
     "search.empty": "無結果",
     "search.apps": "應用",
     "search.results": "結果",
-    "search.viewAll": "在 Library 查看全部",
+    "search.viewAll": "在 Search 查看全部",
     "join": "加入測驗",
     "join.error": "無法開啟加入測驗",
     "notify": "通知",
@@ -292,7 +311,7 @@ const HEADER_I18N = {
     "desc.classroom": "班級與學習小組",
     "item.slide-studio": "簡報工作室",
     "desc.slide-studio": "簡報編輯器",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "實驗與工具",
     "item.app-platform": "應用平台",
     "desc.app-platform": "全部 Quizzman 應用",
@@ -326,6 +345,8 @@ const HEADER_I18N = {
     "desc.search": "全站搜尋",
     "item.live-quiz": "即時測驗",
     "desc.live-quiz": "即時課堂測驗",
+    "item.present": "Present",
+    "desc.present": "即時互動簡報",
     "item.homework": "作業",
     "desc.homework": "作業與繳交",
     "item.classes": "班級",
@@ -339,7 +360,11 @@ const HEADER_I18N = {
     "item.practice": "練習",
     "desc.practice": "Pikahans 單字練習",
     "item.challenges": "挑戰",
-    "desc.challenges": "成語王挑戰"
+    "desc.challenges": "成語王挑戰",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "建造知識城區，擲骰答題對決",
+    "item.vault": "The Vault",
+    "desc.vault": "開寶箱、下注對決、智勝全場"
   },
   "jp": {
     "nav.home": "ホーム",
@@ -358,7 +383,7 @@ const HEADER_I18N = {
     "search.empty": "結果なし",
     "search.apps": "アプリ",
     "search.results": "結果",
-    "search.viewAll": "Library ですべて見る",
+    "search.viewAll": "Search ですべて見る",
     "join": "クイズに参加",
     "join.error": "参加クイズを開けません",
     "notify": "通知",
@@ -373,7 +398,7 @@ const HEADER_I18N = {
     "desc.classroom": "クラスと学習グループ",
     "item.slide-studio": "スライドスタジオ",
     "desc.slide-studio": "プレゼン編集",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "実験とツール",
     "item.app-platform": "アプリプラットフォーム",
     "desc.app-platform": "すべてのQuizzmanアプリ",
@@ -407,6 +432,8 @@ const HEADER_I18N = {
     "desc.search": "Quizzmanを横断検索",
     "item.live-quiz": "ライブクイズ",
     "desc.live-quiz": "リアルタイム授業クイズ",
+    "item.present": "Present",
+    "desc.present": "インタラクティブなライブ発表",
     "item.homework": "宿題",
     "desc.homework": "宿題と提出",
     "item.classes": "クラス",
@@ -420,7 +447,11 @@ const HEADER_I18N = {
     "item.practice": "練習",
     "desc.practice": "Pikahans単語練習",
     "item.challenges": "チャレンジ",
-    "desc.challenges": "成語王チャレンジ"
+    "desc.challenges": "成語王チャレンジ",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "知識街区を築き、サイコロで対戦",
+    "item.vault": "The Vault",
+    "desc.vault": "宝箱を開け、賭けて部屋を出し抜け"
   },
   "kr": {
     "nav.home": "홈",
@@ -439,7 +470,7 @@ const HEADER_I18N = {
     "search.empty": "결과 없음",
     "search.apps": "앱",
     "search.results": "결과",
-    "search.viewAll": "Library에서 모두 보기",
+    "search.viewAll": "Search에서 모두 보기",
     "join": "퀴즈 참가",
     "join.error": "참가 퀴즈를 열 수 없습니다",
     "notify": "알림",
@@ -454,7 +485,7 @@ const HEADER_I18N = {
     "desc.classroom": "수업과 학습 그룹",
     "item.slide-studio": "슬라이드 스튜디오",
     "desc.slide-studio": "프레젠테이션 편집기",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "실험과 도구",
     "item.app-platform": "앱 플랫폼",
     "desc.app-platform": "모든 Quizzman 앱",
@@ -488,6 +519,8 @@ const HEADER_I18N = {
     "desc.search": "Quizzman 전체 검색",
     "item.live-quiz": "라이브 퀴즈",
     "desc.live-quiz": "실시간 수업 퀴즈",
+    "item.present": "Present",
+    "desc.present": "실시간 인터랙티브 발표",
     "item.homework": "숙제",
     "desc.homework": "숙제와 제출",
     "item.classes": "수업",
@@ -501,7 +534,11 @@ const HEADER_I18N = {
     "item.practice": "연습",
     "desc.practice": "Pikahans 단어 연습",
     "item.challenges": "챌린지",
-    "desc.challenges": "성어왕 챌린지"
+    "desc.challenges": "성어왕 챌린지",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "지식 구역을 짓고 주사위로 대결",
+    "item.vault": "The Vault",
+    "desc.vault": "상자를 열고 판돈을 걸어 방을 제압"
   },
   "fr": {
     "nav.home": "Accueil",
@@ -520,7 +557,7 @@ const HEADER_I18N = {
     "search.empty": "Aucun résultat",
     "search.apps": "Applications",
     "search.results": "Résultats",
-    "search.viewAll": "Tout voir sur Library",
+    "search.viewAll": "Tout voir sur Search",
     "join": "Rejoindre le quiz",
     "join.error": "Impossible d’ouvrir Rejoindre le quiz",
     "notify": "Notifications",
@@ -535,7 +572,7 @@ const HEADER_I18N = {
     "desc.classroom": "Classes et groupes d’apprentissage",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Éditeur de présentation",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Expériences et outils",
     "item.app-platform": "Plateforme d’apps",
     "desc.app-platform": "Toutes les apps Quizzman",
@@ -569,6 +606,8 @@ const HEADER_I18N = {
     "desc.search": "Rechercher sur Quizzman",
     "item.live-quiz": "Quiz en direct",
     "desc.live-quiz": "Quiz de classe en temps réel",
+    "item.present": "Present",
+    "desc.present": "Présentation interactive en direct",
     "item.homework": "Devoirs",
     "desc.homework": "Devoirs et soumissions",
     "item.classes": "Classes",
@@ -582,7 +621,11 @@ const HEADER_I18N = {
     "item.practice": "Pratique",
     "desc.practice": "Pratique de mots Pikahans",
     "item.challenges": "Défis",
-    "desc.challenges": "Défis Idiom King"
+    "desc.challenges": "Défis Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Construisez des quartiers, lancez le dé, quizez vos rivaux",
+    "item.vault": "The Vault",
+    "desc.vault": "Ouvrez les coffres, misez, déjouez la salle"
   },
   "de": {
     "nav.home": "Start",
@@ -601,7 +644,7 @@ const HEADER_I18N = {
     "search.empty": "Keine Ergebnisse",
     "search.apps": "Apps",
     "search.results": "Ergebnisse",
-    "search.viewAll": "Alles in Library ansehen",
+    "search.viewAll": "Alles in Search ansehen",
     "join": "Quiz beitreten",
     "join.error": "Quiz beitreten konnte nicht geöffnet werden",
     "notify": "Benachrichtigungen",
@@ -616,7 +659,7 @@ const HEADER_I18N = {
     "desc.classroom": "Klassen und Lerngruppen",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Präsentationseditor",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Experimente und Tools",
     "item.app-platform": "App-Plattform",
     "desc.app-platform": "Alle Quizzman-Apps",
@@ -650,6 +693,8 @@ const HEADER_I18N = {
     "desc.search": "Überall auf Quizzman suchen",
     "item.live-quiz": "Live-Quiz",
     "desc.live-quiz": "Echtzeit-Klassenquiz",
+    "item.present": "Present",
+    "desc.present": "Interaktive Live-Präsentation",
     "item.homework": "Hausaufgaben",
     "desc.homework": "Aufgaben und Abgaben",
     "item.classes": "Klassen",
@@ -663,7 +708,11 @@ const HEADER_I18N = {
     "item.practice": "Übung",
     "desc.practice": "Pikahans-Wortübung",
     "item.challenges": "Herausforderungen",
-    "desc.challenges": "Idiom-King-Herausforderungen"
+    "desc.challenges": "Idiom-King-Herausforderungen",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Bezirke bauen, würfeln, Rivalen quizen",
+    "item.vault": "The Vault",
+    "desc.vault": "Truhen knacken, Einsatz setzen, den Raum überlisten"
   },
   "es": {
     "nav.home": "Inicio",
@@ -682,7 +731,7 @@ const HEADER_I18N = {
     "search.empty": "Sin resultados",
     "search.apps": "Apps",
     "search.results": "Resultados",
-    "search.viewAll": "Ver todo en Library",
+    "search.viewAll": "Ver todo en Search",
     "join": "Unirse al quiz",
     "join.error": "No se pudo abrir Unirse al quiz",
     "notify": "Notificaciones",
@@ -697,7 +746,7 @@ const HEADER_I18N = {
     "desc.classroom": "Clases y grupos de aprendizaje",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Editor de presentaciones",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Experimentos y herramientas",
     "item.app-platform": "Plataforma de apps",
     "desc.app-platform": "Todas las apps de Quizzman",
@@ -731,6 +780,8 @@ const HEADER_I18N = {
     "desc.search": "Buscar en Quizzman",
     "item.live-quiz": "Quiz en vivo",
     "desc.live-quiz": "Quizzes de clase en tiempo real",
+    "item.present": "Present",
+    "desc.present": "Presentación interactiva en vivo",
     "item.homework": "Tareas",
     "desc.homework": "Tareas y entregas",
     "item.classes": "Clases",
@@ -744,7 +795,11 @@ const HEADER_I18N = {
     "item.practice": "Práctica",
     "desc.practice": "Práctica de palabras Pikahans",
     "item.challenges": "Desafíos",
-    "desc.challenges": "Desafíos Idiom King"
+    "desc.challenges": "Desafíos Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Construye distritos, lanza el dado, reta a rivales",
+    "item.vault": "The Vault",
+    "desc.vault": "Abre cofres, apuesta y supera a la sala"
   },
   "th": {
     "nav.home": "หน้าแรก",
@@ -763,7 +818,7 @@ const HEADER_I18N = {
     "search.empty": "ไม่พบผลลัพธ์",
     "search.apps": "แอป",
     "search.results": "ผลลัพธ์",
-    "search.viewAll": "ดูทั้งหมดบน Library",
+    "search.viewAll": "ดูทั้งหมดบน Search",
     "join": "เข้าควิซ",
     "join.error": "ไม่สามารถเปิดเข้าควิซได้",
     "notify": "การแจ้งเตือน",
@@ -778,7 +833,7 @@ const HEADER_I18N = {
     "desc.classroom": "ชั้นเรียนและกลุ่มเรียน",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "ตัวแก้ไขงานนำเสนอ",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "การทดลองและเครื่องมือ",
     "item.app-platform": "แพลตฟอร์มแอป",
     "desc.app-platform": "แอป Quizzman ทั้งหมด",
@@ -812,6 +867,8 @@ const HEADER_I18N = {
     "desc.search": "ค้นหาทั่ว Quizzman",
     "item.live-quiz": "ควิซสด",
     "desc.live-quiz": "ควิซชั้นเรียนแบบเรียลไทม์",
+    "item.present": "Present",
+    "desc.present": "งานนำเสนอสดแบบโต้ตอบ",
     "item.homework": "การบ้าน",
     "desc.homework": "การบ้านและการส่งงาน",
     "item.classes": "ชั้นเรียน",
@@ -825,7 +882,11 @@ const HEADER_I18N = {
     "item.practice": "ฝึกฝน",
     "desc.practice": "ฝึกคำศัพท์ Pikahans",
     "item.challenges": "ความท้าทาย",
-    "desc.challenges": "ความท้าทาย Idiom King"
+    "desc.challenges": "ความท้าทาย Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "สร้างย่านความรู้ ทอยลูกเต๋า แข่งควิซ",
+    "item.vault": "The Vault",
+    "desc.vault": "เปิดหีบ วางเดิมพัน เอาชนะห้อง"
   },
   "pt": {
     "nav.home": "Início",
@@ -844,7 +905,7 @@ const HEADER_I18N = {
     "search.empty": "Sem resultados",
     "search.apps": "Apps",
     "search.results": "Resultados",
-    "search.viewAll": "Ver tudo na Library",
+    "search.viewAll": "Ver tudo na Search",
     "join": "Entrar no quiz",
     "join.error": "Não foi possível abrir Entrar no quiz",
     "notify": "Notificações",
@@ -859,7 +920,7 @@ const HEADER_I18N = {
     "desc.classroom": "Turmas e grupos de aprendizagem",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Editor de apresentações",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Experimentos e ferramentas",
     "item.app-platform": "Plataforma de apps",
     "desc.app-platform": "Todos os apps Quizzman",
@@ -893,6 +954,8 @@ const HEADER_I18N = {
     "desc.search": "Pesquisar no Quizzman",
     "item.live-quiz": "Quiz ao vivo",
     "desc.live-quiz": "Quizzes de aula em tempo real",
+    "item.present": "Present",
+    "desc.present": "Apresentação interativa ao vivo",
     "item.homework": "Tarefas",
     "desc.homework": "Tarefas e envios",
     "item.classes": "Turmas",
@@ -906,27 +969,55 @@ const HEADER_I18N = {
     "item.practice": "Prática",
     "desc.practice": "Prática de palavras Pikahans",
     "item.challenges": "Desafios",
-    "desc.challenges": "Desafios Idiom King"
+    "desc.challenges": "Desafios Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Construa distritos, role o dado, desafie rivais",
+    "item.vault": "The Vault",
+    "desc.vault": "Abra baús, aposte e supere a sala"
   }
 };
 
   const HEADER_LANGS = ['vi', 'en', 'zh', 'zht', 'jp', 'kr', 'fr', 'de', 'es', 'th', 'pt'];
-  const HEADER_LANG_ALIAS = { ja: 'jp', ko: 'kr', 'zh-tw': 'zht', 'zh-cn': 'zh', 'zh-hans': 'zh', 'zh-hant': 'zht' };
+  const HEADER_LANG_ALIAS = {
+    ja: 'jp', ko: 'kr',
+    zh: 'zh', 'zh-cn': 'zh', 'zh-hans': 'zh', zhs: 'zh',
+    zht: 'zht', 'zh-tw': 'zht', 'zh-hant': 'zht', 'zh-hk': 'zht', 'zh-mo': 'zht',
+  };
+
+  function foldZhLang(lang) {
+    if (lang === 'zht' || lang.startsWith('zh-t') || lang.includes('hant')
+        || lang === 'zh-tw' || lang === 'zh-hk' || lang === 'zh-mo') return 'zht';
+    if (lang === 'zh' || lang.startsWith('zh-')) return 'zh';
+    return lang;
+  }
 
   function getHeaderLang() {
     try {
-      const raw = localStorage.getItem('qmf-lang')
+      const readCookie = (name) => {
+        try {
+          const parts = String(document.cookie || '').split(';');
+          const prefix = name + '=';
+          for (let i = 0; i < parts.length; i++) {
+            const p = parts[i].trim();
+            if (p.indexOf(prefix) === 0) return decodeURIComponent(p.slice(prefix.length));
+          }
+        } catch (e0) { /* ignore */ }
+        return '';
+      };
+      let raw = localStorage.getItem('qmf-lang')
         || localStorage.getItem('lab-ui-lang')
         || localStorage.getItem('lab-lang')
-        || document.documentElement.getAttribute('data-lang')
         || '';
+      if (!raw || raw === 'auto') raw = readCookie('qmf-lang') || raw;
+      if (!raw || raw === 'auto') {
+        raw = document.documentElement.getAttribute('data-lang') || '';
+      }
       let lang = String(raw).trim().toLowerCase().replace(/_/g, '-');
       if (HEADER_LANG_ALIAS[lang]) lang = HEADER_LANG_ALIAS[lang];
-      if (lang.startsWith('zh-t') || lang.includes('hant')) lang = 'zht';
-      else if (lang.startsWith('zh')) lang = 'zh';
-      else if (lang.startsWith('ja')) lang = 'jp';
+      lang = foldZhLang(lang);
+      if (lang.startsWith('ja')) lang = 'jp';
       else if (lang.startsWith('ko')) lang = 'kr';
-      else lang = lang.split('-')[0];
+      else if (!HEADER_I18N[lang]) lang = lang.split('-')[0];
       if (HEADER_I18N[lang]) return lang;
     } catch (e) { /* ignore */ }
     return 'vi';
@@ -953,7 +1044,7 @@ const HEADER_I18N = {
   const LEGATUS_BRIDGE = CDN_BASE + '/legatus-bridge.js?v=' + VERSION;
   const LEGATUS_ENDPOINT = 'https://legatus.quizzman.com';
   const NAV_ICON_BASE = 'https://ui.quizzman.com/qmf/assets/logo/nav';
-  const NAV_ICON_VER = '20260801';
+  const NAV_ICON_VER = '20260925';
   let joinOverlayLoader = null;
 
   function navIcon(name) {
@@ -965,6 +1056,12 @@ const HEADER_I18N = {
       iconImgWebp2x: base + '-80.webp?v=' + NAV_ICON_VER,
       iconAlt: name.replace(/-/g, ' '),
     };
+  }
+
+  const PLAY_BADGE_SVG = '<svg viewBox="0 0 24 24" width="10" height="10" aria-hidden="true"><path fill="currentColor" d="M8 5.14v13.72L19.5 12 8 5.14z"/></svg>';
+
+  function presentIcon() {
+    return { ...navIcon('slide-studio'), iconBadge: 'play', iconAlt: 'present' };
   }
 
   /**
@@ -1009,17 +1106,18 @@ const HEADER_I18N = {
           { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', groupKey: 'group.platform', label: ht('item.lms'), description: ht('desc.lms'), group: ht('group.platform'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
           { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', groupKey: 'group.platform', label: ht('item.classroom'), description: ht('desc.classroom'), group: ht('group.platform'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
           { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', groupKey: 'group.platform', label: ht('item.slide-studio'), description: ht('desc.slide-studio'), group: ht('group.platform'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
-          { id: 'lab', labelKey: 'item.lab', descKey: 'desc.lab', groupKey: 'group.platform', label: ht('item.lab'), description: ht('desc.lab'), group: ht('group.platform'), href: 'https://lab.quizzman.com', ...navIcon('eastern-lab') },
+          { id: 'lab', labelKey: 'item.lab', descKey: 'desc.lab', groupKey: 'group.platform', label: ht('item.lab'), description: ht('desc.lab'), group: ht('group.platform'), href: 'https://insight.quizzman.com', ...navIcon('eastern-lab') },
           { id: 'app-platform', labelKey: 'item.app-platform', descKey: 'desc.app-platform', groupKey: 'group.platform', label: ht('item.app-platform'), description: ht('desc.app-platform'), group: ht('group.platform'), href: 'https://app.quizzman.com', icon: 'A' },
           { id: 'quiz-editor', labelKey: 'item.quiz-editor', descKey: 'desc.quiz-editor', groupKey: 'group.create', label: ht('item.quiz-editor'), description: ht('desc.quiz-editor'), group: ht('group.create'), href: 'https://app.quizzman.com/quiz-editor/', ...navIcon('quiz-editor') },
+          { id: 'present', labelKey: 'item.present', descKey: 'desc.present', groupKey: 'group.create', label: ht('item.present'), description: ht('desc.present'), group: ht('group.create'), href: 'https://play.quizzman.com/slide', ...presentIcon() },
           { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', groupKey: 'group.create', label: ht('item.assignment'), description: ht('desc.assignment'), group: ht('group.create'), href: 'https://class.quizzman.com/homework', ...navIcon('assignment') },
-          { id: 'iching', labelKey: 'item.iching', descKey: 'desc.iching', groupKey: 'group.create', label: ht('item.iching'), description: ht('desc.iching'), group: ht('group.create'), href: 'https://lab.quizzman.com/tool/iching-divination', ...navIcon('iching') },
-          { id: 'calendar', labelKey: 'item.calendar', descKey: 'desc.calendar', groupKey: 'group.create', label: ht('item.calendar'), description: ht('desc.calendar'), group: ht('group.create'), href: 'https://lab.quizzman.com/tool/calendar-converter', ...navIcon('calendar') },
+          { id: 'iching', labelKey: 'item.iching', descKey: 'desc.iching', groupKey: 'group.create', label: ht('item.iching'), description: ht('desc.iching'), group: ht('group.create'), href: 'https://insight.quizzman.com/tool/iching-divination', ...navIcon('iching') },
+          { id: 'calendar', labelKey: 'item.calendar', descKey: 'desc.calendar', groupKey: 'group.create', label: ht('item.calendar'), description: ht('desc.calendar'), group: ht('group.create'), href: 'https://insight.quizzman.com/tool/calendar-converter', ...navIcon('calendar') },
           { id: 'astro', labelKey: 'item.astro', descKey: 'desc.astro', groupKey: 'group.create', label: ht('item.astro'), description: ht('desc.astro'), group: ht('group.create'), href: 'https://astro.quizzman.com', ...navIcon('astro') },
-          { id: 'zodiac-sign', labelKey: 'item.zodiac-sign', descKey: 'desc.zodiac-sign', groupKey: 'group.create', label: ht('item.zodiac-sign'), description: ht('desc.zodiac-sign'), group: ht('group.create'), href: 'https://lab.quizzman.com/zodiac-sign', ...navIcon('zodiac-sign') },
-          { id: 'tarot', labelKey: 'item.tarot', descKey: 'desc.tarot', groupKey: 'group.create', label: ht('item.tarot'), description: ht('desc.tarot'), group: ht('group.create'), href: 'https://lab.quizzman.com/tarot', ...navIcon('tarot') },
-          { id: 'vedic', labelKey: 'item.vedic', descKey: 'desc.vedic', groupKey: 'group.create', label: ht('item.vedic'), description: ht('desc.vedic'), group: ht('group.create'), href: 'https://lab.quizzman.com/vedic', ...navIcon('vedic') },
-          { id: 'mandarin', labelKey: 'item.mandarin', descKey: 'desc.mandarin', groupKey: 'group.create', label: ht('item.mandarin'), description: ht('desc.mandarin'), group: ht('group.create'), href: 'https://hsk.quizzman.com', ...navIcon('mandarin') },
+          { id: 'zodiac-sign', labelKey: 'item.zodiac-sign', descKey: 'desc.zodiac-sign', groupKey: 'group.create', label: ht('item.zodiac-sign'), description: ht('desc.zodiac-sign'), group: ht('group.create'), href: 'https://insight.quizzman.com/zodiac-sign', ...navIcon('zodiac-sign') },
+          { id: 'tarot', labelKey: 'item.tarot', descKey: 'desc.tarot', groupKey: 'group.create', label: ht('item.tarot'), description: ht('desc.tarot'), group: ht('group.create'), href: 'https://insight.quizzman.com/tarot', ...navIcon('tarot') },
+          { id: 'vedic', labelKey: 'item.vedic', descKey: 'desc.vedic', groupKey: 'group.create', label: ht('item.vedic'), description: ht('desc.vedic'), group: ht('group.create'), href: 'https://insight.quizzman.com/vedic', ...navIcon('vedic') },
+          { id: 'mandarin', labelKey: 'item.mandarin', descKey: 'desc.mandarin', groupKey: 'group.create', label: ht('item.mandarin'), description: ht('desc.mandarin'), group: ht('group.create'), href: 'https://study.quizzman.com', ...navIcon('mandarin') },
         ],
       },
       {
@@ -1032,7 +1130,7 @@ const HEADER_I18N = {
           { id: 'dictionary', labelKey: 'item.dictionary', descKey: 'desc.dictionary', label: ht('item.dictionary'), description: ht('desc.dictionary'), href: 'https://dict.quizzman.com', icon: '典' },
           { id: 'docs', labelKey: 'item.docs', descKey: 'desc.docs', label: ht('item.docs'), description: ht('desc.docs'), href: 'https://ui.quizzman.com/qmf/docs.html', ...navIcon('ui') },
           { id: 'ai-knowledge', labelKey: 'item.ai-knowledge', descKey: 'desc.ai-knowledge', label: ht('item.ai-knowledge'), description: ht('desc.ai-knowledge'), href: 'https://mentis.quizzman.com', ...navIcon('mentis') },
-          { id: 'search', labelKey: 'item.search', descKey: 'desc.search', label: ht('item.search'), description: ht('desc.search'), href: 'https://lib.quizzman.com', icon: '⌕' },
+          { id: 'search', labelKey: 'item.search', descKey: 'desc.search', label: ht('item.search'), description: ht('desc.search'), href: 'https://search.quizzman.com', icon: '⌕' },
         ],
       },
       {
@@ -1042,6 +1140,7 @@ const HEADER_I18N = {
         href: 'https://study.quizzman.com',
         children: [
           { id: 'live-quiz', labelKey: 'item.live-quiz', descKey: 'desc.live-quiz', label: ht('item.live-quiz'), description: ht('desc.live-quiz'), href: 'https://play.quizzman.com/quiz', ...navIcon('live-quiz') },
+          { id: 'present', labelKey: 'item.present', descKey: 'desc.present', label: ht('item.present'), description: ht('desc.present'), href: 'https://play.quizzman.com/slide', ...presentIcon() },
           { id: 'homework', labelKey: 'item.homework', descKey: 'desc.homework', label: ht('item.homework'), description: ht('desc.homework'), href: 'https://class.quizzman.com', icon: 'H' },
           { id: 'classes', labelKey: 'item.classes', descKey: 'desc.classes', label: ht('item.classes'), description: ht('desc.classes'), href: 'https://class.quizzman.com', icon: 'C' },
           { id: 'learning-center', labelKey: 'item.learning-center', descKey: 'desc.learning-center', label: ht('item.learning-center'), description: ht('desc.learning-center'), href: 'https://study.quizzman.com', icon: '学' },
@@ -1053,10 +1152,14 @@ const HEADER_I18N = {
         label: ht('nav.game', 'Game'),
         href: 'https://play.quizzman.com',
         children: [
+          { id: 'live-quiz', labelKey: 'item.live-quiz', descKey: 'desc.live-quiz', label: ht('item.live-quiz'), description: ht('desc.live-quiz'), href: 'https://play.quizzman.com/quiz', ...navIcon('live-quiz') },
+          { id: 'present', labelKey: 'item.present', descKey: 'desc.present', label: ht('item.present'), description: ht('desc.present'), href: 'https://play.quizzman.com/slide', ...presentIcon() },
           { id: 'edu-games', labelKey: 'item.edu-games', descKey: 'desc.edu-games', label: ht('item.edu-games'), description: ht('desc.edu-games'), href: 'https://play.quizzman.com', icon: 'G' },
           { id: 'multiplayer', labelKey: 'item.multiplayer', descKey: 'desc.multiplayer', label: ht('item.multiplayer'), description: ht('desc.multiplayer'), href: 'https://play.quizzman.com', icon: '合' },
           { id: 'practice', labelKey: 'item.practice', descKey: 'desc.practice', label: ht('item.practice'), description: ht('desc.practice'), href: 'https://play.quizzman.com/pikahans', ...navIcon('pikahans') },
           { id: 'challenges', labelKey: 'item.challenges', descKey: 'desc.challenges', label: ht('item.challenges'), description: ht('desc.challenges'), href: 'https://play.quizzman.com/idiom-king', ...navIcon('idiom-king') },
+          { id: 'tycoon', labelKey: 'item.tycoon', descKey: 'desc.tycoon', label: ht('item.tycoon'), description: ht('desc.tycoon'), href: 'https://play.quizzman.com/tycoon', ...navIcon('tycoon') },
+          { id: 'arena', labelKey: 'item.vault', descKey: 'desc.vault', label: ht('item.vault'), description: ht('desc.vault'), href: 'https://play.quizzman.com/arena', ...navIcon('arena') },
         ],
       },
     ];
@@ -1080,8 +1183,8 @@ const HEADER_I18N = {
     joinQuizLabel: 'Join Quiz',
     joinOverlayBase: JOIN_OVERLAY_BASE,
     // In-header typeahead hits this API; searchUrl is optional "see all" footer only
-    searchApiUrl: 'https://lib.quizzman.com/api/search',
-    searchUrl: 'https://lib.quizzman.com/?q={q}',
+    searchApiUrl: 'https://search.quizzman.com/api/search',
+    searchUrl: 'https://search.quizzman.com/?q={q}',
     loginUrl: 'https://id.quizzman.com/login',
     profileUrl: 'https://id.quizzman.com/account',
     settingsUrl: 'https://id.quizzman.com/account',
@@ -1171,9 +1274,12 @@ const HEADER_I18N = {
       return { section: 'app', child: 'app-platform' };
     }
 
-    if (host === 'lab.quizzman.com') {
+    if (host === 'insight.quizzman.com' || host === 'lab.quizzman.com') {
       if (path.startsWith('/tool/iching-divination')) return { section: 'app', child: 'iching' };
       if (path.startsWith('/tool/calendar-converter')) return { section: 'app', child: 'calendar' };
+      if (path.startsWith('/zodiac-sign')) return { section: 'app', child: 'zodiac-sign' };
+      if (path.startsWith('/tarot')) return { section: 'app', child: 'tarot' };
+      if (path.startsWith('/vedic')) return { section: 'app', child: 'vedic' };
       return { section: 'app', child: 'lab' };
     }
 
@@ -1189,16 +1295,12 @@ const HEADER_I18N = {
       return { section: 'tri-thuc', child: 'docs' };
     }
 
-    if (host === 'lib.quizzman.com') {
+    if (host === 'search.quizzman.com' || host === 'lib.quizzman.com') {
       return { section: 'tri-thuc', child: 'search' };
     }
 
-    if (host === 'hsk.quizzman.com') {
+    if (host === 'hsk.quizzman.com' || host === 'study.quizzman.com') {
       return { section: 'app', child: 'mandarin' };
-    }
-
-    if (host === 'study.quizzman.com') {
-      return { section: 'hoc', child: 'learning-center' };
     }
 
     if (host === 'class.quizzman.com') {
@@ -1210,8 +1312,11 @@ const HEADER_I18N = {
 
     if (host === 'play.quizzman.com') {
       if (path.startsWith('/quiz')) return { section: 'hoc', child: 'live-quiz' };
+      if (path.startsWith('/slide')) return { section: 'hoc', child: 'present' };
       if (path.startsWith('/pikahans')) return { section: 'game', child: 'practice' };
       if (path.startsWith('/idiom-king')) return { section: 'game', child: 'challenges' };
+      if (path.startsWith('/tycoon')) return { section: 'game', child: 'tycoon' };
+      if (path.startsWith('/arena')) return { section: 'game', child: 'arena' };
       return { section: 'game', child: 'edu-games' };
     }
 
@@ -1219,6 +1324,10 @@ const HEADER_I18N = {
   }
 
   function renderMegaIcon(child) {
+    const stacked = child.iconBadge === 'play';
+    const badge = stacked
+      ? `<span class="lab-header__mega-icon-badge" aria-hidden="true">${PLAY_BADGE_SVG}</span>`
+      : '';
     if (child.iconImg) {
       const alt = escapeHtml(child.iconAlt || child.label);
       const src = escapeHtml(child.iconImg);
@@ -1229,11 +1338,12 @@ const HEADER_I18N = {
       const webpSrcset = webp && webp2x ? `${webp} 1x, ${webp2x} 2x` : webp;
 
       return `
-        <span class="lab-header__mega-icon lab-header__mega-icon--img" aria-hidden="true">
+        <span class="lab-header__mega-icon lab-header__mega-icon--img${stacked ? ' lab-header__mega-icon--stacked' : ''}" aria-hidden="true">
           <picture>
             ${webpSrcset ? `<source type="image/webp" srcset="${webpSrcset}">` : (webp ? `<source type="image/webp" srcset="${webp}">` : '')}
             <img src="${src}" ${src2x ? `srcset="${pngSrcset}"` : ''} alt="${alt}" width="20" height="20" loading="lazy" decoding="async">
           </picture>
+          ${badge}
         </span>
       `;
     }
@@ -1399,26 +1509,35 @@ const HEADER_I18N = {
 
   function flattenNavLinks(navItems) {
     const out = [];
+    const seen = new Set();
+    const push = (entry) => {
+      const key = entry.id || entry.href;
+      if (!key || seen.has(key)) return;
+      seen.add(key);
+      out.push(entry);
+    };
     (navItems || []).forEach((item) => {
       if (item.href && item.href !== '#') {
-        out.push({
+        push({
           id: item.id,
           label: item.label,
           description: item.description || '',
           href: item.href,
           icon: item.icon,
           iconImg: item.iconImg,
+          iconBadge: item.iconBadge,
         });
       }
       (item.children || []).forEach((child) => {
         if (child.disabled || !child.href) return;
-        out.push({
+        push({
           id: child.id,
           label: child.label,
           description: child.description || '',
           href: child.href,
           icon: child.icon,
           iconImg: child.iconImg,
+          iconBadge: child.iconBadge,
         });
       });
     });
@@ -1439,6 +1558,7 @@ const HEADER_I18N = {
     'ai-knowledge': ['mentis', 'ai knowledge', 'hỏi mentis'],
     'search': ['search', 'tìm kiếm', '搜索', '搜尋'],
     'live-quiz': ['live quiz', 'play', 'chơi quiz', 'thi đấu'],
+    'present': ['present', 'trình chiếu', 'live slide', 'interactive slides', '演示', '簡報', '投影片'],
     'lms': ['lms', 'học tập', 'learning management', '学习管理'],
     'iching': ['kinh dịch', 'i-ching', 'i ching', 'quẻ', 'hexagram', '易经', '易經', 'yijing'],
     'calendar': ['lịch', 'calendar', 'ngày tốt', 'âm lịch', 'dương lịch', '历法', '曆法'],
@@ -1455,6 +1575,8 @@ const HEADER_I18N = {
     'tarot': ['bói tarot', 'tarot', 'rider waite', 'gieo bài', 'rút bài', 'major arcana', '塔罗', '塔羅'],
     'vedic': ['vedic', 'jyotish', 'jyotiṣa', 'jyotisha', 'chiêm tinh ấn độ', 'hindu astrology', 'nakshatra', '吠陀', '印度占星'],
     'mandarin': ['mandarin', 'tiếng trung', 'chinese', 'hsk', '中文', '汉语'],
+    'tycoon': ['tycoon', 'tỷ phú', 'board game', 'đô thị', 'đổ xúc xắc', '大亨', '垄断', '知識城區', '知识城区'],
+    'arena': ['the vault', 'vault', 'arena', 'rương', 'kho bạc', 'đặt cược', '金库', '金庫', '竞技场', '競技場', '宝箱'],
     'jck-font': ['jck', 'font', 'chữ hán', 'glyph', '字体', '字體'],
     'tuvi': ['tử vi', 'zi wei', '紫微', 'đẩu số', 'lá số'],
     'bazi': ['bát tự', 'tứ trụ', 'ba zi', 'four pillars', '八字', '四柱'],
@@ -1632,7 +1754,7 @@ const HEADER_I18N = {
       }
       this.bindLangWatch();
       document.body.classList.add('has-qmf-header');
-      console.log(`[QMF Header] v${VERSION} initialized`);
+      if (window.__QMF_DEBUG__) console.log(`[QMF Header] v${VERSION} initialized`);
     }
 
     bindLangWatch() {
@@ -1825,8 +1947,8 @@ const HEADER_I18N = {
             ${navHtml}
             <div class="lab-header__spacer" aria-hidden="true"></div>
             ${qmGroupHtml}
-            ${renderSearch(this.config)}
             <div class="lab-header__spacer lab-header__spacer--end" aria-hidden="true"></div>
+            ${renderSearch(this.config)}
             <div class="lab-header__actions">
               ${renderJoinQuizButton(this.config)}
               ${this.config.showNotification !== false ? `<div class="lab-header__notification-slot" data-qmf-notification-slot aria-label="${escapeHtml(ht('notify', 'Notifications'))}" data-qmf-i18n="notify" title="${escapeHtml(ht('notify', 'Notifications'))}"></div>` : ''}
@@ -1912,7 +2034,7 @@ const HEADER_I18N = {
       };
 
       const viewAllUrl = (q) => {
-        const tpl = this.config.searchUrl || 'https://lib.quizzman.com/?q={q}';
+        const tpl = this.config.searchUrl || 'https://search.quizzman.com/?q={q}';
         return tpl.includes('{q}')
           ? tpl.replace('{q}', encodeURIComponent(q))
           : `${tpl}${tpl.includes('?') ? '&' : '?'}q=${encodeURIComponent(q)}`;
@@ -1942,8 +2064,14 @@ const HEADER_I18N = {
         }
 
         const appsHtml = (apps || []).map((app, i) => {
+          const stacked = app.iconBadge === 'play';
+          const badge = stacked
+            ? `<span class="lab-header__mega-icon-badge" aria-hidden="true">${PLAY_BADGE_SVG}</span>`
+            : '';
           const icon = app.iconImg
-            ? `<img class="lab-header__search-hit-icon-img" src="${escapeHtml(app.iconImg)}" alt="" width="20" height="20" loading="lazy">`
+            ? (stacked
+              ? `<span class="lab-header__search-hit-icon-wrap lab-header__search-hit-icon-wrap--stacked"><img class="lab-header__search-hit-icon-img" src="${escapeHtml(app.iconImg)}" alt="" width="20" height="20" loading="lazy">${badge}</span>`
+              : `<img class="lab-header__search-hit-icon-img" src="${escapeHtml(app.iconImg)}" alt="" width="20" height="20" loading="lazy">`)
             : `<span class="lab-header__search-hit-icon" aria-hidden="true">${escapeHtml((app.icon || app.label || '?').toString().charAt(0))}</span>`;
           return `
             <a
@@ -2008,7 +2136,7 @@ const HEADER_I18N = {
 
         const footer = `
           <a class="lab-header__search-footer" href="${escapeHtml(viewAllUrl(q))}" data-qmf-search-viewall>
-            ${escapeHtml(ht('search.viewAll', 'See all on Library'))}
+            ${escapeHtml(ht('search.viewAll', 'See all on Search'))}
             <span aria-hidden="true">↗</span>
           </a>
         `;
@@ -2037,7 +2165,7 @@ const HEADER_I18N = {
         const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
         this._searchAbort = ctrl;
 
-        const api = (this.config.searchApiUrl || 'https://lib.quizzman.com/api/search').replace(/\/+$/, '');
+        const api = (this.config.searchApiUrl || 'https://search.quizzman.com/api/search').replace(/\/+$/, '');
         // System UI lang → API locale (jp/kr → ja/ko). Multilingual query; display localized server-side.
         let searchLang = getHeaderLang();
         if (searchLang === 'jp') searchLang = 'ja';
@@ -2047,7 +2175,7 @@ const HEADER_I18N = {
         try {
           const res = await fetch(url, {
             method: 'GET',
-            credentials: 'include',
+            credentials: 'omit',
             signal: ctrl?.signal,
             headers: {
               Accept: 'application/json',
@@ -2080,7 +2208,7 @@ const HEADER_I18N = {
           closePanel();
           return;
         }
-        this._searchTimer = setTimeout(() => fetchHits(q), 220);
+        this._searchTimer = setTimeout(() => fetchHits(q), 450);
       };
 
       const runSearch = (query) => {
@@ -2130,7 +2258,21 @@ const HEADER_I18N = {
       });
 
       input.addEventListener('focus', () => {
+        // Desktop: mark open so the pill expands in-header (CSS); mobile uses overlay.
+        if (!window.matchMedia('(max-width: 899px)').matches) {
+          this.headerEl?.classList.add('lab-header--search-open');
+        }
         if (String(input.value || '').trim()) scheduleSearch(input.value);
+      });
+
+      input.addEventListener('blur', () => {
+        // Collapse after focus leaves the wrap (allow click into panel/results first).
+        window.setTimeout(() => {
+          if (wrap?.contains(document.activeElement)) return;
+          if (!window.matchMedia('(max-width: 899px)').matches) {
+            this.headerEl?.classList.remove('lab-header--search-open');
+          }
+        }, 120);
       });
 
       input.addEventListener('keydown', (e) => {
@@ -2390,5 +2532,5 @@ const HEADER_I18N = {
     window.QMF.createHeader = window.createUnifiedHeader;
   }
 
-  console.log(`[QMF Header] Module loaded v${VERSION}`);
+  if (window.__QMF_DEBUG__) console.log(`[QMF Header] Module loaded v${VERSION}`);
 })();

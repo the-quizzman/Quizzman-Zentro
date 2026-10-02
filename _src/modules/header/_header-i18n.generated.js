@@ -32,7 +32,7 @@ const HEADER_I18N = {
     "desc.classroom": "Lớp học và nhóm học",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Soạn bài trình chiếu",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Thí nghiệm và công cụ",
     "item.app-platform": "Nền tảng App",
     "desc.app-platform": "Tất cả ứng dụng Quizzman",
@@ -79,7 +79,11 @@ const HEADER_I18N = {
     "item.practice": "Luyện tập",
     "desc.practice": "Luyện từ Pikahans",
     "item.challenges": "Thử thách",
-    "desc.challenges": "Thử thách Idiom King"
+    "desc.challenges": "Thử thách Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Xây khu đô thị tri thức, đổ xúc xắc, quiz đối thủ",
+    "item.vault": "The Vault",
+    "desc.vault": "Mở rương, đặt cược, hơn đối thủ trong phòng"
   },
   "en": {
     "nav.home": "Home",
@@ -113,7 +117,7 @@ const HEADER_I18N = {
     "desc.classroom": "Classes and learning groups",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Presentation editor",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Experiments and tools",
     "item.app-platform": "App Platform",
     "desc.app-platform": "All Quizzman apps",
@@ -160,7 +164,11 @@ const HEADER_I18N = {
     "item.practice": "Practice",
     "desc.practice": "Pikahans word practice",
     "item.challenges": "Challenges",
-    "desc.challenges": "Idiom King challenges"
+    "desc.challenges": "Idiom King challenges",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Build knowledge districts, roll the die, quiz rivals",
+    "item.vault": "The Vault",
+    "desc.vault": "Crack chests, stake cash, outsmart the room"
   },
   "zh": {
     "nav.home": "首页",
@@ -194,7 +202,7 @@ const HEADER_I18N = {
     "desc.classroom": "班级与学习小组",
     "item.slide-studio": "幻灯片工作室",
     "desc.slide-studio": "演示文稿编辑器",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "实验与工具",
     "item.app-platform": "应用平台",
     "desc.app-platform": "全部 Quizzman 应用",
@@ -241,7 +249,11 @@ const HEADER_I18N = {
     "item.practice": "练习",
     "desc.practice": "Pikahans 单词练习",
     "item.challenges": "挑战",
-    "desc.challenges": "成语王挑战"
+    "desc.challenges": "成语王挑战",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "建造知识城区，掷骰答题对决",
+    "item.vault": "The Vault",
+    "desc.vault": "开宝箱、下注对决、智胜全场"
   },
   "zht": {
     "nav.home": "首頁",
@@ -275,7 +287,7 @@ const HEADER_I18N = {
     "desc.classroom": "班級與學習小組",
     "item.slide-studio": "簡報工作室",
     "desc.slide-studio": "簡報編輯器",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "實驗與工具",
     "item.app-platform": "應用平台",
     "desc.app-platform": "全部 Quizzman 應用",
@@ -322,7 +334,11 @@ const HEADER_I18N = {
     "item.practice": "練習",
     "desc.practice": "Pikahans 單字練習",
     "item.challenges": "挑戰",
-    "desc.challenges": "成語王挑戰"
+    "desc.challenges": "成語王挑戰",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "建造知識城區，擲骰答題對決",
+    "item.vault": "The Vault",
+    "desc.vault": "開寶箱、下注對決、智勝全場"
   },
   "jp": {
     "nav.home": "ホーム",
@@ -356,7 +372,7 @@ const HEADER_I18N = {
     "desc.classroom": "クラスと学習グループ",
     "item.slide-studio": "スライドスタジオ",
     "desc.slide-studio": "プレゼン編集",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "実験とツール",
     "item.app-platform": "アプリプラットフォーム",
     "desc.app-platform": "すべてのQuizzmanアプリ",
@@ -403,7 +419,11 @@ const HEADER_I18N = {
     "item.practice": "練習",
     "desc.practice": "Pikahans単語練習",
     "item.challenges": "チャレンジ",
-    "desc.challenges": "成語王チャレンジ"
+    "desc.challenges": "成語王チャレンジ",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "知識街区を築き、サイコロで対戦",
+    "item.vault": "The Vault",
+    "desc.vault": "宝箱を開け、賭けて部屋を出し抜け"
   },
   "kr": {
     "nav.home": "홈",
@@ -437,7 +457,7 @@ const HEADER_I18N = {
     "desc.classroom": "수업과 학습 그룹",
     "item.slide-studio": "슬라이드 스튜디오",
     "desc.slide-studio": "프레젠테이션 편집기",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "실험과 도구",
     "item.app-platform": "앱 플랫폼",
     "desc.app-platform": "모든 Quizzman 앱",
@@ -484,7 +504,11 @@ const HEADER_I18N = {
     "item.practice": "연습",
     "desc.practice": "Pikahans 단어 연습",
     "item.challenges": "챌린지",
-    "desc.challenges": "성어왕 챌린지"
+    "desc.challenges": "성어왕 챌린지",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "지식 구역을 짓고 주사위로 대결",
+    "item.vault": "The Vault",
+    "desc.vault": "상자를 열고 판돈을 걸어 방을 제압"
   },
   "fr": {
     "nav.home": "Accueil",
@@ -518,7 +542,7 @@ const HEADER_I18N = {
     "desc.classroom": "Classes et groupes d’apprentissage",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Éditeur de présentation",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Expériences et outils",
     "item.app-platform": "Plateforme d’apps",
     "desc.app-platform": "Toutes les apps Quizzman",
@@ -565,7 +589,11 @@ const HEADER_I18N = {
     "item.practice": "Pratique",
     "desc.practice": "Pratique de mots Pikahans",
     "item.challenges": "Défis",
-    "desc.challenges": "Défis Idiom King"
+    "desc.challenges": "Défis Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Construisez des quartiers, lancez le dé, quizez vos rivaux",
+    "item.vault": "The Vault",
+    "desc.vault": "Ouvrez les coffres, misez, déjouez la salle"
   },
   "de": {
     "nav.home": "Start",
@@ -599,7 +627,7 @@ const HEADER_I18N = {
     "desc.classroom": "Klassen und Lerngruppen",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Präsentationseditor",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Experimente und Tools",
     "item.app-platform": "App-Plattform",
     "desc.app-platform": "Alle Quizzman-Apps",
@@ -646,7 +674,11 @@ const HEADER_I18N = {
     "item.practice": "Übung",
     "desc.practice": "Pikahans-Wortübung",
     "item.challenges": "Herausforderungen",
-    "desc.challenges": "Idiom-King-Herausforderungen"
+    "desc.challenges": "Idiom-King-Herausforderungen",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Bezirke bauen, würfeln, Rivalen quizen",
+    "item.vault": "The Vault",
+    "desc.vault": "Truhen knacken, Einsatz setzen, den Raum überlisten"
   },
   "es": {
     "nav.home": "Inicio",
@@ -680,7 +712,7 @@ const HEADER_I18N = {
     "desc.classroom": "Clases y grupos de aprendizaje",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Editor de presentaciones",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Experimentos y herramientas",
     "item.app-platform": "Plataforma de apps",
     "desc.app-platform": "Todas las apps de Quizzman",
@@ -727,7 +759,11 @@ const HEADER_I18N = {
     "item.practice": "Práctica",
     "desc.practice": "Práctica de palabras Pikahans",
     "item.challenges": "Desafíos",
-    "desc.challenges": "Desafíos Idiom King"
+    "desc.challenges": "Desafíos Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Construye distritos, lanza el dado, reta a rivales",
+    "item.vault": "The Vault",
+    "desc.vault": "Abre cofres, apuesta y supera a la sala"
   },
   "th": {
     "nav.home": "หน้าแรก",
@@ -761,7 +797,7 @@ const HEADER_I18N = {
     "desc.classroom": "ชั้นเรียนและกลุ่มเรียน",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "ตัวแก้ไขงานนำเสนอ",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "การทดลองและเครื่องมือ",
     "item.app-platform": "แพลตฟอร์มแอป",
     "desc.app-platform": "แอป Quizzman ทั้งหมด",
@@ -808,7 +844,11 @@ const HEADER_I18N = {
     "item.practice": "ฝึกฝน",
     "desc.practice": "ฝึกคำศัพท์ Pikahans",
     "item.challenges": "ความท้าทาย",
-    "desc.challenges": "ความท้าทาย Idiom King"
+    "desc.challenges": "ความท้าทาย Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "สร้างย่านความรู้ ทอยลูกเต๋า แข่งควิซ",
+    "item.vault": "The Vault",
+    "desc.vault": "เปิดหีบ วางเดิมพัน เอาชนะห้อง"
   },
   "pt": {
     "nav.home": "Início",
@@ -842,7 +882,7 @@ const HEADER_I18N = {
     "desc.classroom": "Turmas e grupos de aprendizagem",
     "item.slide-studio": "Slide Studio",
     "desc.slide-studio": "Editor de apresentações",
-    "item.lab": "Eastern Lab",
+    "item.lab": "Insight",
     "desc.lab": "Experimentos e ferramentas",
     "item.app-platform": "Plataforma de apps",
     "desc.app-platform": "Todos os apps Quizzman",
@@ -889,6 +929,10 @@ const HEADER_I18N = {
     "item.practice": "Prática",
     "desc.practice": "Prática de palavras Pikahans",
     "item.challenges": "Desafios",
-    "desc.challenges": "Desafios Idiom King"
+    "desc.challenges": "Desafios Idiom King",
+    "item.tycoon": "Tycoon",
+    "desc.tycoon": "Construa distritos, role o dado, desafie rivais",
+    "item.vault": "The Vault",
+    "desc.vault": "Abra baús, aposte e supere a sala"
   }
 };
