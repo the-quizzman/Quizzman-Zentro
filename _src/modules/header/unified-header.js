@@ -8,7 +8,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.10.24';
+  const VERSION = '3.10.25';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   /* Same origin path as CDN_BASE — avoid dual modules/ vs modules-v3/ caches */
   const CDN_NAV_BASE = CDN_BASE;

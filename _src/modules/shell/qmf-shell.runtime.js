@@ -6,21 +6,22 @@
  *
  * UI (Lumen bar, plan ring, menus) lives in auth-widget / header modules.
  *
- * @version 2.2.33
+ * @version 2.2.65
  */
 (function (global) {
   'use strict';
 
   var Runtime = {
-    shell: '2.2.33',
+    shell: '2.2.65',
     packages: {
-      header: '3.10.15',
-      auth: '1.5.9',
-      legatus: '1.3.6',
-      sso: '20260721',
-      i18n: '1.0.3',
-      prefs: '1.0.0',
-      analytics: '1.0.0',
+      header: '3.10.25',
+      auth: '2.0.4',
+      legatus: '1.3.11',
+      sso: '20260906noloop',
+      i18n: '1.0.6',
+      prefs: '1.0.3',
+      analytics: '1.1.0',
+      ads: '1.0.2',
     },
   };
 
@@ -265,7 +266,7 @@
       showUserDropdown: false,
       showNotification: opts.auth !== false,
       autoMountLegatus: false,
-      loginUrl: opts.loginUrl || (resolveIdBase() + '/login?redirect_uri=' + encodeURIComponent(global.location.href)),
+      loginUrl: opts.loginUrl || '#login',
       profileUrl: opts.profileUrl || accountUrl,
       settingsUrl: opts.settingsUrl || accountUrl,
     }, opts.header || {});
@@ -301,18 +302,20 @@
     );
 
     var accountUrl = opts.accountUrl || ACCOUNT;
-    var redirectLogin = opts.loginUrl ||
-      (resolveIdBase() + '/login?redirect_uri=' + encodeURIComponent(global.location.href));
+    var redirectLogin = opts.loginUrl || '#login';
 
     var detectedLang = (global.QmfPrefsDetect && global.QmfPrefsDetect.getLang && global.QmfPrefsDetect.getLang()) || null;
 
+    var defaultMe = (global.location && String(global.location.pathname).indexOf('/assignment') === 0)
+      ? '/assignment/api/auth/me'
+      : '/api/auth/me';
     state.widget = global.createAuthWidget({
       container: container,
       lang: opts.lang || detectedLang || undefined,
-      apiEndpoint: opts.apiEndpoint || (resolveIdBase() + '/api/auth/me'),
+      apiEndpoint: opts.apiEndpoint || defaultMe,
       loginUrl: redirectLogin,
       accountUrl: accountUrl,
-      logoutUrl: opts.logoutUrl || (resolveIdBase() + '/logout'),
+      logoutUrl: opts.logoutUrl || (resolveIdBase() + '/oauth/logout'),
       showTierBadge: opts.showTierBadge !== false,
       showLumenBadge: opts.showLumenBadge !== false,
       showProgressRing: opts.showProgressRing !== false,
@@ -332,6 +335,14 @@
         });
         if (typeof opts.onUserLoad === 'function') {
           try { opts.onUserLoad(user, meta); } catch (e2) { /* ignore */ }
+        }
+      },
+      onGuest: function () {
+        state.user = null;
+        state.token = null;
+        emitAuth('guest');
+        if (typeof opts.onGuest === 'function') {
+          try { opts.onGuest(); } catch (e3) { /* ignore */ }
         }
       },
       onLogout: function () {
@@ -362,7 +373,6 @@
           await global.mountLegatusInHeader({
             slot: opts.legatusSlot || '[data-qmf-notification-slot]',
             endpoint: opts.legatusEndpoint || 'https://legatus.quizzman.com',
-            token: state.token || undefined,
           });
         }
       } else {
@@ -403,6 +413,9 @@
       await mountHeader(opts);
     }
     await mountWidget(opts);
+    if (opts.auth === false) {
+      emitAuth('guest');
+    }
     state.mounted = true;
     return api;
   }
@@ -437,6 +450,93 @@
     return Promise.resolve(null);
   }
 
+  function isFleetPublishReason(reason) {
+    var r = String(reason || '');
+    if (r.indexOf('shell:rev') === 0) return true;
+    if (r === 'shell:bc' || r === 'shell:storage' || r === 'cache flush') return true;
+    if (r === 'shell:runtime-mismatch') return true;
+    return false;
+  }
+
+  function isProtectedSoftReloadContext() {
+    if (global.QMF_SOFT_RELOAD_DEFER === true) return true;
+    try {
+      var path = String(global.location.pathname || '/').toLowerCase();
+      if (path.indexOf('/quiz-editor') === 0) return true;
+      if (path.indexOf('/slide-studio') === 0) return true;
+      if (path === '/slide' || path.indexOf('/slide/') === 0) return true;
+      if (path.indexOf('/host') === 0 || path === '/live' || path.indexOf('/live/') === 0) return true;
+      if (path.indexOf('/tycoon') === 0) return true;
+      if (path.indexOf('/arena') === 0 || path.indexOf('/the-vault') === 0) return true;
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  var fleetUpdateNoticeEl = null;
+
+  function showFleetUpdateNotice(rev) {
+    try {
+      var key = 'qmf_shell_update_notice_' + rev;
+      if (sessionStorage.getItem(key) === '1') return;
+      if (fleetUpdateNoticeEl && fleetUpdateNoticeEl.isConnected) return;
+      if (!document.body) return;
+
+      sessionStorage.setItem(key, '1');
+
+      var root = document.createElement('div');
+      root.id = 'qmf-shell-update-notice';
+      root.setAttribute('role', 'status');
+      root.setAttribute('aria-live', 'polite');
+      root.style.cssText = [
+        'position:fixed',
+        'z-index:2147483000',
+        'left:50%',
+        'bottom:max(16px,env(safe-area-inset-bottom))',
+        'transform:translateX(-50%)',
+        'max-width:min(420px,calc(100vw - 32px))',
+        'padding:14px 16px 14px 18px',
+        'border-radius:12px',
+        'background:#0f172a',
+        'color:#f8fafc',
+        'box-shadow:0 12px 40px rgba(15,23,42,.35)',
+        'font:500 14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif',
+        'display:flex',
+        'align-items:flex-start',
+        'gap:12px',
+      ].join(';');
+
+      var text = document.createElement('p');
+      text.style.cssText = 'margin:0;flex:1';
+      text.textContent = 'Quizzman was just updated to a new version. You can keep working — reload when you\'re ready.';
+
+      var close = document.createElement('button');
+      close.type = 'button';
+      close.setAttribute('aria-label', 'Dismiss');
+      close.textContent = '\u00d7';
+      close.style.cssText = [
+        'flex:0 0 auto',
+        'border:0',
+        'background:transparent',
+        'color:#94a3b8',
+        'font:600 20px/1 system-ui,sans-serif',
+        'cursor:pointer',
+        'padding:0 2px',
+        'margin:-2px 0 0',
+      ].join(';');
+      close.addEventListener('click', function () {
+        try { root.remove(); } catch (e) { /* ignore */ }
+        fleetUpdateNoticeEl = null;
+      });
+
+      root.appendChild(text);
+      root.appendChild(close);
+      document.body.appendChild(root);
+      fleetUpdateNoticeEl = root;
+    } catch (e) { /* ignore */ }
+  }
+
   function isTypingContext() {
     try {
       var el = document.activeElement;
@@ -453,11 +553,19 @@
   /** Soft-reload principle — replace navigation with ?_qmf=, never ask users to hard refresh. */
   function softReload(reason, nextRev) {
     var rev = nextRev || Runtime.shell;
+    var why = reason || 'manual';
+    if (isFleetPublishReason(why) && isProtectedSoftReloadContext()) {
+      showFleetUpdateNotice(rev);
+      try {
+        console.info('[QMFShell] fleet update notice (protected):', why, rev);
+      } catch (e1) { /* ignore */ }
+      return;
+    }
     if (isTypingContext()) {
       try {
-        console.info('[QMFShell] soft-reload deferred (typing):', reason || 'manual', rev);
+        console.info('[QMFShell] soft-reload deferred (typing):', why, rev);
       } catch (e0) { /* ignore */ }
-      var pending = { reason: reason || 'manual', nextRev: rev };
+      var pending = { reason: why, nextRev: rev };
       var onOut = function () {
         setTimeout(function () {
           if (isTypingContext()) return;
@@ -470,10 +578,10 @@
     }
 
     try {
-      console.warn('[QMFShell] soft-reload:', reason || 'manual', rev);
+      console.warn('[QMFShell] soft-reload:', why, rev);
       var u = new URL(global.location.href);
       u.searchParams.set('_qmf', rev);
-      if (reason) u.searchParams.set('_qmf_why', String(reason).slice(0, 48));
+      if (reason) u.searchParams.set('_qmf_why', String(why).slice(0, 48));
       u.searchParams.set('_t', String(Date.now()));
       global.location.replace(u.toString());
     } catch (e) {
@@ -493,24 +601,15 @@
       }
     }
     emitAuth('logout');
-    // Fallback: clear on id-sys then land on /login?logged_out=1 (no silent refresh).
-    var dest = (state.opts && state.opts.logoutUrl) || (resolveIdBase() + '/logout');
+    var dest = (state.opts && state.opts.logoutUrl) || (resolveIdBase() + '/oauth/logout');
     try {
-      var land = new URL(resolveIdBase() + '/login');
-      land.searchParams.set('logged_out', '1');
-      try {
-        var here = new URL(global.location.href);
-        if (here.hostname.endsWith('quizzman.com')
-            && !(here.hostname === 'id.quizzman.com' && here.pathname.indexOf('/login') === 0)) {
-          land.searchParams.set('redirect', global.location.href);
-        }
-      } catch (e0) { /* ignore */ }
-      var u = new URL(dest, global.location.origin);
-      u.searchParams.set('redirect_uri', land.toString());
-      u.searchParams.set('redirect', land.toString());
+      var land = new URL(global.location.href);
+      land.hash = '';
+      var u = new URL(dest, resolveIdBase());
+      u.searchParams.set('post_logout_redirect_uri', land.origin + land.pathname + land.search);
       global.location.assign(u.toString());
     } catch (e2) {
-      global.location.href = resolveIdBase() + '/logout?redirect=' + encodeURIComponent(resolveIdBase() + '/login?logged_out=1');
+      global.location.href = resolveIdBase() + '/oauth/logout';
     }
   }
 
@@ -549,5 +648,5 @@
   if (!global.QMF) global.QMF = {};
   global.QMF.Shell = api;
 
-  console.log('[QMFShell] ready v' + Runtime.shell, Runtime.packages);
+  if (global.__QMF_DEBUG__) console.log('[QMFShell] ready v' + Runtime.shell, Runtime.packages);
 })(typeof window !== 'undefined' ? window : globalThis);
