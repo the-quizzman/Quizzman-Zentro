@@ -464,8 +464,8 @@ export function normalizeLang(raw) {
   if (raw == null || raw === "") return "en";
   const s = String(raw).trim().replace(/_/g, "-").toLowerCase();
   if (s.startsWith("vi")) return "vi";
-  if (s === "zh-tw" || s === "zh-hant" || s === "zht" || s.startsWith("zh-hant")) return "zht";
-  if (s.startsWith("zh")) return "zh";
+  if (s === "zht" || s === "zh-tw" || s === "zh-hk" || s === "zh-mo" || s === "zh-hant" || s.startsWith("zh-t") || s.includes("hant")) return "zht";
+  if (s === "zh" || s.startsWith("zh-") || s.startsWith("zh")) return "zh";
   if (s.startsWith("ja") || s === "jp") return "jp";
   if (s.startsWith("ko") || s === "kr") return "kr";
   if (s.startsWith("fr")) return "fr";

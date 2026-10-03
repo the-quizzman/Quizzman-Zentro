@@ -6,7 +6,7 @@
   'use strict';
 
   var CDN = 'https://ui.quizzman.com/qmf/dist/legatus';
-  var VERSION = '1.3.8';
+  var VERSION = '1.3.9';
   var loading = null;
   var authWired = false;
 
@@ -230,7 +230,9 @@
         endpoint: endpoint,
         autoConnect: true,
         toastHost: true,
+        // Access JWT is HttpOnly. SDK sends credentials; tokenProvider is usually null.
         tokenProvider: function () { return resolveToken(); },
+        forceRestart: true,
       });
 
       var slot = pickSlot(slots);

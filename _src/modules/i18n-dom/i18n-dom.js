@@ -1,6 +1,6 @@
 /**
  * QMF i18n-dom — shared data-i18n apply + prefs sync (lang / theme / region)
- * @version 1.0.2
+ * @version 1.0.6
  *
  *   <script src="https://ui.quizzman.com/qmf/dist/modules/i18n-dom/i18n-dom.js"></script>
  *   <script>
@@ -16,9 +16,10 @@
 (function (global) {
   'use strict';
 
-  var VERSION = '1.0.3';
+  var VERSION = '1.0.6';
   var SUPPORTED = ['vi', 'en', 'zh', 'zht', 'jp', 'kr', 'fr', 'de', 'es', 'th', 'pt'];
   var ALIAS = {
+    auto: 'auto',
     vi: 'vi', 'vi-vn': 'vi',
     en: 'en', 'en-us': 'en', 'en-gb': 'en',
     zh: 'zh', 'zh-cn': 'zh', 'zh-hans': 'zh', zhs: 'zh',
@@ -56,14 +57,38 @@
   function normalizeLang(code) {
     if (!code) return null;
     var key = String(code).trim().toLowerCase().replace(/_/g, '-');
+    if (key === 'auto') return 'auto';
     if (ALIAS[key]) return ALIAS[key];
-    if (key.indexOf('zh-t') === 0 || key.indexOf('hant') >= 0) return 'zht';
-    if (key.indexOf('zh') === 0) return 'zh';
+    if (key === 'zht' || key.indexOf('zh-t') === 0 || key.indexOf('hant') >= 0
+        || key === 'zh-tw' || key === 'zh-hk' || key === 'zh-mo') return 'zht';
+    if (key === 'zh' || key.indexOf('zh-') === 0) return 'zh';
     if (key.indexOf('ja') === 0) return 'jp';
     if (key.indexOf('ko') === 0) return 'kr';
     if (key.indexOf('fr') === 0) return 'fr';
     var base = key.split('-')[0];
     return ALIAS[base] || (SUPPORTED.indexOf(base) >= 0 ? base : null);
+  }
+
+  function detectLangFromBrowser() {
+    var nav = String((typeof navigator !== 'undefined' && (navigator.language || (navigator.languages && navigator.languages[0]))) || 'vi').toLowerCase();
+    if (nav === 'zht' || nav.indexOf('zh-t') === 0 || nav.indexOf('hant') >= 0 || nav === 'zh-tw' || nav === 'zh-hk' || nav === 'zh-mo') return 'zht';
+    if (nav === 'zh' || nav.indexOf('zh-') === 0 || nav.indexOf('zh') === 0) return 'zh';
+    if (nav.indexOf('ko') === 0) return 'kr';
+    if (nav.indexOf('ja') === 0) return 'jp';
+    if (nav.indexOf('fr') === 0) return 'fr';
+    if (nav.indexOf('de') === 0) return 'de';
+    if (nav.indexOf('es') === 0) return 'es';
+    if (nav.indexOf('th') === 0) return 'th';
+    if (nav.indexOf('pt') === 0) return 'pt';
+    if (nav.indexOf('en') === 0) return 'en';
+    if (nav.indexOf('vi') === 0) return 'vi';
+    return 'vi';
+  }
+
+  function resolveLang(code) {
+    var n = normalizeLang(code);
+    if (n === 'auto' || !n) return detectLangFromBrowser();
+    return n;
   }
 
   function normalizeTheme(t) {
@@ -73,8 +98,41 @@
 
   function normalizeRegion(r) {
     if (!r) return null;
-    var v = String(r).trim().toUpperCase();
+    var v = String(r).trim();
+    if (v.toLowerCase() === 'auto') return 'auto';
+    v = v.toUpperCase();
     return /^[A-Z]{2}/.test(v) ? v.slice(0, 16) : null;
+  }
+
+  function detectRegionFromBrowser() {
+    try {
+      var list = [];
+      if (typeof navigator !== 'undefined') {
+        if (navigator.language) list.push(navigator.language);
+        if (navigator.languages) list = list.concat(navigator.languages);
+      }
+      for (var i = 0; i < list.length; i++) {
+        var m = String(list[i]).match(/-([A-Za-z]{2})\b/);
+        if (m) return m[1].toUpperCase();
+      }
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      if (/Ho_Chi_Minh|Saigon|Bangkok/i.test(tz)) return 'VN';
+      if (/Taipei/i.test(tz)) return 'TW';
+      if (/Shanghai|Beijing|Chongqing|Harbin|Hong_Kong/i.test(tz)) return 'CN';
+      if (/Tokyo/i.test(tz)) return 'JP';
+      if (/Seoul/i.test(tz)) return 'KR';
+      if (/Singapore/i.test(tz)) return 'SG';
+      if (/Sydney|Melbourne|Perth|Brisbane|Adelaide/i.test(tz)) return 'AU';
+      if (/Paris/i.test(tz)) return 'FR';
+      if (/New_York|Los_Angeles|Chicago|Denver|Phoenix|Anchorage|Honolulu/i.test(tz)) return 'US';
+    } catch (e) { /* ignore */ }
+    return 'VN';
+  }
+
+  function resolveRegion(code) {
+    var n = normalizeRegion(code);
+    if (n === 'auto' || !n) return detectRegionFromBrowser();
+    return n;
   }
 
   function readStoredPrefs() {
@@ -82,14 +140,18 @@
     var theme = null;
     var region = null;
     try {
-      lang = normalizeLang(
+      var lsLang = normalizeLang(
         localStorage.getItem('qmf-lang')
         || localStorage.getItem('lab-ui-lang')
         || localStorage.getItem('lab-lang')
         || localStorage.getItem('qss_ui_lang')
         || localStorage.getItem('preferred_language')
-        || readLangCookie()
       );
+      var cookieLang = readLangCookie();
+      var src = readLangSrcCookie();
+      if (lsLang === 'auto') lang = 'auto';
+      else if (cookieLang && (src === 'local' || !lsLang || cookieLang !== lsLang)) lang = cookieLang;
+      else lang = lsLang || cookieLang;
       theme = normalizeTheme(
         localStorage.getItem('qmf-theme')
         || localStorage.getItem('lab-theme')
@@ -107,11 +169,11 @@
     };
   }
 
-  function writeLangCookie(lang) {
-    if (!lang || typeof document === 'undefined') return;
+  function writeSharedCookie(name, value) {
+    if (!name || value == null || typeof document === 'undefined') return;
     try {
       var host = (location && location.hostname) || '';
-      var base = 'qmf-lang=' + encodeURIComponent(lang)
+      var base = name + '=' + encodeURIComponent(value)
         + '; path=/; max-age=' + (365 * 24 * 60 * 60)
         + '; SameSite=Lax';
       if (location.protocol === 'https:') base += '; Secure';
@@ -123,18 +185,33 @@
     } catch (e) { /* ignore */ }
   }
 
-  function readLangCookie() {
-    if (typeof document === 'undefined') return null;
+  function writeLangCookie(lang) {
+    if (!lang) return;
+    writeSharedCookie('qmf-lang', lang);
+  }
+
+  function readSharedCookie(name) {
+    if (!name || typeof document === 'undefined') return null;
     try {
       var parts = String(document.cookie || '').split(';');
+      var prefix = name + '=';
       for (var i = 0; i < parts.length; i++) {
         var p = parts[i].trim();
-        if (p.indexOf('qmf-lang=') === 0) {
-          return normalizeLang(decodeURIComponent(p.slice('qmf-lang='.length)));
+        if (p.indexOf(prefix) === 0) {
+          return decodeURIComponent(p.slice(prefix.length));
         }
       }
     } catch (e) { /* ignore */ }
     return null;
+  }
+
+  function readLangCookie() {
+    return normalizeLang(readSharedCookie('qmf-lang'));
+  }
+
+  function readLangSrcCookie() {
+    var src = readSharedCookie('qmf-lang-src');
+    return src === 'local' || src === 'account' || src === 'detect' ? src : null;
   }
 
   function writePrefs(prefs, opts) {
@@ -148,10 +225,15 @@
         localStorage.setItem('qmf-lang', lang);
         localStorage.setItem('lab-lang', lang);
         localStorage.setItem('lab-ui-lang', lang);
-        // Bridge app.* slide-studio storage
         localStorage.setItem('qss_ui_lang', lang);
-        writeLangCookie(lang);
-        state.lang = lang;
+        localStorage.setItem('preferred_language', lang);
+        var resolvedLang = resolveLang(lang);
+        writeLangCookie(resolvedLang);
+        if (opts.source === 'local' || opts.source === 'account' || opts.source === 'detect') {
+          writeSharedCookie('qmf-lang-src', opts.source);
+          try { localStorage.setItem('qmf-prefs-source', opts.source); } catch (e0) { /* ignore */ }
+        }
+        state.lang = resolvedLang;
       }
       if (theme) {
         localStorage.setItem('qmf-theme', theme);
@@ -160,7 +242,7 @@
       }
       if (region) {
         localStorage.setItem('qmf-region', region);
-        state.region = region;
+        state.region = resolveRegion(region);
       }
     } catch (e) { /* ignore */ }
 
@@ -170,13 +252,14 @@
     }
 
     if (lang && opts.applyLangChrome !== false) {
-      var htmlLang = lang === 'zht' ? 'zh-Hant' : (lang === 'jp' ? 'ja' : (lang === 'kr' ? 'ko' : lang));
+      var applied = state.lang;
+      var htmlLang = applied === 'zht' ? 'zh-Hant' : (applied === 'jp' ? 'ja' : (applied === 'kr' ? 'ko' : applied));
       document.documentElement.lang = htmlLang;
-      document.documentElement.setAttribute('data-lang', lang);
+      document.documentElement.setAttribute('data-lang', applied);
     }
 
     if (region) {
-      document.documentElement.setAttribute('data-region', region);
+      document.documentElement.setAttribute('data-region', state.region);
     }
   }
 
@@ -275,7 +358,7 @@
 
   function loadPacks(lang, packNames) {
     packNames = packNames || state.packs;
-    lang = normalizeLang(lang) || state.lang;
+    lang = resolveLang(lang || state.lang);
     return Promise.all(packNames.map(function (n) { return loadPack(n, lang); }))
       .then(function (parts) {
         var dict = Object.create(null);
@@ -289,13 +372,14 @@
   function setLanguage(lang, opts) {
     opts = opts || {};
     lang = normalizeLang(lang) || 'vi';
-    writePrefs({ lang: lang }, { applyTheme: false });
-    return loadPacks(lang, state.packs).then(function () {
+    writePrefs({ lang: lang }, { applyTheme: false, source: opts.source || 'local' });
+    var resolved = resolveLang(lang);
+    return loadPacks(resolved, state.packs).then(function () {
       if (opts.apply !== false) apply(opts.root || document);
       if (opts.emit !== false) {
         try {
-          global.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang: lang, source: 'i18n-dom' } }));
-          global.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang: lang, source: 'i18n-dom' } }));
+          global.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang: resolved, pref: lang, source: 'i18n-dom' } }));
+          global.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang: resolved, pref: lang, source: 'i18n-dom' } }));
         } catch (e) { /* ignore */ }
       }
       return lang;
@@ -328,16 +412,19 @@
 
   function hydrateFromUser(user) {
     if (!user) return Promise.resolve(state);
+    var stored = readStoredPrefs();
+    var src = readLangSrcCookie();
+    var skipLang = src === 'local' || stored.lang === 'auto';
     var patch = {};
-    var lang = normalizeLang(user.language || user.preferred_language);
+    var lang = skipLang ? null : normalizeLang(user.language || user.preferred_language);
     var region = normalizeRegion(user.region);
     var theme = normalizeTheme(user.theme || user.ui_theme);
     if (lang) patch.lang = lang;
     if (region) patch.region = region;
     if (theme) patch.theme = theme;
     if (!Object.keys(patch).length) return Promise.resolve(state);
-    writePrefs(patch);
-    if (patch.lang) return loadPacks(patch.lang).then(function () { apply(document); return state; });
+    writePrefs(patch, { source: patch.lang ? 'account' : undefined });
+    if (patch.lang) return loadPacks(resolveLang(patch.lang)).then(function () { apply(document); return state; });
     return Promise.resolve(state);
   }
 
@@ -351,8 +438,8 @@
     if (theme) writePrefs({ theme: theme }, { applyLangChrome: false });
     if (region) writePrefs({ region: region }, { applyTheme: false, applyLangChrome: false });
 
-    if (lang && lang !== state.lang) {
-      jobs.push(loadPacks(lang).then(function () { apply(document); }));
+    if (lang && lang !== 'auto' && resolveLang(lang) !== state.lang) {
+      jobs.push(loadPacks(resolveLang(lang)).then(function () { apply(document); }));
     } else if (e.type === 'qmf:langchange' || e.type === 'qmf:lang-change') {
       jobs.push(Promise.resolve().then(function () { apply(document); }));
     }
@@ -374,10 +461,16 @@
     // storage sync across same-origin tabs
     global.addEventListener('storage', function (e) {
       if (!e) return;
-      if (e.key === 'qmf-lang' || e.key === 'lab-ui-lang' || e.key === 'qmf-theme' || e.key === 'qmf-region') {
+      if (e.key === 'qmf-lang' || e.key === 'lab-ui-lang' || e.key === 'qmf-theme' || e.key === 'qmf-region' || e.key === 'qmf_prefs_signal') {
         var prefs = readStoredPrefs();
         writePrefs(prefs);
-        loadPacks(prefs.lang).then(function () { apply(document); });
+        loadPacks(resolveLang(prefs.lang)).then(function () {
+          apply(document);
+          try {
+            global.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang: state.lang, pref: prefs.lang, source: 'storage' } }));
+            global.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang: state.lang, pref: prefs.lang, source: 'storage' } }));
+          } catch (e2) { /* ignore */ }
+        });
       }
     });
   }
@@ -401,7 +494,7 @@
 
     return loadPacks(prefs.lang, state.packs).then(function () {
       apply(opts.root || document);
-      console.log('[QmfI18n] mounted v' + VERSION, { lang: state.lang, theme: state.theme, region: state.region, packs: state.packs });
+      if (global.__QMF_DEBUG__) console.log('[QmfI18n] mounted v' + VERSION, { lang: state.lang, theme: state.theme, region: state.region, packs: state.packs });
       return api;
     });
   }
@@ -429,5 +522,5 @@
   if (!global.QMF) global.QMF = {};
   global.QMF.I18n = api;
 
-  console.log('[QmfI18n] module loaded v' + VERSION);
+  if (global.__QMF_DEBUG__) console.log('[QmfI18n] module loaded v' + VERSION);
 })(typeof window !== 'undefined' ? window : globalThis);

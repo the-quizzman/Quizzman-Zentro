@@ -8,7 +8,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.10.25';
+  const VERSION = '3.12.1';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   /* Same origin path as CDN_BASE — avoid dual modules/ vs modules-v3/ caches */
   const CDN_NAV_BASE = CDN_BASE;
@@ -20,12 +20,30 @@
 const HEADER_I18N = {
   "vi": {
     "nav.home": "Trang chủ",
+    "nav.explore": "Khám phá",
+    "nav.learn": "Học tập",
+    "nav.knowledge": "Kiến thức",
+    "nav.insight": "Insight",
+    "nav.play": "Play",
     "nav.app": "Ứng dụng",
-    "nav.knowledge": "Tri thức",
-    "nav.learn": "Học",
     "nav.game": "Trò chơi",
+    "group.create": "Sáng tạo",
+    "group.teach": "Giảng dạy",
+    "group.study": "Học tập",
+    "group.research_tools": "Nghiên cứu & Công cụ",
+    "group.classes": "Lớp học",
+    "group.resources": "Học liệu",
+    "group.eastern": "Hệ thống Đông phương",
+    "group.astrology": "Chiêm nghiệm & Hoàng đạo",
+    "group.time_cosmos": "Thời gian & Vũ trụ",
+    "group.interactive": "Tương tác",
+    "group.games": "Trò chơi",
     "group.platform": "Nền tảng",
-    "group.create": "Tạo & khám phá",
+    "footer.exploreAll": "Xem tất cả ứng dụng Quizzman →",
+    "footer.startLearning": "Bắt đầu học ngay →",
+    "footer.exploreKnowledge": "Khám phá kho tri thức →",
+    "footer.exploreInsight": "Khám phá toàn bộ Insight →",
+    "footer.explorePlay": "Khám phá Play Center →",
     "search.placeholder": "Tìm app, tri thức…",
     "search.aria": "Tìm app, wiki, docs, quiz…",
     "search.open": "Tìm kiếm",
@@ -35,7 +53,7 @@ const HEADER_I18N = {
     "search.empty": "Không có kết quả",
     "search.apps": "Ứng dụng",
     "search.results": "Kết quả",
-    "search.viewAll": "Xem tất cả trên Search",
+    "search.viewAll": "Xem tất cả trên Library",
     "join": "Vào Quiz",
     "join.error": "Không mở được Join Quiz",
     "notify": "Thông báo",
@@ -74,6 +92,8 @@ const HEADER_I18N = {
     "desc.mandarin": "Học tiếng Trung",
     "item.wiki": "Wiki",
     "desc.wiki": "Kho tri thức",
+    "item.paper": "Paper",
+    "desc.paper": "Bài báo khoa học & QPS",
     "item.dictionary": "Từ điển",
     "desc.dictionary": "Từ điển Hán Nôm",
     "item.docs": "Tài liệu",
@@ -84,8 +104,6 @@ const HEADER_I18N = {
     "desc.search": "Tìm trên Quizzman",
     "item.live-quiz": "Quiz trực tiếp",
     "desc.live-quiz": "Quiz lớp học realtime",
-    "item.present": "Present",
-    "desc.present": "Trình chiếu tương tác",
     "item.homework": "Bài tập",
     "desc.homework": "Bài tập và nộp bài",
     "item.classes": "Lớp học",
@@ -103,16 +121,48 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "Xây khu đô thị tri thức, đổ xúc xắc, quiz đối thủ",
     "item.vault": "The Vault",
-    "desc.vault": "Mở rương, đặt cược, hơn đối thủ trong phòng"
+    "desc.vault": "Mở rương, đặt cược, hơn đối thủ trong phòng",
+    "item.tuvi": "Tử Vi",
+    "desc.tuvi": "Luận giải Tử Vi Đẩu Số",
+    "item.bazi": "Bát Tự",
+    "desc.bazi": "Tứ Trụ Mệnh Lý & ngũ hành",
+    "item.zentro": "Zentro",
+    "desc.zentro": "Nền tảng kiến trúc tri thức",
+    "item.jck": "JCK Font Engine",
+    "desc.jck": "Dựng glyph Hán–Nôm",
+    "item.chinese-number": "Chinese Numbers",
+    "desc.chinese-number": "Luyện đọc và chuyển đổi số",
+    "item.grammar": "Grammar",
+    "desc.grammar": "Sổ tay ngữ pháp Hán ngữ",
+    "item.library": "Library",
+    "desc.library": "Thư viện học liệu & đề thi"
   },
   "en": {
     "nav.home": "Home",
-    "nav.app": "Apps",
-    "nav.knowledge": "Knowledge",
+    "nav.explore": "Explore",
     "nav.learn": "Learn",
+    "nav.knowledge": "Knowledge",
+    "nav.insight": "Insight",
+    "nav.play": "Play",
+    "nav.app": "Apps",
     "nav.game": "Games",
+    "group.create": "Create",
+    "group.teach": "Teach",
+    "group.study": "Study",
+    "group.research_tools": "Research & Tools",
+    "group.classes": "Classes",
+    "group.resources": "Resources",
+    "group.eastern": "Eastern Systems",
+    "group.astrology": "Astrology",
+    "group.time_cosmos": "Time & Cosmos",
+    "group.interactive": "Interactive",
+    "group.games": "Games",
     "group.platform": "Platform",
-    "group.create": "Create & explore",
+    "footer.exploreAll": "View all Quizzman apps →",
+    "footer.startLearning": "Start learning →",
+    "footer.exploreKnowledge": "Explore Knowledge →",
+    "footer.exploreInsight": "Explore all Insight →",
+    "footer.explorePlay": "Explore Play →",
     "search.placeholder": "Search apps, knowledge…",
     "search.aria": "Search apps, wiki, docs, quizzes…",
     "search.open": "Search",
@@ -122,7 +172,7 @@ const HEADER_I18N = {
     "search.empty": "No results",
     "search.apps": "Apps",
     "search.results": "Results",
-    "search.viewAll": "See all on Search",
+    "search.viewAll": "See all on Library",
     "join": "Join Quiz",
     "join.error": "Unable to open Join Quiz",
     "notify": "Notifications",
@@ -161,6 +211,8 @@ const HEADER_I18N = {
     "desc.mandarin": "Chinese language learning",
     "item.wiki": "Wiki",
     "desc.wiki": "Knowledge base",
+    "item.paper": "Paper",
+    "desc.paper": "Academic papers & QPS",
     "item.dictionary": "Dictionary",
     "desc.dictionary": "Chinese dictionary",
     "item.docs": "Docs",
@@ -171,8 +223,6 @@ const HEADER_I18N = {
     "desc.search": "Search across Quizzman",
     "item.live-quiz": "Live Quiz",
     "desc.live-quiz": "Realtime classroom quizzes",
-    "item.present": "Present",
-    "desc.present": "Interactive live slides",
     "item.homework": "Homework",
     "desc.homework": "Assignments and submissions",
     "item.classes": "Classes",
@@ -190,16 +240,48 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "Build knowledge districts, roll the die, quiz rivals",
     "item.vault": "The Vault",
-    "desc.vault": "Crack chests, stake cash, outsmart the room"
+    "desc.vault": "Crack chests, stake cash, outsmart the room",
+    "item.tuvi": "Ziwei Doushu",
+    "desc.tuvi": "Classical Eastern astrology",
+    "item.bazi": "Four Pillars (Bazi)",
+    "desc.bazi": "Chinese destiny analysis",
+    "item.zentro": "Zentro",
+    "desc.zentro": "Knowledge platform & runtime",
+    "item.jck": "JCK Font Engine",
+    "desc.jck": "Glyph synthesis & font studio",
+    "item.chinese-number": "Chinese Numbers",
+    "desc.chinese-number": "Read & convert numbers",
+    "item.grammar": "Grammar",
+    "desc.grammar": "Chinese grammar reference",
+    "item.library": "Library",
+    "desc.library": "Shared learning resources"
   },
   "zh": {
     "nav.home": "首页",
-    "nav.app": "应用",
-    "nav.knowledge": "知识",
+    "nav.explore": "探索",
     "nav.learn": "学习",
+    "nav.knowledge": "知识",
+    "nav.insight": "洞察",
+    "nav.play": "互动",
+    "nav.app": "应用",
     "nav.game": "游戏",
+    "group.create": "创作",
+    "group.teach": "教学",
+    "group.study": "学习",
+    "group.research_tools": "研究与工具",
+    "group.classes": "班级",
+    "group.resources": "资源",
+    "group.eastern": "东方体系",
+    "group.astrology": "占星与象征",
+    "group.time_cosmos": "时间与宇宙",
+    "group.interactive": "实时互动",
+    "group.games": "趣味游戏",
     "group.platform": "平台",
-    "group.create": "创建与探索",
+    "footer.exploreAll": "查看全部 Quizzman 应用程序 →",
+    "footer.startLearning": "开启学习之旅 →",
+    "footer.exploreKnowledge": "探索知识殿堂 →",
+    "footer.exploreInsight": "探索全部洞察系统 →",
+    "footer.explorePlay": "探索 Play 互动中心 →",
     "search.placeholder": "搜索应用、知识…",
     "search.aria": "搜索应用、百科、文档、测验…",
     "search.open": "搜索",
@@ -209,7 +291,7 @@ const HEADER_I18N = {
     "search.empty": "无结果",
     "search.apps": "应用",
     "search.results": "结果",
-    "search.viewAll": "在 Search 查看全部",
+    "search.viewAll": "在 Library 查看全部",
     "join": "加入测验",
     "join.error": "无法打开加入测验",
     "notify": "通知",
@@ -248,6 +330,8 @@ const HEADER_I18N = {
     "desc.mandarin": "中文学习",
     "item.wiki": "Wiki",
     "desc.wiki": "知识库",
+    "item.paper": "Paper",
+    "desc.paper": "学术论文与QPS标准",
     "item.dictionary": "词典",
     "desc.dictionary": "汉喃词典",
     "item.docs": "文档",
@@ -258,8 +342,6 @@ const HEADER_I18N = {
     "desc.search": "全站搜索",
     "item.live-quiz": "实时测验",
     "desc.live-quiz": "实时课堂测验",
-    "item.present": "Present",
-    "desc.present": "实时互动演示",
     "item.homework": "作业",
     "desc.homework": "作业与提交",
     "item.classes": "班级",
@@ -277,16 +359,48 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "建造知识城区，掷骰答题对决",
     "item.vault": "The Vault",
-    "desc.vault": "开宝箱、下注对决、智胜全场"
+    "desc.vault": "开宝箱、下注对决、智胜全场",
+    "item.tuvi": "紫微斗数",
+    "desc.tuvi": "传统命理与星盘推演",
+    "item.bazi": "四柱八字",
+    "desc.bazi": "五行干支生克分析",
+    "item.zentro": "Zentro",
+    "desc.zentro": "知识体系与架构平台",
+    "item.jck": "JCK 字形引擎",
+    "desc.jck": "汉字/喃字字形合成",
+    "item.chinese-number": "中文数字",
+    "desc.chinese-number": "数字读法与转换练习",
+    "item.grammar": "语法精讲",
+    "desc.grammar": "中文语法要点与指南",
+    "item.library": "资料馆",
+    "desc.library": "共享教案与学习资源"
   },
   "zht": {
     "nav.home": "首頁",
-    "nav.app": "應用",
-    "nav.knowledge": "知識",
+    "nav.explore": "探索",
     "nav.learn": "學習",
+    "nav.knowledge": "知識",
+    "nav.insight": "洞察",
+    "nav.play": "互動",
+    "nav.app": "應用",
     "nav.game": "遊戲",
+    "group.create": "創作",
+    "group.teach": "教學",
+    "group.study": "學習",
+    "group.research_tools": "研究與工具",
+    "group.classes": "班級",
+    "group.resources": "資源",
+    "group.eastern": "東方體系",
+    "group.astrology": "占星與象徵",
+    "group.time_cosmos": "時間與宇宙",
+    "group.interactive": "即時互動",
+    "group.games": "趣味遊戲",
     "group.platform": "平台",
-    "group.create": "建立與探索",
+    "footer.exploreAll": "查看全部 Quizzman 應用程式 →",
+    "footer.startLearning": "開啟學習之旅 →",
+    "footer.exploreKnowledge": "探索知識殿堂 →",
+    "footer.exploreInsight": "探索全部洞察系統 →",
+    "footer.explorePlay": "探索 Play 互動中心 →",
     "search.placeholder": "搜尋應用、知識…",
     "search.aria": "搜尋應用、百科、文件、測驗…",
     "search.open": "搜尋",
@@ -296,7 +410,7 @@ const HEADER_I18N = {
     "search.empty": "無結果",
     "search.apps": "應用",
     "search.results": "結果",
-    "search.viewAll": "在 Search 查看全部",
+    "search.viewAll": "在 Library 查看全部",
     "join": "加入測驗",
     "join.error": "無法開啟加入測驗",
     "notify": "通知",
@@ -335,6 +449,8 @@ const HEADER_I18N = {
     "desc.mandarin": "中文學習",
     "item.wiki": "Wiki",
     "desc.wiki": "知識庫",
+    "item.paper": "Paper",
+    "desc.paper": "學術論文與QPS標準",
     "item.dictionary": "詞典",
     "desc.dictionary": "漢喃詞典",
     "item.docs": "文件",
@@ -345,8 +461,6 @@ const HEADER_I18N = {
     "desc.search": "全站搜尋",
     "item.live-quiz": "即時測驗",
     "desc.live-quiz": "即時課堂測驗",
-    "item.present": "Present",
-    "desc.present": "即時互動簡報",
     "item.homework": "作業",
     "desc.homework": "作業與繳交",
     "item.classes": "班級",
@@ -364,7 +478,21 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "建造知識城區，擲骰答題對決",
     "item.vault": "The Vault",
-    "desc.vault": "開寶箱、下注對決、智勝全場"
+    "desc.vault": "開寶箱、下注對決、智勝全場",
+    "item.tuvi": "紫微斗數",
+    "desc.tuvi": "傳統命理與星盤推演",
+    "item.bazi": "四柱八字",
+    "desc.bazi": "五行干支生剋分析",
+    "item.zentro": "Zentro",
+    "desc.zentro": "知識體系與架構平台",
+    "item.jck": "JCK 字形引擎",
+    "desc.jck": "漢字/喃字字形合成",
+    "item.chinese-number": "中文數字",
+    "desc.chinese-number": "數字讀法與轉換練習",
+    "item.grammar": "語法精講",
+    "desc.grammar": "中文語法要點與指南",
+    "item.library": "資料館",
+    "desc.library": "共享教案與學習資源"
   },
   "jp": {
     "nav.home": "ホーム",
@@ -383,7 +511,7 @@ const HEADER_I18N = {
     "search.empty": "結果なし",
     "search.apps": "アプリ",
     "search.results": "結果",
-    "search.viewAll": "Search ですべて見る",
+    "search.viewAll": "Library ですべて見る",
     "join": "クイズに参加",
     "join.error": "参加クイズを開けません",
     "notify": "通知",
@@ -422,6 +550,8 @@ const HEADER_I18N = {
     "desc.mandarin": "中国語学習",
     "item.wiki": "Wiki",
     "desc.wiki": "ナレッジベース",
+    "item.paper": "Paper",
+    "desc.paper": "学術論文とQPS標準",
     "item.dictionary": "辞書",
     "desc.dictionary": "漢喃辞書",
     "item.docs": "ドキュメント",
@@ -432,8 +562,6 @@ const HEADER_I18N = {
     "desc.search": "Quizzmanを横断検索",
     "item.live-quiz": "ライブクイズ",
     "desc.live-quiz": "リアルタイム授業クイズ",
-    "item.present": "Present",
-    "desc.present": "インタラクティブなライブ発表",
     "item.homework": "宿題",
     "desc.homework": "宿題と提出",
     "item.classes": "クラス",
@@ -470,7 +598,7 @@ const HEADER_I18N = {
     "search.empty": "결과 없음",
     "search.apps": "앱",
     "search.results": "결과",
-    "search.viewAll": "Search에서 모두 보기",
+    "search.viewAll": "Library에서 모두 보기",
     "join": "퀴즈 참가",
     "join.error": "참가 퀴즈를 열 수 없습니다",
     "notify": "알림",
@@ -509,6 +637,8 @@ const HEADER_I18N = {
     "desc.mandarin": "중국어 학습",
     "item.wiki": "Wiki",
     "desc.wiki": "지식 베이스",
+    "item.paper": "Paper",
+    "desc.paper": "학술 논문 및 QPS 표준",
     "item.dictionary": "사전",
     "desc.dictionary": "한남 사전",
     "item.docs": "문서",
@@ -519,8 +649,6 @@ const HEADER_I18N = {
     "desc.search": "Quizzman 전체 검색",
     "item.live-quiz": "라이브 퀴즈",
     "desc.live-quiz": "실시간 수업 퀴즈",
-    "item.present": "Present",
-    "desc.present": "실시간 인터랙티브 발표",
     "item.homework": "숙제",
     "desc.homework": "숙제와 제출",
     "item.classes": "수업",
@@ -557,7 +685,7 @@ const HEADER_I18N = {
     "search.empty": "Aucun résultat",
     "search.apps": "Applications",
     "search.results": "Résultats",
-    "search.viewAll": "Tout voir sur Search",
+    "search.viewAll": "Tout voir sur Library",
     "join": "Rejoindre le quiz",
     "join.error": "Impossible d’ouvrir Rejoindre le quiz",
     "notify": "Notifications",
@@ -596,6 +724,8 @@ const HEADER_I18N = {
     "desc.mandarin": "Apprentissage du chinois",
     "item.wiki": "Wiki",
     "desc.wiki": "Base de connaissances",
+    "item.paper": "Paper",
+    "desc.paper": "Articles de recherche & QPS",
     "item.dictionary": "Dictionnaire",
     "desc.dictionary": "Dictionnaire chinois",
     "item.docs": "Docs",
@@ -606,8 +736,6 @@ const HEADER_I18N = {
     "desc.search": "Rechercher sur Quizzman",
     "item.live-quiz": "Quiz en direct",
     "desc.live-quiz": "Quiz de classe en temps réel",
-    "item.present": "Present",
-    "desc.present": "Présentation interactive en direct",
     "item.homework": "Devoirs",
     "desc.homework": "Devoirs et soumissions",
     "item.classes": "Classes",
@@ -644,7 +772,7 @@ const HEADER_I18N = {
     "search.empty": "Keine Ergebnisse",
     "search.apps": "Apps",
     "search.results": "Ergebnisse",
-    "search.viewAll": "Alles in Search ansehen",
+    "search.viewAll": "Alles in Library ansehen",
     "join": "Quiz beitreten",
     "join.error": "Quiz beitreten konnte nicht geöffnet werden",
     "notify": "Benachrichtigungen",
@@ -683,6 +811,8 @@ const HEADER_I18N = {
     "desc.mandarin": "Chinesisch lernen",
     "item.wiki": "Wiki",
     "desc.wiki": "Wissensdatenbank",
+    "item.paper": "Paper",
+    "desc.paper": "Forschungsberichte & QPS",
     "item.dictionary": "Wörterbuch",
     "desc.dictionary": "Chinesisches Wörterbuch",
     "item.docs": "Docs",
@@ -693,8 +823,6 @@ const HEADER_I18N = {
     "desc.search": "Überall auf Quizzman suchen",
     "item.live-quiz": "Live-Quiz",
     "desc.live-quiz": "Echtzeit-Klassenquiz",
-    "item.present": "Present",
-    "desc.present": "Interaktive Live-Präsentation",
     "item.homework": "Hausaufgaben",
     "desc.homework": "Aufgaben und Abgaben",
     "item.classes": "Klassen",
@@ -731,7 +859,7 @@ const HEADER_I18N = {
     "search.empty": "Sin resultados",
     "search.apps": "Apps",
     "search.results": "Resultados",
-    "search.viewAll": "Ver todo en Search",
+    "search.viewAll": "Ver todo en Library",
     "join": "Unirse al quiz",
     "join.error": "No se pudo abrir Unirse al quiz",
     "notify": "Notificaciones",
@@ -770,6 +898,8 @@ const HEADER_I18N = {
     "desc.mandarin": "Aprendizaje de chino",
     "item.wiki": "Wiki",
     "desc.wiki": "Base de conocimiento",
+    "item.paper": "Paper",
+    "desc.paper": "Artículos científicos y QPS",
     "item.dictionary": "Diccionario",
     "desc.dictionary": "Diccionario chino",
     "item.docs": "Docs",
@@ -780,8 +910,6 @@ const HEADER_I18N = {
     "desc.search": "Buscar en Quizzman",
     "item.live-quiz": "Quiz en vivo",
     "desc.live-quiz": "Quizzes de clase en tiempo real",
-    "item.present": "Present",
-    "desc.present": "Presentación interactiva en vivo",
     "item.homework": "Tareas",
     "desc.homework": "Tareas y entregas",
     "item.classes": "Clases",
@@ -818,7 +946,7 @@ const HEADER_I18N = {
     "search.empty": "ไม่พบผลลัพธ์",
     "search.apps": "แอป",
     "search.results": "ผลลัพธ์",
-    "search.viewAll": "ดูทั้งหมดบน Search",
+    "search.viewAll": "ดูทั้งหมดบน Library",
     "join": "เข้าควิซ",
     "join.error": "ไม่สามารถเปิดเข้าควิซได้",
     "notify": "การแจ้งเตือน",
@@ -857,6 +985,8 @@ const HEADER_I18N = {
     "desc.mandarin": "เรียนภาษาจีน",
     "item.wiki": "Wiki",
     "desc.wiki": "คลังความรู้",
+    "item.paper": "Paper",
+    "desc.paper": "บทความวิจัยและมาตรฐาน QPS",
     "item.dictionary": "พจนานุกรม",
     "desc.dictionary": "พจนานุกรมจีน",
     "item.docs": "เอกสาร",
@@ -867,8 +997,6 @@ const HEADER_I18N = {
     "desc.search": "ค้นหาทั่ว Quizzman",
     "item.live-quiz": "ควิซสด",
     "desc.live-quiz": "ควิซชั้นเรียนแบบเรียลไทม์",
-    "item.present": "Present",
-    "desc.present": "งานนำเสนอสดแบบโต้ตอบ",
     "item.homework": "การบ้าน",
     "desc.homework": "การบ้านและการส่งงาน",
     "item.classes": "ชั้นเรียน",
@@ -905,7 +1033,7 @@ const HEADER_I18N = {
     "search.empty": "Sem resultados",
     "search.apps": "Apps",
     "search.results": "Resultados",
-    "search.viewAll": "Ver tudo na Search",
+    "search.viewAll": "Ver tudo na Library",
     "join": "Entrar no quiz",
     "join.error": "Não foi possível abrir Entrar no quiz",
     "notify": "Notificações",
@@ -944,6 +1072,8 @@ const HEADER_I18N = {
     "desc.mandarin": "Aprendizado de chinês",
     "item.wiki": "Wiki",
     "desc.wiki": "Base de conhecimento",
+    "item.paper": "Paper",
+    "desc.paper": "Artigos de pesquisa e QPS",
     "item.dictionary": "Dicionário",
     "desc.dictionary": "Dicionário chinês",
     "item.docs": "Docs",
@@ -954,8 +1084,6 @@ const HEADER_I18N = {
     "desc.search": "Pesquisar no Quizzman",
     "item.live-quiz": "Quiz ao vivo",
     "desc.live-quiz": "Quizzes de aula em tempo real",
-    "item.present": "Present",
-    "desc.present": "Apresentação interativa ao vivo",
     "item.homework": "Tarefas",
     "desc.homework": "Tarefas e envios",
     "item.classes": "Turmas",
@@ -1044,7 +1172,7 @@ const HEADER_I18N = {
   const LEGATUS_BRIDGE = CDN_BASE + '/legatus-bridge.js?v=' + VERSION;
   const LEGATUS_ENDPOINT = 'https://legatus.quizzman.com';
   const NAV_ICON_BASE = 'https://ui.quizzman.com/qmf/assets/logo/nav';
-  const NAV_ICON_VER = '20260925';
+  const NAV_ICON_VER = '20261003';
   let joinOverlayLoader = null;
 
   function navIcon(name) {
@@ -1065,10 +1193,47 @@ const HEADER_I18N = {
   }
 
   /**
+   * Mobile drawer SVG icons — outline style, stroke=currentColor, 24×24 viewBox.
+   * Used by renderMobileNavRow() for the flat-row sidebar (Option 2).
+   */
+  const MOBILE_NAV_ICONS = {
+    'explore':   '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+    'play':      '<path d="M6.5 11.5h4M8.5 9.5v4"/><path d="M15.4 10.6h.01M18 12.9h.01"/><path d="M17.4 5.5H6.6a4 4 0 0 0-3.98 3.6L2 14.4A2.4 2.4 0 0 0 6.3 16l.6-.8h10.2l.6.8a2.4 2.4 0 0 0 4.3-1.6l-.62-5.3a4 4 0 0 0-3.98-3.6z"/>',
+    'game':      '<path d="M6.5 11.5h4M8.5 9.5v4"/><path d="M15.4 10.6h.01M18 12.9h.01"/><path d="M17.4 5.5H6.6a4 4 0 0 0-3.98 3.6L2 14.4A2.4 2.4 0 0 0 6.3 16l.6-.8h10.2l.6.8a2.4 2.4 0 0 0 4.3-1.6l-.62-5.3a4 4 0 0 0-3.98-3.6z"/>',
+    'insight':   '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>',
+    'learn':     '<path d="M22 9.5 12 5 2 9.5l10 4.5 10-4.5z"/><path d="M6 11.4V16c3.2 2 8.8 2 12 0v-4.6"/>',
+    'knowledge': '<path d="M2 4.5h6a3 3 0 0 1 3 3V20a2.2 2.2 0 0 0-2.2-2.2H2z"/><path d="M22 4.5h-6a3 3 0 0 0-3 3V20a2.2 2.2 0 0 1 2.2-2.2H22z"/>',
+    'mandarin':  '<path d="M4 4h16"/><path d="M9 4v3a6 6 0 0 0 6 6"/><path d="M3 10h5"/><path d="m10 20 4-8 4 8"/><path d="m11.8 16h4.4"/>',
+    'paper':     '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>',
+    'class':     '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+    'editor':    '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    'settings':  '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+    'info':      '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+    'globe':     '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    'chevron-right': '<polyline points="9 18 15 12 9 6"/>',
+    'search':    '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+    'menu':      '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>',
+    'close':     '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+    'gamepad':   '<path d="M6.5 11.5h4M8.5 9.5v4"/><path d="M15.4 10.6h.01M18 12.9h.01"/><path d="M17.4 5.5H6.6a4 4 0 0 0-3.98 3.6L2 14.4A2.4 2.4 0 0 0 6.3 16l.6-.8h10.2l.6.8a2.4 2.4 0 0 0 4.3-1.6l-.62-5.3a4 4 0 0 0-3.98-3.6z"/>',
+  };
+
+  function mobileNavSVG(key, extraClass) {
+    const paths = MOBILE_NAV_ICONS[key] || MOBILE_NAV_ICONS['explore'];
+    const cls = extraClass ? ` class="${extraClass}"` : '';
+    return `<svg${cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+  }
+
+  /**
    * Section glyphs for the primary nav — Lucide-style, 2px stroke, one visual family.
    * Rendered inline so they inherit the link color (muted → brand accent when active).
    */
   const NAV_SECTION_ICONS = {
+    'explore': '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+    'learn': '<path d="M22 9.5 12 5 2 9.5l10 4.5 10-4.5z"/><path d="M6 11.4V16c3.2 2 8.8 2 12 0v-4.6"/>',
+    'knowledge': '<path d="M2 4.5h6a3 3 0 0 1 3 3V20a2.2 2.2 0 0 0-2.2-2.2H2z"/><path d="M22 4.5h-6a3 3 0 0 0-3 3V20a2.2 2.2 0 0 1 2.2-2.2H22z"/>',
+    'insight': '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>',
+    'play': '<path d="M6.5 11.5h4M8.5 9.5v4"/><path d="M15.4 10.6h.01M18 12.9h.01"/><path d="M17.4 5.5H6.6a4 4 0 0 0-3.98 3.6L2 14.4A2.4 2.4 0 0 0 6.3 16l.6-.8h10.2l.6.8a2.4 2.4 0 0 0 4.3-1.6l-.62-5.3a4 4 0 0 0-3.98-3.6z"/>',
+    // Backward compatibility
     'home': '<path d="m3 10.8 9-7.3 9 7.3"/><path d="M5.5 9.5V21h13V9.5"/><path d="M9.5 21v-6h5v6"/>',
     'app': '<rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/>',
     'tri-thuc': '<path d="M2 4.5h6a3 3 0 0 1 3 3V20a2.2 2.2 0 0 0-2.2-2.2H2z"/><path d="M22 4.5h-6a3 3 0 0 0-3 3V20a2.2 2.2 0 0 1 2.2-2.2H22z"/>',
@@ -1083,83 +1248,128 @@ const HEADER_I18N = {
   }
 
   /**
-   * Four primary sections only. Add new apps as children — never new top-level items.
+   * Primary product navigation: Explore · Learn · Knowledge · Insight · Play.
    * Product logos: compressed WebP/PNG thumbs under /qmf/assets/logo/nav/ (cached 7d).
    */
 
   function getQuizzmanNavItems() {
     return [
       {
-        id: 'home',
-        labelKey: 'nav.home',
-        label: ht('nav.home', 'Home'),
-        href: 'https://quizzman.com',
-        compact: true,
-      },
-      {
-        id: 'app',
-        labelKey: 'nav.app',
-        label: ht('nav.app', 'App'),
-        href: 'https://app.quizzman.com',
+        id: 'explore',
+        labelKey: 'nav.explore',
+        label: ht('nav.explore', 'Explore'),
+        href: 'https://quizzman.com/#apps',
+        columns: 4,
+        footerLink: {
+          labelKey: 'footer.exploreAll',
+          label: ht('footer.exploreAll', 'View all Quizzman apps →'),
+          href: 'https://quizzman.com/#apps',
+        },
         children: [
-          { id: 'mentis', labelKey: 'item.mentis', descKey: 'desc.mentis', groupKey: 'group.platform', label: ht('item.mentis'), description: ht('desc.mentis'), group: ht('group.platform'), href: 'https://mentis.quizzman.com', ...navIcon('mentis') },
-          { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', groupKey: 'group.platform', label: ht('item.lms'), description: ht('desc.lms'), group: ht('group.platform'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
-          { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', groupKey: 'group.platform', label: ht('item.classroom'), description: ht('desc.classroom'), group: ht('group.platform'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
-          { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', groupKey: 'group.platform', label: ht('item.slide-studio'), description: ht('desc.slide-studio'), group: ht('group.platform'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
-          { id: 'lab', labelKey: 'item.lab', descKey: 'desc.lab', groupKey: 'group.platform', label: ht('item.lab'), description: ht('desc.lab'), group: ht('group.platform'), href: 'https://insight.quizzman.com', ...navIcon('eastern-lab') },
-          { id: 'app-platform', labelKey: 'item.app-platform', descKey: 'desc.app-platform', groupKey: 'group.platform', label: ht('item.app-platform'), description: ht('desc.app-platform'), group: ht('group.platform'), href: 'https://app.quizzman.com', icon: 'A' },
+          // Create
           { id: 'quiz-editor', labelKey: 'item.quiz-editor', descKey: 'desc.quiz-editor', groupKey: 'group.create', label: ht('item.quiz-editor'), description: ht('desc.quiz-editor'), group: ht('group.create'), href: 'https://app.quizzman.com/quiz-editor/', ...navIcon('quiz-editor') },
-          { id: 'present', labelKey: 'item.present', descKey: 'desc.present', groupKey: 'group.create', label: ht('item.present'), description: ht('desc.present'), group: ht('group.create'), href: 'https://play.quizzman.com/slide', ...presentIcon() },
+          { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', groupKey: 'group.create', label: ht('item.slide-studio'), description: ht('desc.slide-studio'), group: ht('group.create'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
           { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', groupKey: 'group.create', label: ht('item.assignment'), description: ht('desc.assignment'), group: ht('group.create'), href: 'https://class.quizzman.com/homework', ...navIcon('assignment') },
-          { id: 'iching', labelKey: 'item.iching', descKey: 'desc.iching', groupKey: 'group.create', label: ht('item.iching'), description: ht('desc.iching'), group: ht('group.create'), href: 'https://insight.quizzman.com/tool/iching-divination', ...navIcon('iching') },
-          { id: 'calendar', labelKey: 'item.calendar', descKey: 'desc.calendar', groupKey: 'group.create', label: ht('item.calendar'), description: ht('desc.calendar'), group: ht('group.create'), href: 'https://insight.quizzman.com/tool/calendar-converter', ...navIcon('calendar') },
-          { id: 'astro', labelKey: 'item.astro', descKey: 'desc.astro', groupKey: 'group.create', label: ht('item.astro'), description: ht('desc.astro'), group: ht('group.create'), href: 'https://astro.quizzman.com', ...navIcon('astro') },
-          { id: 'zodiac-sign', labelKey: 'item.zodiac-sign', descKey: 'desc.zodiac-sign', groupKey: 'group.create', label: ht('item.zodiac-sign'), description: ht('desc.zodiac-sign'), group: ht('group.create'), href: 'https://insight.quizzman.com/zodiac-sign', ...navIcon('zodiac-sign') },
-          { id: 'tarot', labelKey: 'item.tarot', descKey: 'desc.tarot', groupKey: 'group.create', label: ht('item.tarot'), description: ht('desc.tarot'), group: ht('group.create'), href: 'https://insight.quizzman.com/tarot', ...navIcon('tarot') },
-          { id: 'vedic', labelKey: 'item.vedic', descKey: 'desc.vedic', groupKey: 'group.create', label: ht('item.vedic'), description: ht('desc.vedic'), group: ht('group.create'), href: 'https://insight.quizzman.com/vedic', ...navIcon('vedic') },
-          { id: 'mandarin', labelKey: 'item.mandarin', descKey: 'desc.mandarin', groupKey: 'group.create', label: ht('item.mandarin'), description: ht('desc.mandarin'), group: ht('group.create'), href: 'https://study.quizzman.com', ...navIcon('mandarin') },
+          // Teach
+          { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', groupKey: 'group.teach', label: ht('item.classroom'), description: ht('desc.classroom'), group: ht('group.teach'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
+          { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', groupKey: 'group.teach', label: ht('item.lms'), description: ht('desc.lms'), group: ht('group.teach'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
+          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', groupKey: 'group.teach', label: ht('item.library'), description: ht('desc.library'), group: ht('group.teach'), href: 'https://lib.quizzman.com', icon: '馆' },
+          // Study
+          { id: 'mandarin', labelKey: 'item.mandarin', descKey: 'desc.mandarin', groupKey: 'group.study', label: ht('item.mandarin'), description: ht('desc.mandarin'), group: ht('group.study'), href: 'https://study.quizzman.com', ...navIcon('mandarin') },
+          { id: 'grammar', labelKey: 'item.grammar', descKey: 'desc.grammar', groupKey: 'group.study', label: ht('item.grammar'), description: ht('desc.grammar'), group: ht('group.study'), href: 'https://study.quizzman.com/grammar', icon: '文' },
+          { id: 'chinese-number', labelKey: 'item.chinese-number', descKey: 'desc.chinese-number', groupKey: 'group.study', label: ht('item.chinese-number'), description: ht('desc.chinese-number'), group: ht('group.study'), href: 'https://study.quizzman.com/tool/chinese-number', icon: '数' },
+          { id: 'jck', labelKey: 'item.jck', descKey: 'desc.jck', groupKey: 'group.study', label: ht('item.jck'), description: ht('desc.jck'), group: ht('group.study'), href: 'https://dict.quizzman.com/jck/#synth', ...navIcon('jck') },
+          // Research & Tools
+          { id: 'insight-portal', labelKey: 'item.lab', descKey: 'desc.lab', groupKey: 'group.research_tools', label: ht('item.lab', 'Quizzman Insight'), description: ht('desc.lab'), group: ht('group.research_tools'), href: 'https://insight.quizzman.com', ...navIcon('eastern-lab') },
+          { id: 'astro', labelKey: 'item.astro', descKey: 'desc.astro', groupKey: 'group.research_tools', label: ht('item.astro'), description: ht('desc.astro'), group: ht('group.research_tools'), href: 'https://astro.quizzman.com', ...navIcon('astro') },
+          { id: 'calendar', labelKey: 'item.calendar', descKey: 'desc.calendar', groupKey: 'group.research_tools', label: ht('item.calendar'), description: ht('desc.calendar'), group: ht('group.research_tools'), href: 'https://insight.quizzman.com/tool/calendar-converter', ...navIcon('calendar') },
         ],
       },
       {
-        id: 'tri-thuc',
-        labelKey: 'nav.knowledge',
-        label: ht('nav.knowledge', 'Knowledge'),
-        href: 'https://wiki.quizzman.com',
-        children: [
-          { id: 'wiki', labelKey: 'item.wiki', descKey: 'desc.wiki', label: ht('item.wiki'), description: ht('desc.wiki'), href: 'https://wiki.quizzman.com', ...navIcon('wiki') },
-          { id: 'dictionary', labelKey: 'item.dictionary', descKey: 'desc.dictionary', label: ht('item.dictionary'), description: ht('desc.dictionary'), href: 'https://dict.quizzman.com', icon: '典' },
-          { id: 'docs', labelKey: 'item.docs', descKey: 'desc.docs', label: ht('item.docs'), description: ht('desc.docs'), href: 'https://ui.quizzman.com/qmf/docs.html', ...navIcon('ui') },
-          { id: 'ai-knowledge', labelKey: 'item.ai-knowledge', descKey: 'desc.ai-knowledge', label: ht('item.ai-knowledge'), description: ht('desc.ai-knowledge'), href: 'https://mentis.quizzman.com', ...navIcon('mentis') },
-          { id: 'search', labelKey: 'item.search', descKey: 'desc.search', label: ht('item.search'), description: ht('desc.search'), href: 'https://search.quizzman.com', icon: '⌕' },
-        ],
-      },
-      {
-        id: 'hoc',
+        id: 'learn',
         labelKey: 'nav.learn',
         label: ht('nav.learn', 'Learn'),
         href: 'https://study.quizzman.com',
+        columns: 3,
+        footerLink: {
+          labelKey: 'footer.startLearning',
+          label: ht('footer.startLearning', 'Start learning →'),
+          href: 'https://study.quizzman.com',
+        },
         children: [
-          { id: 'live-quiz', labelKey: 'item.live-quiz', descKey: 'desc.live-quiz', label: ht('item.live-quiz'), description: ht('desc.live-quiz'), href: 'https://play.quizzman.com/quiz', ...navIcon('live-quiz') },
-          { id: 'present', labelKey: 'item.present', descKey: 'desc.present', label: ht('item.present'), description: ht('desc.present'), href: 'https://play.quizzman.com/slide', ...presentIcon() },
-          { id: 'homework', labelKey: 'item.homework', descKey: 'desc.homework', label: ht('item.homework'), description: ht('desc.homework'), href: 'https://class.quizzman.com', icon: 'H' },
-          { id: 'classes', labelKey: 'item.classes', descKey: 'desc.classes', label: ht('item.classes'), description: ht('desc.classes'), href: 'https://class.quizzman.com', icon: 'C' },
-          { id: 'learning-center', labelKey: 'item.learning-center', descKey: 'desc.learning-center', label: ht('item.learning-center'), description: ht('desc.learning-center'), href: 'https://study.quizzman.com', icon: '学' },
+          // Study
+          { id: 'mandarin', labelKey: 'item.mandarin', descKey: 'desc.mandarin', groupKey: 'group.study', label: ht('item.mandarin'), description: ht('desc.mandarin'), group: ht('group.study'), href: 'https://study.quizzman.com', ...navIcon('mandarin') },
+          { id: 'grammar', labelKey: 'item.grammar', descKey: 'desc.grammar', groupKey: 'group.study', label: ht('item.grammar'), description: ht('desc.grammar'), group: ht('group.study'), href: 'https://study.quizzman.com/grammar', icon: '文' },
+          { id: 'chinese-number', labelKey: 'item.chinese-number', descKey: 'desc.chinese-number', groupKey: 'group.study', label: ht('item.chinese-number'), description: ht('desc.chinese-number'), group: ht('group.study'), href: 'https://study.quizzman.com/tool/chinese-number', icon: '数' },
+          // Classes
+          { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', groupKey: 'group.classes', label: ht('item.classroom'), description: ht('desc.classroom'), group: ht('group.classes'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
+          { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', groupKey: 'group.classes', label: ht('item.lms'), description: ht('desc.lms'), group: ht('group.classes'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
+          // Resources
+          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', groupKey: 'group.resources', label: ht('item.library'), description: ht('desc.library'), group: ht('group.resources'), href: 'https://lib.quizzman.com', icon: '馆' },
         ],
       },
       {
-        id: 'game',
-        labelKey: 'nav.game',
-        label: ht('nav.game', 'Game'),
-        href: 'https://play.quizzman.com',
+        id: 'knowledge',
+        labelKey: 'nav.knowledge',
+        label: ht('nav.knowledge', 'Knowledge'),
+        href: 'https://wiki.quizzman.com',
+        footerLink: {
+          labelKey: 'footer.exploreKnowledge',
+          label: ht('footer.exploreKnowledge', 'Explore Knowledge →'),
+          href: 'https://wiki.quizzman.com',
+        },
         children: [
-          { id: 'live-quiz', labelKey: 'item.live-quiz', descKey: 'desc.live-quiz', label: ht('item.live-quiz'), description: ht('desc.live-quiz'), href: 'https://play.quizzman.com/quiz', ...navIcon('live-quiz') },
-          { id: 'present', labelKey: 'item.present', descKey: 'desc.present', label: ht('item.present'), description: ht('desc.present'), href: 'https://play.quizzman.com/slide', ...presentIcon() },
-          { id: 'edu-games', labelKey: 'item.edu-games', descKey: 'desc.edu-games', label: ht('item.edu-games'), description: ht('desc.edu-games'), href: 'https://play.quizzman.com', icon: 'G' },
-          { id: 'multiplayer', labelKey: 'item.multiplayer', descKey: 'desc.multiplayer', label: ht('item.multiplayer'), description: ht('desc.multiplayer'), href: 'https://play.quizzman.com', icon: '合' },
-          { id: 'practice', labelKey: 'item.practice', descKey: 'desc.practice', label: ht('item.practice'), description: ht('desc.practice'), href: 'https://play.quizzman.com/pikahans', ...navIcon('pikahans') },
-          { id: 'challenges', labelKey: 'item.challenges', descKey: 'desc.challenges', label: ht('item.challenges'), description: ht('desc.challenges'), href: 'https://play.quizzman.com/idiom-king', ...navIcon('idiom-king') },
-          { id: 'tycoon', labelKey: 'item.tycoon', descKey: 'desc.tycoon', label: ht('item.tycoon'), description: ht('desc.tycoon'), href: 'https://play.quizzman.com/tycoon', ...navIcon('tycoon') },
-          { id: 'arena', labelKey: 'item.vault', descKey: 'desc.vault', label: ht('item.vault'), description: ht('desc.vault'), href: 'https://play.quizzman.com/arena', ...navIcon('arena') },
+          { id: 'wiki', labelKey: 'item.wiki', descKey: 'desc.wiki', label: ht('item.wiki'), description: ht('desc.wiki'), href: 'https://wiki.quizzman.com', ...navIcon('wiki') },
+          { id: 'dictionary', labelKey: 'item.dictionary', descKey: 'desc.dictionary', label: ht('item.dictionary'), description: ht('desc.dictionary'), href: 'https://dict.quizzman.com', icon: '典' },
+          { id: 'paper', labelKey: 'item.paper', descKey: 'desc.paper', label: ht('item.paper'), description: ht('desc.paper'), href: 'https://paper.quizzman.com', ...navIcon('paper') },
+          { id: 'zentro', labelKey: 'item.zentro', descKey: 'desc.zentro', label: ht('item.zentro'), description: ht('desc.zentro'), href: 'https://ui.quizzman.com', icon: 'Z' },
+        ],
+      },
+      {
+        id: 'insight',
+        labelKey: 'nav.insight',
+        label: ht('nav.insight', 'Insight'),
+        href: 'https://insight.quizzman.com',
+        columns: 3,
+        footerLink: {
+          labelKey: 'footer.exploreInsight',
+          label: ht('footer.exploreInsight', 'Explore all Insight →'),
+          href: 'https://insight.quizzman.com',
+        },
+        children: [
+          // Eastern systems
+          { id: 'tuvi', labelKey: 'item.tuvi', descKey: 'desc.tuvi', groupKey: 'group.eastern', label: ht('item.tuvi'), description: ht('desc.tuvi'), group: ht('group.eastern'), href: 'https://insight.quizzman.com/tool/tuvi-reading', ...navIcon('ziwei') },
+          { id: 'bazi', labelKey: 'item.bazi', descKey: 'desc.bazi', groupKey: 'group.eastern', label: ht('item.bazi'), description: ht('desc.bazi'), group: ht('group.eastern'), href: 'https://insight.quizzman.com/tool/bazi-reading', ...navIcon('bazi') },
+          { id: 'iching', labelKey: 'item.iching', descKey: 'desc.iching', groupKey: 'group.eastern', label: ht('item.iching'), description: ht('desc.iching'), group: ht('group.eastern'), href: 'https://insight.quizzman.com/tool/iching-divination', ...navIcon('iching') },
+          // Astrology
+          { id: 'zodiac-sign', labelKey: 'item.zodiac-sign', descKey: 'desc.zodiac-sign', groupKey: 'group.astrology', label: ht('item.zodiac-sign'), description: ht('desc.zodiac-sign'), group: ht('group.astrology'), href: 'https://insight.quizzman.com/zodiac-sign', ...navIcon('zodiac-sign') },
+          { id: 'vedic', labelKey: 'item.vedic', descKey: 'desc.vedic', groupKey: 'group.astrology', label: ht('item.vedic'), description: ht('desc.vedic'), group: ht('group.astrology'), href: 'https://insight.quizzman.com/vedic', ...navIcon('vedic') },
+          { id: 'tarot', labelKey: 'item.tarot', descKey: 'desc.tarot', groupKey: 'group.astrology', label: ht('item.tarot'), description: ht('desc.tarot'), group: ht('group.astrology'), href: 'https://insight.quizzman.com/tarot', ...navIcon('tarot') },
+          // Time & Cosmos
+          { id: 'calendar', labelKey: 'item.calendar', descKey: 'desc.calendar', groupKey: 'group.time_cosmos', label: ht('item.calendar'), description: ht('desc.calendar'), group: ht('group.time_cosmos'), href: 'https://insight.quizzman.com/tool/calendar-converter', ...navIcon('calendar') },
+          { id: 'astro', labelKey: 'item.astro', descKey: 'desc.astro', groupKey: 'group.time_cosmos', label: ht('item.astro'), description: ht('desc.astro'), group: ht('group.time_cosmos'), href: 'https://astro.quizzman.com', ...navIcon('astro') },
+        ],
+      },
+      {
+        id: 'play',
+        labelKey: 'nav.play',
+        label: ht('nav.play', 'Play'),
+        href: 'https://play.quizzman.com',
+        columns: 2,
+        footerLink: {
+          labelKey: 'footer.explorePlay',
+          label: ht('footer.explorePlay', 'Explore Play →'),
+          href: 'https://play.quizzman.com',
+        },
+        children: [
+          // Interactive
+          { id: 'live-quiz', labelKey: 'item.live-quiz', descKey: 'desc.live-quiz', groupKey: 'group.interactive', label: ht('item.live-quiz'), description: ht('desc.live-quiz'), group: ht('group.interactive'), href: 'https://play.quizzman.com/quiz', ...navIcon('live-quiz') },
+          { id: 'present', labelKey: 'item.present', descKey: 'desc.present', groupKey: 'group.interactive', label: ht('item.present'), description: ht('desc.present'), group: ht('group.interactive'), href: 'https://play.quizzman.com/slide', ...presentIcon() },
+          // Games
+          { id: 'pikahans', labelKey: 'item.practice', descKey: 'desc.practice', groupKey: 'group.games', label: ht('item.practice'), description: ht('desc.practice'), group: ht('group.games'), href: 'https://play.quizzman.com/pikahans', ...navIcon('pikahans') },
+          { id: 'idiom-king', labelKey: 'item.challenges', descKey: 'desc.challenges', groupKey: 'group.games', label: ht('item.challenges'), description: ht('desc.challenges'), group: ht('group.games'), href: 'https://play.quizzman.com/idiom-king', ...navIcon('idiom-king') },
+          { id: 'tycoon', labelKey: 'item.tycoon', descKey: 'desc.tycoon', groupKey: 'group.games', label: ht('item.tycoon'), description: ht('desc.tycoon'), group: ht('group.games'), href: 'https://play.quizzman.com/tycoon', ...navIcon('tycoon') },
+          { id: 'vault', labelKey: 'item.vault', descKey: 'desc.vault', groupKey: 'group.games', label: ht('item.vault'), description: ht('desc.vault'), group: ht('group.games'), href: 'https://play.quizzman.com/arena', ...navIcon('arena') },
         ],
       },
     ];
@@ -1257,67 +1467,85 @@ const HEADER_I18N = {
     const path = window.location.pathname;
 
     if (host === 'quizzman.com' || host === 'www.quizzman.com') {
-      return { section: 'home' };
+      return { section: 'explore' };
     }
 
     if (host === 'mentis.quizzman.com') {
-      return { section: 'app', child: 'mentis' };
+      return { section: 'knowledge', child: 'zentro' };
     }
 
     if (host === 'lms.quizzman.com') {
-      return { section: 'app', child: 'lms' };
+      return { section: 'learn', child: 'lms' };
     }
 
     if (host === 'app.quizzman.com') {
-      if (path.startsWith('/quiz-editor')) return { section: 'app', child: 'quiz-editor' };
-      if (path.startsWith('/slide-studio')) return { section: 'app', child: 'slide-studio' };
-      return { section: 'app', child: 'app-platform' };
+      if (path.startsWith('/quiz-editor')) return { section: 'explore', child: 'quiz-editor' };
+      if (path.startsWith('/slide-studio')) return { section: 'explore', child: 'slide-studio' };
+      return { section: 'explore' };
     }
 
     if (host === 'insight.quizzman.com' || host === 'lab.quizzman.com') {
-      if (path.startsWith('/tool/iching-divination')) return { section: 'app', child: 'iching' };
-      if (path.startsWith('/tool/calendar-converter')) return { section: 'app', child: 'calendar' };
-      if (path.startsWith('/zodiac-sign')) return { section: 'app', child: 'zodiac-sign' };
-      if (path.startsWith('/tarot')) return { section: 'app', child: 'tarot' };
-      if (path.startsWith('/vedic')) return { section: 'app', child: 'vedic' };
-      return { section: 'app', child: 'lab' };
+      if (path.includes('tuvi')) return { section: 'insight', child: 'tuvi' };
+      if (path.includes('bazi')) return { section: 'insight', child: 'bazi' };
+      if (path.includes('iching')) return { section: 'insight', child: 'iching' };
+      if (path.includes('calendar')) return { section: 'insight', child: 'calendar' };
+      if (path.includes('zodiac')) return { section: 'insight', child: 'zodiac-sign' };
+      if (path.includes('tarot')) return { section: 'insight', child: 'tarot' };
+      if (path.includes('vedic')) return { section: 'insight', child: 'vedic' };
+      return { section: 'insight' };
+    }
+
+    if (host === 'astro.quizzman.com') {
+      return { section: 'insight', child: 'astro' };
     }
 
     if (host === 'wiki.quizzman.com') {
-      return { section: 'tri-thuc', child: 'wiki' };
+      return { section: 'knowledge', child: 'wiki' };
+    }
+
+    if (host === 'paper.quizzman.com') {
+      return { section: 'knowledge', child: 'paper' };
     }
 
     if (host === 'dict.quizzman.com') {
-      return { section: 'tri-thuc', child: 'dictionary' };
+      if (path.includes('jck')) return { section: 'explore', child: 'jck' };
+      return { section: 'knowledge', child: 'dictionary' };
     }
 
     if (host === 'ui.quizzman.com') {
-      return { section: 'tri-thuc', child: 'docs' };
+      return { section: 'knowledge', child: 'zentro' };
     }
 
-    if (host === 'search.quizzman.com' || host === 'lib.quizzman.com') {
-      return { section: 'tri-thuc', child: 'search' };
+    if (host === 'search.quizzman.com') {
+      return {};
+    }
+
+    if (host === 'lib.quizzman.com' || host === 'library.quizzman.com') {
+      return { section: 'learn', child: 'library' };
     }
 
     if (host === 'hsk.quizzman.com' || host === 'study.quizzman.com') {
-      return { section: 'app', child: 'mandarin' };
+      if (path.includes('chinese-number')) return { section: 'learn', child: 'chinese-number' };
+      if (path.includes('grammar')) return { section: 'learn', child: 'grammar' };
+      if (path.includes('jck')) return { section: 'explore', child: 'jck' };
+      return { section: 'learn', child: 'mandarin' };
     }
 
     if (host === 'class.quizzman.com') {
       if (path.includes('assignment') || path.includes('homework')) {
-        return { section: 'app', child: 'assignment' };
+        return { section: 'explore', child: 'assignment' };
       }
-      return { section: 'app', child: 'classroom' };
+      return { section: 'learn', child: 'classroom' };
     }
 
     if (host === 'play.quizzman.com') {
-      if (path.startsWith('/quiz')) return { section: 'hoc', child: 'live-quiz' };
-      if (path.startsWith('/slide')) return { section: 'hoc', child: 'present' };
-      if (path.startsWith('/pikahans')) return { section: 'game', child: 'practice' };
-      if (path.startsWith('/idiom-king')) return { section: 'game', child: 'challenges' };
-      if (path.startsWith('/tycoon')) return { section: 'game', child: 'tycoon' };
-      if (path.startsWith('/arena')) return { section: 'game', child: 'arena' };
-      return { section: 'game', child: 'edu-games' };
+      if (path.startsWith('/quiz')) return { section: 'play', child: 'live-quiz' };
+      if (path.startsWith('/slide')) return { section: 'play', child: 'present' };
+      if (path.startsWith('/pikahans')) return { section: 'play', child: 'pikahans' };
+      if (path.startsWith('/idiom-king')) return { section: 'play', child: 'idiom-king' };
+      if (path.startsWith('/tycoon')) return { section: 'play', child: 'tycoon' };
+      if (path.startsWith('/arena') || path.startsWith('/vault')) return { section: 'play', child: 'vault' };
+      return { section: 'play' };
     }
 
     return {};
@@ -1407,7 +1635,23 @@ const HEADER_I18N = {
         `).join('')
       : children.map((child) => renderMegaCard(child, activeState.child)).join('');
     const count = children.length;
-    const wide = count >= 4;
+    let colsClass = '';
+    if (item.columns === 4 || groups.length >= 4) {
+      colsClass = ' lab-header__mega--cols-4';
+    } else if (item.columns === 3 || groups.length === 3) {
+      colsClass = ' lab-header__mega--cols-3';
+    } else if (item.columns === 2 || groups.length === 2 || count >= 4) {
+      colsClass = ' lab-header__mega--wide';
+    }
+
+    const footer = item.footerLink
+      ? `<div class="lab-header__mega-footer">
+          <a class="lab-header__mega-footer-link" href="${escapeHtml(item.footerLink.href)}"${item.footerLink.labelKey ? i18nAttr(item.footerLink.labelKey) : ''}>
+            <span>${escapeHtml(item.footerLink.label)}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>`
+      : '';
 
     return `
       <div class="lab-header__nav-item lab-header__nav-item--dropdown${isSectionActive ? ' is-active' : ''}" data-nav-id="${escapeHtml(item.id)}">
@@ -1416,10 +1660,11 @@ const HEADER_I18N = {
           <span class="lab-header__nav-text"${item.labelKey ? i18nAttr(item.labelKey) : ''}>${escapeHtml(item.label)}</span>
           <svg class="lab-header__nav-chevron" width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </button>
-        <div class="lab-header__mega${wide ? ' lab-header__mega--wide' : ''}" role="menu" aria-label="${escapeHtml(item.label)}"${item.labelKey ? i18nAttr(item.labelKey) : ''}>
+        <div class="lab-header__mega${colsClass}" role="menu" aria-label="${escapeHtml(item.label)}"${item.labelKey ? i18nAttr(item.labelKey) : ''}>
           <div class="lab-header__mega-grid">
             ${cards}
           </div>
+          ${footer}
         </div>
       </div>
     `;
@@ -1454,55 +1699,29 @@ const HEADER_I18N = {
 
   function renderMobileNavSection(item, activeState) {
     const isSectionActive = item.id === activeState.section;
+    const navIconSvg = mobileNavSVG(item.id, 'mh-nav-icon');
+    const chevronSvg = mobileNavSVG('chevron-right', 'mh-nav-chevron');
 
     if (item.children && item.children.length) {
-      let currentGroup = null;
-      const children = item.children.map((child) => {
-        const isActive = child.id === activeState.child;
-        const icon = renderMegaIcon(child);
-        const groupLabel = child.group && child.group !== currentGroup
-          ? `<span class="lab-header__drawer-group-label"${child.groupKey ? i18nAttr(child.groupKey) : ''}>${escapeHtml(child.group)}</span>`
-          : '';
-        currentGroup = child.group || null;
-
-        if (child.disabled) {
-          return `
-            ${groupLabel}
-            <span class="lab-header__drawer-item lab-header__drawer-item--disabled${isActive ? ' is-active' : ''}" aria-disabled="true">
-              ${icon}
-              <span class="lab-header__drawer-item-body">
-                <span class="lab-header__drawer-item-title"${child.labelKey ? i18nAttr(child.labelKey) : ''}>${escapeHtml(child.label)}</span>
-                <span class="lab-header__drawer-item-desc"${child.descKey ? i18nAttr(child.descKey) : ''}>${escapeHtml(child.description || '')}</span>
-              </span>
-            </span>
-          `;
-        }
-
-        return `
-          ${groupLabel}
-          <a class="lab-header__drawer-item${isActive ? ' is-active' : ''}" href="${escapeHtml(child.href)}">
-            ${icon}
-            <span class="lab-header__drawer-item-body">
-              <span class="lab-header__drawer-item-title"${child.labelKey ? i18nAttr(child.labelKey) : ''}>${escapeHtml(child.label)}</span>
-              <span class="lab-header__drawer-item-desc"${child.descKey ? i18nAttr(child.descKey) : ''}>${escapeHtml(child.description || '')}</span>
-            </span>
-          </a>
-        `;
-      }).join('');
-
+      // On mobile we render ONE top-level flat row per section (not per child).
+      // The row links directly to the section's href (or first child's href).
+      const dest = item.href || (item.children[0] && item.children[0].href) || '#';
       return `
-        <div class="lab-header__drawer-section${isSectionActive ? ' is-active' : ''}">
-          <div class="lab-header__drawer-section-head">
-            <span class="lab-header__drawer-section-label"${item.labelKey ? i18nAttr(item.labelKey) : ''}>${escapeHtml(item.label)}</span>
-          </div>
-          <div class="lab-header__drawer-section-items">${children}</div>
-        </div>
+        <a class="lab-header__drawer-item lab-header__drawer-section-row${isSectionActive ? ' is-active' : ''}" href="${escapeHtml(dest)}">
+          ${navIconSvg}
+          <span class="lab-header__drawer-item-body">
+            <span class="lab-header__drawer-item-title"${item.labelKey ? i18nAttr(item.labelKey) : ''}>${escapeHtml(item.label)}</span>
+          </span>
+          ${chevronSvg}
+        </a>
       `;
     }
 
     return `
-      <a class="lab-header__drawer-link${isSectionActive ? ' is-active' : ''}" href="${escapeHtml(item.href)}"${item.labelKey ? i18nAttr(item.labelKey) : ''}>
+      <a class="lab-header__drawer-link lab-header__drawer-section-row${isSectionActive ? ' is-active' : ''}" href="${escapeHtml(item.href || '#')}"${item.labelKey ? i18nAttr(item.labelKey) : ''}>
+        ${navIconSvg}
         <span class="lab-header__drawer-link-text"${item.labelKey ? i18nAttr(item.labelKey) : ''}>${escapeHtml(item.label)}</span>
+        ${chevronSvg}
       </a>
     `;
   }
@@ -1554,6 +1773,7 @@ const HEADER_I18N = {
     'classroom': ['lớp học', 'classroom', 'virtual classroom', '教室', '课堂'],
     'dictionary': ['từ điển', 'dictionary', 'hán nôm', 'hán việt', '词典', '詞典', '字典'],
     'wiki': ['wiki', 'bách khoa', 'encyclopedia', '百科'],
+    'paper': ['paper', 'bài báo', 'nghiên cứu', 'qps', 'học thuật', 'academic', 'research', '论文', '論文'],
     'docs': ['docs', 'tài liệu', 'documentation', '文档', '文檔'],
     'ai-knowledge': ['mentis', 'ai knowledge', 'hỏi mentis'],
     'search': ['search', 'tìm kiếm', '搜索', '搜尋'],
@@ -1907,21 +2127,97 @@ const HEADER_I18N = {
       `;
 
       const menuBtnHtml = showGlobalNav
-        ? `<button type="button" class="lab-header__menu-btn lab-header__mobile-menu" aria-label="${escapeHtml(ht('menu.open', 'Open navigation menu'))}"${i18nAttr('menu.open')} aria-expanded="false" aria-controls="lab-header-drawer"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`
+        ? `<button type="button" class="lab-header__menu-btn lab-header__mobile-menu" aria-label="${escapeHtml(ht('menu.open', 'Open navigation menu'))}"${i18nAttr('menu.open')} aria-expanded="false" aria-controls="lab-header-drawer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>`
         : '';
+
+      // Mobile-only actions cluster: [Game] [Search] [Menu]
+      const mobileActionsHtml = showGlobalNav ? `
+        <div class="lab-header__mobile-actions" aria-hidden="false">
+          <a
+            href="https://play.quizzman.com"
+            class="lab-header__mobile-game"
+            aria-label="Open Quizzman Play"
+            title="Play"
+          >
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6.5 11.5h4M8.5 9.5v4"/>
+              <path d="M15.4 10.6h.01M18 12.9h.01"/>
+              <path d="M17.4 5.5H6.6a4 4 0 0 0-3.98 3.6L2 14.4A2.4 2.4 0 0 0 6.3 16l.6-.8h10.2l.6.8a2.4 2.4 0 0 0 4.3-1.6l-.62-5.3a4 4 0 0 0-3.98-3.6z"/>
+            </svg>
+          </a>
+          <button type="button" class="lab-header__search-btn" data-qmf-search-toggle aria-label="${escapeHtml(ht('search.open', 'Search'))}"${i18nAttr('search.open')} aria-expanded="false" aria-controls="qmf-global-search">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+          ${menuBtnHtml}
+        </div>
+      ` : '';
+
+      // Build language section for drawer
+      const currentLang = getHeaderLang();
+      const langLabels = {
+        vi: 'VI', en: 'EN', zh: '简中', zht: '繁中',
+        jp: '日本語', kr: '한국어', fr: 'FR', de: 'DE',
+        es: 'ES', th: 'ภาษาไทย', pt: 'PT',
+      };
+      const langBtnsHtml = HEADER_LANGS.map((l) => {
+        const isActive = l === currentLang;
+        return `<button type="button" class="lab-header__drawer-lang-btn${isActive ? ' is-active' : ''}" data-lang="${l}" aria-pressed="${isActive}">${escapeHtml(langLabels[l] || l.toUpperCase())}</button>`;
+      }).join('');
+
+      const drawerLangSection = `
+        <div class="lab-header__drawer-sep"></div>
+        <div class="lab-header__drawer-lang">
+          <span class="lab-header__drawer-lang-label">Language</span>
+          <div class="lab-header__drawer-lang-grid" data-drawer-lang-grid>
+            ${langBtnsHtml}
+          </div>
+        </div>
+      `;
+
+      // Secondary menu: Settings + About
+      const drawerSecondary = `
+        <div class="lab-header__drawer-sep"></div>
+        <div class="lab-header__drawer-secondary">
+          <a href="${escapeHtml(this.config.settingsUrl || 'https://id.quizzman.com/account')}" class="lab-header__drawer-secondary-item">
+            <svg class="mh-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Settings</span>
+            <svg class="mh-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <a href="https://quizzman.com/about" class="lab-header__drawer-secondary-item">
+            <svg class="mh-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>About Quizzman</span>
+            <svg class="mh-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      `;
+
+      // Drawer logo picture (mirrors brand logo)
+      const drawerLogoPicture = this.config.logoSrc
+        ? `<img src="${escapeHtml(this.config.logoSrc)}" alt="Quizzman" class="lab-header__drawer-title-logo" width="36" height="36" loading="eager">`
+        : `<picture>
+            <source srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-232.webp 2x" type="image/webp">
+            <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.png" alt="Quizzman" class="lab-header__drawer-title-logo" width="36" height="36" loading="eager" decoding="async">
+           </picture>`;
 
       const drawerHtml = showGlobalNav
         ? `
           <div class="lab-header__drawer-backdrop" hidden></div>
           <aside id="lab-header-drawer" class="lab-header__drawer" aria-hidden="true" aria-label="Quizzman navigation menu">
             <div class="lab-header__drawer-head">
-              <span class="lab-header__drawer-title">Quizzman</span>
-              <button type="button" class="lab-header__drawer-close" aria-label="${escapeHtml(ht('menu.close', 'Close navigation menu'))}"${i18nAttr('menu.close')}>
-                <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4.5 4.5 13.5 13.5M13.5 4.5 4.5 13.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span class="lab-header__drawer-title">
+                ${drawerLogoPicture}
+                Quizzman
+              </span>
+              <button type="button" class="lab-header__drawer-close" aria-label="${escapeHtml(ht('menu.close', 'Close navigation'))}"${i18nAttr('menu.close')}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
             <div class="lab-header__drawer-body">
               ${this.navItems.map((item) => renderMobileNavSection(item, this.activeState)).join('')}
+              ${drawerLangSection}
+              ${drawerSecondary}
             </div>
             <div class="lab-header__drawer-extras" data-drawer-extras></div>
           </aside>
@@ -1953,7 +2249,7 @@ const HEADER_I18N = {
               ${renderJoinQuizButton(this.config)}
               ${this.config.showNotification !== false ? `<div class="lab-header__notification-slot" data-qmf-notification-slot aria-label="${escapeHtml(ht('notify', 'Notifications'))}" data-qmf-i18n="notify" title="${escapeHtml(ht('notify', 'Notifications'))}"></div>` : ''}
             </div>
-            ${menuBtnHtml}
+            ${mobileActionsHtml}
           </div>
           ${drawerHtml}
         </header>
@@ -1994,7 +2290,7 @@ const HEADER_I18N = {
       const form = this.headerEl?.querySelector('[data-qmf-search]');
       const input = form?.querySelector('.lab-header__search-input');
       const panel = wrap?.querySelector('[data-qmf-search-panel]');
-      const toggle = this.headerEl?.querySelector('[data-qmf-search-toggle]');
+      const toggles = this.headerEl?.querySelectorAll('[data-qmf-search-toggle]') || [];
       const dismiss = form?.querySelector('[data-qmf-search-dismiss]');
       if (!form || !input || !panel) return;
 
@@ -2006,7 +2302,7 @@ const HEADER_I18N = {
 
       const setSearchOpen = (open) => {
         this.headerEl?.classList.toggle('lab-header--search-open', open);
-        toggle?.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggles.forEach((t) => t.setAttribute('aria-expanded', open ? 'true' : 'false'));
         if (open) {
           requestAnimationFrame(() => {
             input.focus();
@@ -2233,11 +2529,13 @@ const HEADER_I18N = {
         fetchHits(q);
       };
 
-      toggle?.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const open = !this.headerEl?.classList.contains('lab-header--search-open');
-        setSearchOpen(open);
+      toggles.forEach((toggle) => {
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const open = !this.headerEl?.classList.contains('lab-header--search-open');
+          setSearchOpen(open);
+        });
       });
 
       dismiss?.addEventListener('click', (e) => {
@@ -2313,7 +2611,8 @@ const HEADER_I18N = {
       });
 
       document.addEventListener('pointerdown', (e) => {
-        if (!wrap?.contains(e.target) && !toggle?.contains(e.target)) {
+        const hitToggle = Array.from(toggles).some((t) => t.contains(e.target));
+        if (!wrap?.contains(e.target) && !hitToggle) {
           closePanel();
         }
       });
@@ -2340,10 +2639,21 @@ const HEADER_I18N = {
 
         const positionDropdown = () => {
           if (!dropdown) return;
-          dropdown.classList.remove('lab-header__mega--align-right');
-          const rect = dropdown.getBoundingClientRect();
-          if (rect.right > window.innerWidth - 12) {
-            dropdown.classList.add('lab-header__mega--align-right');
+          dropdown.style.left = '0px';
+          dropdown.style.right = 'auto';
+
+          const itemRect = item.getBoundingClientRect();
+          const dropRect = dropdown.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const padding = 16;
+
+          if (dropRect.right > viewportWidth - padding) {
+            const overflow = dropRect.right - (viewportWidth - padding);
+            let shiftLeft = -overflow;
+            if (itemRect.left + shiftLeft < padding) {
+              shiftLeft = padding - itemRect.left;
+            }
+            dropdown.style.left = `${Math.round(shiftLeft)}px`;
           }
         };
 
@@ -2399,7 +2709,9 @@ const HEADER_I18N = {
       if (this._navChromeBound) return;
       this._navChromeBound = true;
 
-      const menuBtn = this.headerEl.querySelector('.lab-header__mobile-menu');
+      // The mobile-actions cluster contains a duplicate .lab-header__search-btn
+      // and .lab-header__mobile-menu. We need to find all menu-btn instances.
+      const menuBtns = this.headerEl.querySelectorAll('.lab-header__mobile-menu, .lab-header__menu-btn');
       const drawer = this.headerEl.querySelector('.lab-header__drawer');
       const backdrop = this.headerEl.querySelector('.lab-header__drawer-backdrop');
       const closeBtn = this.headerEl.querySelector('.lab-header__drawer-close');
@@ -2416,7 +2728,7 @@ const HEADER_I18N = {
       const openDrawer = () => {
         this.drawerOpen = true;
         drawer?.setAttribute('aria-hidden', 'false');
-        menuBtn?.setAttribute('aria-expanded', 'true');
+        menuBtns.forEach((b) => b.setAttribute('aria-expanded', 'true'));
         backdrop?.removeAttribute('hidden');
         this.headerEl?.classList.add('lab-header--drawer-open');
         document.body.classList.add('lab-header-drawer-open');
@@ -2427,16 +2739,20 @@ const HEADER_I18N = {
       const closeDrawer = () => {
         this.drawerOpen = false;
         drawer?.setAttribute('aria-hidden', 'true');
-        menuBtn?.setAttribute('aria-expanded', 'false');
+        menuBtns.forEach((b) => b.setAttribute('aria-expanded', 'false'));
         backdrop?.setAttribute('hidden', '');
         this.headerEl?.classList.remove('lab-header--drawer-open');
         document.body.classList.remove('lab-header-drawer-open');
-        menuBtn?.focus();
+        // Restore focus to first menu btn
+        const firstMenuBtn = this.headerEl?.querySelector('.lab-header__mobile-menu, .lab-header__menu-btn');
+        firstMenuBtn?.focus();
       };
 
-      menuBtn?.addEventListener('click', () => {
-        if (this.drawerOpen) closeDrawer();
-        else openDrawer();
+      menuBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (this.drawerOpen) closeDrawer();
+          else openDrawer();
+        });
       });
 
       closeBtn?.addEventListener('click', closeDrawer);
@@ -2446,6 +2762,38 @@ const HEADER_I18N = {
       document.addEventListener('keydown', this.boundKeydown);
 
       this.closeDrawer = closeDrawer;
+
+      // Setup language switcher in drawer
+      this.setupMobileLanguage();
+    }
+
+    setupMobileLanguage() {
+      // Language buttons in the mobile drawer
+      const grid = document.querySelector('[data-drawer-lang-grid]');
+      if (!grid) return;
+
+      const setLang = (lang) => {
+        try {
+          localStorage.setItem('qmf-lang', lang);
+          document.cookie = `qmf-lang=${lang};path=/;max-age=31536000`;
+          document.documentElement.setAttribute('data-lang', lang);
+        } catch (e) { /* ignore */ }
+        // Update button states
+        grid.querySelectorAll('.lab-header__drawer-lang-btn').forEach((btn) => {
+          const active = btn.getAttribute('data-lang') === lang;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        // Notify header i18n system
+        window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang } }));
+      };
+
+      grid.addEventListener('click', (e) => {
+        const btn = e.target.closest('.lab-header__drawer-lang-btn');
+        if (!btn) return;
+        const lang = btn.getAttribute('data-lang');
+        if (lang) setLang(lang);
+      });
     }
 
     closeAllDropdowns() {

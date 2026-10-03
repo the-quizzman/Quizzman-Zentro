@@ -17,6 +17,7 @@ import { join, resolve } from 'path';
 const ROOT = resolve(import.meta.dirname, '..');
 const DIST = join(ROOT, 'dist');
 const LOGO_SRC = join(ROOT, 'assets', 'logo');
+const FONTS_SRC = join(ROOT, 'assets', 'fonts');
 
 const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
@@ -86,6 +87,11 @@ function main() {
   if (!dryRun) rmSync(assetsTarget, { recursive: true, force: true });
   const n2 = copyTree(LOGO_SRC, assetsTarget);
 
+  const fontsTarget = join(TARGET, 'assets', 'fonts');
+  log(`→ font assets → ${fontsTarget}`);
+  if (!dryRun) rmSync(fontsTarget, { recursive: true, force: true });
+  const nFonts = copyTree(FONTS_SRC, fontsTarget);
+
   // Copy landing index if present
   const indexSrc = join(ROOT, 'index.html');
   const indexDest = join(TARGET, 'index.html');
@@ -97,8 +103,9 @@ function main() {
     }
   }
 
-  console.log(`\n✓ Published ~${n1 + n2} files`);
+  console.log(`\n✓ Published ~${n1 + n2 + nFonts} files`);
   console.log(`  CDN base: https://ui.quizzman.com/qmf/dist/`);
+  console.log(`  Fonts:    https://ui.quizzman.com/qmf/assets/fonts/fonts.css`);
   console.log(`  Verify:   curl -sI https://ui.quizzman.com/qmf/dist/modules/header/unified-header.js`);
   console.log(`\n  Reload nginx if docroot changed:`);
   console.log(`    sudo nginx -t && sudo systemctl reload nginx`);

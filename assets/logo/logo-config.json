@@ -207,7 +207,7 @@
       "hasCustomLogo": true,
       "description": "Compressed header mega-menu thumbnails (40/80 + webp)",
       "cdnPath": "nav",
-      "version": "20260801",
+      "version": "20260925",
       "items": {
         "astro": {
           "40": "nav/astro-40.webp",
@@ -283,6 +283,16 @@
           "40": "nav/pikahans-40.webp",
           "80": "nav/pikahans-80.webp",
           "png40": "nav/pikahans-40.png"
+        },
+        "tycoon": {
+          "40": "nav/tycoon-40.webp",
+          "80": "nav/tycoon-80.webp",
+          "png40": "nav/tycoon-40.png"
+        },
+        "arena": {
+          "40": "nav/arena-40.webp",
+          "80": "nav/arena-80.webp",
+          "png40": "nav/arena-40.png"
         },
         "mentis": {
           "40": "nav/mentis-40.webp",

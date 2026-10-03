@@ -1,5 +1,5 @@
 {
-  "version": "20260801",
+  "version": "20261003",
   "cdnBase": "https://ui.quizzman.com/qmf/assets/logo/nav",
   "size": 40,
   "retina": 80,
@@ -19,9 +19,13 @@
     "wiki",
     "idiom-king",
     "pikahans",
+    "tycoon",
+    "arena",
     "mentis",
     "eastern-lab",
     "mandarin",
-    "live-quiz"
+    "live-quiz",
+    "paper",
+    "jck"
   ]
 }

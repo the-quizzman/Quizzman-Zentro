@@ -17,7 +17,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '1.0.4';
+  const VERSION = '1.0.6';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/settings-float';
   const ACCOUNT_PREFS_URL = 'https://id.quizzman.com/api/account/update-profile';
 
@@ -127,7 +127,7 @@
       this.injectStyles();
       this.render();
       this.attachEvents();
-      console.log(`[QMF Settings] v${VERSION} initialized`);
+      if (window.__QMF_DEBUG__) console.log(`[QMF Settings] v${VERSION} initialized`);
     }
 
     injectStyles() {
@@ -416,13 +416,21 @@
         localStorage.setItem('lab-lang', lang);
         localStorage.setItem('lab-ui-lang', lang);
         localStorage.setItem('qss_ui_lang', lang);
+        localStorage.setItem('preferred_language', lang);
+        localStorage.setItem('qmf-prefs-source', 'local');
         var host = location.hostname || '';
         var base = 'qmf-lang=' + encodeURIComponent(lang)
           + '; path=/; max-age=' + (365 * 24 * 60 * 60) + '; SameSite=Lax'
           + (location.protocol === 'https:' ? '; Secure' : '');
-        document.cookie = (host === 'quizzman.com' || host.slice(-13) === '.quizzman.com')
-          ? base + '; domain=.quizzman.com'
-          : base;
+        var src = 'qmf-lang-src=local; path=/; max-age=' + (365 * 24 * 60 * 60) + '; SameSite=Lax'
+          + (location.protocol === 'https:' ? '; Secure' : '');
+        if (host === 'quizzman.com' || host.slice(-13) === '.quizzman.com') {
+          document.cookie = base + '; domain=.quizzman.com';
+          document.cookie = src + '; domain=.quizzman.com';
+        } else {
+          document.cookie = base;
+          document.cookie = src;
+        }
       } catch (e) { /* ignore */ }
       
       // Update UI
@@ -430,6 +438,12 @@
         btn.classList.toggle('qmf-settings__lang--active', btn.dataset.lang === lang);
       });
       this.applyUiLabels(lang);
+
+      try {
+        if (window.labI18n && typeof window.labI18n.setLang === 'function') {
+          window.labI18n.setLang(lang, true);
+        }
+      } catch (e2) { /* ignore */ }
       
       // Callback
       if (typeof this.config.onLangChange === 'function') {
@@ -437,14 +451,20 @@
       }
 
       if (window.QmfI18n && typeof window.QmfI18n.setLanguage === 'function') {
-        window.QmfI18n.setLanguage(lang, { emit: false });
+        window.QmfI18n.setLanguage(lang, { emit: false, source: 'local' });
       }
+
+      try {
+        if (window.QmfPrefsDetect && typeof window.QmfPrefsDetect.broadcast === 'function') {
+          window.QmfPrefsDetect.broadcast({ lang: lang, pref: lang, source: 'local' });
+        }
+      } catch (e3) { /* ignore */ }
       
       // Dual event names — Legatus listens to hyphen form
-      window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang } }));
-      window.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang } }));
+      window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang, source: 'local' } }));
+      window.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang, source: 'local' } }));
       window.dispatchEvent(new CustomEvent('qmf:prefs-change', {
-        detail: { lang, theme: this.config.theme, region: localStorage.getItem('qmf-region') || null },
+        detail: { lang, theme: this.config.theme, region: localStorage.getItem('qmf-region') || null, source: 'local' },
       }));
 
       const save = persistAccountPrefs({ language: lang });
@@ -543,5 +563,5 @@
     });
   }
 
-  console.log(`[QMF Settings Float] Module loaded v${VERSION}`);
+  if (window.__QMF_DEBUG__) console.log(`[QMF Settings Float] Module loaded v${VERSION}`);
 })();

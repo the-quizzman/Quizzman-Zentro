@@ -6,15 +6,15 @@
  *
  * UI (Lumen bar, plan ring, menus) lives in auth-widget / header modules.
  *
- * @version 2.2.65
+ * @version 2.2.66
  */
 (function (global) {
   'use strict';
 
   var Runtime = {
-    shell: '2.2.65',
+    shell: '2.2.70',
     packages: {
-      header: '3.10.25',
+      header: '3.12.1',
       auth: '2.0.4',
       legatus: '1.3.11',
       sso: '20260906noloop',

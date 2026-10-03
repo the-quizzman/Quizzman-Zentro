@@ -144,6 +144,15 @@ function generateManifest() {
   writeFileSync(join(DIST, 'manifest.json'), JSON.stringify(manifest, null, 2));
 }
 
+function stripModuleTests(dir) {
+  if (!existsSync(dir)) return;
+  for (const item of readdirSync(dir)) {
+    const full = join(dir, item);
+    if (statSync(full).isDirectory()) stripModuleTests(full);
+    else if (/\.(test|spec)\.(js|ts|mjs|cjs)$/.test(item)) rmSync(full);
+  }
+}
+
 async function main() {
   console.log('╔════════════════════════════════════════╗');
   console.log('║   QMF CDN Build (lightweight) v3.3.1   ║');
@@ -163,6 +172,7 @@ async function main() {
   console.log('\n[3/6] Copy standalone modules → dist/modules/');
   if (existsSync(SRC_MODULES)) {
     cpSync(SRC_MODULES, join(DIST, 'modules'), { recursive: true });
+    stripModuleTests(join(DIST, 'modules'));
     console.log('  ✓ _src/modules → dist/modules');
   } else {
     console.warn('  ⚠ _src/modules not found');

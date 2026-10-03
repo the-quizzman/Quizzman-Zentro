@@ -1,11 +1,19 @@
 /**
- * QMF Join Overlay — reusable Live Quiz entry experience.
+ * QMF Join Overlay — reusable quiz / game entry experience.
  *
  * Public API:
  *   QMFJoinOverlay.open({ value?, source?, onJoin? })
  *   QMFJoinOverlay.close(reason?)
  *   QMFJoinOverlay.normalizeInput(value)
- *   QMFJoinOverlay.toJoinUrl(pin)
+ *   QMFJoinOverlay.resolveRoute(value)
+ *   QMFJoinOverlay.toJoinUrl(value)
+ *
+ * Routing:
+ *   6-digit PIN     → play.quizzman.com/live/{pin}
+ *   S…              → play.quizzman.com/slide?code=
+ *   Q…              → play.quizzman.com?code=
+ *   H…              → play.quizzman.com/homework/{code}
+ *   PK…             → play.quizzman.com/pikahans?code=
  *
  * Declarative trigger:
  *   <button data-qmf-join data-qmf-join-value="123456">Join Quiz</button>
@@ -13,12 +21,14 @@
 (function() {
   'use strict';
 
-  const VERSION = '1.0.4';
+  const VERSION = '1.0.5';
   const PIN_LENGTH = 6;
   const PLAY_ORIGIN = 'https://play.quizzman.com';
   const ALLOWED_INVITE_HOSTS = new Set([
     'play.quizzman.com',
     'www.play.quizzman.com',
+    'join.quizzman.com',
+    'www.join.quizzman.com',
   ]);
   const ROOT_ID = 'qmf-join-overlay';
   const STYLE_ID = 'qmf-join-overlay-styles';
@@ -33,6 +43,13 @@
     window.dispatchEvent(new CustomEvent(`qmf:join-${name}`, { detail }));
   }
 
+  function cleanCode(value) {
+    return String(value || '')
+      .trim()
+      .toUpperCase()
+      .replace(/[\s_-]+/g, '');
+  }
+
   function digits(value) {
     return String(value || '').replace(/\D/g, '').slice(0, PIN_LENGTH);
   }
@@ -42,48 +59,114 @@
     return pin.length > 3 ? `${pin.slice(0, 3)} ${pin.slice(3)}` : pin;
   }
 
-  function pinFromAllowedUrl(raw) {
+  function formatDisplay(code, type) {
+    if (type === 'pin') return formatPin(code);
+    return String(code || '').toUpperCase();
+  }
+
+  function routeFromCode(rawCode) {
+    const code = cleanCode(rawCode);
+    if (!code) return { valid: false, type: 'empty', code: '', url: '' };
+
+    if (/^\d{6}$/.test(code)) {
+      return {
+        valid: true,
+        type: 'pin',
+        code,
+        url: `${PLAY_ORIGIN}/live/${code}`,
+      };
+    }
+
+    if (code.startsWith('PK')) {
+      return {
+        valid: true,
+        type: 'pikahans',
+        code,
+        url: `${PLAY_ORIGIN}/pikahans?code=${encodeURIComponent(code)}`,
+      };
+    }
+
+    if (code.startsWith('S') && code.length >= 2) {
+      return {
+        valid: true,
+        type: 'slide',
+        code,
+        url: `${PLAY_ORIGIN}/slide?code=${encodeURIComponent(code)}`,
+      };
+    }
+
+    if (code.startsWith('Q') && code.length >= 2) {
+      return {
+        valid: true,
+        type: 'quiz',
+        code,
+        url: `${PLAY_ORIGIN}/?code=${encodeURIComponent(code)}`,
+      };
+    }
+
+    if (code.startsWith('H') && code.length >= 2) {
+      return {
+        valid: true,
+        type: 'homework',
+        code,
+        url: `${PLAY_ORIGIN}/homework/${encodeURIComponent(code)}`,
+      };
+    }
+
+    return { valid: false, type: 'invalid', code, url: '' };
+  }
+
+  function routeFromAllowedUrl(raw) {
     let url;
     try {
       url = new URL(String(raw || '').trim());
     } catch {
-      return '';
+      return { valid: false, type: 'invalid-link', code: '', url: '' };
     }
     if (url.protocol !== 'https:' || !ALLOWED_INVITE_HOSTS.has(url.hostname.toLowerCase())) {
-      return '';
+      return { valid: false, type: 'invalid-link', code: '', url: '' };
     }
+
     const liveMatch = url.pathname.match(/\/live\/(\d{6})(?:\/|$)/i);
-    if (liveMatch) return liveMatch[1];
-    for (const key of ['pin', 'code', 'gamePin']) {
-      const candidate = digits(url.searchParams.get(key));
-      if (candidate.length === PIN_LENGTH) return candidate;
-    }
-    return '';
+    if (liveMatch) return routeFromCode(liveMatch[1]);
+
+    const hwMatch = url.pathname.match(/\/homework\/([^/?#]+)/i);
+    if (hwMatch) return routeFromCode(hwMatch[1]);
+
+    const codeParam = url.searchParams.get('code')
+      || url.searchParams.get('pin')
+      || url.searchParams.get('gamePin')
+      || '';
+    if (codeParam) return routeFromCode(codeParam);
+
+    return { valid: false, type: 'invalid-link', code: '', url: '' };
   }
 
   function normalizeInput(value) {
     const raw = String(value || '').trim();
-    if (!raw) return { valid: false, pin: '', type: 'empty' };
+    if (!raw) return { valid: false, pin: '', code: '', type: 'empty', url: '' };
     if (/^https?:\/\//i.test(raw)) {
-      const pin = pinFromAllowedUrl(raw);
+      const route = routeFromAllowedUrl(raw);
       return {
-        valid: pin.length === PIN_LENGTH,
-        pin,
-        type: pin ? 'link' : 'invalid-link',
+        valid: route.valid,
+        pin: route.type === 'pin' ? route.code : '',
+        code: route.code,
+        type: route.type,
+        url: route.url,
       };
     }
-    const pin = digits(raw);
+    const route = routeFromCode(raw);
     return {
-      valid: pin.length === PIN_LENGTH,
-      pin,
-      type: 'pin',
+      valid: route.valid,
+      pin: route.type === 'pin' ? route.code : '',
+      code: route.code,
+      type: route.type,
+      url: route.url,
     };
   }
 
-  function toJoinUrl(pin) {
-    const normalized = digits(pin);
-    if (normalized.length !== PIN_LENGTH) return '';
-    return `${PLAY_ORIGIN}/live/${normalized}`;
+  function toJoinUrl(value) {
+    return normalizeInput(value).url || '';
   }
 
   function ensureFonts() {
@@ -119,17 +202,25 @@
       const parsed = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
       if (!Array.isArray(parsed)) return [];
       return parsed
-        .filter((item) => item && /^\d{6}$/.test(String(item.pin || '')))
+        .map((item) => {
+          if (!item) return null;
+          const code = cleanCode(item.code || item.pin || '');
+          const route = routeFromCode(code);
+          if (!route.valid) return null;
+          return { code: route.code, type: route.type, joinedAt: item.joinedAt || 0 };
+        })
+        .filter(Boolean)
         .slice(0, 3);
     } catch {
       return [];
     }
   }
 
-  function rememberGame(pin) {
+  function rememberGame(route) {
+    if (!route?.valid || !route.code) return;
     try {
-      const current = getRecentGames().filter((item) => item.pin !== pin);
-      current.unshift({ pin, joinedAt: Date.now() });
+      const current = getRecentGames().filter((item) => item.code !== route.code);
+      current.unshift({ code: route.code, type: route.type, joinedAt: Date.now() });
       localStorage.setItem(RECENT_KEY, JSON.stringify(current.slice(0, 3)));
     } catch { /* storage may be blocked */ }
   }
@@ -173,8 +264,8 @@
               <div class="qmf-join__title-wrap">
                 <span class="qmf-join__game-icon" aria-hidden="true">🎮</span>
                 <div>
-                  <h2 id="qmf-join-title" class="qmf-join__title">Join Live Quiz</h2>
-                  <p id="qmf-join-subtitle" class="qmf-join__subtitle">Enter a Game PIN or join using an invitation link.</p>
+                  <h2 id="qmf-join-title" class="qmf-join__title">Join Quiz</h2>
+                  <p id="qmf-join-subtitle" class="qmf-join__subtitle">Enter a Game PIN or code (S / Q / H / PK).</p>
                 </div>
               </div>
               <button type="button" class="qmf-join__close" data-qmf-join-close aria-label="Close Join Quiz">
@@ -183,15 +274,15 @@
             </header>
 
             <form class="qmf-join__form" novalidate>
-              <label class="qmf-join__label" for="qmf-join-pin">Game PIN</label>
+              <label class="qmf-join__label" for="qmf-join-pin">Game code</label>
               <div class="qmf-join__pin-wrap">
                 <span class="qmf-join__pin-glow" aria-hidden="true"></span>
                 <input id="qmf-join-pin" class="qmf-join__pin" type="text"
-                  inputmode="numeric" pattern="[0-9 ]*" maxlength="7"
-                  autocomplete="one-time-code" enterkeyhint="go"
-                  placeholder="123 456" aria-describedby="qmf-join-help qmf-join-error">
+                  inputmode="text" maxlength="24"
+                  autocomplete="one-time-code" enterkeyhint="go" autocapitalize="characters" spellcheck="false"
+                  placeholder="123 456 · S… · Q… · H… · PK…" aria-describedby="qmf-join-help qmf-join-error">
               </div>
-              <p id="qmf-join-help" class="qmf-join__help">6-digit PIN</p>
+              <p id="qmf-join-help" class="qmf-join__help">PIN → Live · S → Slide · Q → Play · H → Homework · PK → Pikahans</p>
               <p id="qmf-join-error" class="qmf-join__error" role="alert" aria-live="polite"></p>
               <button type="submit" class="qmf-join__submit" disabled>
                 <span>Join Game</span>
@@ -254,13 +345,13 @@
       const games = getRecentGames();
       list.replaceChildren();
       section.hidden = games.length === 0;
-      games.forEach(({ pin }) => {
+      games.forEach(({ code, type }) => {
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'qmf-join__recent-game';
-        button.innerHTML = `<span class="qmf-join__secondary-ico" aria-hidden="true">▶</span><strong>${formatPin(pin)}</strong>`;
+        button.innerHTML = `<span class="qmf-join__secondary-ico" aria-hidden="true">▶</span><strong>${formatDisplay(code, type)}</strong>`;
         button.addEventListener('click', () => {
-          this.input.value = formatPin(pin);
+          this.input.value = formatDisplay(code, type);
           this.onInput();
           this.input.focus();
         });
@@ -311,25 +402,29 @@
 
     setValue(value) {
       const parsed = normalizeInput(value);
-      this.input.value = formatPin(parsed.pin);
+      this.input.value = formatDisplay(parsed.code, parsed.type);
       this.updateState(parsed);
     }
 
     onInput() {
-      const pin = digits(this.input.value);
-      this.input.value = formatPin(pin);
-      this.updateState(normalizeInput(pin));
+      const raw = this.input.value;
+      if (/^[\d\s]*$/.test(raw)) {
+        this.input.value = formatPin(raw);
+      } else {
+        this.input.value = String(raw).toUpperCase().replace(/[^A-Z0-9\s_-]/g, '');
+      }
+      this.updateState(normalizeInput(this.input.value));
       this.clearError();
     }
 
     onPaste(event) {
       const pasted = event.clipboardData?.getData('text') || '';
       const parsed = normalizeInput(pasted);
-      if (!parsed.valid && parsed.type !== 'pin') return;
+      if (!parsed.valid && parsed.type !== 'pin' && parsed.type !== 'invalid') return;
       event.preventDefault();
-      this.input.value = formatPin(parsed.pin);
-      this.updateState(parsed);
-      if (!parsed.valid) this.showError('Enter a valid 6-digit Game PIN.');
+      this.input.value = formatDisplay(parsed.code || cleanCode(pasted), parsed.type);
+      this.updateState(normalizeInput(this.input.value));
+      if (!parsed.valid) this.showError('Enter a valid PIN or code (S / Q / H / PK).');
     }
 
     updateState(parsed) {
@@ -342,27 +437,33 @@
 
     submit() {
       const parsed = normalizeInput(this.input.value);
-      if (!parsed.valid) {
-        this.showError('Enter a valid 6-digit Game PIN.');
+      if (!parsed.valid || !parsed.url) {
+        this.showError('Enter a valid PIN or code (S / Q / H / PK).');
         this.input.focus();
         this.input.classList.remove('is-shaking');
         void this.input.offsetWidth;
         this.input.classList.add('is-shaking');
         return;
       }
-      const url = toJoinUrl(parsed.pin);
-      rememberGame(parsed.pin);
+      rememberGame(parsed);
       dispatch('submit', {
         pin: parsed.pin,
-        url,
+        code: parsed.code,
+        type: parsed.type,
+        url: parsed.url,
         source: this.options.source || 'api',
       });
       if (typeof this.options.onJoin === 'function') {
-        this.options.onJoin({ pin: parsed.pin, url });
+        this.options.onJoin({
+          pin: parsed.pin,
+          code: parsed.code,
+          type: parsed.type,
+          url: parsed.url,
+        });
         return;
       }
       this.root.classList.add('is-launching');
-      window.setTimeout(() => window.location.assign(url), 160);
+      window.setTimeout(() => window.location.assign(parsed.url), 160);
     }
 
     async pasteInvite() {
@@ -370,7 +471,7 @@
         const text = await navigator.clipboard.readText();
         const parsed = normalizeInput(text);
         if (!parsed.valid) throw new Error('invalid');
-        this.input.value = formatPin(parsed.pin);
+        this.input.value = formatDisplay(parsed.code, parsed.type);
         this.updateState(parsed);
         this.clearError();
         this.input.focus();
@@ -403,7 +504,7 @@
         bitmap.close?.();
         const parsed = normalizeInput(codes[0]?.rawValue || '');
         if (!parsed.valid) throw new Error('invalid');
-        this.input.value = formatPin(parsed.pin);
+        this.input.value = formatDisplay(parsed.code, parsed.type);
         this.updateState(parsed);
         this.clearError();
         this.input.focus();
@@ -493,6 +594,7 @@
     open: (options) => getOverlay().open(options),
     close: (reason) => getOverlay().close(reason),
     normalizeInput,
+    resolveRoute: normalizeInput,
     formatPin,
     toJoinUrl,
     get instance() { return getOverlay(); },

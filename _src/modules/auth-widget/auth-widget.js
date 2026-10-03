@@ -1,7 +1,7 @@
 /**
  * QMF Auth Widget Component
  * User chip + macOS-style account menu + preferences sheet
- * @version 1.5.9
+ * @version 2.0.4
  *
  * Usage:
  * <script src="https://ui.quizzman.com/qmf/dist/modules/auth-widget/auth-widget.js"></script>
@@ -16,7 +16,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '1.5.9';
+  const VERSION = '2.0.4';
   /* System UI stack — SF Pro on Apple, Segoe on Windows; no Inter-first */
   const FONT_STACK = 'var(--qmf-font-system, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, "Segoe UI", sans-serif)';
   const ID_SYS = 'https://id.quizzman.com';
@@ -25,45 +25,20 @@
   const THEMES = new Set(['light', 'dark']);
 
   function readAuthToken() {
-    try {
-      if (window.QuizzmanAuth?.getToken) {
-        const t = window.QuizzmanAuth.getToken();
-        if (t) return t;
-      }
-      if (window.QuizzmanSSO?.getToken) {
-        const t = window.QuizzmanSSO.getToken();
-        if (t) return t;
-      }
-    } catch (e) { /* ignore */ }
-    const cookie = document.cookie || '';
-    const m = cookie.match(/(?:^|; )(?:jwt_token|authToken)=([^;]*)/);
-    if (m) {
-      try { return decodeURIComponent(m[1]); } catch (e) { return m[1]; }
-    }
-    try {
-      return localStorage.getItem('jwt_token')
-        || localStorage.getItem('authToken')
-        || localStorage.getItem('token')
-        || null;
-    } catch (e) {
-      return null;
-    }
+    return null;
   }
 
   /** Persist UI prefs to account (source of truth when logged in). localStorage is cache only. */
   function persistAccountPrefs(partial) {
     if (!partial || typeof partial !== 'object') return Promise.resolve(null);
-    const token = readAuthToken();
-    const hasSession = !!(token || /(?:^|; )(?:jwt_token|authToken|session_id)=/.test(document.cookie || ''));
+    if (location.hostname !== 'id.quizzman.com') return Promise.resolve(null);
+    const hasSession = /(?:^|; )(?:qm_id|id_at)=/.test(document.cookie || '');
     if (!hasSession) return Promise.resolve(null);
-
-    const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
-    if (token) headers.Authorization = 'Bearer ' + token;
 
     return fetch(ACCOUNT_PREFS_URL, {
       method: 'POST',
       credentials: 'include',
-      headers,
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(partial),
     }).then((res) => {
       if (!res.ok) {
@@ -97,6 +72,7 @@
       manageRole: 'Quản lý vai trò trên ID',
       done: 'Xong',
       prefsTitle: 'Thiết lập',
+      auto: 'Tự động',
     },
     en: {
       login: 'Sign in',
@@ -112,6 +88,7 @@
       manageRole: 'Manage role on ID',
       done: 'Done',
       prefsTitle: 'Settings',
+      auto: 'Auto',
     },
     zh: {
       login: '登录',
@@ -127,6 +104,7 @@
       manageRole: '在 ID 管理角色',
       done: '完成',
       prefsTitle: '设置',
+      auto: '自动',
     },
     zht: {
       login: '登入',
@@ -142,6 +120,7 @@
       manageRole: '在 ID 管理角色',
       done: '完成',
       prefsTitle: '設定',
+      auto: '自動',
     },
     kr: {
       login: '로그인',
@@ -157,6 +136,7 @@
       manageRole: 'ID에서 역할 관리',
       done: '완료',
       prefsTitle: '설정',
+      auto: '자동',
     },
     jp: {
       login: 'ログイン',
@@ -172,6 +152,7 @@
       manageRole: 'IDで役割を管理',
       done: '完了',
       prefsTitle: '設定',
+      auto: '自動',
     },
     fr: {
       login: 'Se connecter',
@@ -187,6 +168,7 @@
       manageRole: 'Gérer le rôle sur ID',
       done: 'Terminé',
       prefsTitle: 'Paramètres',
+      auto: 'Auto',
     },
     de: {
       login: 'Anmelden',
@@ -202,6 +184,7 @@
       manageRole: 'Rolle auf ID verwalten',
       done: 'Fertig',
       prefsTitle: 'Einstellungen',
+      auto: 'Auto',
     },
     es: {
       login: 'Iniciar sesión',
@@ -217,6 +200,7 @@
       manageRole: 'Gestionar rol en ID',
       done: 'Listo',
       prefsTitle: 'Ajustes',
+      auto: 'Auto',
     },
     th: {
       login: 'เข้าสู่ระบบ',
@@ -232,6 +216,7 @@
       manageRole: 'จัดการบทบาทที่ ID',
       done: 'เสร็จ',
       prefsTitle: 'การตั้งค่า',
+      auto: 'อัตโนมัติ',
     },
     pt: {
       login: 'Entrar',
@@ -247,10 +232,12 @@
       manageRole: 'Gerenciar função no ID',
       done: 'Concluído',
       prefsTitle: 'Configurações',
+      auto: 'Automático',
     },
   };
 
   const LANG_OPTIONS = [
+    { id: 'auto', label: 'Auto', short: 'A' },
     { id: 'vi', label: 'Tiếng Việt', short: 'VI' },
     { id: 'en', label: 'English', short: 'EN' },
     { id: 'zh', label: '简体中文', short: '简' },
@@ -265,15 +252,16 @@
   ];
 
   const REGION_OPTIONS = [
-    { id: 'VN', label: 'Việt Nam' },
-    { id: 'US', label: 'United States' },
-    { id: 'TW', label: '台灣' },
-    { id: 'CN', label: '中国大陆' },
-    { id: 'JP', label: '日本' },
-    { id: 'KR', label: '대한민국' },
-    { id: 'SG', label: 'Singapore' },
-    { id: 'AU', label: 'Australia' },
-    { id: 'FR', label: 'France' },
+    { id: 'auto', label: 'Auto', flag: null },
+    { id: 'VN', label: 'Việt Nam', flag: 'vn' },
+    { id: 'US', label: 'United States', flag: 'us' },
+    { id: 'TW', label: '台灣', flag: 'tw' },
+    { id: 'CN', label: '中国大陆', flag: 'cn' },
+    { id: 'JP', label: '日本', flag: 'jp' },
+    { id: 'KR', label: '대한민국', flag: 'kr' },
+    { id: 'SG', label: 'Singapore', flag: 'sg' },
+    { id: 'AU', label: 'Australia', flag: 'au' },
+    { id: 'FR', label: 'France', flag: 'fr' },
   ];
 
   const ROLE_OPTIONS = [
@@ -283,13 +271,75 @@
     { id: 'student', label: { vi: 'Học sinh', en: 'Student', zh: '学生', zht: '學生', kr: '학생', jp: '生徒', fr: 'Élève', de: 'Schüler', es: 'Estudiante', th: 'นักเรียน', pt: 'Aluno' } },
   ];
 
-  /* Solid 20×20 glyphs, optically centered in the viewBox (Heroicons-style). */
+  function regionFlagImg(code, size) {
+    const c = String(code || 'un').toLowerCase();
+    const s = size || 20;
+    return `<img class="qmf-auth-flag" src="https://flagcdn.com/w40/${c}.png" srcset="https://flagcdn.com/w80/${c}.png 2x" width="${s}" height="${Math.round(s * 0.75)}" alt="" loading="lazy" decoding="async">`;
+  }
+
+  function detectLangFromBrowser() {
+    const nav = String(navigator.language || (navigator.languages && navigator.languages[0]) || 'vi').toLowerCase();
+    if (nav === 'zht' || nav.startsWith('zh-t') || nav.includes('hant') || nav === 'zh-tw' || nav === 'zh-hk' || nav === 'zh-mo') return 'zht';
+    if (nav === 'zh' || nav.startsWith('zh-') || nav.startsWith('zh')) return 'zh';
+    if (nav.startsWith('ko')) return 'kr';
+    if (nav.startsWith('ja')) return 'jp';
+    if (nav.startsWith('fr')) return 'fr';
+    if (nav.startsWith('de')) return 'de';
+    if (nav.startsWith('es')) return 'es';
+    if (nav.startsWith('th')) return 'th';
+    if (nav.startsWith('pt')) return 'pt';
+    if (nav.startsWith('en')) return 'en';
+    if (nav.startsWith('vi')) return 'vi';
+    return 'vi';
+  }
+
+  const REGION_CODES = new Set(REGION_OPTIONS.map((r) => r.id).filter((id) => id !== 'auto'));
+
+  function detectRegionFromBrowser() {
+    try {
+      const langs = [navigator.language].concat(navigator.languages || []).filter(Boolean);
+      for (let i = 0; i < langs.length; i++) {
+        const m = String(langs[i]).match(/-([A-Za-z]{2})\b/);
+        if (m) {
+          const code = m[1].toUpperCase();
+          if (REGION_CODES.has(code)) return code;
+        }
+      }
+      const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '');
+      if (/Ho_Chi_Minh|Saigon|Bangkok/i.test(tz)) return 'VN';
+      if (/Taipei/i.test(tz)) return 'TW';
+      if (/Shanghai|Beijing|Chongqing|Harbin|Hong_Kong/i.test(tz)) return 'CN';
+      if (/Tokyo/i.test(tz)) return 'JP';
+      if (/Seoul/i.test(tz)) return 'KR';
+      if (/Singapore/i.test(tz)) return 'SG';
+      if (/Sydney|Melbourne|Perth|Brisbane|Adelaide/i.test(tz)) return 'AU';
+      if (/Paris/i.test(tz)) return 'FR';
+      if (/New_York|Los_Angeles|Chicago|Denver|Phoenix|Anchorage|Honolulu/i.test(tz)) return 'US';
+    } catch (e) { /* ignore */ }
+    return 'VN';
+  }
+
+  /* Solid glyphs, optically centered in the viewBox (Heroicons-style). */
   const ICONS = {
     account: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z"/></svg>',
     settings: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M7.84 1.804A1 1 0 0 1 8.82 1h2.36a1 1 0 0 1 .98.804l.331 1.652a5.993 5.993 0 0 1 1.585.91l1.55-.572a1 1 0 0 1 1.188.392l1.18 2.044a1 1 0 0 1-.205 1.251l-1.22 1.05c.10.0.1.2.074.81s-.025.54-.074.802l1.22 1.05a1 1 0 0 1 .205 1.251l-1.18 2.044a1 1 0 0 1-1.188.392l-1.55-.572a5.993 5.993 0 0 1-1.585.91l-.331 1.652a1 1 0 0 1-.98.804H8.82a1 1 0 0 1-.98-.804l-.331-1.652a5.993 5.993 0 0 1-1.585-.91l-1.55.572a1 1 0 0 1-1.188-.392l-1.18-2.044a1 1 0 0 1 .205-1.251l1.22-1.05A6.04 6.04 0 0 1 3.357 10c0-.273.025-.54.074-.802l-1.22-1.05a1 1 0 0 1-.205-1.251l1.18-2.044a1 1 0 0 1 1.188-.392l1.55.572a5.993 5.993 0 0 1 1.585-.91l.331-1.652ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>',
     logout: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .192.168.1.5.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"/><path fill="currentColor" d="M12.288 9.22a.75.75 0 0 1 1.06 0l1.97 1.97a.75.75 0 0 1 0 1.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06l.69-.69H6.75a.75.75 0 0 1 0-1.5h6.228l-.69-.69a.75.75 0 0 1 0-1.06Z"/></svg>',
     chevron: '<svg class="qmf-auth-chevron" viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path fill="currentColor" d="M2.7 4.3a.75.75 0 0 1 1.06 0L6 6.54l2.24-2.24a.75.75 0 1 1 1.06 1.06l-2.77 2.77a.75.75 0 0 1-1.06 0L2.7 5.36a.75.75 0 0 1 0-1.06Z"/></svg>',
     close: '<svg class="qmf-auth-ico" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/></svg>',
+    rolePersonal: '<svg class="qmf-auth-role-ico" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4.42 0-8 2.24-8 5v1.5c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V19c0-2.76-3.58-5-8-5Z"/></svg>',
+    roleTeacher: '<svg class="qmf-auth-role-ico" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3Zm0 12.99L4.74 12 12 8.01 19.26 12 12 15.99ZM5 16.5v2.75C6.86 21.1 9.29 22 12 22s5.14-.9 7-2.75V16.5l-7 3.82L5 16.5Z"/></svg>',
+    roleSchool: '<svg class="qmf-auth-role-ico" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 3 1 9h22L12 3Zm8 7H4v10h3v-6h4v6h9V10Zm-2 8h-2v-2h2v2Zm0-4h-2v-2h2v2Zm-4 4h-2v-2h2v2Zm0-4h-2v-2h2v2Z"/></svg>',
+    roleStudent: '<svg class="qmf-auth-role-ico" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2Zm0 18H6V4h2v7l2.5-1.5L13 11V4h5v16Z"/></svg>',
+    themeLight: '<svg class="qmf-auth-theme-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 4.5a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V5.25A.75.75 0 0 1 12 4.5Zm0 12a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 12 16.5ZM5.25 12a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5H6a.75.75 0 0 1-.75-.75Zm11.25-.75a.75.75 0 0 0 0 1.5H18a.75.75 0 0 0 0-1.5h-1.5ZM7.34 7.34a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 1 1-1.06 1.06L7.34 8.4a.75.75 0 0 1 0-1.06Zm7.2 7.2a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 1 1-1.06 1.06l-1.06-1.06a.75.75 0 0 1 0-1.06Zm1.06-7.2a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0ZM8.4 14.54a.75.75 0 0 1 0 1.06L7.34 16.66a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0ZM12 8.25a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5Z"/></svg>',
+    themeDark: '<svg class="qmf-auth-theme-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 2.25 12c0 5.385 4.365 9.75 9.75 9.75 3.918 0 7.31-2.31 8.752-5.648Z"/></svg>',
+    globe: '<svg class="qmf-auth-globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2.25A9.75 9.75 0 1 0 21.75 12 9.76 9.76 0 0 0 12 2.25Zm6.97 6h-2.58a13.4 13.4 0 0 0-1.22-3.15A8.28 8.28 0 0 1 18.97 8.25ZM12 3.75c.7 0 1.95 1.62 2.62 4.5H9.38C10.05 5.37 11.3 3.75 12 3.75ZM3.75 12c0-.6.07-1.18.2-1.74h3.2a15.3 15.3 0 0 0 0 3.48h-3.2A8.2 8.2 0 0 1 3.75 12Zm1.28 3.75h2.58c.3 1.17.7 2.25 1.22 3.15a8.28 8.28 0 0 1-3.8-3.15Zm2.58-7.5H4.03a8.28 8.28 0 0 1 3.8-3.15A13.4 13.4 0 0 0 7.61 8.25Zm1.77 7.5h5.24c-.67 2.88-1.92 4.5-2.62 4.5s-1.95-1.62-2.62-4.5Zm5.24-1.5H9.38a13.8 13.8 0 0 1 0-4.5h5.24a13.8 13.8 0 0 1 0 4.5Zm.62 4.65c.52-.9.92-1.98 1.22-3.15h2.58a8.28 8.28 0 0 1-3.8 3.15ZM16.85 13.74a15.3 15.3 0 0 0 0-3.48h3.2a8.2 8.2 0 0 1 0 3.48h-3.2Z"/></svg>',
+  };
+
+  const ROLE_ICONS = {
+    personal: ICONS.rolePersonal,
+    teacher: ICONS.roleTeacher,
+    school: ICONS.roleSchool,
+    student: ICONS.roleStudent,
   };
 
   const DEFAULT_CONFIG = {
@@ -308,6 +358,7 @@
     avatarSize: 28,
     onLogin: null,
     onLogout: null,
+    onGuest: null,
     onUserLoad: null,
     onPrefsChange: null,
   };
@@ -323,7 +374,7 @@
 
     init() {
       if (window.qmfAuthInitialized || document.querySelector('.qmf-auth-wrap')) {
-        console.log('[QMF Auth] Already exists, skipping duplicate');
+        if (window.__QMF_DEBUG__) console.log('[QMF Auth] Already exists, skipping duplicate');
         return;
       }
 
@@ -355,8 +406,10 @@
 
     applyLangLabels() {
       try {
-        const saved = localStorage.getItem('qmf-lang') || localStorage.getItem('lab-ui-lang');
-        if (saved && LABELS[saved]) this.prefs.lang = saved;
+        const saved = localStorage.getItem('qmf-lang')
+          || localStorage.getItem('lab-ui-lang')
+          || this._readLangCookie();
+        if (saved === 'auto' || (saved && LABELS[saved])) this.prefs.lang = saved;
       } catch (e) { /* ignore */ }
 
       const lbl = this.labels();
@@ -385,34 +438,89 @@
       }
     }
 
-    _writeLangCookie(lang) {
+    _writeLangCookie(lang, src) {
       if (!lang) return;
       try {
         const host = location.hostname || '';
-        let base = `qmf-lang=${encodeURIComponent(lang)}; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax`;
-        if (location.protocol === 'https:') base += '; Secure';
-        document.cookie = (host === 'quizzman.com' || host.endsWith('.quizzman.com'))
-          ? `${base}; domain=.quizzman.com`
-          : base;
+        const secure = location.protocol === 'https:' ? '; Secure' : '';
+        const maxAge = `; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax${secure}`;
+        const domain = (host === 'quizzman.com' || host.endsWith('.quizzman.com'))
+          ? '; domain=.quizzman.com'
+          : '';
+        document.cookie = `qmf-lang=${encodeURIComponent(lang)}${maxAge}${domain}`;
+        document.cookie = `qmf-lang-src=${encodeURIComponent(src || 'local')}${maxAge}${domain}`;
       } catch (e) { /* ignore */ }
+    }
+
+    _readLangCookie() {
+      return this.getCookie('qmf-lang');
+    }
+
+    _readLangSrcCookie() {
+      const src = this.getCookie('qmf-lang-src');
+      return src === 'local' || src === 'account' || src === 'detect' ? src : null;
+    }
+
+    _paintLang(resolved, pref) {
+      const applied = resolved || this.getLang();
+      if (!applied) return;
+      try {
+        const htmlLang = applied === 'zht' ? 'zh-Hant'
+          : (applied === 'jp' ? 'ja' : (applied === 'kr' ? 'ko' : applied));
+        document.documentElement.lang = htmlLang;
+        document.documentElement.setAttribute('data-lang', applied);
+      } catch (e) { /* ignore */ }
+      try {
+        if (window.labI18n && typeof window.labI18n.setLang === 'function'
+            && window.labI18n.lang !== applied) {
+          window.labI18n.setLang(applied, true);
+        }
+      } catch (e2) { /* ignore */ }
+      try {
+        if (window.QmfI18n && typeof window.QmfI18n.setLanguage === 'function') {
+          window.QmfI18n.setLanguage(pref || applied, { emit: false });
+        }
+      } catch (e3) { /* ignore */ }
+    }
+
+    _broadcastPrefs(detail) {
+      try {
+        if (window.QmfPrefsDetect && typeof window.QmfPrefsDetect.broadcast === 'function') {
+          window.QmfPrefsDetect.broadcast(detail);
+          return;
+        }
+      } catch (e) { /* ignore */ }
+      try {
+        if (!window.__qmfPrefsBc) window.__qmfPrefsBc = new BroadcastChannel('qmf-prefs');
+        window.__qmfPrefsBc.postMessage(detail);
+      } catch (e2) { /* ignore */ }
+      try {
+        localStorage.setItem('qmf_prefs_signal', JSON.stringify(Object.assign({ t: Date.now() }, detail)));
+      } catch (e3) { /* ignore */ }
     }
 
     loadPrefs() {
       let lang = this.config.lang;
-      const savedLang = localStorage.getItem('qmf-lang')
+      const lsLang = localStorage.getItem('qmf-lang')
         || localStorage.getItem('lab-ui-lang')
-        || localStorage.getItem('lab-lang')
-        || this.getCookie('qmf-lang');
-      if (savedLang && LABELS[savedLang]) lang = savedLang;
+        || localStorage.getItem('lab-lang');
+      const cookieLang = this._readLangCookie();
+      const src = this._readLangSrcCookie();
+      if (lsLang === 'auto') lang = 'auto';
+      else if (cookieLang && (src === 'local' || !lsLang || cookieLang !== lsLang) && (cookieLang === 'auto' || LABELS[cookieLang])) lang = cookieLang;
+      else if (lsLang === 'auto' || (lsLang && LABELS[lsLang])) lang = lsLang;
+      else if (cookieLang === 'auto' || (cookieLang && LABELS[cookieLang])) lang = cookieLang;
 
       const theme = localStorage.getItem('qmf-theme')
         || localStorage.getItem('lab-theme')
         || document.documentElement.getAttribute('data-theme')
         || 'light';
 
-      const region = localStorage.getItem('qmf-region')
+      let region = localStorage.getItem('qmf-region')
         || localStorage.getItem('qlib-region')
         || 'VN';
+      if (String(region).toLowerCase() === 'auto') region = 'auto';
+      else region = String(region).toUpperCase();
 
       const role = localStorage.getItem('qmf-role')
         || localStorage.getItem('qlib-role')
@@ -535,20 +643,17 @@
         .qmf-auth-avatar-wrap[data-tier="free"] {
           --qmf-plan-ring: conic-gradient(from 200deg, #38bdf8, #34d399, #fbbf24, #fb7185, #a78bfa, #38bdf8);
         }
-        .qmf-auth-avatar-wrap[data-tier="plus"] {
-          --qmf-plan-ring: conic-gradient(from 210deg, #0d9488, #22d3ee, #6ee7b7, #fcd34d, #2dd4bf, #0d9488);
+        .qmf-auth-avatar-wrap[data-tier="pro"] {
+          --qmf-plan-ring: conic-gradient(from 180deg, #5e5ce6, #bf5af2, #ff9f0a, #5e5ce6);
         }
-        .qmf-auth-avatar-wrap[data-tier="pro"],
-        .qmf-auth-avatar-wrap[data-tier="premium"] {
-          --qmf-plan-ring: conic-gradient(from 180deg, #ea580c, #fbbf24, #fb7185, #a855f7, #f97316, #ea580c);
-        }
-        .qmf-auth-avatar-wrap[data-tier="elite"],
-        .qmf-auth-avatar-wrap[data-tier="enterprise"],
         .qmf-auth-avatar-wrap[data-tier="ultra"] {
-          --qmf-plan-ring: conic-gradient(from 0deg, #14b8a6, #6366f1, #e11d48, #f59e0b, #06b6d4, #14b8a6);
+          --qmf-plan-ring: conic-gradient(from 0deg, #64d2ff, #6366f1, #e11d48, #f59e0b, #06b6d4, #64d2ff);
         }
-        .qmf-auth-avatar-wrap[data-tier="legend"] {
-          --qmf-plan-ring: conic-gradient(from 90deg, #22d3ee, #818cf8, #e879f9, #fb7185, #fbbf24, #34d399, #22d3ee);
+        .qmf-auth-avatar-wrap[data-tier="admin"] {
+          --qmf-plan-ring: conic-gradient(from 90deg, #ff3b30, #ff6482, #ffd60a, #ff3b30);
+        }
+        .qmf-auth-avatar-wrap[data-tier="mod"] {
+          --qmf-plan-ring: conic-gradient(from 210deg, #0a84ff, #64d2ff, #30d158, #0a84ff);
         }
         .qmf-auth-progress { display: none !important; }
 
@@ -617,26 +722,47 @@
         [data-theme="dark"] .qmf-auth-lumen { color: #0a84ff; }
 
         .qmf-auth-tier {
-          font: 700 9px/1 ${FONT_STACK};
-          text-transform: uppercase;
-          letter-spacing: 0.04em;
+          font: 700 10px/1 ${FONT_STACK};
+          letter-spacing: 0.02em;
           padding: 4px 7px;
           border-radius: 999px;
           background: #007aff;
           color: #fff;
+          white-space: nowrap;
+          flex-shrink: 0;
+          text-transform: none;
         }
-        .qmf-auth-tier--plus { background: linear-gradient(135deg, #0a84ff, #30d158); }
-        .qmf-auth-tier--pro,
-        .qmf-auth-tier--premium { background: linear-gradient(135deg, #5e5ce6, #bf5af2); }
-        .qmf-auth-tier--elite,
-        .qmf-auth-tier--enterprise,
+        /* Compact plan/role badges — Pro · Ultra · Admin · Mod */
+        .qmf-auth-tier--pro {
+          background: linear-gradient(135deg, #5e5ce6, #bf5af2);
+          color: #fff;
+        }
         .qmf-auth-tier--ultra {
           background: linear-gradient(135deg, #1c1c1e, #3a3a3c);
-          box-shadow: 0 0 0 1px rgba(10, 132, 255, 0.4);
+          color: #f5f5f7;
+          box-shadow: 0 0 0 1px rgba(100, 210, 255, 0.45);
         }
-        .qmf-auth-tier--legend {
-          background: linear-gradient(135deg, #64d2ff, #bf5af2, #ff9f0a);
-          color: #1c1c1e;
+        .qmf-auth-tier--admin {
+          background: linear-gradient(135deg, #ff3b30, #ff6482);
+          color: #fff;
+        }
+        .qmf-auth-tier--mod {
+          background: linear-gradient(135deg, #0a84ff, #64d2ff);
+          color: #fff;
+        }
+        .qmf-auth-tier--free {
+          background: rgba(60, 60, 67, 0.12);
+          color: #636366;
+          box-shadow: inset 0 0 0 1px rgba(60, 60, 67, 0.12);
+        }
+        :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-tier--free {
+          background: rgba(235, 235, 245, 0.14);
+          color: #aeaeb2;
+          box-shadow: inset 0 0 0 1px rgba(235, 235, 245, 0.16);
+        }
+        :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-tier--ultra {
+          background: linear-gradient(135deg, #2c2c2e, #48484a);
+          box-shadow: 0 0 0 1px rgba(100, 210, 255, 0.35);
         }
 
         .qmf-auth-chevron {
@@ -648,7 +774,7 @@
           margin: 0 0 0 1px;
           transition: transform 0.18s ease, opacity 0.18s ease;
         }
-        .qmf-auth-wrap--open .qmf-auth-chevron {
+        .qmf-auth-wrap--open .qmf-auth-chip > .qmf-auth-chevron {
           transform: rotate(180deg);
           opacity: 0.7;
         }
@@ -742,6 +868,12 @@
           display: block;
         }
         .qmf-auth-user-meta { min-width: 0; }
+        .qmf-auth-user-name-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          min-width: 0;
+        }
         .qmf-auth-user-name {
           font: 600 13px/1.25 ${FONT_STACK};
           color: var(--drop-text);
@@ -749,6 +881,11 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          min-width: 0;
+        }
+        .qmf-auth-drop .qmf-auth-tier {
+          font: 700 9px/1 ${FONT_STACK};
+          padding: 3px 7px;
         }
         .qmf-auth-user-email {
           margin-top: 2px;
@@ -951,12 +1088,11 @@
           margin: 0;
           border-radius: 12px;
           background: var(--sheet-card);
-          border: 1px solid var(--sheet-border);
-          overflow: hidden;
+          overflow: visible;
+          position: relative;
         }
         :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-pref {
           background: var(--sheet-card);
-          border-color: var(--sheet-border);
         }
         .qmf-auth-pref__label {
           padding: 12px 12px 0;
@@ -978,7 +1114,7 @@
           align-items: center;
           justify-content: center;
           gap: 6px;
-          min-height: 32px;
+          min-height: 36px;
           padding: 0 10px;
           border-radius: 8px;
           border: none;
@@ -1005,30 +1141,184 @@
           color: var(--sheet-accent);
           background: transparent;
         }
-        .qmf-auth-lang-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 4px;
+        .qmf-auth-theme-ico {
+          display: block;
+          flex-shrink: 0;
+          opacity: 0.85;
+        }
+        .qmf-auth-seg--active .qmf-auth-theme-ico,
+        .qmf-auth-seg:hover .qmf-auth-theme-ico {
+          opacity: 1;
+        }
+
+        .qmf-auth-flag {
+          display: block;
+          width: 20px;
+          height: 15px;
+          object-fit: cover;
+          border-radius: 3px;
+          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+          flex-shrink: 0;
+        }
+        .qmf-auth-globe {
+          display: block;
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
+          opacity: 0.85;
+          color: var(--sheet-accent);
+        }
+        .qmf-auth-lang-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 28px;
+          height: 20px;
+          padding: 0 6px;
+          border-radius: 6px;
+          background: var(--sheet-accent-soft);
+          color: var(--sheet-accent);
+          font: 700 10px/1 ${FONT_STACK};
+          letter-spacing: 0.02em;
+          flex-shrink: 0;
+        }
+        .qmf-auth-dd {
+          position: relative;
+          z-index: 1;
           padding: 10px 12px 12px;
         }
-        .qmf-auth-lang-grid .qmf-auth-seg {
-          flex-direction: column;
-          gap: 2px;
-          min-height: 48px;
-          padding: 8px 6px;
+        .qmf-auth-dd.is-open {
+          z-index: 40;
         }
-        .qmf-auth-lang-grid .qmf-auth-seg small {
-          font: 400 10px/1 ${FONT_STACK};
+        .qmf-auth-sheet.has-dd-open {
+          overflow: visible;
+        }
+        .qmf-auth-dd-trigger {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          min-height: 42px;
+          padding: 8px 12px;
+          border-radius: 10px;
+          border: 1px solid var(--sheet-border);
+          background: var(--sheet-bg, rgba(255, 255, 255, 0.55));
+          color: var(--sheet-text);
+          font: 600 13px/1.2 ${FONT_STACK};
+          cursor: pointer;
+          text-align: left;
+          transition: border-color 0.12s ease, box-shadow 0.12s ease;
+        }
+        :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-dd-trigger {
+          background: rgba(255, 255, 255, 0.06);
+        }
+        .qmf-auth-dd-trigger:hover,
+        .qmf-auth-dd.is-open .qmf-auth-dd-trigger {
+          border-color: var(--sheet-accent);
+          box-shadow: 0 0 0 3px var(--sheet-accent-soft);
+        }
+        .qmf-auth-dd-trigger__label {
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .qmf-auth-dd-trigger .qmf-auth-chevron {
+          opacity: 0.55;
+          transition: transform 0.16s ease;
+        }
+        .qmf-auth-dd.is-open .qmf-auth-dd-trigger .qmf-auth-chevron {
+          transform: rotate(180deg);
+        }
+        .qmf-auth-dd-menu {
+          display: none;
+          position: absolute;
+          z-index: 50;
+          left: 12px;
+          right: 12px;
+          top: calc(100% - 4px);
+          max-height: 220px;
+          overflow: auto;
+          padding: 6px;
+          border-radius: 12px;
+          border: 1px solid var(--sheet-border);
+          background: #fff;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+          -webkit-overflow-scrolling: touch;
+        }
+        :where([data-theme="dark"], .dark, .dark-mode) .qmf-auth-dd-menu {
+          background: #2c2c2e;
+          box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+        }
+        .qmf-auth-dd.is-open .qmf-auth-dd-menu { display: block; }
+        .qmf-auth-dd-opt {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          min-height: 38px;
+          padding: 8px 10px;
+          border: none;
+          border-radius: 8px;
+          background: transparent;
+          color: var(--sheet-text);
+          font: 500 13px/1.2 ${FONT_STACK};
+          cursor: pointer;
+          text-align: left;
+        }
+        .qmf-auth-dd-opt:hover {
+          background: var(--sheet-accent-soft);
+        }
+        .qmf-auth-dd-opt.is-active,
+        .qmf-auth-dd-opt[aria-selected="true"] {
+          color: var(--sheet-accent);
+          font-weight: 700;
+          background: var(--sheet-accent-soft);
+        }
+
+        .qmf-auth-role-current {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin: 10px 12px 0;
+          padding: 12px;
+          border-radius: 12px;
+          border: 1px solid var(--sheet-border);
+          background: transparent;
+        }
+        .qmf-auth-role-current__ico {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          display: grid;
+          place-items: center;
+          color: var(--sheet-accent);
+          background: var(--sheet-accent-soft);
+          flex-shrink: 0;
+        }
+        .qmf-auth-role-current__ico .qmf-auth-role-ico {
+          opacity: 1;
+        }
+        .qmf-auth-role-current__meta {
+          min-width: 0;
+          flex: 1;
+        }
+        .qmf-auth-role-current__name {
+          font: 700 14px/1.25 ${FONT_STACK};
+          color: var(--sheet-text);
+        }
+        .qmf-auth-role-current__hint {
+          margin-top: 2px;
+          font: 400 11px/1.3 ${FONT_STACK};
           color: var(--sheet-label);
         }
-        .qmf-auth-seg--active small { color: inherit; opacity: 0.8; }
-
         .qmf-auth-role-note {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: flex-end;
           gap: 10px;
-          padding: 0 12px 12px;
+          padding: 10px 12px 12px;
         }
         .qmf-auth-role-note a {
           font: 600 12px/1.3 ${FONT_STACK};
@@ -1064,25 +1354,27 @@
 
         @media (max-width: 480px) {
           .qmf-auth-drop { min-width: 220px; }
-          .qmf-auth-lang-grid { grid-template-columns: repeat(2, 1fr); }
         }
       `;
     }
 
     getLang() {
-      if (this.prefs?.lang && LABELS[this.prefs.lang]) return this.prefs.lang;
+      const pref = this.prefs?.lang;
+      if (pref === 'auto') return detectLangFromBrowser();
+      if (pref && LABELS[pref]) return pref;
       if (this.config.lang && LABELS[this.config.lang]) return this.config.lang;
       const saved = localStorage.getItem('lab-ui-lang') || localStorage.getItem('qmf-lang');
+      if (saved === 'auto') return detectLangFromBrowser();
       if (saved && LABELS[saved]) return saved;
       if (window.labI18n?.lang && LABELS[window.labI18n.lang]) return window.labI18n.lang;
+      return detectLangFromBrowser();
+    }
 
-      const nav = (navigator.language || 'vi').toLowerCase();
-      if (nav.startsWith('zh-t') || nav === 'zht' || nav.includes('hant')) return 'zht';
-      if (nav.startsWith('zh')) return 'zh';
-      if (nav.startsWith('ko')) return 'kr';
-      if (nav.startsWith('ja')) return 'jp';
-      if (nav.startsWith('en')) return 'en';
-      return 'vi';
+    getRegion() {
+      const pref = this.prefs?.region;
+      if (!pref || String(pref).toLowerCase() === 'auto') return detectRegionFromBrowser();
+      const up = String(pref).toUpperCase();
+      return REGION_CODES.has(up) ? up : detectRegionFromBrowser();
     }
 
     labels() {
@@ -1090,33 +1382,11 @@
     }
 
     getToken() {
-      if (window.QuizzmanAuth?.getToken) {
-        const t = window.QuizzmanAuth.getToken();
-        if (t) return t;
-      }
-      if (window.QuizzmanSSO?.getToken) {
-        const t = window.QuizzmanSSO.getToken();
-        if (t) return t;
-      }
-      return this.getCookie('jwt_token') || this.getCookie('authToken')
-        || localStorage.getItem('jwt_token') || localStorage.getItem('authToken') || localStorage.getItem('token');
+      return null;
     }
 
     getLoginUrl() {
-      const returnPath = window.location.pathname + window.location.search;
-      const redirect = returnPath && returnPath !== '/' ? returnPath : '/account';
-      try {
-        const loginBase = new URL(this.config.loginUrl, window.location.origin);
-        if (loginBase.origin === window.location.origin) {
-          loginBase.searchParams.set('redirect', redirect);
-          return loginBase.pathname + loginBase.search;
-        }
-        // External IdP — keep existing query (e.g. client_id), set redirect
-        loginBase.searchParams.set('redirect', window.location.href);
-        return loginBase.toString();
-      } catch (e) { /* fall through */ }
-      const sep = String(this.config.loginUrl || '').includes('?') ? '&' : '?';
-      return this.config.loginUrl + sep + 'redirect=' + encodeURIComponent(window.location.href);
+      return this.config.loginUrl || (ID_SYS + '/login');
     }
 
     getLogoutUrl() {
@@ -1174,13 +1444,53 @@
     }
 
     normalizeTier(raw) {
-      const t = String(raw || 'free').toLowerCase().trim().replace(/^quizzman\s+/, '');
-      if (['pro', 'premium', 'professional'].includes(t)) return 'pro';
-      if (['plus', 'basic'].includes(t)) return 'plus';
-      if (['elite', 'ultra', 'enterprise'].includes(t)) return 'elite';
-      if (t === 'legend') return 'legend';
-      if (t === 'free' || t === 'inactive') return 'free';
+      let t = String(raw || 'free').toLowerCase().trim();
+      t = t.replace(/^quizzman[\s_-]*/i, '').replace(/[\s_-]+/g, '');
+      if (['admin', 'superadmin', 'owner', 'root'].includes(t)) return 'admin';
+      if (['mod', 'moderator', 'staff'].includes(t)) return 'mod';
+      if (['ultra', 'elite', 'enterprise', 'legend', 'premium'].includes(t)) return 'ultra';
+      if (['pro', 'professional', 'plus', 'basic'].includes(t)) return 'pro';
+      if (t === 'free' || t === 'inactive' || t === 'starter') return 'free';
       return t || 'free';
+    }
+
+    /** Compact badge labels: Pro · Ultra · Admin · Mod (no Quizzman prefix). */
+    resolvePlanTier(user) {
+      const roleRaw =
+        user?.role
+        || user?.user_role
+        || (Array.isArray(user?.roles) ? user.roles[0] : '')
+        || window.qmTier?.role
+        || '';
+      const planRaw =
+        window.qmTier?.tier
+        || user?.tier
+        || user?.plan_code
+        || user?.plan
+        || user?.subscription?.plan_code
+        || user?.subscription?.tier
+        || '';
+
+      let tier = this.normalizeTier(roleRaw);
+      if (tier !== 'admin' && tier !== 'mod') {
+        tier = this.normalizeTier(planRaw || roleRaw || 'free');
+      }
+
+      // If a display name sneaks in (e.g. "Quizzman Pro"), strip brand + map.
+      const labelRaw =
+        window.qmTier?.label
+        || window.qmTier?.name
+        || user?.plan_name
+        || user?.plan_label
+        || user?.subscription?.plan_name
+        || '';
+      if (labelRaw && tier === 'free') {
+        tier = this.normalizeTier(labelRaw);
+      }
+
+      const LABELS = { pro: 'Pro', ultra: 'Ultra', admin: 'Admin', mod: 'Mod' };
+      const label = LABELS[tier] || '';
+      return { tier, label };
     }
 
     lumenBarPct(lumen) {
@@ -1259,68 +1569,43 @@
       if (window.QuizzmanAuth?.refreshAccessToken) {
         return window.QuizzmanAuth.refreshAccessToken();
       }
-      return fetch(ID_SYS + '/api/auth/refresh', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      })
-        .then(res => (res.ok ? res.json() : null))
-        .then(data => {
-          if (data?.success && data.token) {
-            document.cookie = `jwt_token=${encodeURIComponent(data.token)}; path=/; domain=.quizzman.com; max-age=${90 * 24 * 60 * 60}; SameSite=Lax; Secure`;
-            try { localStorage.setItem('jwt_token', data.token); } catch (e) { /* ignore */ }
-            return data.token;
-          }
-          return null;
-        })
-        .catch(() => null);
+      return Promise.resolve(null);
     }
 
     checkAuth() {
-      if (window.QuizzmanAuth?.handleTokenFromUrl) {
-        window.QuizzmanAuth.handleTokenFromUrl();
-      }
-
-      if (window.QuizzmanAuth?.getAuth) {
-        window.QuizzmanAuth.getAuth().then(auth => {
+      const sso = window.QuizzmanSSO || window.QuizzmanAuth || window.IdSysSSO;
+      if (sso?.getAuth) {
+        sso.getAuth().then(auth => {
           if (auth.authenticated && auth.user) {
             this.user = auth.user;
-            try { localStorage.setItem('user', JSON.stringify(auth.user)); } catch (e) { /* ignore */ }
             this.hydratePrefsFromUser(auth.user);
             this.renderUserChip();
             if (typeof this.config.onUserLoad === 'function') {
-              const token = auth.token || auth.accessToken || this.getToken() || null;
-              this.config.onUserLoad(auth.user, { token });
+              this.config.onUserLoad(auth.user, { token: null });
             }
           } else {
-            this.checkAuthFallback();
+            this.renderLoginBtn();
           }
-        }).catch(() => this.checkAuthFallback());
+        }).catch(() => this.renderLoginBtn());
+        return;
+      }
+      if (sso?.handleCallback) {
+        Promise.resolve(sso.handleCallback()).then(() => this.checkAuthFallback()).catch(() => this.checkAuthFallback());
         return;
       }
       this.checkAuthFallback();
     }
 
     checkAuthFallback() {
-      const token = this.getToken();
-
-      if (!token) {
-        const hasSession = window.QuizzmanSSO?.hasSessionHint?.() ||
-          /(?:^|; )session_id=/.test(document.cookie) ||
-          /(?:^|; )jwt_token=/.test(document.cookie);
-        if (!hasSession) {
-          this.renderLoginBtn();
-          return;
-        }
-        this.refreshAccessToken().then(newToken => {
-          if (newToken) this.verifyWithBackend();
-          else this.renderLoginBtn();
-        });
+      const hint = window.QuizzmanSSO?.hasSessionHint?.() || /(?:^|; )qm_id=/.test(document.cookie || '');
+      if (!hint) {
+        this.renderLoginBtn();
         return;
       }
-
-      this.verifyWithBackend();
+      this.refreshAccessToken().then((ok) => {
+        if (ok) this.verifyWithBackend();
+        else this.renderLoginBtn();
+      });
     }
 
     getUserFromStorage() {
@@ -1332,52 +1617,35 @@
     }
 
     verifyWithBackend(retryAfterRefresh) {
-      const token = this.getToken();
       const fetcher = window.QuizzmanSSO?.fetchWithRefresh || fetch;
-      const headers = {};
-      if (token) headers.Authorization = 'Bearer ' + token;
-      const opts = { credentials: 'include', headers };
+      const opts = { credentials: 'include', headers: { Accept: 'application/json' } };
 
       fetcher(this.config.apiEndpoint, opts)
         .then(res => {
           if (res.status === 401 && !retryAfterRefresh) {
-            return this.refreshAccessToken().then(token => {
-              if (token) return this.verifyWithBackend(true);
+            return this.refreshAccessToken().then(ok => {
+              if (ok) return this.verifyWithBackend(true);
               return { success: false };
             });
           }
-          if (res.status === 404) {
-            return { success: true, user: this.user || this.createBasicUser() };
-          }
+          if (!res.ok) return { success: false };
           return res.json();
         })
         .then(data => {
           if (data && data.success && data.user) {
             this.user = data.user;
-            try { localStorage.setItem('user', JSON.stringify(data.user)); } catch (e) { /* ignore */ }
             this.hydratePrefsFromUser(data.user);
             this.renderUserChip();
             if (typeof this.config.onUserLoad === 'function') {
-              const token = data.token || data.accessToken || this.getToken() || null;
-              this.config.onUserLoad(data.user, { token });
+              this.config.onUserLoad(data.user, { token: null });
             }
           } else {
-            try { localStorage.removeItem('user'); } catch (e) { /* ignore */ }
             this.renderLoginBtn();
           }
         })
         .catch(() => {
           if (!this.user) this.renderLoginBtn();
         });
-    }
-
-    createBasicUser() {
-      return {
-        id: 'unknown',
-        email: '',
-        display_name: 'User',
-        tier: 'free'
-      };
     }
 
     pinNotificationSlot() {
@@ -1425,6 +1693,13 @@
       a.title = lbl.login;
       a.setAttribute('aria-label', lbl.login);
       a.innerHTML = ICONS.account;
+      a.addEventListener('click', (e) => {
+        const sso = window.QuizzmanSSO || window.QuizzmanAuth;
+        if (sso && typeof sso.startLogin === 'function') {
+          e.preventDefault();
+          sso.startLogin();
+        }
+      });
 
       this.container.insertBefore(a, this.container.firstChild);
       this.elements.loginBtn = a;
@@ -1432,6 +1707,9 @@
 
       if (typeof this.config.onLogin === 'function') {
         a.addEventListener('click', (e) => this.config.onLogin(e));
+      }
+      if (typeof this.config.onGuest === 'function') {
+        try { this.config.onGuest(); } catch (e) { /* ignore */ }
       }
     }
 
@@ -1450,7 +1728,7 @@
       const email = user.email || '';
       const initials = this.getInitials(displayName, email);
       const avatarSrc = this.resolveAvatarUrl(user);
-      const tier = this.normalizeTier(window.qmTier?.tier || user.tier || user.plan_code || 'free');
+      const { tier, label: tierLabel } = this.resolvePlanTier(user);
       const lumen = user.lumen || null;
       const title = (this.config.showTitle && lumen?.title) ? lumen.title : '';
       const nameShown = displayName || email.split('@')[0] || lbl.account;
@@ -1467,10 +1745,11 @@
 
       chip.appendChild(this.buildAvatarEl(avatarSrc, initials, lumen, tier));
 
-      if (this.config.showTierBadge && tier && tier !== 'free') {
+      // Compact bar: paid/staff badges only (header CSS may hide this). Full badge lives in dropdown.
+      if (this.config.showTierBadge && tierLabel) {
         const tierEl = document.createElement('span');
         tierEl.className = 'qmf-auth-tier qmf-auth-tier--' + tier;
-        tierEl.textContent = tier === 'pro' ? 'PRO' : tier.toUpperCase();
+        tierEl.textContent = tierLabel;
         chip.appendChild(tierEl);
       }
 
@@ -1492,6 +1771,9 @@
       const titleLine = title
         ? `<div class="qmf-auth-user-title">${this._esc(title)}</div>`
         : '';
+      const planBadge = (this.config.showTierBadge && tierLabel)
+        ? `<span class="qmf-auth-tier qmf-auth-tier--${this._esc(tier)}" title="${this._esc(tierLabel)}">${this._esc(tierLabel)}</span>`
+        : '';
 
       const settingsItem = this.config.showSettings
         ? `<button type="button" class="qmf-auth-item qmf-auth-settings-btn" role="menuitem">${ICONS.settings}<span class="qmf-auth-item__label">${lbl.settings}</span></button>`
@@ -1501,7 +1783,10 @@
         <div class="qmf-auth-user">
           ${avatarBlock}
           <div class="qmf-auth-user-meta">
-            <div class="qmf-auth-user-name">${this._esc(nameShown)}</div>
+            <div class="qmf-auth-user-name-row">
+              <div class="qmf-auth-user-name">${this._esc(nameShown)}</div>
+              ${planBadge}
+            </div>
             ${titleLine}
             ${email ? `<div class="qmf-auth-user-email">${this._esc(email)}</div>` : ''}
             ${lumenLine}
@@ -1520,9 +1805,8 @@
       this.setLegatusAuthVisible(true);
 
       try {
-        const token = this.getToken() || null;
         window.dispatchEvent(new CustomEvent('qmf:auth-ready', {
-          detail: { user: this.user || null, token }
+          detail: { user: this.user || null, token: null }
         }));
       } catch (e) { /* ignore */ }
 
@@ -1656,25 +1940,43 @@
       root.setAttribute('aria-modal', 'true');
       root.setAttribute('aria-label', lbl.prefsTitle);
 
-      const roleButtons = ROLE_OPTIONS.map((r) => {
-        const text = r.label[lang] || r.label.en;
-        const active = role === r.id ? ' qmf-auth-seg--active' : '';
-        return `<button type="button" class="qmf-auth-seg${active}" data-pref="role" data-value="${r.id}">${this._esc(text)}</button>`;
+      const currentLang = LANG_OPTIONS.find((l) => l.id === (this.prefs.lang || lang)) || LANG_OPTIONS[0];
+      const langOptions = LANG_OPTIONS.map((l) => {
+        const selected = currentLang.id === l.id;
+        const label = l.id === 'auto' ? lbl.auto : l.label;
+        const short = l.id === 'auto' ? 'A' : l.short;
+        return `<button type="button" class="qmf-auth-dd-opt${selected ? ' is-active' : ''}" data-pref="lang" data-value="${l.id}" role="option" aria-selected="${selected ? 'true' : 'false'}"><span class="qmf-auth-lang-badge">${this._esc(short)}</span><span>${this._esc(label)}</span></button>`;
       }).join('');
 
-      const langButtons = LANG_OPTIONS.map((l) => {
-        const active = lang === l.id ? ' qmf-auth-seg--active' : '';
-        return `<button type="button" class="qmf-auth-seg${active}" data-pref="lang" data-value="${l.id}" title="${this._esc(l.label)}"><span>${this._esc(l.short)}</span><small>${this._esc(l.label)}</small></button>`;
+      const storedRegion = this.prefs.region || region;
+      const currentRegion = REGION_OPTIONS.find((r) => r.id === storedRegion) || REGION_OPTIONS.find((r) => r.id === 'auto') || REGION_OPTIONS[0];
+      const regionOptions = REGION_OPTIONS.map((r) => {
+        const selected = (currentRegion.id === r.id);
+        const label = r.id === 'auto' ? lbl.auto : r.label;
+        const mark = r.id === 'auto' ? ICONS.globe : regionFlagImg(r.flag, 20);
+        return `<button type="button" class="qmf-auth-dd-opt${selected ? ' is-active' : ''}" data-pref="region" data-value="${r.id}" role="option" aria-selected="${selected ? 'true' : 'false'}">${mark}<span>${this._esc(label)}</span></button>`;
       }).join('');
 
-      const regionButtons = REGION_OPTIONS.map((r) => {
-        const active = region === r.id ? ' qmf-auth-seg--active' : '';
-        return `<button type="button" class="qmf-auth-seg${active}" data-pref="region" data-value="${r.id}">${this._esc(r.label)}</button>`;
-      }).join('');
+      const regionTriggerMark = currentRegion.id === 'auto'
+        ? ICONS.globe
+        : regionFlagImg(currentRegion.flag, 22);
+      const regionTriggerLabel = currentRegion.id === 'auto' ? lbl.auto : currentRegion.label;
+      const langTriggerLabel = currentLang.id === 'auto' ? lbl.auto : currentLang.label;
+      const langTriggerShort = currentLang.id === 'auto' ? 'A' : currentLang.short;
+
+      const roleId = (() => {
+        const fromUser = this.user?.app_role || this.user?.ui_role || this.user?.persona;
+        if (fromUser && APP_ROLES.has(fromUser)) return fromUser;
+        if (role && APP_ROLES.has(role)) return role;
+        return 'personal';
+      })();
+      const roleOpt = ROLE_OPTIONS.find((r) => r.id === roleId) || ROLE_OPTIONS[0];
+      const roleText = roleOpt.label[lang] || roleOpt.label.en;
+      const roleIco = ROLE_ICONS[roleId] || ICONS.rolePersonal;
 
       root.innerHTML = `
         <div class="qmf-auth-sheet-scrim" data-sheet-dismiss></div>
-        <div class="qmf-auth-sheet">
+        <div class="qmf-auth-sheet" data-prefs-sheet>
           <div class="qmf-auth-sheet__head">
             <h2 class="qmf-auth-sheet__title">${lbl.prefsTitle}</h2>
             <button type="button" class="qmf-auth-sheet__close" data-sheet-dismiss aria-label="${lbl.done}">${ICONS.close}</button>
@@ -1683,21 +1985,44 @@
             <section class="qmf-auth-pref">
               <div class="qmf-auth-pref__label">${lbl.appearance}</div>
               <div class="qmf-auth-pref__row">
-                <button type="button" class="qmf-auth-seg${theme === 'light' ? ' qmf-auth-seg--active' : ''}" data-pref="theme" data-value="light">${lbl.light}</button>
-                <button type="button" class="qmf-auth-seg${theme === 'dark' ? ' qmf-auth-seg--active' : ''}" data-pref="theme" data-value="dark">${lbl.dark}</button>
+                <button type="button" class="qmf-auth-seg${theme === 'light' ? ' qmf-auth-seg--active' : ''}" data-pref="theme" data-value="light">${ICONS.themeLight}<span>${lbl.light}</span></button>
+                <button type="button" class="qmf-auth-seg${theme === 'dark' ? ' qmf-auth-seg--active' : ''}" data-pref="theme" data-value="dark">${ICONS.themeDark}<span>${lbl.dark}</span></button>
               </div>
             </section>
             <section class="qmf-auth-pref">
               <div class="qmf-auth-pref__label">${lbl.language}</div>
-              <div class="qmf-auth-lang-grid">${langButtons}</div>
+              <div class="qmf-auth-dd" data-dd="lang">
+                <button type="button" class="qmf-auth-dd-trigger" data-dd-trigger aria-haspopup="listbox" aria-expanded="false">
+                  <span class="qmf-auth-lang-badge" data-lang-badge>${this._esc(langTriggerShort)}</span>
+                  <span class="qmf-auth-dd-trigger__label" data-lang-label>${this._esc(langTriggerLabel)}</span>
+                  ${ICONS.chevron}
+                </button>
+                <div class="qmf-auth-dd-menu" role="listbox" hidden data-dd-menu>
+                  ${langOptions}
+                </div>
+              </div>
             </section>
             <section class="qmf-auth-pref">
               <div class="qmf-auth-pref__label">${lbl.region}</div>
-              <div class="qmf-auth-pref__row">${regionButtons}</div>
+              <div class="qmf-auth-dd" data-dd="region">
+                <button type="button" class="qmf-auth-dd-trigger" data-dd-trigger aria-haspopup="listbox" aria-expanded="false">
+                  <span data-region-mark>${regionTriggerMark}</span>
+                  <span class="qmf-auth-dd-trigger__label" data-region-label>${this._esc(regionTriggerLabel)}</span>
+                  ${ICONS.chevron}
+                </button>
+                <div class="qmf-auth-dd-menu" role="listbox" hidden data-dd-menu>
+                  ${regionOptions}
+                </div>
+              </div>
             </section>
             <section class="qmf-auth-pref">
               <div class="qmf-auth-pref__label">${lbl.role}</div>
-              <div class="qmf-auth-pref__row">${roleButtons}</div>
+              <div class="qmf-auth-role-current">
+                <div class="qmf-auth-role-current__ico">${roleIco}</div>
+                <div class="qmf-auth-role-current__meta">
+                  <div class="qmf-auth-role-current__name">${this._esc(roleText)}</div>
+                </div>
+              </div>
               <div class="qmf-auth-role-note">
                 <a href="${ID_SYS}/account" target="_blank" rel="noopener noreferrer">${lbl.manageRole}</a>
               </div>
@@ -1714,8 +2039,32 @@
 
       requestAnimationFrame(() => root.classList.add('qmf-auth-sheet-root--open'));
 
+      const sheetEl = root.querySelector('[data-prefs-sheet]');
+      const setDdOpen = (dd, open) => {
+        if (!dd) return;
+        const trigger = dd.querySelector('[data-dd-trigger]');
+        const menu = dd.querySelector('[data-dd-menu]');
+        dd.classList.toggle('is-open', open);
+        if (trigger) trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (menu) menu.hidden = !open;
+        const anyOpen = !!root.querySelector('.qmf-auth-dd.is-open');
+        if (sheetEl) sheetEl.classList.toggle('has-dd-open', anyOpen);
+      };
+      const closeAllDd = (except) => {
+        root.querySelectorAll('.qmf-auth-dd.is-open').forEach((dd) => {
+          if (dd !== except) setDdOpen(dd, false);
+        });
+      };
+
       const onKey = (e) => {
-        if (e.key === 'Escape') this.closePrefsSheet();
+        if (e.key === 'Escape') {
+          const openDd = root.querySelector('.qmf-auth-dd.is-open');
+          if (openDd) {
+            setDdOpen(openDd, false);
+            return;
+          }
+          this.closePrefsSheet();
+        }
       };
       this._prefsKeyHandler = onKey;
       document.addEventListener('keydown', onKey);
@@ -1726,10 +2075,29 @@
           this.closePrefsSheet();
           return;
         }
+
+        const trigger = e.target.closest('[data-dd-trigger]');
+        if (trigger) {
+          e.preventDefault();
+          const dd = trigger.closest('.qmf-auth-dd');
+          const willOpen = !dd.classList.contains('is-open');
+          closeAllDd(dd);
+          setDdOpen(dd, willOpen);
+          return;
+        }
+
+        if (!e.target.closest('.qmf-auth-dd')) {
+          closeAllDd();
+        }
+
         const seg = e.target.closest('[data-pref]');
         if (!seg) return;
         const key = seg.getAttribute('data-pref');
         const value = seg.getAttribute('data-value');
+        if (key === 'region' || key === 'lang') {
+          const dd = seg.closest('.qmf-auth-dd');
+          if (dd) setDdOpen(dd, false);
+        }
         this.applyPref(key, value, root);
       });
     }
@@ -1754,26 +2122,41 @@
       const lang = user.language || user.preferred_language;
       const region = user.region;
       const theme = user.theme || user.ui_theme;
-      const appRole = user.app_role;
+      const appRole = user.app_role || user.ui_role || user.persona;
       let changed = false;
       const seed = {};
+      const src = this._readLangSrcCookie()
+        || (function () { try { return localStorage.getItem('qmf-prefs-source'); } catch (e) { return null; } })();
+      const localLang = this.prefs.lang
+        || (function () {
+          try { return localStorage.getItem('qmf-lang') || localStorage.getItem('lab-ui-lang'); }
+          catch (e) { return null; }
+        })()
+        || this._readLangCookie();
+      const userChoseLang = src === 'local' || localLang === 'auto';
 
-      if (lang && LABELS[lang]) {
-        this.prefs.lang = lang;
-        try {
-          localStorage.setItem('qmf-lang', lang);
-          localStorage.setItem('lab-lang', lang);
-          localStorage.setItem('lab-ui-lang', lang);
-          localStorage.setItem('qss_ui_lang', lang);
-          this._writeLangCookie(lang);
-        } catch (e) { /* ignore */ }
-        changed = true;
-      } else if (this.prefs.lang && LABELS[this.prefs.lang]) {
+      if (lang === 'auto' || (lang && LABELS[lang])) {
+        if (userChoseLang && localLang && localLang !== lang) {
+          seed.language = localLang;
+        } else if (!userChoseLang) {
+          this.prefs.lang = lang;
+          try {
+            localStorage.setItem('qmf-lang', lang);
+            localStorage.setItem('lab-lang', lang);
+            localStorage.setItem('lab-ui-lang', lang);
+            localStorage.setItem('qss_ui_lang', lang);
+            localStorage.setItem('qmf-prefs-source', 'account');
+            this._writeLangCookie(lang === 'auto' ? detectLangFromBrowser() : lang, 'account');
+          } catch (e) { /* ignore */ }
+          changed = true;
+        }
+      } else if (this.prefs.lang === 'auto' || (this.prefs.lang && LABELS[this.prefs.lang])) {
         seed.language = this.prefs.lang;
       }
 
       if (region) {
-        this.prefs.region = String(region).toUpperCase();
+        const r = String(region).toLowerCase() === 'auto' ? 'auto' : String(region).toUpperCase();
+        this.prefs.region = r;
         try { localStorage.setItem('qmf-region', this.prefs.region); } catch (e) { /* ignore */ }
         changed = true;
       } else if (this.prefs.region) {
@@ -1805,8 +2188,10 @@
       }
 
       if (changed) {
-        window.dispatchEvent(new CustomEvent('qmf:prefs-change', { detail: { ...this.prefs, source: 'account' } }));
-        if (window.QmfI18n && typeof window.QmfI18n.hydrateFromUser === 'function') {
+        window.dispatchEvent(new CustomEvent('qmf:prefs-change', {
+          detail: { ...this.prefs, source: userChoseLang ? 'local' : 'account' },
+        }));
+        if (window.QmfI18n && typeof window.QmfI18n.hydrateFromUser === 'function' && !userChoseLang) {
           window.QmfI18n.hydrateFromUser(user);
         }
       }
@@ -1839,17 +2224,28 @@
       let needsSoftReload = false;
       const serverPatch = {};
 
-      if (key === 'lang' && LABELS[value]) {
+      if (key === 'lang' && (value === 'auto' || LABELS[value])) {
         this.prefs.lang = value;
+        const resolved = value === 'auto' ? detectLangFromBrowser() : value;
         try {
           localStorage.setItem('qmf-lang', value);
           localStorage.setItem('lab-lang', value);
           localStorage.setItem('lab-ui-lang', value);
           localStorage.setItem('qss_ui_lang', value);
-          this._writeLangCookie(value);
+          localStorage.setItem('preferred_language', value);
+          localStorage.setItem('qmf-prefs-source', 'local');
+          this._writeLangCookie(resolved);
         } catch (e) { /* ignore */ }
-        window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang: value } }));
-        window.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang: value } }));
+        this._paintLang(resolved, value);
+        this._broadcastPrefs({
+          lang: resolved,
+          pref: value,
+          theme: this.prefs.theme,
+          region: this.prefs.region,
+          source: 'local',
+        });
+        window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang: resolved, pref: value, source: 'local' } }));
+        window.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang: resolved, pref: value, source: 'local' } }));
         serverPatch.language = value;
         needsSoftReload = true;
       }
@@ -1866,11 +2262,13 @@
         serverPatch.theme = value;
       }
 
-      if (key === 'region') {
-        this.prefs.region = value;
-        try { localStorage.setItem('qmf-region', value); } catch (e) { /* ignore */ }
-        window.dispatchEvent(new CustomEvent('qmf:region-change', { detail: { region: value } }));
-        serverPatch.region = value;
+      if (key === 'region' && (value === 'auto' || REGION_CODES.has(String(value).toUpperCase()))) {
+        const stored = value === 'auto' ? 'auto' : String(value).toUpperCase();
+        this.prefs.region = stored;
+        const resolved = stored === 'auto' ? detectRegionFromBrowser() : stored;
+        try { localStorage.setItem('qmf-region', stored); } catch (e) { /* ignore */ }
+        window.dispatchEvent(new CustomEvent('qmf:region-change', { detail: { region: resolved, pref: stored } }));
+        serverPatch.region = stored;
         needsSoftReload = true;
       }
 
@@ -1884,15 +2282,37 @@
         serverPatch.app_role = value;
       }
 
-      window.dispatchEvent(new CustomEvent('qmf:prefs-change', { detail: { ...this.prefs } }));
+      window.dispatchEvent(new CustomEvent('qmf:prefs-change', { detail: { ...this.prefs, source: 'local' } }));
       if (typeof this.config.onPrefsChange === 'function') {
         this.config.onPrefsChange({ ...this.prefs }, key, value);
       }
 
       if (root) {
         root.querySelectorAll(`[data-pref="${key}"]`).forEach((btn) => {
-          btn.classList.toggle('qmf-auth-seg--active', btn.getAttribute('data-value') === value);
+          const on = btn.getAttribute('data-value') === value;
+          btn.classList.toggle('qmf-auth-seg--active', on);
+          btn.classList.toggle('qmf-auth-role-btn--active', on);
+          btn.classList.toggle('is-active', on);
+          if (btn.hasAttribute('aria-selected')) {
+            btn.setAttribute('aria-selected', on ? 'true' : 'false');
+          }
         });
+        if (key === 'region') {
+          const opt = REGION_OPTIONS.find((r) => r.id === value);
+          const labelEl = root.querySelector('[data-region-label]');
+          const markWrap = root.querySelector('[data-region-mark]');
+          if (opt && labelEl) labelEl.textContent = opt.id === 'auto' ? this.labels().auto : opt.label;
+          if (opt && markWrap) {
+            markWrap.innerHTML = opt.id === 'auto' ? ICONS.globe : regionFlagImg(opt.flag, 22);
+          }
+        }
+        if (key === 'lang') {
+          const opt = LANG_OPTIONS.find((l) => l.id === value);
+          const labelEl = root.querySelector('[data-lang-label]');
+          const badgeEl = root.querySelector('[data-lang-badge]');
+          if (opt && labelEl) labelEl.textContent = opt.id === 'auto' ? this.labels().auto : opt.label;
+          if (opt && badgeEl) badgeEl.textContent = opt.id === 'auto' ? 'A' : opt.short;
+        }
       }
 
       /* Account is source of truth when signed in; localStorage is paint cache. */
@@ -1948,10 +2368,7 @@
 
     async logout() {
       const url = this.getLogoutUrl();
-      const token = this.getToken && this.getToken();
 
-      // 1) Revoke session + clear HttpOnly refresh_token on id.quizzman.com
-      //    (Set-Cookie only works from that origin; await briefly so it isn't aborted).
       try {
         const sso = window.QuizzmanSSO || window.IdSysSSO || window.QuizzmanAuth;
         if (sso && typeof sso.logout === 'function') {
@@ -1960,14 +2377,11 @@
             new Promise((resolve) => setTimeout(resolve, 2000)),
           ]);
         } else {
-          const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
-          if (token) headers.Authorization = 'Bearer ' + token;
           await Promise.race([
-            fetch('https://id.quizzman.com/api/auth/logout', {
-              method: 'POST',
+            fetch('https://id.quizzman.com/logout', {
+              method: 'GET',
               credentials: 'include',
-              headers,
-              body: '{}',
+              redirect: 'manual',
             }).catch(() => null),
             new Promise((resolve) => setTimeout(resolve, 2000)),
           ]);
@@ -2051,5 +2465,5 @@
     window.QMF.createAuthWidget = window.createAuthWidget;
   }
 
-  console.log(`[QMF Auth Widget] Module loaded v${VERSION}`);
+  if (window.__QMF_DEBUG__) console.log(`[QMF Auth Widget] Module loaded v${VERSION}`);
 })();

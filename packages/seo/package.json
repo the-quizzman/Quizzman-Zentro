@@ -1,0 +1,33 @@
+{
+  "name": "@qmf/seo",
+  "version": "1.0.0",
+  "description": "QMF SEO / Brand Identity — Organization + WebSite structured data for the Quizzman ecosystem",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test dist/identity.test.js || node --test src/identity.test.mjs",
+    "clean": "rm -rf dist"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  },
+  "private": true
+}

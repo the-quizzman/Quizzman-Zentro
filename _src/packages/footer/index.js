@@ -24,9 +24,9 @@ var FooterConfigSchema = z.object({
     href: z.string()
   })).default([
     { icon: "fab fa-facebook", label: "Facebook", href: "https://www.facebook.com/quizzman.official" },
-    { icon: "fab fa-youtube", label: "YouTube", href: "https://www.youtube.com/@quizzman" },
-    { icon: "fab fa-tiktok", label: "TikTok", href: "https://www.tiktok.com/@quizzman" },
-    { icon: "fab fa-discord", label: "Discord", href: "https://discord.gg/quizzman" }
+    { icon: "fab fa-youtube", label: "YouTube", href: "https://www.youtube.com/@quizzman.official" },
+    { icon: "fab fa-tiktok", label: "TikTok", href: "https://www.tiktok.com/@quizzman.com" },
+    { icon: "fab fa-github", label: "GitHub", href: "https://github.com/the-quizzman" }
   ]),
   // DMCA
   showDmca: z.boolean().default(true),

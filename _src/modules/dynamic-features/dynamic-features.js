@@ -117,7 +117,7 @@
                 }
                 
                 this.initialized = true;
-                console.log('[QMF Dynamic Features] Initialized successfully');
+                if (global.__QMF_DEBUG__) console.log('[QMF Dynamic Features] Initialized successfully');
             } catch (error) {
                 console.error('[QMF Dynamic Features] Initialization error:', error);
                 // Use defaults

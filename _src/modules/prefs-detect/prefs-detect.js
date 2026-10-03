@@ -1,6 +1,6 @@
 /**
  * QMF prefs-detect — first-visit lang / theme / region bootstrap
- * @version 1.0.0
+ * @version 1.0.3
  *
  * Precedence:
  *   account (logged-in, via auth-widget) > explicit localStorage/cookie > browser detect > defaults
@@ -16,7 +16,7 @@
 (function (global) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.3';
   var SUPPORTED_LANG = ['vi', 'en', 'zh', 'zht', 'jp', 'kr', 'fr', 'de', 'es', 'th', 'pt'];
   var SUPPORTED_REGION = ['VN', 'US', 'TW', 'CN', 'JP', 'KR', 'SG', 'AU', 'FR', 'TH', 'DE', 'ES', 'PT', 'GB'];
 
@@ -75,20 +75,28 @@
     fr: 'FR', de: 'DE', es: 'ES', pt: 'PT', en: 'US',
   };
 
+  var PREFS_BC_NAME = 'qmf-prefs';
+  var LANG_SRC_COOKIE = 'qmf-lang-src';
+
   var state = {
     bootstrapped: false,
     lang: null,
     theme: null,
     region: null,
     applied: null,
+    _accountBound: false,
+    _crossTabBound: false,
+    _bc: null,
+    _adopting: false,
   };
 
   function normalizeLang(code) {
     if (!code) return null;
     var key = String(code).trim().toLowerCase().replace(/_/g, '-');
     if (LANG_ALIAS[key]) return LANG_ALIAS[key];
-    if (key.indexOf('zh-t') === 0 || key.indexOf('hant') >= 0) return 'zht';
-    if (key.indexOf('zh') === 0) return 'zh';
+    if (key === 'zht' || key.indexOf('zh-t') === 0 || key.indexOf('hant') >= 0
+        || key === 'zh-tw' || key === 'zh-hk' || key === 'zh-mo') return 'zht';
+    if (key === 'zh' || key.indexOf('zh-') === 0) return 'zh';
     if (key.indexOf('ja') === 0) return 'jp';
     if (key.indexOf('ko') === 0) return 'kr';
     var base = key.split('-')[0];
@@ -121,11 +129,11 @@
     return null;
   }
 
-  function writeLangCookie(lang) {
-    if (!lang) return;
+  function writeSharedCookie(name, value) {
+    if (!name || value == null || typeof document === 'undefined') return;
     try {
       var host = (location && location.hostname) || '';
-      var base = 'qmf-lang=' + encodeURIComponent(lang)
+      var base = name + '=' + encodeURIComponent(value)
         + '; path=/; max-age=' + (365 * 24 * 60 * 60)
         + '; SameSite=Lax';
       if (location.protocol === 'https:') base += '; Secure';
@@ -135,6 +143,37 @@
         document.cookie = base;
       }
     } catch (e) { /* ignore */ }
+  }
+
+  function readSharedCookie(name) {
+    if (!name || typeof document === 'undefined') return null;
+    try {
+      var parts = String(document.cookie || '').split(';');
+      var prefix = name + '=';
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i].trim();
+        if (p.indexOf(prefix) === 0) {
+          return decodeURIComponent(p.slice(prefix.length));
+        }
+      }
+    } catch (e) { /* ignore */ }
+    return null;
+  }
+
+  function writeLangCookie(lang) {
+    if (!lang) return;
+    writeSharedCookie('qmf-lang', lang);
+  }
+
+  function writeLangSrcCookie(src) {
+    if (!src) return;
+    writeSharedCookie(LANG_SRC_COOKIE, src);
+  }
+
+  function readLangSrcCookie() {
+    var src = readSharedCookie(LANG_SRC_COOKIE);
+    if (src === 'local' || src === 'account' || src === 'detect') return src;
+    return null;
   }
 
   function lsGet(key) {
@@ -241,14 +280,15 @@
     } catch (e) { /* ignore */ }
   }
 
-  function persist(prefs) {
+  function persist(prefs, source) {
     if (!prefs) return;
     if (prefs.lang) {
       lsSet('qmf-lang', prefs.lang);
       lsSet('lab-lang', prefs.lang);
       lsSet('lab-ui-lang', prefs.lang);
       lsSet('qss_ui_lang', prefs.lang);
-      writeLangCookie(prefs.lang);
+      lsSet('preferred_language', prefs.lang);
+      writeLangCookie(prefs.lang === 'auto' ? detectLang() : prefs.lang);
     }
     if (prefs.theme) {
       lsSet('qmf-theme', prefs.theme);
@@ -258,7 +298,10 @@
       lsSet('qmf-region', prefs.region);
       lsSet('qlib-region', prefs.region);
     }
-    lsSet('qmf-prefs-source', 'detect');
+    if (source) {
+      lsSet('qmf-prefs-source', source);
+      writeLangSrcCookie(source);
+    }
   }
 
   function emit(prefs, fields) {
@@ -285,12 +328,188 @@
     } catch (e) { /* ignore */ }
   }
 
+  function readLsLang() {
+    return normalizeLang(
+      lsGet('qmf-lang') || lsGet('lab-ui-lang') || lsGet('lab-lang') || lsGet('qss_ui_lang') || lsGet('preferred_language')
+    );
+  }
+
+  /**
+   * Cookie is the cross-subdomain store. localStorage `auto` stays local.
+   * User-chosen cookie (`qmf-lang-src=local`) wins over a stale per-origin cache.
+   */
+  function readPreferredLang() {
+    var ls = readLsLang();
+    if (ls === 'auto') return 'auto';
+    var cookie = readLangCookie();
+    var src = readLangSrcCookie() || lsGet('qmf-prefs-source');
+    if (cookie && (src === 'local' || !ls || cookie !== ls)) return cookie;
+    return ls || cookie || null;
+  }
+
   function readCurrent() {
     return {
-      lang: normalizeLang(lsGet('qmf-lang') || lsGet('lab-ui-lang') || lsGet('lab-lang') || readLangCookie()) || state.lang,
+      lang: readPreferredLang() || state.lang,
       theme: normalizeTheme(lsGet('qmf-theme') || lsGet('lab-theme')) || state.theme,
       region: normalizeRegion(lsGet('qmf-region') || lsGet('qlib-region')) || state.region,
     };
+  }
+
+  function hasExplicitUserLang() {
+    var src = readLangSrcCookie() || lsGet('qmf-prefs-source');
+    if (src === 'local') return true;
+    var ls = readLsLang();
+    return ls === 'auto';
+  }
+
+  function requestLangReload(why) {
+    try {
+      if (global.QMFShell && typeof global.QMFShell.softReload === 'function') {
+        global.QMFShell.softReload(why || 'prefs:lang-sync');
+        return;
+      }
+    } catch (e) { /* ignore */ }
+    try {
+      var u = new URL(global.location.href);
+      u.searchParams.set('_qmf', 'prefs');
+      u.searchParams.set('_qmf_why', String(why || 'prefs:lang-sync').slice(0, 48));
+      u.searchParams.set('_t', String(Date.now()));
+      global.location.replace(u.toString());
+    } catch (e2) {
+      try { global.location.reload(); } catch (e3) { /* ignore */ }
+    }
+  }
+
+  function broadcast(detail) {
+    if (!detail || state._adopting) return;
+    var payload = {
+      lang: detail.lang || null,
+      pref: detail.pref || detail.lang || null,
+      theme: detail.theme || null,
+      region: detail.region || null,
+      source: detail.source || 'local',
+      t: Date.now(),
+    };
+    try {
+      ensurePrefsChannel();
+      if (state._bc) state._bc.postMessage(payload);
+    } catch (e) { /* ignore */ }
+    try {
+      localStorage.setItem('qmf_prefs_signal', JSON.stringify(payload));
+    } catch (e2) { /* ignore */ }
+  }
+
+  function adopt(detail, opts) {
+    opts = opts || {};
+    if (!detail || state._adopting) return false;
+    var lang = normalizeLang(detail.lang || detail.pref);
+    var theme = detail.theme != null ? normalizeTheme(detail.theme) : null;
+    var region = detail.region != null ? normalizeRegion(detail.region) : null;
+    var source = detail.source === 'local' || detail.source === 'account' ? detail.source : 'local';
+    var cur = readCurrent();
+    var changed = false;
+    var patch = {};
+
+    if (lang && lang !== cur.lang) {
+      patch.lang = lang;
+      changed = true;
+    }
+    if (theme && theme !== cur.theme) {
+      patch.theme = theme;
+      changed = true;
+    }
+    if (region && region !== cur.region) {
+      patch.region = region;
+      changed = true;
+    }
+    if (!changed) return false;
+
+    state._adopting = true;
+    try {
+      persist(patch, source);
+      applyDom(Object.assign({}, cur, patch));
+      var now = readCurrent();
+      state.lang = now.lang;
+      state.theme = now.theme;
+      state.region = now.region;
+      emit(now, Object.keys(patch));
+    } finally {
+      state._adopting = false;
+    }
+
+    if (opts.reload !== false && patch.lang) {
+      requestLangReload('prefs:lang-sync');
+    }
+    return true;
+  }
+
+  function reconcileFromCookie() {
+    var cookie = readLangCookie();
+    var ls = readLsLang();
+    if (!cookie) return false;
+    if (ls === 'auto') return false;
+    if (cookie === ls) return false;
+    var src = readLangSrcCookie() || 'local';
+    persist({ lang: cookie }, src === 'detect' ? 'stored' : src);
+    applyDom({ lang: cookie });
+    var now = readCurrent();
+    state.lang = now.lang;
+    if (cookie !== state.lang && now.lang) state.lang = now.lang;
+    return true;
+  }
+
+  function ensurePrefsChannel() {
+    if (state._bc || typeof BroadcastChannel === 'undefined') return state._bc;
+    try {
+      state._bc = new BroadcastChannel(PREFS_BC_NAME);
+      global.__qmfPrefsBc = state._bc;
+    } catch (e) { /* ignore */ }
+    return state._bc;
+  }
+
+  function bindCrossTabWatch() {
+    if (state._crossTabBound) return;
+    state._crossTabBound = true;
+    try {
+      ensurePrefsChannel();
+      if (state._bc) {
+        state._bc.onmessage = function (ev) {
+          var data = ev && ev.data;
+          if (!data) return;
+          adopt(data, { reload: true });
+        };
+      }
+    } catch (e) { /* ignore */ }
+
+    try {
+      global.addEventListener('storage', function (e) {
+        if (!e) return;
+        if (e.key === 'qmf_prefs_signal' && e.newValue) {
+          try { adopt(JSON.parse(e.newValue), { reload: true }); } catch (e2) { /* ignore */ }
+          return;
+        }
+        if (e.key === 'qmf-lang' || e.key === 'lab-ui-lang' || e.key === 'qmf-theme' || e.key === 'qmf-region') {
+          var prefs = readCurrent();
+          adopt({
+            lang: prefs.lang,
+            theme: prefs.theme,
+            region: prefs.region,
+            source: lsGet('qmf-prefs-source') || 'local',
+          }, { reload: true });
+        }
+      });
+    } catch (e3) { /* ignore */ }
+
+    try {
+      global.addEventListener('visibilitychange', function () {
+        if (document.visibilityState !== 'visible') return;
+        if (reconcileFromCookie()) {
+          var cur = readCurrent();
+          emit(cur, ['lang']);
+          requestLangReload('prefs:lang-cookie');
+        }
+      });
+    } catch (e4) { /* ignore */ }
   }
 
   /**
@@ -299,6 +518,16 @@
    */
   function bootstrap(opts) {
     opts = opts || {};
+    if (state.bootstrapped && !opts.force) {
+      return {
+        lang: state.lang,
+        theme: state.theme,
+        region: state.region,
+        filled: [],
+        source: lsGet('qmf-prefs-source') || 'stored',
+        skipped: true,
+      };
+    }
     var force = !!opts.force;
     var fields = [];
     var patch = {};
@@ -324,7 +553,8 @@
 
     // Always refresh in-memory state from storage after optional writes
     if (fields.length) {
-      persist(patch);
+      var detectSrc = readLangSrcCookie() === 'local' ? 'local' : 'detect';
+      persist(patch, detectSrc);
       applyDom(patch);
       emit(Object.assign(readCurrent(), patch), fields);
       state.applied = {
@@ -341,21 +571,25 @@
       applyDom(cur);
     }
 
+    reconcileFromCookie();
+
     var now = readCurrent();
     state.lang = now.lang;
     state.theme = now.theme;
     state.region = now.region;
     state.bootstrapped = true;
 
-    // Account hydrate wins later — mark source so UI can tell detect vs account
     if (!lsGet('qmf-prefs-source')) lsSet('qmf-prefs-source', fields.length ? 'detect' : 'stored');
+    if (!readLangSrcCookie() && fields.indexOf('lang') >= 0) writeLangSrcCookie('detect');
 
-    console.log('[QmfPrefsDetect] bootstrap v' + VERSION, {
-      lang: state.lang,
-      theme: state.theme,
-      region: state.region,
-      filled: fields,
-    });
+    if (global.__QMF_DEBUG__) {
+      console.log('[QmfPrefsDetect] bootstrap v' + VERSION, {
+        lang: state.lang,
+        theme: state.theme,
+        region: state.region,
+        filled: fields,
+      });
+    }
 
     return {
       lang: state.lang,
@@ -366,7 +600,11 @@
     };
   }
 
-  /** Account settings take priority — write through and mark source. */
+  /**
+   * Account hydrate fills gaps only.
+   * A user-chosen language (`qmf-lang-src=local` / localStorage auto) must not be
+   * overwritten — ID account APIs are same-origin and cannot persist from other subs.
+   */
   function applyAccount(user) {
     if (!user) return null;
     var patch = {};
@@ -375,20 +613,27 @@
     var theme = normalizeTheme(user.theme || user.ui_theme);
     var region = normalizeRegion(user.region);
 
-    if (lang) { patch.lang = lang; fields.push('lang'); }
+    if (lang && !hasExplicitUserLang()) {
+      patch.lang = lang;
+      fields.push('lang');
+    }
     if (theme) { patch.theme = theme; fields.push('theme'); }
     if (region) { patch.region = region; fields.push('region'); }
     if (!fields.length) return null;
 
-    persist(patch);
-    lsSet('qmf-prefs-source', 'account');
+    persist(patch, patch.lang ? 'account' : null);
     applyDom(patch);
-    // Do not re-emit prefs-change here — auth-widget / i18n-dom already do.
     var now = readCurrent();
     state.lang = now.lang;
     state.theme = now.theme;
     state.region = now.region;
-    return { lang: state.lang, theme: state.theme, region: state.region, fields: fields, source: 'account' };
+    return {
+      lang: state.lang,
+      theme: state.theme,
+      region: state.region,
+      fields: fields,
+      source: patch.lang ? 'account' : (lsGet('qmf-prefs-source') || 'stored'),
+    };
   }
 
   function bindAccountWatch() {
@@ -404,8 +649,12 @@
     });
     global.addEventListener('qmf:prefs-change', function (e) {
       var d = (e && e.detail) || {};
-      if (d.source === 'account' || d.source === 'user' || d.source === 'settings') {
-        lsSet('qmf-prefs-source', d.source);
+      if (d.source === 'local' || d.source === 'user' || d.source === 'settings') {
+        lsSet('qmf-prefs-source', 'local');
+        writeLangSrcCookie('local');
+      } else if (d.source === 'account') {
+        lsSet('qmf-prefs-source', 'account');
+        writeLangSrcCookie('account');
       }
       var cur = readCurrent();
       state.lang = cur.lang;
@@ -416,6 +665,7 @@
 
   function mount(opts) {
     bindAccountWatch();
+    bindCrossTabWatch();
     return bootstrap(opts);
   }
 
@@ -439,6 +689,9 @@
     hasStoredLang: hasStoredLang,
     hasStoredTheme: hasStoredTheme,
     hasStoredRegion: hasStoredRegion,
+    broadcast: broadcast,
+    adopt: adopt,
+    reconcileFromCookie: reconcileFromCookie,
   };
 
   global.QmfPrefsDetect = api;
@@ -446,19 +699,21 @@
   if (!global.QMF) global.QMF = {};
   global.QMF.PrefsDetect = api;
 
-  // Auto-run once if shell (or page) loaded the script without explicit bootstrap.
-  // Shell will call bootstrap() again safely (idempotent for stored keys).
+  // Auto-run only when the page loaded this script without QMFShell.
+  // Shell always calls mount() itself — skip to avoid a second bootstrap.
   try {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function () {
-        if (!state.bootstrapped) mount();
-      });
-    } else if (!state.bootstrapped) {
-      mount();
+    if (!global.QMFShell) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+          if (!state.bootstrapped && !global.QMFShell) mount();
+        });
+      } else if (!state.bootstrapped) {
+        mount();
+      }
     }
   } catch (e) {
-    try { mount(); } catch (e2) { /* ignore */ }
+    try { if (!state.bootstrapped && !global.QMFShell) mount(); } catch (e2) { /* ignore */ }
   }
 
-  console.log('[QmfPrefsDetect] module loaded v' + VERSION);
+  if (global.__QMF_DEBUG__) console.log('[QmfPrefsDetect] module loaded v' + VERSION);
 })(typeof window !== 'undefined' ? window : globalThis);

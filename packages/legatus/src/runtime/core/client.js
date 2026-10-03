@@ -69,14 +69,9 @@ export class LegatusClient {
   async request(path, options = {}) {
     const execute = async (forceRefresh = false) => {
       const authHeaders = await this.headers(forceRefresh);
-      if (!authHeaders.Authorization) {
-        const err = new Error("not authenticated");
-        err.status = 401;
-        err.code = "TOKEN_MISSING";
-        throw err;
-      }
       return fetch(this.apiUrl(path), {
         ...options,
+        credentials: "include",
         headers: {
           ...(options.body ? { "Content-Type": "application/json" } : {}),
           ...authHeaders,
@@ -309,22 +304,18 @@ export class LegatusClient {
     const gen = ++this._generation;
     let token = await this.getToken();
     if (!token) token = await this.getToken({ forceRefresh: true });
-    if (!token) {
-      this._setConn({ status: "error", connected: false, error: "not authenticated" });
-      return;
-    }
     if (this._closed || gen !== this._generation) return;
 
     const ac = new AbortController();
     this._sseAbort = ac;
+    const streamHeaders = { Accept: "text/event-stream" };
+    if (token) streamHeaders.Authorization = `Bearer ${token}`;
     let res;
     try {
       res = await fetch(this.streamUrl(), {
         method: "GET",
-        headers: {
-          Accept: "text/event-stream",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: streamHeaders,
+        credentials: "include",
         signal: ac.signal,
         cache: "no-store",
       });
@@ -337,18 +328,17 @@ export class LegatusClient {
 
     if (res.status === 401) {
       token = await this.getToken({ forceRefresh: true });
-      if (!token || this._closed || gen !== this._generation) {
+      if (this._closed || gen !== this._generation) {
         this._sseAbort = null;
-        this._setConn({ status: "error", connected: false, error: "not authenticated" });
         return;
       }
+      const retryHeaders = { Accept: "text/event-stream" };
+      if (token) retryHeaders.Authorization = `Bearer ${token}`;
       try {
         res = await fetch(this.streamUrl(), {
           method: "GET",
-          headers: {
-            Accept: "text/event-stream",
-            Authorization: `Bearer ${token}`,
-          },
+          headers: retryHeaders,
+          credentials: "include",
           signal: ac.signal,
           cache: "no-store",
         });
@@ -389,6 +379,9 @@ export class LegatusClient {
 
     try {
       await this._readSse(res.body, gen);
+    } catch (err) {
+      if (err && (err.name === 'AbortError' || ac.signal.aborted)) return;
+      throw err;
     } finally {
       if (this._sseAbort === ac) this._sseAbort = null;
       if (!this._closed && gen === this._generation && !documentHidden()) {
@@ -432,15 +425,13 @@ export class LegatusClient {
   async _connectWs() {
     let token = await this.getToken();
     if (!token) token = await this.getToken({ forceRefresh: true });
-    if (!token) {
-      this._setConn({ status: "error", connected: false, error: "not authenticated" });
-      return;
-    }
     if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
       return;
     }
 
-    const url = `${this.wsUrl()}?token=${encodeURIComponent(token)}`;
+    const url = token
+      ? `${this.wsUrl()}?token=${encodeURIComponent(token)}`
+      : this.wsUrl();
     const ws = new WebSocket(url);
     this.ws = ws;
 

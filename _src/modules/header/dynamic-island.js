@@ -16,7 +16,7 @@
 (function () {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.0.1';
   const AUTO_DISMISS_MS = 6000;
   const EXPAND_HOVER_DELAY = 400;
 
@@ -40,7 +40,9 @@
       if (typeof window !== 'undefined') {
         window.QMFDynamicIsland = this;
       }
-      console.log(`[QMF DynamicIsland] v${VERSION} ready`);
+      if (typeof window !== 'undefined' && window.__QMF_DEBUG__) {
+        console.log(`[QMF DynamicIsland] v${VERSION} ready`);
+      }
     }
 
     /* ---- DOM ---- */
