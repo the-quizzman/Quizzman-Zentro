@@ -8,7 +8,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.12.1';
+  const VERSION = '3.13.0';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   /* Same origin path as CDN_BASE — avoid dual modules/ vs modules-v3/ caches */
   const CDN_NAV_BASE = CDN_BASE;
@@ -1105,7 +1105,130 @@ const HEADER_I18N = {
   }
 };
 
+  const EXTRA_I18N = {
+    vi: {
+      "nav.group.study": "Study Mandarin",
+      "nav.group.class": "Class",
+      "nav.group.editor": "Editor",
+      "nav.language": "Ngôn ngữ",
+      "nav.settings": "Cài đặt",
+      "nav.about": "Về Quizzman",
+      "nav.back": "Quay lại"
+    },
+    en: {
+      "nav.group.study": "Study Mandarin",
+      "nav.group.class": "Class",
+      "nav.group.editor": "Editor",
+      "nav.language": "Language",
+      "nav.settings": "Settings",
+      "nav.about": "About Quizzman",
+      "nav.back": "Back"
+    },
+    zh: {
+      "nav.group.study": "华语学习",
+      "nav.group.class": "班级",
+      "nav.group.editor": "编辑器",
+      "nav.language": "语言",
+      "nav.settings": "设置",
+      "nav.about": "关于 Quizzman",
+      "nav.back": "返回"
+    },
+    zht: {
+      "nav.group.study": "華語學習",
+      "nav.group.class": "班級",
+      "nav.group.editor": "編輯器",
+      "nav.language": "語言",
+      "nav.settings": "設定",
+      "nav.about": "關於 Quizzman",
+      "nav.back": "返回"
+    },
+    jp: {
+      "nav.group.study": "中国語学習",
+      "nav.group.class": "クラス",
+      "nav.group.editor": "エディター",
+      "nav.language": "言語",
+      "nav.settings": "設定",
+      "nav.about": "Quizzman について",
+      "nav.back": "戻る"
+    },
+    kr: {
+      "nav.group.study": "중국어 학습",
+      "nav.group.class": "클래스",
+      "nav.group.editor": "에디터",
+      "nav.language": "언어",
+      "nav.settings": "설정",
+      "nav.about": "Quizzman 정보",
+      "nav.back": "뒤로"
+    },
+    fr: {
+      "nav.group.study": "Study Mandarin",
+      "nav.group.class": "Classe",
+      "nav.group.editor": "Éditeur",
+      "nav.language": "Langue",
+      "nav.settings": "Paramètres",
+      "nav.about": "À propos de Quizzman",
+      "nav.back": "Retour"
+    },
+    de: {
+      "nav.group.study": "Study Mandarin",
+      "nav.group.class": "Klasse",
+      "nav.group.editor": "Editor",
+      "nav.language": "Sprache",
+      "nav.settings": "Einstellungen",
+      "nav.about": "Über Quizzman",
+      "nav.back": "Zurück"
+    },
+    es: {
+      "nav.group.study": "Study Mandarin",
+      "nav.group.class": "Clase",
+      "nav.group.editor": "Editor",
+      "nav.language": "Idioma",
+      "nav.settings": "Configuración",
+      "nav.about": "Acerca de Quizzman",
+      "nav.back": "Atrás"
+    },
+    th: {
+      "nav.group.study": "Study Mandarin",
+      "nav.group.class": "ชั้นเรียน",
+      "nav.group.editor": "เครื่องมือแก้ไข",
+      "nav.language": "ภาษา",
+      "nav.settings": "การตั้งค่า",
+      "nav.about": "เกี่ยวกับ Quizzman",
+      "nav.back": "ย้อนกลับ"
+    },
+    pt: {
+      "nav.group.study": "Study Mandarin",
+      "nav.group.class": "Turma",
+      "nav.group.editor": "Editor",
+      "nav.language": "Idioma",
+      "nav.settings": "Configurações",
+      "nav.about": "Sobre o Quizzman",
+      "nav.back": "Voltar"
+    }
+  };
+  Object.keys(EXTRA_I18N).forEach((lang) => {
+    if (HEADER_I18N[lang]) Object.assign(HEADER_I18N[lang], EXTRA_I18N[lang]);
+  });
+
   const HEADER_LANGS = ['vi', 'en', 'zh', 'zht', 'jp', 'kr', 'fr', 'de', 'es', 'th', 'pt'];
+  const LANG_NATIVE_NAMES = {
+    zht: '繁體中文',
+    zh:  '简体中文',
+    vi:  'Tiếng Việt',
+    en:  'English',
+    jp:  '日本語',
+    kr:  '한국어',
+    fr:  'Français',
+    de:  'Deutsch',
+    es:  'Español',
+    th:  'ภาษาไทย',
+    pt:  'Português',
+  };
+  const LANG_SHORT_LABELS = {
+    vi: 'VI', en: 'EN', zh: '简中', zht: '繁中',
+    jp: '日本語', kr: '한국어', fr: 'FR', de: 'DE',
+    es: 'ES', th: 'ไทย', pt: 'PT',
+  };
   const HEADER_LANG_ALIAS = {
     ja: 'jp', ko: 'kr',
     zh: 'zh', 'zh-cn': 'zh', 'zh-hans': 'zh', zhs: 'zh',
@@ -1197,24 +1320,29 @@ const HEADER_I18N = {
    * Used by renderMobileNavRow() for the flat-row sidebar (Option 2).
    */
   const MOBILE_NAV_ICONS = {
-    'explore':   '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
-    'play':      '<path d="M6.5 11.5h4M8.5 9.5v4"/><path d="M15.4 10.6h.01M18 12.9h.01"/><path d="M17.4 5.5H6.6a4 4 0 0 0-3.98 3.6L2 14.4A2.4 2.4 0 0 0 6.3 16l.6-.8h10.2l.6.8a2.4 2.4 0 0 0 4.3-1.6l-.62-5.3a4 4 0 0 0-3.98-3.6z"/>',
-    'game':      '<path d="M6.5 11.5h4M8.5 9.5v4"/><path d="M15.4 10.6h.01M18 12.9h.01"/><path d="M17.4 5.5H6.6a4 4 0 0 0-3.98 3.6L2 14.4A2.4 2.4 0 0 0 6.3 16l.6-.8h10.2l.6.8a2.4 2.4 0 0 0 4.3-1.6l-.62-5.3a4 4 0 0 0-3.98-3.6z"/>',
-    'insight':   '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>',
-    'learn':     '<path d="M22 9.5 12 5 2 9.5l10 4.5 10-4.5z"/><path d="M6 11.4V16c3.2 2 8.8 2 12 0v-4.6"/>',
-    'knowledge': '<path d="M2 4.5h6a3 3 0 0 1 3 3V20a2.2 2.2 0 0 0-2.2-2.2H2z"/><path d="M22 4.5h-6a3 3 0 0 0-3 3V20a2.2 2.2 0 0 1 2.2-2.2H22z"/>',
-    'mandarin':  '<path d="M4 4h16"/><path d="M9 4v3a6 6 0 0 0 6 6"/><path d="M3 10h5"/><path d="m10 20 4-8 4 8"/><path d="m11.8 16h4.4"/>',
-    'paper':     '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>',
-    'class':     '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
-    'editor':    '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
-    'settings':  '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
-    'info':      '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
-    'globe':     '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    'study':         '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+    'knowledge':     '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+    'insight':       '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>',
+    'play':          '<rect width="20" height="12" x="2" y="6" rx="6"/><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/>',
+    'class':         '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    'editor':        '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+    'language':      '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    'globe':         '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    'settings':      '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+    'info':          '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
     'chevron-right': '<polyline points="9 18 15 12 9 6"/>',
-    'search':    '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
-    'menu':      '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>',
-    'close':     '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
-    'gamepad':   '<path d="M6.5 11.5h4M8.5 9.5v4"/><path d="M15.4 10.6h.01M18 12.9h.01"/><path d="M17.4 5.5H6.6a4 4 0 0 0-3.98 3.6L2 14.4A2.4 2.4 0 0 0 6.3 16l.6-.8h10.2l.6.8a2.4 2.4 0 0 0 4.3-1.6l-.62-5.3a4 4 0 0 0-3.98-3.6z"/>',
+    'chevron-down':  '<polyline points="6 9 12 15 18 9"/>',
+    'back':          '<polyline points="15 18 9 12 15 6"/>',
+    'check':         '<polyline points="20 6 9 17 4 12"/>',
+    'close':         '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+    'search':        '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+    'menu':          '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>',
+    'explore':       '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+    'learn':         '<path d="M22 9.5 12 5 2 9.5l10 4.5 10-4.5z"/><path d="M6 11.4V16c3.2 2 8.8 2 12 0v-4.6"/>',
+    'mandarin':      '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+    'paper':         '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>',
+    'game':          '<rect width="20" height="12" x="2" y="6" rx="6"/><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/>',
+    'gamepad':       '<rect width="20" height="12" x="2" y="6" rx="6"/><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/>',
   };
 
   function mobileNavSVG(key, extraClass) {
@@ -1320,7 +1448,7 @@ const HEADER_I18N = {
         },
         children: [
           { id: 'wiki', labelKey: 'item.wiki', descKey: 'desc.wiki', label: ht('item.wiki'), description: ht('desc.wiki'), href: 'https://wiki.quizzman.com', ...navIcon('wiki') },
-          { id: 'dictionary', labelKey: 'item.dictionary', descKey: 'desc.dictionary', label: ht('item.dictionary'), description: ht('desc.dictionary'), href: 'https://dict.quizzman.com', icon: '典' },
+          { id: 'dictionary', labelKey: 'item.dictionary', descKey: 'desc.dictionary', label: ht('item.dictionary'), description: ht('desc.dictionary'), href: 'https://dict.quizzman.com', ...navIcon('dictionary') },
           { id: 'paper', labelKey: 'item.paper', descKey: 'desc.paper', label: ht('item.paper'), description: ht('desc.paper'), href: 'https://paper.quizzman.com', ...navIcon('paper') },
           { id: 'zentro', labelKey: 'item.zentro', descKey: 'desc.zentro', label: ht('item.zentro'), description: ht('desc.zentro'), href: 'https://ui.quizzman.com', icon: 'Z' },
         ],
@@ -1697,33 +1825,156 @@ const HEADER_I18N = {
     return navItems.map((item) => renderNavItem(item, activeState)).join('');
   }
 
-  function renderMobileNavSection(item, activeState) {
-    const isSectionActive = item.id === activeState.section;
-    const navIconSvg = mobileNavSVG(item.id, 'mh-nav-icon');
-    const chevronSvg = mobileNavSVG('chevron-right', 'mh-nav-chevron');
+  /**
+   * Canonical mobile navigation groups for Quizzman product navigator.
+   * Parents NEVER navigate directly — they trigger the drill-down sub-view.
+   */
+  function getMobileNavGroups() {
+    return [
+      {
+        id: 'study',
+        labelKey: 'nav.group.study',
+        label: ht('nav.group.study', 'Study Mandarin'),
+        icon: 'study',
+        children: [
+          { id: 'mandarin', labelKey: 'item.mandarin', descKey: 'desc.mandarin', label: ht('item.mandarin', 'Mandarin'), description: ht('desc.mandarin'), href: 'https://study.quizzman.com', ...navIcon('mandarin') },
+          { id: 'grammar', labelKey: 'item.grammar', descKey: 'desc.grammar', label: ht('item.grammar', 'Grammar'), description: ht('desc.grammar'), href: 'https://study.quizzman.com/grammar', icon: '文' },
+          { id: 'chinese-number', labelKey: 'item.chinese-number', descKey: 'desc.chinese-number', label: ht('item.chinese-number', 'Chinese Numbers'), description: ht('desc.chinese-number'), href: 'https://study.quizzman.com/tool/chinese-number', icon: '数' },
+          { id: 'jck', labelKey: 'item.jck', descKey: 'desc.jck', label: ht('item.jck', 'JCK Font Engine'), description: ht('desc.jck'), href: 'https://dict.quizzman.com/jck/#synth', ...navIcon('jck') },
+        ],
+      },
+      {
+        id: 'knowledge',
+        labelKey: 'nav.knowledge',
+        label: ht('nav.knowledge', 'Knowledge'),
+        icon: 'knowledge',
+        children: [
+          { id: 'wiki', labelKey: 'item.wiki', descKey: 'desc.wiki', label: ht('item.wiki', 'Wiki'), description: ht('desc.wiki'), href: 'https://wiki.quizzman.com', ...navIcon('wiki') },
+          { id: 'paper', labelKey: 'item.paper', descKey: 'desc.paper', label: ht('item.paper', 'Paper'), description: ht('desc.paper'), href: 'https://paper.quizzman.com', ...navIcon('paper') },
+          { id: 'dictionary', labelKey: 'item.dictionary', descKey: 'desc.dictionary', label: ht('item.dictionary', 'Dictionary'), description: ht('desc.dictionary'), href: 'https://dict.quizzman.com', ...navIcon('dictionary') },
+        ],
+      },
+      {
+        id: 'insight',
+        labelKey: 'nav.insight',
+        label: ht('nav.insight', 'Insight'),
+        icon: 'insight',
+        children: [
+          { id: 'insight-portal', labelKey: 'item.lab', descKey: 'desc.lab', label: ht('item.lab', 'Quizzman Insight'), description: ht('desc.lab'), href: 'https://insight.quizzman.com', ...navIcon('eastern-lab') },
+          { id: 'tuvi', labelKey: 'item.tuvi', descKey: 'desc.tuvi', label: ht('item.tuvi', 'Tử Vi'), description: ht('desc.tuvi'), href: 'https://insight.quizzman.com/tool/tuvi-reading', ...navIcon('ziwei') },
+          { id: 'bazi', labelKey: 'item.bazi', descKey: 'desc.bazi', label: ht('item.bazi', 'Bát Tự'), description: ht('desc.bazi'), href: 'https://insight.quizzman.com/tool/bazi-reading', ...navIcon('bazi') },
+          { id: 'iching', labelKey: 'item.iching', descKey: 'desc.iching', label: ht('item.iching', 'I-Ching'), description: ht('desc.iching'), href: 'https://insight.quizzman.com/tool/iching-divination', ...navIcon('iching') },
+          { id: 'zodiac-sign', labelKey: 'item.zodiac-sign', descKey: 'desc.zodiac-sign', label: ht('item.zodiac-sign', 'Cung Hoàng Đạo'), description: ht('desc.zodiac-sign'), href: 'https://insight.quizzman.com/zodiac-sign', ...navIcon('zodiac-sign') },
+          { id: 'vedic', labelKey: 'item.vedic', descKey: 'desc.vedic', label: ht('item.vedic', 'Vedic'), description: ht('desc.vedic'), href: 'https://insight.quizzman.com/vedic', ...navIcon('vedic') },
+          { id: 'tarot', labelKey: 'item.tarot', descKey: 'desc.tarot', label: ht('item.tarot', 'Tarot'), description: ht('desc.tarot'), href: 'https://insight.quizzman.com/tarot', ...navIcon('tarot') },
+          { id: 'calendar', labelKey: 'item.calendar', descKey: 'desc.calendar', label: ht('item.calendar', 'Calendar'), description: ht('desc.calendar'), href: 'https://insight.quizzman.com/tool/calendar-converter', ...navIcon('calendar') },
+          { id: 'astro', labelKey: 'item.astro', descKey: 'desc.astro', label: ht('item.astro', 'Astro'), description: ht('desc.astro'), href: 'https://astro.quizzman.com', ...navIcon('astro') },
+        ],
+      },
+      {
+        id: 'play',
+        labelKey: 'nav.play',
+        label: ht('nav.play', 'Play'),
+        icon: 'play',
+        children: [
+          { id: 'live-quiz', labelKey: 'item.live-quiz', descKey: 'desc.live-quiz', label: ht('item.live-quiz', 'Live Quiz'), description: ht('desc.live-quiz'), href: 'https://play.quizzman.com/quiz', ...navIcon('live-quiz') },
+          { id: 'present', labelKey: 'item.present', descKey: 'desc.present', label: ht('item.present', 'Present'), description: ht('desc.present'), href: 'https://play.quizzman.com/slide', ...presentIcon() },
+          { id: 'pikahans', labelKey: 'item.practice', descKey: 'desc.practice', label: ht('item.practice', 'Pikahans'), description: ht('desc.practice'), href: 'https://play.quizzman.com/pikahans', ...navIcon('pikahans') },
+          { id: 'idiom-king', labelKey: 'item.challenges', descKey: 'desc.challenges', label: ht('item.challenges', 'Idiom King'), description: ht('desc.challenges'), href: 'https://play.quizzman.com/idiom-king', ...navIcon('idiom-king') },
+          { id: 'tycoon', labelKey: 'item.tycoon', descKey: 'desc.tycoon', label: ht('item.tycoon', 'Tycoon'), description: ht('desc.tycoon'), href: 'https://play.quizzman.com/tycoon', ...navIcon('tycoon') },
+          { id: 'vault', labelKey: 'item.vault', descKey: 'desc.vault', label: ht('item.vault', 'The Vault'), description: ht('desc.vault'), href: 'https://play.quizzman.com/arena', ...navIcon('arena') },
+        ],
+      },
+      {
+        id: 'class',
+        labelKey: 'nav.group.class',
+        label: ht('nav.group.class', 'Class'),
+        icon: 'class',
+        children: [
+          { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', label: ht('item.classroom', 'Class'), description: ht('desc.classroom'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
+          { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', label: ht('item.slide-studio', 'Slide Studio'), description: ht('desc.slide-studio'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
+          { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', label: ht('item.lms', 'LMS'), description: ht('desc.lms'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
+          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', label: ht('item.library', 'Library'), description: ht('desc.library'), href: 'https://lib.quizzman.com', icon: '馆' },
+          { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', label: ht('item.assignment', 'Assignment'), description: ht('desc.assignment'), href: 'https://class.quizzman.com/homework', ...navIcon('assignment') },
+        ],
+      },
+      {
+        id: 'editor',
+        labelKey: 'nav.group.editor',
+        label: ht('nav.group.editor', 'Editor'),
+        icon: 'editor',
+        children: [
+          { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', label: ht('item.slide-studio', 'Slide Studio'), description: ht('desc.slide-studio'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
+          { id: 'quiz-editor', labelKey: 'item.quiz-editor', descKey: 'desc.quiz-editor', label: ht('item.quiz-editor', 'Quiz Editor'), description: ht('desc.quiz-editor'), href: 'https://app.quizzman.com/quiz-editor/', ...navIcon('quiz-editor') },
+          { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', label: ht('item.assignment', 'Assignment'), description: ht('desc.assignment'), href: 'https://class.quizzman.com/homework', ...navIcon('assignment') },
+        ],
+      },
+    ];
+  }
 
-    if (item.children && item.children.length) {
-      // On mobile we render ONE top-level flat row per section (not per child).
-      // The row links directly to the section's href (or first child's href).
-      const dest = item.href || (item.children[0] && item.children[0].href) || '#';
-      return `
-        <a class="lab-header__drawer-item lab-header__drawer-section-row${isSectionActive ? ' is-active' : ''}" href="${escapeHtml(dest)}">
-          ${navIconSvg}
-          <span class="lab-header__drawer-item-body">
-            <span class="lab-header__drawer-item-title"${item.labelKey ? i18nAttr(item.labelKey) : ''}>${escapeHtml(item.label)}</span>
-          </span>
-          ${chevronSvg}
-        </a>
-      `;
-    }
-
+  function renderMobileCategoryItem(group) {
     return `
-      <a class="lab-header__drawer-link lab-header__drawer-section-row${isSectionActive ? ' is-active' : ''}" href="${escapeHtml(item.href || '#')}"${item.labelKey ? i18nAttr(item.labelKey) : ''}>
-        ${navIconSvg}
-        <span class="lab-header__drawer-link-text"${item.labelKey ? i18nAttr(item.labelKey) : ''}>${escapeHtml(item.label)}</span>
-        ${chevronSvg}
+      <button type="button" class="lab-header__drawer-item lab-header__drawer-drill-btn" data-drawer-drill="${escapeHtml(group.id)}" aria-haspopup="true">
+        ${mobileNavSVG(group.icon, 'mh-nav-icon')}
+        <span class="lab-header__drawer-item-title"${group.labelKey ? i18nAttr(group.labelKey) : ''}>${escapeHtml(group.label)}</span>
+        ${mobileNavSVG('chevron-right', 'mh-nav-chevron')}
+      </button>
+    `;
+  }
+
+  function renderMobileChildItem(child) {
+    let iconHtml = '';
+    if (child.iconImgWebp) {
+      iconHtml = `
+        <picture>
+          <source srcset="${child.iconImgWebp} 1x, ${child.iconImgWebp2x} 2x" type="image/webp">
+          <img src="${child.iconImg}" alt="${escapeHtml(child.iconAlt || child.label)}" class="mh-child-icon-img" width="22" height="22" loading="lazy">
+        </picture>
+      `;
+    } else if (child.icon) {
+      iconHtml = `<span class="lab-header__drawer-glyph-thumb">${escapeHtml(child.icon)}</span>`;
+    } else {
+      iconHtml = `<span class="lab-header__drawer-glyph-thumb">•</span>`;
+    }
+    return `
+      <a class="lab-header__drawer-child-item" href="${escapeHtml(child.href || '#')}">
+        <span class="lab-header__drawer-child-icon">${iconHtml}</span>
+        <span class="lab-header__drawer-child-body">
+          <span class="lab-header__drawer-child-title"${child.labelKey ? i18nAttr(child.labelKey) : ''}>${escapeHtml(child.label)}</span>
+          ${child.description ? `<span class="lab-header__drawer-child-desc"${child.descKey ? i18nAttr(child.descKey) : ''}>${escapeHtml(child.description)}</span>` : ''}
+        </span>
+        ${mobileNavSVG('chevron-right', 'mh-nav-chevron')}
       </a>
     `;
+  }
+
+  function renderMobileSubView(targetId, currentLang) {
+    if (targetId === 'language') {
+      const rows = HEADER_LANGS.map((l) => {
+        const isCurrent = l === currentLang;
+        return `
+          <button type="button" class="lab-header__drawer-lang-row${isCurrent ? ' is-active' : ''}" data-drawer-lang-select="${l}" aria-pressed="${isCurrent}">
+            <span class="lab-header__drawer-lang-name">${escapeHtml(LANG_NATIVE_NAMES[l] || l)}</span>
+            ${isCurrent ? mobileNavSVG('check', 'mh-check-icon') : ''}
+          </button>
+        `;
+      }).join('');
+      return {
+        titleKey: 'nav.language',
+        title: ht('nav.language', 'Language'),
+        html: `<div class="lab-header__drawer-lang-sublist">${rows}</div>`,
+      };
+    }
+
+    const groups = getMobileNavGroups();
+    const group = groups.find((g) => g.id === targetId);
+    if (!group) return null;
+    const itemsHtml = group.children.map(renderMobileChildItem).join('');
+    return {
+      titleKey: group.labelKey,
+      title: group.label,
+      html: `<div class="lab-header__drawer-child-list">${itemsHtml}</div>`,
+    };
   }
 
   function flattenNavLinks(navItems) {
@@ -2005,12 +2256,31 @@ const HEADER_I18N = {
         this.bindNavDropdowns();
       }
 
-      const drawerBody = this.headerEl.querySelector('.lab-header__drawer-body')
-        || document.querySelector('#lab-header-drawer .lab-header__drawer-body');
-      if (drawerBody && this.config.showGlobalNav) {
-        drawerBody.innerHTML = this.navItems
-          .map((item) => renderMobileNavSection(item, this.activeState))
-          .join('');
+      const drawerEl = this.headerEl.querySelector('.lab-header__drawer')
+        || document.querySelector('#lab-header-drawer');
+      if (drawerEl && this.config.showGlobalNav) {
+        const navList = drawerEl.querySelector('[data-drawer-nav-list]');
+        if (navList) {
+          navList.innerHTML = getMobileNavGroups().map(renderMobileCategoryItem).join('');
+        }
+        const langBadge = drawerEl.querySelector('[data-drawer-lang-badge]');
+        if (langBadge) {
+          const curLang = getHeaderLang();
+          langBadge.textContent = LANG_SHORT_LABELS[curLang] || curLang.toUpperCase();
+        }
+        if (this.activeSubView) {
+          const subData = renderMobileSubView(this.activeSubView, getHeaderLang());
+          if (subData) {
+            const subTitleEl = drawerEl.querySelector('[data-drawer-sub-title]');
+            const subContentEl = drawerEl.querySelector('[data-drawer-sub-content]');
+            if (subTitleEl) {
+              subTitleEl.textContent = subData.title;
+              if (subData.titleKey) subTitleEl.setAttribute('data-qmf-i18n', subData.titleKey);
+              else subTitleEl.removeAttribute('data-qmf-i18n');
+            }
+            if (subContentEl) subContentEl.innerHTML = subData.html;
+          }
+        }
       }
 
       // Search / join / chrome controls
@@ -2154,72 +2424,79 @@ const HEADER_I18N = {
         </div>
       ` : '';
 
-      // Build language section for drawer
+      // Build mobile drawer HTML (Drill-Down model)
       const currentLang = getHeaderLang();
-      const langLabels = {
-        vi: 'VI', en: 'EN', zh: '简中', zht: '繁中',
-        jp: '日本語', kr: '한국어', fr: 'FR', de: 'DE',
-        es: 'ES', th: 'ภาษาไทย', pt: 'PT',
-      };
-      const langBtnsHtml = HEADER_LANGS.map((l) => {
-        const isActive = l === currentLang;
-        return `<button type="button" class="lab-header__drawer-lang-btn${isActive ? ' is-active' : ''}" data-lang="${l}" aria-pressed="${isActive}">${escapeHtml(langLabels[l] || l.toUpperCase())}</button>`;
-      }).join('');
+      const mobileCategoryRowsHtml = getMobileNavGroups().map(renderMobileCategoryItem).join('');
 
-      const drawerLangSection = `
-        <div class="lab-header__drawer-sep"></div>
-        <div class="lab-header__drawer-lang">
-          <span class="lab-header__drawer-lang-label">Language</span>
-          <div class="lab-header__drawer-lang-grid" data-drawer-lang-grid>
-            ${langBtnsHtml}
-          </div>
-        </div>
-      `;
-
-      // Secondary menu: Settings + About
-      const drawerSecondary = `
-        <div class="lab-header__drawer-sep"></div>
-        <div class="lab-header__drawer-secondary">
-          <a href="${escapeHtml(this.config.settingsUrl || 'https://id.quizzman.com/account')}" class="lab-header__drawer-secondary-item">
-            <svg class="mh-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            <span>Settings</span>
-            <svg class="mh-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-          <a href="https://quizzman.com/about" class="lab-header__drawer-secondary-item">
-            <svg class="mh-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>About Quizzman</span>
-            <svg class="mh-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-        </div>
+      const drawerUtilitySection = `
+        <button type="button" class="lab-header__drawer-item lab-header__drawer-drill-btn lab-header__drawer-lang-trigger" data-drawer-drill="language" aria-haspopup="true">
+          ${mobileNavSVG('language', 'mh-nav-icon')}
+          <span class="lab-header__drawer-item-title"${i18nAttr('nav.language')}>${escapeHtml(ht('nav.language', 'Language'))}</span>
+          <span class="lab-header__drawer-badge" data-drawer-lang-badge>${escapeHtml(LANG_SHORT_LABELS[currentLang] || currentLang.toUpperCase())}</span>
+          ${mobileNavSVG('chevron-right', 'mh-nav-chevron')}
+        </button>
+        <a href="${escapeHtml(this.config.settingsUrl || 'https://id.quizzman.com/account')}" class="lab-header__drawer-item">
+          ${mobileNavSVG('settings', 'mh-nav-icon')}
+          <span class="lab-header__drawer-item-title"${i18nAttr('nav.settings')}>${escapeHtml(ht('nav.settings', 'Settings'))}</span>
+          ${mobileNavSVG('chevron-right', 'mh-nav-chevron')}
+        </a>
+        <a href="https://quizzman.com/about" class="lab-header__drawer-item">
+          ${mobileNavSVG('info', 'mh-nav-icon')}
+          <span class="lab-header__drawer-item-title"${i18nAttr('nav.about')}>${escapeHtml(ht('nav.about', 'About Quizzman'))}</span>
+          ${mobileNavSVG('chevron-right', 'mh-nav-chevron')}
+        </a>
       `;
 
       // Drawer logo picture (mirrors brand logo)
       const drawerLogoPicture = this.config.logoSrc
-        ? `<img src="${escapeHtml(this.config.logoSrc)}" alt="Quizzman" class="lab-header__drawer-title-logo" width="36" height="36" loading="eager">`
+        ? `<img src="${escapeHtml(this.config.logoSrc)}" alt="Quizzman" class="lab-header__drawer-title-logo" width="32" height="32" loading="eager">`
         : `<picture>
             <source srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-232.webp 2x" type="image/webp">
-            <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.png" alt="Quizzman" class="lab-header__drawer-title-logo" width="36" height="36" loading="eager" decoding="async">
+            <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.png" alt="Quizzman" class="lab-header__drawer-title-logo" width="32" height="32" loading="eager" decoding="async">
            </picture>`;
 
       const drawerHtml = showGlobalNav
         ? `
           <div class="lab-header__drawer-backdrop" hidden></div>
           <aside id="lab-header-drawer" class="lab-header__drawer" aria-hidden="true" aria-label="Quizzman navigation menu">
-            <div class="lab-header__drawer-head">
-              <span class="lab-header__drawer-title">
-                ${drawerLogoPicture}
-                Quizzman
-              </span>
-              <button type="button" class="lab-header__drawer-close" aria-label="${escapeHtml(ht('menu.close', 'Close navigation'))}"${i18nAttr('menu.close')}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
+            <div class="lab-header__drawer-views">
+              <!-- Root View -->
+              <div class="lab-header__drawer-view lab-header__drawer-view--root">
+                <div class="lab-header__drawer-head">
+                  <span class="lab-header__drawer-title">
+                    ${drawerLogoPicture}
+                    Quizzman
+                  </span>
+                  <button type="button" class="lab-header__drawer-close" aria-label="${escapeHtml(ht('menu.close', 'Close navigation'))}"${i18nAttr('menu.close')}>
+                    ${mobileNavSVG('close')}
+                  </button>
+                </div>
+                <div class="lab-header__drawer-body">
+                  <div class="lab-header__drawer-nav-list" data-drawer-nav-list>
+                    ${mobileCategoryRowsHtml}
+                  </div>
+                  <div class="lab-header__drawer-sep"></div>
+                  <div class="lab-header__drawer-utility-list" data-drawer-utility-list>
+                    ${drawerUtilitySection}
+                  </div>
+                </div>
+                <div class="lab-header__drawer-extras" data-drawer-extras></div>
+              </div>
+
+              <!-- Sub View -->
+              <div class="lab-header__drawer-view lab-header__drawer-view--sub" aria-hidden="true">
+                <div class="lab-header__drawer-head">
+                  <button type="button" class="lab-header__drawer-back-btn" data-drawer-back aria-label="${escapeHtml(ht('nav.back', 'Back'))}"${i18nAttr('nav.back')}>
+                    ${mobileNavSVG('back', 'mh-back-icon')}
+                    <span class="lab-header__drawer-back-title" data-drawer-sub-title></span>
+                  </button>
+                  <button type="button" class="lab-header__drawer-close" aria-label="${escapeHtml(ht('menu.close', 'Close navigation'))}"${i18nAttr('menu.close')}>
+                    ${mobileNavSVG('close')}
+                  </button>
+                </div>
+                <div class="lab-header__drawer-body lab-header__drawer-sub-content" data-drawer-sub-content></div>
+              </div>
             </div>
-            <div class="lab-header__drawer-body">
-              ${this.navItems.map((item) => renderMobileNavSection(item, this.activeState)).join('')}
-              ${drawerLangSection}
-              ${drawerSecondary}
-            </div>
-            <div class="lab-header__drawer-extras" data-drawer-extras></div>
           </aside>
         `
         : '';
@@ -2712,9 +2989,10 @@ const HEADER_I18N = {
       // The mobile-actions cluster contains a duplicate .lab-header__search-btn
       // and .lab-header__mobile-menu. We need to find all menu-btn instances.
       const menuBtns = this.headerEl.querySelectorAll('.lab-header__mobile-menu, .lab-header__menu-btn');
-      const drawer = this.headerEl.querySelector('.lab-header__drawer');
-      const backdrop = this.headerEl.querySelector('.lab-header__drawer-backdrop');
-      const closeBtn = this.headerEl.querySelector('.lab-header__drawer-close');
+      const drawer = this.headerEl.querySelector('.lab-header__drawer')
+        || document.querySelector('#lab-header-drawer');
+      const backdrop = this.headerEl.querySelector('.lab-header__drawer-backdrop')
+        || document.querySelector('.lab-header__drawer-backdrop');
 
       // Portal to <body> so position:fixed is viewport-relative (header
       // backdrop-filter / transforms must not become the containing block).
@@ -2733,19 +3011,60 @@ const HEADER_I18N = {
         this.headerEl?.classList.add('lab-header--drawer-open');
         document.body.classList.add('lab-header-drawer-open');
         try { if (drawer) drawer.scrollTop = 0; } catch (e) { /* ignore */ }
+        const closeBtn = drawer?.querySelector('.lab-header__drawer-close');
         closeBtn?.focus();
+      };
+
+      const closeSubView = () => {
+        if (!drawer) return;
+        drawer.classList.remove('is-subview-open');
+        const subView = drawer.querySelector('.lab-header__drawer-view--sub');
+        const rootView = drawer.querySelector('.lab-header__drawer-view--root');
+        subView?.setAttribute('aria-hidden', 'true');
+        rootView?.setAttribute('aria-hidden', 'false');
+        this.activeSubView = null;
       };
 
       const closeDrawer = () => {
         this.drawerOpen = false;
+        closeSubView();
         drawer?.setAttribute('aria-hidden', 'true');
         menuBtns.forEach((b) => b.setAttribute('aria-expanded', 'false'));
         backdrop?.setAttribute('hidden', '');
         this.headerEl?.classList.remove('lab-header--drawer-open');
         document.body.classList.remove('lab-header-drawer-open');
-        // Restore focus to first menu btn
         const firstMenuBtn = this.headerEl?.querySelector('.lab-header__mobile-menu, .lab-header__menu-btn');
         firstMenuBtn?.focus();
+      };
+
+      const openSubView = (targetId) => {
+        if (!drawer) return;
+        const currentLang = getHeaderLang();
+        const data = renderMobileSubView(targetId, currentLang);
+        if (!data) return;
+
+        const subTitleEl = drawer.querySelector('[data-drawer-sub-title]');
+        const subContentEl = drawer.querySelector('[data-drawer-sub-content]');
+        const subView = drawer.querySelector('.lab-header__drawer-view--sub');
+        const rootView = drawer.querySelector('.lab-header__drawer-view--root');
+
+        if (subTitleEl) {
+          subTitleEl.textContent = data.title;
+          if (data.titleKey) subTitleEl.setAttribute('data-qmf-i18n', data.titleKey);
+          else subTitleEl.removeAttribute('data-qmf-i18n');
+        }
+        if (subContentEl) {
+          subContentEl.innerHTML = data.html;
+          subContentEl.scrollTop = 0;
+        }
+
+        this.activeSubView = targetId;
+        drawer.classList.add('is-subview-open');
+        rootView?.setAttribute('aria-hidden', 'true');
+        subView?.setAttribute('aria-hidden', 'false');
+
+        const backBtn = drawer.querySelector('[data-drawer-back]');
+        backBtn?.focus();
       };
 
       menuBtns.forEach((btn) => {
@@ -2755,45 +3074,77 @@ const HEADER_I18N = {
         });
       });
 
-      closeBtn?.addEventListener('click', closeDrawer);
+      // Delegate all drawer events: drill-downs, back button, language selector, close buttons
+      drawer?.addEventListener('click', (e) => {
+        const drillBtn = e.target.closest('[data-drawer-drill]');
+        if (drillBtn) {
+          e.preventDefault();
+          const targetId = drillBtn.getAttribute('data-drawer-drill');
+          if (targetId) openSubView(targetId);
+          return;
+        }
+
+        const backBtn = e.target.closest('[data-drawer-back]');
+        if (backBtn) {
+          e.preventDefault();
+          closeSubView();
+          return;
+        }
+
+        const langBtn = e.target.closest('[data-drawer-lang-select]');
+        if (langBtn) {
+          e.preventDefault();
+          const lang = langBtn.getAttribute('data-drawer-lang-select');
+          if (lang) {
+            try {
+              localStorage.setItem('qmf-lang', lang);
+              document.cookie = `qmf-lang=${lang};path=/;max-age=31536000`;
+              document.documentElement.setAttribute('data-lang', lang);
+            } catch (err) { /* ignore */ }
+
+            drawer.querySelectorAll('[data-drawer-lang-select]').forEach((b) => {
+              const active = b.getAttribute('data-drawer-lang-select') === lang;
+              b.classList.toggle('is-active', active);
+              b.setAttribute('aria-pressed', active ? 'true' : 'false');
+              const existingCheck = b.querySelector('.mh-check-icon');
+              if (active && !existingCheck) {
+                b.insertAdjacentHTML('beforeend', mobileNavSVG('check', 'mh-check-icon'));
+              } else if (!active && existingCheck) {
+                existingCheck.remove();
+              }
+            });
+
+            const badgeEl = drawer.querySelector('[data-drawer-lang-badge]');
+            if (badgeEl) {
+              badgeEl.textContent = LANG_SHORT_LABELS[lang] || lang.toUpperCase();
+            }
+
+            window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang } }));
+            this.applyI18n();
+          }
+          return;
+        }
+
+        const closeBtnClicked = e.target.closest('.lab-header__drawer-close');
+        if (closeBtnClicked) {
+          e.preventDefault();
+          closeDrawer();
+          return;
+        }
+      });
+
       backdrop?.addEventListener('click', closeDrawer);
 
       document.addEventListener('click', this.boundDocClick);
       document.addEventListener('keydown', this.boundKeydown);
 
       this.closeDrawer = closeDrawer;
-
-      // Setup language switcher in drawer
-      this.setupMobileLanguage();
+      this.closeSubView = closeSubView;
+      this.openSubView = openSubView;
     }
 
     setupMobileLanguage() {
-      // Language buttons in the mobile drawer
-      const grid = document.querySelector('[data-drawer-lang-grid]');
-      if (!grid) return;
-
-      const setLang = (lang) => {
-        try {
-          localStorage.setItem('qmf-lang', lang);
-          document.cookie = `qmf-lang=${lang};path=/;max-age=31536000`;
-          document.documentElement.setAttribute('data-lang', lang);
-        } catch (e) { /* ignore */ }
-        // Update button states
-        grid.querySelectorAll('.lab-header__drawer-lang-btn').forEach((btn) => {
-          const active = btn.getAttribute('data-lang') === lang;
-          btn.classList.toggle('is-active', active);
-          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-        });
-        // Notify header i18n system
-        window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang } }));
-      };
-
-      grid.addEventListener('click', (e) => {
-        const btn = e.target.closest('.lab-header__drawer-lang-btn');
-        if (!btn) return;
-        const lang = btn.getAttribute('data-lang');
-        if (lang) setLang(lang);
-      });
+      // Kept for backward compatibility; handled via delegated click on [data-drawer-lang-select]
     }
 
     closeAllDropdowns() {
