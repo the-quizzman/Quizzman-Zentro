@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Zentro — Modular Framework + Runtime. Documentation hub for guides, API, components, AI indexes, and examples." />
+  <meta name="description" content="Modular architecture specifications, component catalog, API references and developer guides for Quizzman web platforms." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
-  <meta name="theme-color" content="#f5f5f7" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="canonical" href="https://ui.quizzman.com/" />
-  <title>Zentro — Modular Framework + Runtime</title>
+  <title>Quizzman UI — Architecture &amp; Runtime Registry</title>
   <link rel="alternate" hreflang="en" href="https://ui.quizzman.com/" />
   <link rel="alternate" hreflang="vi" href="https://ui.quizzman.com/?lang=vi" />
   <link rel="sitemap" type="application/xml" href="/qmf/sitemap.xml" />
@@ -16,8 +16,8 @@
   <link rel="icon" href="/qmf/assets/logo/favicon-32.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/qmf/assets/docs-portal.css?v=20260810-zentro1" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/qmf/assets/docs-portal.css?v=20261008-paper" />
   <script>
     (function () {
       try {
@@ -29,397 +29,593 @@
       } catch (e) {}
     })();
   </script>
-<script type="application/ld+json" data-qmf-identity="1" data-qmf-site="ui">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "https://ui.quizzman.com/#website",
-      "url": "https://ui.quizzman.com/",
-      "name": "Zentro",
-      "publisher": {
-        "@id": "https://quizzman.com/#organization"
+  <script type="application/ld+json" data-qmf-identity="1" data-qmf-site="ui">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://ui.quizzman.com/#website",
+        "url": "https://ui.quizzman.com/",
+        "name": "Quizzman UI",
+        "publisher": {
+          "@id": "https://quizzman.com/#organization"
+        }
       }
-    }
-  ]
-}
-</script>
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="sr-only" href="#main">Skip to content</a>
 
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <a class="brand" href="/" aria-label="Zentro home">
-        <img src="/qmf/assets/logo/quizzman-logo.png" width="28" height="28" alt="" />
-        <span class="brand-name">Zentro</span>
-      </a>
-      <details class="version-menu">
-        <summary aria-label="Switch version">v4 Alpha</summary>
-        <div class="version-panel">
-          <a href="/qmf/docs/v4/README.md"><span>Latest</span><strong>v4 Alpha</strong></a>
-          <a href="/qmf/docs/USAGE.md"><span>Stable</span><strong>v3.0</strong></a>
-        </div>
-      </details>
+  <!-- GLOBAL MASTHEAD — Direct Parity with paper.quizzman.com -->
+  <header class="global-masthead" role="banner">
+    <div class="masthead-inner">
+      <div class="masthead-left">
+        <a href="/" class="brand-link" aria-label="Quizzman UI Registry">
+          <svg class="brand-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#123C69"/>
+            <path d="M18 18h20c8.837 0 16 7.163 16 16s-7.163 16-16 16H26v10H18V18z" fill="#fff"/>
+            <path d="M26 26v12h12c4.418 0 8-3.582 8-8s-3.582-8-8-8H26z" fill="#123C69"/>
+          </svg>
+          <span class="brand-wordmark">QUIZZMAN<sup>™</sup></span>
+          <span class="brand-label">UI</span>
+        </a>
+        <nav class="masthead-nav" aria-label="Global Navigation">
+          <a href="#docs" class="nav-link" data-i18n="nav_docs">Docs</a>
+          <a href="#components" class="nav-link" data-i18n="nav_components">Components</a>
+          <a href="#guides" class="nav-link" data-i18n="nav_guides">Guides</a>
+          <a href="/qmf/docs/API.md" class="nav-link" data-i18n="nav_api">API</a>
+          <a href="/registry/" class="nav-link" data-i18n="nav_registry">Registry</a>
+          <a href="#ai" class="nav-link" data-i18n="nav_ai">AI</a>
+          <a href="#examples" class="nav-link" data-i18n="nav_examples">Examples</a>
+          <a href="/qmf/docs/v4/QMF_SPEC.md" class="nav-link">Standard</a>
+        </nav>
+      </div>
 
-      <nav class="nav-center" aria-label="Primary">
-        <a href="#docs" data-i18n="nav_docs">Docs</a>
-        <a href="#components" data-i18n="nav_components">Components</a>
-        <a href="#guides" data-i18n="nav_guides">Guides</a>
-        <a href="/qmf/docs/API.md" data-i18n="nav_api">API</a>
-        <details class="more-menu">
-          <summary>More</summary>
-          <div class="more-panel">
-            <a href="#examples" data-i18n="nav_examples">Examples</a>
-            <a href="#ai" data-i18n="nav_ai">AI</a>
-            <a href="/registry/" data-i18n="nav_registry">Registry</a>
-            <a href="/qmf/docs/v4/ROADMAP.md">Roadmap</a>
-            <a href="https://status.quizzman.com">Status</a>
-            <a href="/qmf/docs/v4/IMPLEMENTATION.md" data-i18n="nav_changelog">Changelog</a>
-          </div>
-        </details>
-      </nav>
-
-      <div class="header-actions">
-        <button type="button" class="search-trigger" id="search-open" aria-label="Search documentation">
-          <span data-i18n="search_placeholder">Search...</span>
-          <kbd>⌘K</kbd>
+      <div class="masthead-right">
+        <button type="button" class="masthead-search-link" id="search-open" aria-label="Search documentation">
+          <span data-i18n="search_placeholder">Search</span>
+          <kbd>/</kbd>
         </button>
         <button type="button" class="icon-btn" id="theme-toggle" aria-label="Toggle theme" aria-pressed="false" title="Theme">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         </button>
-        <a class="icon-btn" href="https://github.com/the-quizzman" aria-label="GitHub" rel="noopener noreferrer" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.9-1.32 2.74-1.05 2.74-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .26.18.59.69.48A10.03 10.03 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"/></svg>
-        </a>
-        <button type="button" class="icon-btn" id="lang-toggle" data-i18n-aria="lang_switch" aria-label="Switch language">EN</button>
-        <button type="button" class="mobile-nav-toggle icon-btn" id="mobile-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Open menu">
+        <button type="button" class="lang-switch-btn" id="lang-toggle" data-i18n-aria="lang_switch" aria-label="Switch language">EN</button>
+        <button type="button" class="mobile-nav-toggle" id="mobile-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Open menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
       </div>
     </div>
   </header>
 
+  <!-- MOBILE DRAWER -->
   <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
     <div class="drawer-backdrop" data-drawer-close></div>
     <div class="drawer-panel">
-      <nav aria-label="Mobile">
+      <nav aria-label="Mobile Navigation">
         <a href="#docs" data-i18n="nav_docs">Docs</a>
         <a href="#components" data-i18n="nav_components">Components</a>
         <a href="#guides" data-i18n="nav_guides">Guides</a>
-        <a href="#examples" data-i18n="nav_examples">Examples</a>
         <a href="/qmf/docs/API.md" data-i18n="nav_api">API</a>
-        <a href="#ai" data-i18n="nav_ai">AI</a>
         <a href="/registry/" data-i18n="nav_registry">Registry</a>
+        <a href="#ai" data-i18n="nav_ai">AI</a>
+        <a href="#examples" data-i18n="nav_examples">Examples</a>
+        <a href="/qmf/docs/v4/QMF_SPEC.md">Standard</a>
         <a href="/qmf/v4-demo/">Live Demo</a>
-        <button type="button" class="search-trigger" data-search-open>Search… <kbd>⌘K</kbd></button>
       </nav>
     </div>
   </div>
 
-  <main id="main" class="portal-layout">
-    <div class="portal-shell container">
-      <aside class="doc-sidebar" aria-label="Documentation navigation">
-        <nav class="side-nav">
-          <div class="side-item">
-            <a href="#docs">Getting Started</a>
-            <div class="side-flyout">
-              <a href="/qmf/docs/USAGE.md">Installation</a>
-              <a href="/qmf/docs/v4/README.md">First Project</a>
-              <a href="/qmf/docs/v4/CLI_SPEC.md">CLI</a>
-              <a href="/qmf/docs/v4/CONTRACT.md">Configuration</a>
-            </div>
-          </div>
-          <div class="side-item">
-            <a href="#docs">Core</a>
-            <div class="side-flyout">
-              <a href="/qmf/docs/v4/MODULE_SPEC.md">Modules</a>
-              <a href="/qmf/docs/v4/EVENT_SPEC.md">Events</a>
-              <a href="/qmf/docs/v4/STATE_SPEC.md">State</a>
-              <a href="/qmf/docs/API.md">Lifecycle</a>
-            </div>
-          </div>
-          <div class="side-item">
-            <a href="#components">Components</a>
-            <div class="side-flyout">
-              <a href="/qmf/docs.html#ui">UI Kit</a>
-              <a href="/qmf/docs/header-settings-setup.md">Navigation</a>
-              <a href="/qmf/docs/header-settings-setup.md">Dynamic Island</a>
-              <a href="/qmf/components.json">components.json</a>
-            </div>
-          </div>
-          <div class="side-item">
-            <a href="/qmf/docs/API.md">API</a>
-            <div class="side-flyout">
-              <a href="/qmf/docs/API.md">Core API</a>
-              <a href="/qmf/api-index.json">API Index</a>
-              <a href="/qmf/schemas/">Schemas</a>
-              <a href="/qmf/docs/v4/CONTRACT.md">Contract</a>
-            </div>
-          </div>
-          <div class="side-item">
-            <a href="#guides">Guides</a>
-            <div class="side-flyout">
-              <a href="/qmf/docs/ARCHITECTURE.md">Architecture</a>
-              <a href="/qmf/docs/v4/CONVENTION.md">Conventions</a>
-              <a href="/qmf/docs/v4/MIGRATION_v3_v4.md">Migration</a>
-              <a href="/qmf/docs/v4/AI_RULES.md">AI Rules</a>
-            </div>
-          </div>
-          <div class="side-item">
-            <a href="/registry/">Registry</a>
-            <div class="side-flyout">
-              <a href="/registry/">Packages</a>
-              <a href="/registry/@qmf%2fruntime">@qmf/runtime</a>
-              <a href="/registry/@qmf%2fcontract">@qmf/contract</a>
-            </div>
-          </div>
-          <div class="side-item">
-            <a href="#ai">AI</a>
-            <div class="side-flyout">
-              <a href="/qmf/llms.txt">llms.txt</a>
-              <a href="/qmf/llms-full.txt">llms-full.txt</a>
-              <a href="/qmf/docs-index.json">docs-index.json</a>
-              <a href="/qmf/docs/v4/AI_RULES.md">Coding guidelines</a>
-            </div>
-          </div>
-          <div class="side-item">
-            <a href="#examples">More...</a>
-            <div class="side-flyout">
-              <a href="#examples">Examples</a>
-              <a href="/qmf/v4-demo/">Live Demo</a>
-              <a href="/qmf/docs/v4/ROADMAP.md">Roadmap</a>
-              <a href="https://status.quizzman.com">Status</a>
-            </div>
-          </div>
-        </nav>
-      </aside>
+  <!-- MAIN EDITORIAL CONTENT -->
+  <main id="main">
+    <div class="home-container">
 
-      <div class="portal-main">
-        <section class="cmd-preview" aria-label="Command palette preview">
-          <button type="button" class="cmd-preview-btn" data-search-open>
-            <kbd>⌘K</kbd>
-            <span>Search documentation</span>
-            <span class="cmd-hints"><em>Components</em><em>API</em><em>Commands</em><em>Jump to docs</em></span>
-          </button>
-        </section>
+      <!-- HERO SECTION -->
+      <section class="home-hero">
+        <div class="hero-eyebrow" data-i18n="hero_kicker">QUIZZMAN™ UI FRAMEWORK</div>
+        <h1 class="hero-title" data-i18n="hero_title">UI &amp; Runtime Registry</h1>
+        <p class="hero-lead" data-i18n="hero_subtitle">
+          Modular architecture specifications, component catalog, API references and developer guides for Quizzman web platforms.
+        </p>
 
-        <section class="hero hero-compact">
-          <p class="hero-kicker" data-i18n="hero_kicker">Modular Framework + Runtime</p>
-          <h1 data-i18n="hero_title">Zentro</h1>
-          <p class="hero-lead" data-i18n="hero_subtitle">Build modern modular applications with a lightweight plugin architecture.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="/qmf/docs/USAGE.md" data-i18n="hero_btn_start">Get Started</a>
-            <a class="btn btn-secondary" href="/qmf/docs.html" data-i18n="hero_btn_docs">Documentation</a>
-            <a class="btn btn-ghost" href="#ai" data-i18n="hero_btn_ai">AI Documentation</a>
-          </div>
-          <div class="install-cmd">
-            <code>npm i @qmf/runtime@4.0.0-alpha.1</code>
-            <button type="button" data-copy="npm i @qmf/runtime@4.0.0-alpha.1 --registry https://ui.quizzman.com/registry/" aria-label="Copy install command">Copy</button>
-          </div>
-          <div class="hero-stats" aria-label="Version status">
-            <div><span>Latest</span><strong>v4 Alpha</strong></div>
-            <div><span>Stable</span><strong>v3.0</strong></div>
-            <div><span>Registry</span><strong>5 packages</strong></div>
-          </div>
-        </section>
+        <!-- FLAT SEARCH TRIGGER (Paper Style with / key) -->
+        <button type="button" class="hero-search-link" data-search-open aria-label="Search documentation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span data-i18n="search_placeholder">Search documentation, components, APIs, guides...</span>
+          <kbd>/</kbd>
+        </button>
 
-        <section class="latest-strip" aria-labelledby="latest-title">
-          <div class="latest-head">
-            <p class="section-label">Latest</p>
-            <h2 id="latest-title">Latest updates</h2>
-          </div>
-          <ol class="timeline">
-            <li><time>Today</time><a href="/qmf/docs/v4/QMF_SPEC.md">Runtime updated</a></li>
-            <li><time>2 days ago</time><a href="/qmf/docs/header-settings-setup.md">Dynamic Island API</a></li>
-            <li><time>5 days ago</time><a href="/qmf/docs/v4/IMPLEMENTATION.md">v4 Alpha released</a></li>
-            <li><time>1 week ago</time><a href="/qmf/docs.html#ui">New components</a></li>
-          </ol>
-          <a class="latest-more" href="/qmf/docs/v4/IMPLEMENTATION.md">View changelog</a>
-        </section>
-
-        <section class="section section-tight" id="quick" aria-labelledby="quick-title">
-          <div class="section-head inline-head">
-            <p class="section-label">Workflow</p>
-            <h2 id="quick-title" data-i18n="section_quick">Quick actions</h2>
-          </div>
-          <div class="quick-grid workflow-grid">
-            <a class="quick-card finder-card" href="/qmf/docs/USAGE.md"><span class="glyph" aria-hidden="true">↓</span><span class="label">Install</span><span class="desc">Install Zentro</span><span class="arrow">→</span></a>
-            <a class="quick-card finder-card" href="/qmf/docs/v4/CLI_SPEC.md"><span class="glyph" aria-hidden="true">◇</span><span class="label">Create App</span><span class="desc">Scaffold CLI</span><span class="arrow">→</span></a>
-            <a class="quick-card finder-card" href="#components"><span class="glyph" aria-hidden="true">▣</span><span class="label">Components</span><span class="desc">Learn UI</span><span class="arrow">→</span></a>
-            <a class="quick-card finder-card" href="/qmf/docs/v4/STATE_SPEC.md"><span class="glyph" aria-hidden="true">◎</span><span class="label">Build UI</span><span class="desc">State + events</span><span class="arrow">→</span></a>
-            <a class="quick-card finder-card" href="/qmf/docs/API.md"><span class="glyph" aria-hidden="true">↦</span><span class="label">Routing</span><span class="desc">Navigate</span><span class="arrow">→</span></a>
-            <a class="quick-card finder-card" href="/qmf/docs/v4/IMPLEMENTATION.md"><span class="glyph" aria-hidden="true">↑</span><span class="label">Deploy</span><span class="desc">CDN + registry</span><span class="arrow">→</span></a>
-          </div>
-        </section>
-
-        <section class="ai-ready" id="ai" aria-labelledby="ai-title">
-          <div>
-            <p class="section-label">AI Ready</p>
-            <h2 id="ai-title">AI Documentation</h2>
-            <p>Indexes and prompts for ChatGPT, Claude, Gemini, Cursor, Copilot, OpenHands, Codex.</p>
-            <a class="btn btn-primary" href="/qmf/llms-full.txt">View AI Docs</a>
-          </div>
-          <ul class="ai-checklist">
-            <li><a href="/qmf/llms.txt">llms.txt</a></li>
-            <li><a href="/qmf/llms-full.txt">llms-full.txt</a></li>
-            <li><a href="/qmf/components.json">components.json</a></li>
-            <li><a href="/qmf/api-index.json">api-index.json</a></li>
-            <li><a href="/qmf/docs-index.json">docs-index.json</a></li>
-            <li><a href="/qmf/docs/v4/examples/ai-workflow/">prompts/</a></li>
-          </ul>
-        </section>
-
-        <section class="why-qmf section-tight" aria-labelledby="why-title">
-          <div class="section-head inline-head">
-            <p class="section-label">Framework</p>
-            <h2 id="why-title">Why Zentro?</h2>
-          </div>
-          <ul class="why-grid">
-            <li><strong>Modular</strong><span>Plugin-first app shell</span></li>
-            <li><strong>Vanilla JS</strong><span>No JSX in core layers</span></li>
-            <li><strong>Tiny Runtime</strong><span>Contract + events + inspect</span></li>
-            <li><strong>Plugin First</strong><span>Manifest-driven modules</span></li>
-            <li><strong>SSR Ready</strong><span>Static / CDN friendly</span></li>
-            <li><strong>AI Ready</strong><span>llms.txt + JSON indexes</span></li>
-          </ul>
-        </section>
-
-        <section class="section section-tight" id="docs" aria-labelledby="docs-title">
-          <div class="section-head inline-head">
-            <p class="section-label">Library</p>
-            <h2 id="docs-title" data-i18n="section_docs">Documentation</h2>
-          </div>
-          <div class="cat-grid dense-cat-grid">
-            <div class="cat-col" id="getting-started"><h3>Getting Started</h3><ul><li><a href="/qmf/docs/USAGE.md">Installation</a></li><li><a href="/qmf/docs/v4/README.md">First Project</a></li><li><a href="/qmf/docs/v4/CLI_SPEC.md">CLI</a></li><li><a href="/qmf/docs/v4/CONTRACT.md">Configuration</a></li></ul></div>
-            <div class="cat-col"><h3>Core</h3><ul><li><a href="/qmf/docs/v4/MODULE_SPEC.md">Module</a></li><li><a href="/qmf/docs/v4/EVENT_SPEC.md">Event</a></li><li><a href="/qmf/docs/v4/STATE_SPEC.md">State</a></li><li><a href="/qmf/docs/API.md">Lifecycle</a></li></ul></div>
-            <div class="cat-col" id="guides"><h3>Guides</h3><ul><li><a href="/qmf/docs/ARCHITECTURE.md">Architecture</a></li><li><a href="/qmf/docs/v4/CONVENTION.md">Best Practices</a></li><li><a href="/qmf/docs/v4/MIGRATION_v3_v4.md">Migration</a></li><li><a href="/qmf/docs/ARCHITECTURE.public.md">Security</a></li></ul></div>
-            <div class="cat-col"><h3>API</h3><ul><li><a href="/qmf/docs/API.md">Core API</a></li><li><a href="/qmf/api-index.json">API Index</a></li><li><a href="/qmf/schemas/">Schemas</a></li><li><a href="/registry/">Registry</a></li></ul></div>
-          </div>
-        </section>
-
-        <section class="section section-tight" id="components" aria-labelledby="comp-title">
-          <div class="section-head inline-head"><p class="section-label">Explorer</p><h2 id="comp-title" data-i18n="section_components">Component explorer</h2></div>
-          <div class="comp-grid compact-comp-grid">
-            <a href="/qmf/docs.html#ui">Button</a><a href="/qmf/docs.html#ui">Card</a><a href="/qmf/docs.html#ui">Input</a><a href="/qmf/docs.html#ui">Dialog</a><a href="/qmf/docs.html#ui">Tabs</a><a href="/qmf/docs.html#ui">Toast</a><a href="/qmf/docs.html#ui">Table</a><a href="/qmf/docs/header-settings-setup.md">Navigation</a>
-          </div>
-        </section>
-
-        <section class="section section-tight" id="examples" aria-labelledby="ex-title">
-          <div class="section-head inline-head"><p class="section-label">Examples</p><h2 id="ex-title" data-i18n="section_examples">Examples</h2></div>
-          <div class="ex-grid compact-ex-grid">
-            <a class="quick-card" href="/qmf/v4-demo/"><span class="label">Starter</span><span class="desc">Auth + dictionary</span></a>
-            <a class="quick-card" href="/qmf/docs/v4/examples/app/"><span class="label">Dashboard</span><span class="desc">Contract-driven app</span></a>
-            <a class="quick-card" href="/qmf/docs.html"><span class="label">Documentation</span><span class="desc">Docs shell</span></a>
-            <a class="quick-card" href="/qmf/docs/v4/examples/ai-workflow/"><span class="label">AI Workflow</span><span class="desc">Agent prompts</span></a>
-          </div>
-        </section>
-      </div>
-
-      <aside class="right-rail" aria-label="Developer dashboard">
-        <div class="dash-card">
-          <h3>Developer Dashboard</h3>
-          <section>
-            <p class="dash-label">Latest Release</p>
-            <p class="dash-value">4.0.0-alpha.1</p>
-            <a href="/qmf/docs/v4/IMPLEMENTATION.md">Release notes</a>
-          </section>
-          <section>
-            <p class="dash-label">Recent Updates</p>
-            <a href="/qmf/docs/v4/CONTRACT.md">Contract spec</a>
-            <a href="/qmf/docs/v4/AI_RULES.md">AI rules</a>
-            <a href="/qmf/v4-demo/">Live demo</a>
-          </section>
-          <section>
-            <p class="dash-label">Popular Docs</p>
-            <a href="/qmf/docs/USAGE.md">Installation</a>
-            <a href="/qmf/docs/ARCHITECTURE.md">Architecture</a>
-            <a href="/qmf/docs/API.md">API Reference</a>
-          </section>
-          <section>
-            <p class="dash-label">Migration</p>
-            <a href="/qmf/docs/v4/MIGRATION_v3_v4.md">v3 → v4</a>
-            <a href="/qmf/docs/MIGRATION.md">v2 → v3</a>
-          </section>
-          <section class="dash-last">
-            <p class="dash-label">Status</p>
-            <a href="https://status.quizzman.com">Service status</a>
-            <a href="/qmf/version">/version</a>
-          </section>
+        <!-- REGISTRY STATUS ROW -->
+        <div class="registry-status-row" aria-label="Framework status">
+          <span>Release <strong>4.0.0-alpha.1</strong></span>
+          <span class="status-sep">·</span>
+          <span>Stable <strong>3.0.0</strong></span>
+          <span class="status-sep">·</span>
+          <span>Registry <strong>5 packages</strong></span>
+          <span class="status-sep">·</span>
+          <span>Core <strong>Vanilla JS</strong></span>
         </div>
-      </aside>
+
+        <!-- FLAT INSTALL CODE BAR -->
+        <div class="install-bar">
+          <span class="install-label">$</span>
+          <code>npm i @qmf/runtime@4.0.0-alpha.1</code>
+          <button type="button" class="copy-btn" data-copy="npm i @qmf/runtime@4.0.0-alpha.1 --registry https://ui.quizzman.com/registry/" aria-label="Copy install command">Copy</button>
+        </div>
+      </section>
+
+      <!-- SECTION 1: ARCHITECTURE ARCHIVE (Matching ENGINE ARCHIVE on paper.quizzman.com) -->
+      <section class="home-section" id="archive">
+        <div class="section-divider"></div>
+        <h2 class="home-section-title">ARCHITECTURE ARCHIVE</h2>
+        <div class="engine-archive-list">
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">01</span>
+              <a href="/qmf/docs/v4/QMF_SPEC.md" class="engine-index-name">Runtime Core</a>
+              <span class="engine-index-count">4 packages</span>
+            </div>
+            <div class="engine-index-sub">
+              Specifications 4 · State Store 1 · Event Bus 1 · Plugin Engine · Lifecycle · Introspection
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">02</span>
+              <a href="#components" class="engine-index-name">UI Component Kit</a>
+              <span class="engine-index-count">18 components</span>
+            </div>
+            <div class="engine-index-sub">
+              Buttons 4 · Dialogs 2 · Inputs 3 · Navigation 3 · Data Tables · Toast · Ambient Settings
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">03</span>
+              <a href="/qmf/docs/v4/CONTRACT.md" class="engine-index-name">Contract &amp; Schemas</a>
+              <span class="engine-index-count">2 specs</span>
+            </div>
+            <div class="engine-index-sub">
+              qmf.schema.json · Declarative Manifest · SSOT · JSON Schema Validation · CLI Doctor
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">04</span>
+              <a href="#guides" class="engine-index-name">Developer Guides</a>
+              <span class="engine-index-count">12 guides</span>
+            </div>
+            <div class="engine-index-sub">
+              Getting Started · CLI Tooling · Architecture Patterns · Best Practices · Migration v3 → v4
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">05</span>
+              <a href="#ai" class="engine-index-name">AI &amp; Machine Specifications</a>
+              <span class="engine-index-count">6 endpoints</span>
+            </div>
+            <div class="engine-index-sub">
+              llms.txt · llms-full.txt · components.json · api-index.json · docs-index.json · Agent Protocols
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">06</span>
+              <a href="/registry/" class="engine-index-name">Package Registry</a>
+              <span class="engine-index-count">5 packages</span>
+            </div>
+            <div class="engine-index-sub">
+              @qmf/runtime · @qmf/contract · @qmf/cli · CDN Pre-built Bundles · Private Registry
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 2: SPECIFICATIONS & RECENT RELEASES (Matching RECENT PAPERS on paper.quizzman.com) -->
+      <section class="home-section" id="specifications">
+        <div class="section-divider"></div>
+        <h2 class="home-section-title">SPECIFICATIONS &amp; RECENT UPDATES</h2>
+        <div class="recent-list">
+
+          <article class="catalogue-paper-row">
+            <div class="row-header">
+              <span class="row-doc-id">QP-UI-040</span>
+              <time class="row-date">Latest Release</time>
+            </div>
+            <h3 class="row-title">
+              <a href="/qmf/docs/v4/QMF_SPEC.md">Zentro 4.0 Architecture Specification &amp; Core Runtime Contract</a>
+            </h3>
+            <div class="row-meta">
+              <span>Architecture</span>
+              <span class="meta-sep">·</span>
+              <span>Runtime</span>
+              <span class="meta-sep">·</span>
+              <span>v4.0.0-alpha.1</span>
+              <span class="meta-sep">·</span>
+              <span>Zero-dependency</span>
+            </div>
+          </article>
+
+          <article class="catalogue-paper-row">
+            <div class="row-header">
+              <span class="row-doc-id">QP-UI-032</span>
+              <time class="row-date">Active Specification</time>
+            </div>
+            <h3 class="row-title">
+              <a href="/qmf/docs/header-settings-setup.md">Unified Header, Dynamic Island &amp; Ambient Navigation Setup</a>
+            </h3>
+            <div class="row-meta">
+              <span>Navigation</span>
+              <span class="meta-sep">·</span>
+              <span>UI Kit</span>
+              <span class="meta-sep">·</span>
+              <span>v3.4.0</span>
+              <span class="meta-sep">·</span>
+              <span>Responsive Island</span>
+            </div>
+          </article>
+
+          <article class="catalogue-paper-row">
+            <div class="row-header">
+              <span class="row-doc-id">QP-UI-030</span>
+              <time class="row-date">Migration Spec</time>
+            </div>
+            <h3 class="row-title">
+              <a href="/qmf/docs/v4/MIGRATION_v3_v4.md">Migration Standard: Porting Monolithic Components from v3 to v4</a>
+            </h3>
+            <div class="row-meta">
+              <span>Migration</span>
+              <span class="meta-sep">·</span>
+              <span>Breaking Changes</span>
+              <span class="meta-sep">·</span>
+              <span>Compatibility Layer</span>
+            </div>
+          </article>
+
+          <article class="catalogue-paper-row">
+            <div class="row-header">
+              <span class="row-doc-id">QP-UI-024</span>
+              <time class="row-date">State &amp; Events</time>
+            </div>
+            <h3 class="row-title">
+              <a href="/qmf/docs/v4/EVENT_SPEC.md">Declarative Event Bus &amp; Cross-Module State Synchronization</a>
+            </h3>
+            <div class="row-meta">
+              <span>Event Bus</span>
+              <span class="meta-sep">·</span>
+              <span>State Management</span>
+              <span class="meta-sep">·</span>
+              <span>Reactive Subscriptions</span>
+            </div>
+          </article>
+
+          <article class="catalogue-paper-row">
+            <div class="row-header">
+              <span class="row-doc-id">QP-UI-015</span>
+              <time class="row-date">AI Machine Protocol</time>
+            </div>
+            <h3 class="row-title">
+              <a href="/qmf/docs/v4/AI_RULES.md">Autonomous AI Coding Rules, Context Indexing &amp; Agent Protocols</a>
+            </h3>
+            <div class="row-meta">
+              <span>AI Rules</span>
+              <span class="meta-sep">·</span>
+              <span>llms.txt</span>
+              <span class="meta-sep">·</span>
+              <span>Machine Documentation</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- SECTION 3: COMPONENT EXPLORER (Paper Table Format) -->
+      <section class="home-section" id="components">
+        <div class="section-divider"></div>
+        <h2 class="home-section-title">COMPONENT EXPLORER</h2>
+        <div class="paper-comp-table-wrap">
+          <table class="paper-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Specification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="/qmf/docs.html#ui" class="paper-table-link">Button</a></td>
+                <td>Action / Control</td>
+                <td><span class="paper-badge">Stable v3</span></td>
+                <td><code>primary, secondary, ghost, icon</code></td>
+              </tr>
+              <tr>
+                <td><a href="/qmf/docs.html#ui" class="paper-table-link">Dialog &amp; Modal</a></td>
+                <td>Overlay</td>
+                <td><span class="paper-badge">Stable v3</span></td>
+                <td><code>a11y focus trap, escape, backdrop</code></td>
+              </tr>
+              <tr>
+                <td><a href="/qmf/docs.html#ui" class="paper-table-link">Input &amp; Search</a></td>
+                <td>Forms</td>
+                <td><span class="paper-badge">Stable v3</span></td>
+                <td><code>text, search, filters, debounce</code></td>
+              </tr>
+              <tr>
+                <td><a href="/qmf/docs/header-settings-setup.md" class="paper-table-link">Unified Navigation</a></td>
+                <td>Layout</td>
+                <td><span class="paper-badge badge-alpha">v4 Alpha</span></td>
+                <td><code>dynamic island, breadcrumbs, drawer</code></td>
+              </tr>
+              <tr>
+                <td><a href="/qmf/docs.html#ui" class="paper-table-link">Tabs &amp; Accordion</a></td>
+                <td>Navigation</td>
+                <td><span class="paper-badge">Stable v3</span></td>
+                <td><code>ARIA tabs, keyboard nav, panels</code></td>
+              </tr>
+              <tr>
+                <td><a href="/qmf/docs.html#ui" class="paper-table-link">Toast &amp; Feedback</a></td>
+                <td>Feedback</td>
+                <td><span class="paper-badge">Stable v3</span></td>
+                <td><code>auto-dismiss, queue, status badges</code></td>
+              </tr>
+              <tr>
+                <td><a href="/qmf/docs.html#ui" class="paper-table-link">Data Table</a></td>
+                <td>Data Display</td>
+                <td><span class="paper-badge">Stable v3</span></td>
+                <td><code>sortable, responsive, monospace cells</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 4: DEVELOPER GUIDES & MANUALS -->
+      <section class="home-section" id="guides">
+        <div class="section-divider"></div>
+        <h2 class="home-section-title">DEVELOPER GUIDES &amp; MANUALS</h2>
+        <div class="engine-archive-list">
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">01</span>
+              <a href="/qmf/docs/USAGE.md" class="engine-index-name">Installation &amp; Setup</a>
+              <span class="engine-index-count">Quickstart</span>
+            </div>
+            <div class="engine-index-sub">
+              NPM package installation, CDN unpkg tags, HTML bootstrapping, and project layout.
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">02</span>
+              <a href="/qmf/docs/v4/README.md" class="engine-index-name">First Project with QMF 4.0</a>
+              <span class="engine-index-count">Architecture</span>
+            </div>
+            <div class="engine-index-sub">
+              Scaffolding micro-frontend apps, composing modules, and declaring manifest schemas.
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">03</span>
+              <a href="/qmf/docs/v4/CLI_SPEC.md" class="engine-index-name">CLI Command-Line Reference</a>
+              <span class="engine-index-count">Tooling</span>
+            </div>
+            <div class="engine-index-sub">
+              Doctor diagnostics, contract verification, module generator, and bundle inspection.
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">04</span>
+              <a href="/qmf/docs/ARCHITECTURE.md" class="engine-index-name">Architecture &amp; Module Boundaries</a>
+              <span class="engine-index-count">Core Design</span>
+            </div>
+            <div class="engine-index-sub">
+              Separation of concerns, decoupled micro-frontends, event-driven communication protocols.
+            </div>
+          </div>
+
+          <div class="engine-index-row">
+            <div class="engine-index-header">
+              <span class="engine-index-num">05</span>
+              <a href="/qmf/docs/v4/MIGRATION_v3_v4.md" class="engine-index-name">Migration Guide v3 → v4</a>
+              <span class="engine-index-count">Migration</span>
+            </div>
+            <div class="engine-index-sub">
+              Step-by-step migration path from monolithic UI v3 to contract-driven v4 architecture.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 5: AI & MACHINE DOCUMENTATION -->
+      <section class="home-section" id="ai">
+        <div class="section-divider"></div>
+        <h2 class="home-section-title">AI &amp; MACHINE DOCUMENTATION</h2>
+        <p class="section-desc">
+          Structured markdown and JSON indexes curated for Large Language Models (ChatGPT, Claude, Gemini, Cursor, Copilot, OpenHands).
+        </p>
+        <div class="ai-archive-grid">
+          <a href="/qmf/llms.txt" class="ai-paper-item">
+            <span class="ai-ext">TXT</span>
+            <div class="ai-info">
+              <span class="ai-name">llms.txt</span>
+              <span class="ai-desc">Standard LLM documentation index &amp; core directives</span>
+            </div>
+          </a>
+          <a href="/qmf/llms-full.txt" class="ai-paper-item">
+            <span class="ai-ext">TXT</span>
+            <div class="ai-info">
+              <span class="ai-name">llms-full.txt</span>
+              <span class="ai-desc">Full comprehensive framework documentation in single stream</span>
+            </div>
+          </a>
+          <a href="/qmf/components.json" class="ai-paper-item">
+            <span class="ai-ext">JSON</span>
+            <div class="ai-info">
+              <span class="ai-name">components.json</span>
+              <span class="ai-desc">Component manifests, props, variants &amp; usage contracts</span>
+            </div>
+          </a>
+          <a href="/qmf/api-index.json" class="ai-paper-item">
+            <span class="ai-ext">JSON</span>
+            <div class="ai-info">
+              <span class="ai-name">api-index.json</span>
+              <span class="ai-desc">Complete JavaScript API surface, function signatures, types</span>
+            </div>
+          </a>
+          <a href="/qmf/docs-index.json" class="ai-paper-item">
+            <span class="ai-ext">JSON</span>
+            <div class="ai-info">
+              <span class="ai-name">docs-index.json</span>
+              <span class="ai-desc">Hierarchical documentation topic map &amp; anchor cross-links</span>
+            </div>
+          </a>
+          <a href="/qmf/docs/v4/AI_RULES.md" class="ai-paper-item">
+            <span class="ai-ext">MD</span>
+            <div class="ai-info">
+              <span class="ai-name">AI_RULES.md</span>
+              <span class="ai-desc">Agent system prompts &amp; architectural constraints</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION 6: INTEGRATION & WORKFLOW -->
+      <section class="home-section" id="workflow">
+        <div class="section-divider"></div>
+        <h2 class="home-section-title">INTEGRATION &amp; WORKFLOW</h2>
+        <div class="workflow-paper-list">
+
+          <div class="workflow-step">
+            <span class="step-num">Step 01</span>
+            <h3 class="step-title">Install Runtime Core</h3>
+            <p class="step-lead">Install the lightweight zero-dependency core from the Quizzman registry:</p>
+            <div class="install-bar">
+              <span class="install-label">$</span>
+              <code>npm i @qmf/runtime@4.0.0-alpha.1</code>
+              <button type="button" class="copy-btn" data-copy="npm i @qmf/runtime@4.0.0-alpha.1">Copy</button>
+            </div>
+          </div>
+
+          <div class="workflow-step">
+            <span class="step-num">Step 02</span>
+            <h3 class="step-title">Declare Manifest Contract</h3>
+            <p class="step-lead">Create <code>qmf.json</code> to declare module routes, event contracts, and plugin dependencies:</p>
+            <div class="code-block-flat">
+              <pre><code>{
+  "$schema": "https://ui.quizzman.com/qmf/schemas/v4/contract.json",
+  "name": "my-study-app",
+  "version": "1.0.0",
+  "plugins": ["@qmf/plugin-router", "@qmf/plugin-state"]
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="workflow-step">
+            <span class="step-num">Step 03</span>
+            <h3 class="step-title">Bootstrap in Browser</h3>
+            <p class="step-lead">Import and bootstrap with pure standard vanilla JavaScript:</p>
+            <div class="code-block-flat">
+              <pre><code>import { bootstrap } from 'https://ui.quizzman.com/qmf/v4/runtime.js';
+
+bootstrap({ manifest: './qmf.json' }).then(app =&gt; {
+  console.log('Quizzman UI Ready', app);
+});</code></pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 7: EXAMPLES & LIVE DEMOS -->
+      <section class="home-section" id="examples">
+        <div class="section-divider"></div>
+        <h2 class="home-section-title">EXAMPLES &amp; LIVE DEMOS</h2>
+        <div class="ai-archive-grid">
+          <a href="/qmf/v4-demo/" class="ai-paper-item">
+            <span class="ai-ext">DEMO</span>
+            <div class="ai-info">
+              <span class="ai-name">Live 4.0 Interactive Demo</span>
+              <span class="ai-desc">In-browser interactive sandbox with authentication &amp; state store</span>
+            </div>
+          </a>
+          <a href="/qmf/docs/v4/examples/app/" class="ai-paper-item">
+            <span class="ai-ext">APP</span>
+            <div class="ai-info">
+              <span class="ai-name">Reference Dashboard Application</span>
+              <span class="ai-desc">Contract-driven multi-page production pattern reference</span>
+            </div>
+          </a>
+          <a href="/qmf/docs.html" class="ai-paper-item">
+            <span class="ai-ext">DOCS</span>
+            <div class="ai-info">
+              <span class="ai-name">Interactive Component Catalog</span>
+              <span class="ai-desc">Visual documentation shell for buttons, modals, forms &amp; tables</span>
+            </div>
+          </a>
+          <a href="/qmf/docs/v4/examples/ai-workflow/" class="ai-paper-item">
+            <span class="ai-ext">AGENT</span>
+            <div class="ai-info">
+              <span class="ai-name">AI Autonomous Workflows</span>
+              <span class="ai-desc">Sample prompts and automated developer tooling agents</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <h3 data-i18n="footer_docs">Documentation</h3>
-          <ul>
-            <li><a href="/qmf/docs.html">Docs UI</a></li>
-            <li><a href="/qmf/docs/USAGE.md">Usage</a></li>
-            <li><a href="/qmf/docs/ARCHITECTURE.md">Architecture</a></li>
-            <li><a href="/qmf/docs/v4/README.md">Zentro 4.0</a></li>
-          </ul>
+  <!-- SCHOLARLY FOOTER — Direct Parity with paper.quizzman.com -->
+  <footer class="scholarly-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <svg class="brand-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#123C69"/>
+            <path d="M18 18h20c8.837 0 16 7.163 16 16s-7.163 16-16 16H26v10H18V18z" fill="#fff"/>
+            <path d="M26 26v12h12c4.418 0 8-3.582 8-8s-3.582-8-8-8H26z" fill="#123C69"/>
+          </svg>
+          <span class="footer-brand-name">QUIZZMAN<sup>™</sup></span>
+          <span class="footer-brand-sub">UI FRAMEWORK</span>
         </div>
-        <div>
-          <h3 data-i18n="footer_api">API</h3>
-          <ul>
-            <li><a href="/qmf/docs/API.md">Core API</a></li>
-            <li><a href="/qmf/api-index.json">API Index</a></li>
-            <li><a href="/qmf/schemas/">Schemas</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 data-i18n="footer_guides">Guides</h3>
-          <ul>
-            <li><a href="/qmf/docs/MIGRATION.md">Migration</a></li>
-            <li><a href="/qmf/docs/v4/AI_RULES.md">AI Rules</a></li>
-            <li><a href="/qmf/docs/v4/CONVENTION.md">Convention</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 data-i18n="footer_examples">Examples</h3>
-          <ul>
-            <li><a href="/qmf/v4-demo/">Live Demo</a></li>
-            <li><a href="/qmf/docs/v4/examples/app/">Example App</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 data-i18n="footer_registry">Registry</h3>
-          <ul>
-            <li><a href="/registry/">Packages</a></li>
-            <li><a href="/qmf/version">/version</a></li>
-            <li><a href="https://status.quizzman.com">Status</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 data-i18n="footer_ai">AI</h3>
-          <ul>
-            <li><a href="/qmf/llms.txt">llms.txt</a></li>
-            <li><a href="/qmf/llms-full.txt">llms-full.txt</a></li>
-            <li><a href="/qmf/sitemap.xml">Sitemap</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 data-i18n="footer_community">Community</h3>
-          <ul>
-            <li><a href="https://github.com/the-quizzman">GitHub</a></li>
-            <li><a href="https://quizzman.com/">Quizzman</a></li>
-            <li><a href="/qmf/docs/v4/ROADMAP.md">Roadmap</a></li>
-            <li><a href="/qmf/docs/v4/IMPLEMENTATION.md">Changelog</a></li>
-          </ul>
-        </div>
+        <nav class="footer-nav" aria-label="Footer Navigation">
+          <a href="/qmf/docs/USAGE.md" data-i18n="footer_docs">Docs</a>
+          <a href="/qmf/docs/API.md" data-i18n="footer_api">API</a>
+          <a href="#components" data-i18n="nav_components">Components</a>
+          <a href="/qmf/docs/ARCHITECTURE.md" data-i18n="footer_guides">Architecture</a>
+          <a href="/registry/" data-i18n="footer_registry">Registry</a>
+          <a href="/qmf/llms.txt" data-i18n="footer_ai">AI (llms.txt)</a>
+          <a href="https://paper.quizzman.com">Paper Standard</a>
+          <a href="https://github.com/the-quizzman">GitHub</a>
+        </nav>
       </div>
-      <div class="footer-bar">
-        <p data-i18n="footer_tagline">Zentro — Modular Framework + Runtime.</p>
-        <p>Zentro · MIT License · Stable 3.0.0 · Alpha 4.0.0-alpha.1</p>
+      <div class="footer-bottom">
+        <div class="footer-domain">ui.quizzman.com</div>
+        <div>Quizzman UI Standard (QMF 4.0) · MIT License · Stable 3.0.0 · Alpha 4.0.0-alpha.1</div>
       </div>
     </div>
   </footer>
 
-  <!-- SEARCH MODAL -->
+  <!-- SEARCH MODAL (Pure Flat Paper Dialog) -->
   <div id="search-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Search documentation">
     <div class="search-dialog">
       <div class="search-input-row">
@@ -437,6 +633,6 @@
     </div>
   </div>
 
-  <script src="/qmf/assets/docs-portal.js?v=20260810-zentro1" defer></script>
+  <script src="/qmf/assets/docs-portal.js?v=20261008-paper" defer></script>
 </body>
 </html>

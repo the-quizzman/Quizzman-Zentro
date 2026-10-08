@@ -14,18 +14,18 @@
     en: {
       nav_docs: 'Docs', nav_components: 'Components', nav_guides: 'Guides', nav_examples: 'Examples',
       nav_api: 'API', nav_ai: 'AI', nav_registry: 'Registry', nav_changelog: 'Changelog',
-      hero_kicker: 'Modular Framework + Runtime',
-      hero_title: 'Zentro',
-      hero_subtitle: 'Build modern modular applications with a lightweight plugin architecture.',
+      hero_kicker: 'QUIZZMAN™ UI FRAMEWORK',
+      hero_title: 'UI & Runtime Registry',
+      hero_subtitle: 'Modular architecture specifications, component catalog, API references and developer guides for Quizzman web platforms.',
       hero_btn_start: 'Get Started', hero_btn_docs: 'Documentation', hero_btn_ai: 'AI Documentation',
-      section_quick: 'Quick actions', section_docs: 'Documentation', section_learn: 'Learn Zentro',
-      section_ai: 'AI & LLM', section_indexes: 'AI-friendly indexes', section_overview: 'Documentation overview',
-      section_dash: 'Developer dashboard', section_examples: 'Examples', section_components: 'Component explorer',
-      section_code: 'Code preview',
-      footer_docs: 'Documentation', footer_api: 'API', footer_guides: 'Guides', footer_examples: 'Examples',
+      section_quick: 'Quick actions', section_docs: 'Documentation', section_learn: 'Architecture Archive',
+      section_ai: 'AI & Machine Documentation', section_indexes: 'AI Indexes', section_overview: 'Overview',
+      section_dash: 'Developer Dashboard', section_examples: 'Examples', section_components: 'Component Explorer',
+      section_code: 'Code Preview',
+      footer_docs: 'Docs', footer_api: 'API', footer_guides: 'Guides', footer_examples: 'Examples',
       footer_registry: 'Registry', footer_ai: 'AI', footer_community: 'Community',
-      footer_tagline: 'Zentro — Modular Framework + Runtime.',
-      search_placeholder: 'Search...', search_empty: 'Type to search documentation',
+      footer_tagline: 'Quizzman UI Framework — Modular Architecture & Runtime.',
+      search_placeholder: 'Search documentation, components, APIs...', search_empty: 'Type to search documentation',
       search_no_results: 'No results found', search_recent: 'Recent searches',
       filter_all: 'All', filter_docs: 'Docs', filter_api: 'API', filter_guides: 'Guides',
       filter_ai: 'AI', filter_examples: 'Examples', filter_registry: 'Registry',
@@ -36,18 +36,18 @@
     vi: {
       nav_docs: 'Tài liệu', nav_components: 'Components', nav_guides: 'Hướng dẫn', nav_examples: 'Ví dụ',
       nav_api: 'API', nav_ai: 'AI', nav_registry: 'Registry', nav_changelog: 'Changelog',
-      hero_kicker: 'Modular Framework + Runtime',
-      hero_title: 'Zentro',
-      hero_subtitle: 'Xây ứng dụng modular hiện đại với kiến trúc plugin nhẹ.',
+      hero_kicker: 'QUIZZMAN™ UI FRAMEWORK',
+      hero_title: 'Sổ Đăng Ký UI & Runtime',
+      hero_subtitle: 'Đặc tả kiến trúc mô-đun, danh mục thành phần giao diện, tài liệu API và hướng dẫn phát triển cho hệ thống Quizzman.',
       hero_btn_start: 'Bắt đầu', hero_btn_docs: 'Tài liệu', hero_btn_ai: 'Tài liệu AI',
-      section_quick: 'Thao tác nhanh', section_docs: 'Tài liệu', section_learn: 'Học Zentro',
-      section_ai: 'AI & LLM', section_indexes: 'Index cho AI', section_overview: 'Tổng quan tài liệu',
-      section_dash: 'Dashboard developer', section_examples: 'Ví dụ', section_components: 'Component explorer',
-      section_code: 'Code preview',
+      section_quick: 'Thao tác nhanh', section_docs: 'Tài liệu', section_learn: 'Lưu trữ Kiến trúc',
+      section_ai: 'Tài liệu Máy & AI', section_indexes: 'Index cho AI', section_overview: 'Tổng quan',
+      section_dash: 'Bảng Điều khiển', section_examples: 'Ví dụ', section_components: 'Danh mục Thành phần',
+      section_code: 'Mã nguồn',
       footer_docs: 'Tài liệu', footer_api: 'API', footer_guides: 'Hướng dẫn', footer_examples: 'Ví dụ',
       footer_registry: 'Registry', footer_ai: 'AI', footer_community: 'Cộng đồng',
-      footer_tagline: 'Zentro — Modular Framework + Runtime.',
-      search_placeholder: 'Tìm kiếm...', search_empty: 'Nhập để tìm kiếm tài liệu',
+      footer_tagline: 'Quizzman UI Framework — Kiến trúc & Runtime Mô-đun.',
+      search_placeholder: 'Tìm kiếm tài liệu, thành phần, API...', search_empty: 'Nhập để tìm kiếm tài liệu',
       search_no_results: 'Không có kết quả', search_recent: 'Tìm kiếm gần đây',
       filter_all: 'Tất cả', filter_docs: 'Tài liệu', filter_api: 'API', filter_guides: 'Hướng dẫn',
       filter_ai: 'AI', filter_examples: 'Ví dụ', filter_registry: 'Registry',
@@ -84,7 +84,7 @@
   function applyTheme(theme) {
     document.documentElement.dataset.theme = theme;
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#f5f5f7');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#121212' : '#ffffff');
     var btn = $('#theme-toggle');
     if (!btn) return;
     var dark = theme === 'dark';
@@ -412,6 +412,14 @@
     }
 
     document.addEventListener('keydown', function (e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        var active = document.activeElement;
+        if (!active || (!/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName) && !active.isContentEditable)) {
+          e.preventDefault();
+          openSearch();
+          return;
+        }
+      }
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); return; }
       onSearchKey(e);
       if (e.key === 'Escape') closeDrawer();
