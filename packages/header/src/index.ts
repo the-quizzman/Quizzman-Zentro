@@ -5,9 +5,9 @@
  * Follows QMF lifecycle: init → mount → connect → ready → destroy
  */
 
-import { z, validateConfig, type QMFPlugin, getGlobalEventBus, createLifecycle } from '@qmf/core';
+import { z, validateConfig, type QMFPlugin, getGlobalEventBus } from '@qmf/core';
 import { createElement, mountComponent, resolveToken, resolveCurrentUser, createLogger, createEventEmitter } from '@qmf/utils';
-import { createDropdown, createBadge, updateBadge, createAvatar, type DropdownItem } from '@qmf/ui';
+import { createDropdown, createBadge, updateBadge, type DropdownItem } from '@qmf/ui';
 
 // ─── Config Schema ──────────────────────────────────────────
 
@@ -360,7 +360,7 @@ export class QMFHeader {
     wrapper.appendChild(toggle);
 
     // Dropdown items
-    const defaultItems: DropdownItem[] = this.config.userMenuItems?.map((item) => ({
+    const defaultItems: DropdownItem[] = this.config.userMenuItems?.map((item: { label: string; icon?: string; action?: string; danger?: boolean; divider?: boolean }) => ({
       label: item.label,
       icon: item.icon,
       action: item.action,
@@ -380,6 +380,27 @@ export class QMFHeader {
       items: defaultItems,
       align: 'right',
       onSelect: (item) => {
+        if (item.action === 'theme') {
+          const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+          const next = cur === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          try { (document.documentElement.style as CSSStyleDeclaration).colorScheme = next; } catch {}
+          try {
+            localStorage.setItem('qmf-theme', next);
+            localStorage.setItem('lab-theme', next);
+            localStorage.setItem('qm-theme', next);
+            const host = location.hostname || '';
+            const domain = (host === 'quizzman.com' || host.endsWith('.quizzman.com')) ? '; domain=.quizzman.com' : '';
+            const secure = location.protocol === 'https:' ? '; Secure' : '';
+            document.cookie = `qmf-theme=${encodeURIComponent(next)}; path=/; max-age=31536000; SameSite=Lax${secure}${domain}`;
+          } catch {}
+          const detail = { theme: next, source: 'header' };
+          window.dispatchEvent(new CustomEvent('qmf:themechange', { detail }));
+          window.dispatchEvent(new CustomEvent('qmf:theme-change', { detail }));
+          document.dispatchEvent(new CustomEvent('qmf:themechange', { detail }));
+          document.dispatchEvent(new CustomEvent('qmf:theme-change', { detail }));
+          document.dispatchEvent(new CustomEvent('qmf-theme-change', { detail: next }));
+        }
         this.emitter.emit('menu:action', item.action);
         getGlobalEventBus().emit('qmf:menu-action', { action: item.action });
       },
@@ -449,7 +470,7 @@ export function createUnifiedHeader(container: string | HTMLElement, config?: Pa
 
   // Expose globally
   if (typeof window !== 'undefined') {
-    (window as Record<string, unknown>).qmfHeader = header;
+    (window as unknown as Record<string, unknown>).qmfHeader = header;
   }
 
   return header;
@@ -471,7 +492,7 @@ export function createHeaderPlugin(config?: Partial<HeaderConfig>): QMFPlugin {
         headerInstance = new QMFHeader(config);
         headerInstance.mount(mountTarget);
         if (typeof window !== 'undefined') {
-          (window as Record<string, unknown>).qmfHeader = headerInstance;
+          (window as unknown as Record<string, unknown>).qmfHeader = headerInstance;
         }
       },
       onDestroy: () => {

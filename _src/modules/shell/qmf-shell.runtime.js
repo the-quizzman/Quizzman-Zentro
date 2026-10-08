@@ -12,9 +12,9 @@
   'use strict';
 
   var Runtime = {
-    shell: '2.2.71',
+    shell: '2.2.72',
     packages: {
-      header: '3.13.0',
+      header: '3.13.1',
       auth: '2.0.4',
       legatus: '1.3.11',
       sso: '20260906noloop',
@@ -274,6 +274,7 @@
     // Allow top-level brand fields
     ['brandName', 'pageTitle', 'productSub', 'logoSrc', 'logoSrcDark', 'mainLogoLink',
       'brandHref', 'showGlobalNav', 'showSearch', 'showChat', 'showFriend', 'showJoinQuiz',
+      'showThemeToggle', 'showLangSwitch',
       'headerInFlow', 'searchPlaceholder', 'searchUrl', 'searchApiUrl', 'navItems'].forEach(function (k) {
       if (opts[k] !== undefined && headerOpts[k] === undefined) headerOpts[k] = opts[k];
     });

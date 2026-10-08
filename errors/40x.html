@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#1a4fd8">
+  <title>404 — Quizzman</title>
+  <link rel="icon" href="https://ui.quizzman.com/qmf/assets/logo/favicon.ico">
+  <link rel="stylesheet" href="https://ui.quizzman.com/qmf/assets/fonts/fonts.css">
+  <style>
+    :root {
+      --ink: #171717;
+      --paper: #ffffff;
+      --muted: #5e5e5e;
+      --line: #e4e4e4;
+      --cobalt: #1a4fd8;
+      --stage: #1a4fd8;
+      --stage-fg: #fff;
+      --on-chip: #171717;
+      --shadow: 7px 7px 0 rgba(0, 0, 0, .18);
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink: #f4f1ea;
+        --paper: #101010;
+        --muted: #b7b7b2;
+        --line: #2e2e2e;
+        --shadow: 7px 7px 0 rgba(0, 0, 0, .45);
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      line-height: 1.45;
+    }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
+    .wrap { width: min(960px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 0 8px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .logo { height: 36px; width: 36px; display: block; border-radius: 9px; }
+    .brand-name { font-family: Outfit, Inter, sans-serif; font-weight: 750; font-size: 20px; letter-spacing: -.03em; }
+    .spacer { flex: 1; }
+    .lang {
+      display: flex;
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .lang button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font: 700 12px/1 Inter, sans-serif;
+      letter-spacing: .04em;
+      padding: 8px 11px;
+      cursor: pointer;
+    }
+    .lang button[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      background: var(--ink);
+      color: var(--paper);
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 999px;
+      padding: 10px 16px;
+      border: 1.5px solid var(--ink);
+    }
+    .stage {
+      margin-top: 18px;
+      background: var(--stage);
+      color: var(--stage-fg);
+      border-radius: 32px;
+      padding: 42px 22px 28px;
+      text-align: center;
+      transition: background-color .35s ease, color .35s ease;
+    }
+    .code {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(4px, 1vw, 12px);
+      min-height: 150px;
+    }
+    .digit {
+      font-family: Outfit, Inter, sans-serif;
+      font-weight: 800;
+      font-size: clamp(92px, 16vw, 148px);
+      line-height: .85;
+      letter-spacing: -.05em;
+    }
+    .digit.bump { animation: pop .45s cubic-bezier(.2, 1.5, .4, 1) both; }
+    .mascot { position: relative; width: clamp(104px, 15vw, 136px); height: clamp(104px, 15vw, 136px); flex: none; }
+    .mascot.land { animation: drop .55s cubic-bezier(.2, 1.15, .4, 1) both; }
+    .tile {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      color: #171717;
+      border-radius: 32%;
+      box-shadow: var(--shadow);
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .qmark {
+      font-family: Outfit, Inter, sans-serif;
+      font-weight: 800;
+      font-size: clamp(64px, 9vw, 84px);
+      line-height: 1;
+      letter-spacing: -.06em;
+      opacity: .14;
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+    .face { position: relative; width: 72px; height: 46px; margin-top: 8px; }
+    .eyes { display: flex; justify-content: space-between; }
+    .eye {
+      width: 18px; height: 18px; background: #171717; border-radius: 50%;
+      display: grid; place-items: center; transform-origin: center;
+      animation: blink 5.2s infinite;
+    }
+    .eye i {
+      width: 7px; height: 7px; background: #fff; border-radius: 50%; display: block;
+      transform: translate(var(--px, 0px), var(--py, 0px));
+    }
+    .mouth {
+      width: 28px; height: 13px; margin: 8px auto 0;
+      border: 3px solid #171717; border-top: 0; border-radius: 0 0 18px 18px;
+    }
+    .blush {
+      position: absolute; top: 18px; width: 10px; height: 6px; border-radius: 999px;
+      background: #f3a3a0;
+    }
+    .blush.l { left: -2px; }
+    .blush.r { right: -2px; }
+    .mascot.is-happy .mouth { width: 34px; height: 16px; }
+    .mascot.is-confused .mouth { transform: rotate(-10deg); width: 22px; }
+    .mascot.is-sleepy .eye { animation: none; transform: scaleY(.38); }
+    .mascot.is-sleepy .mouth { width: 16px; height: 8px; }
+    .prop {
+      position: absolute; right: -18px; bottom: -8px; width: 52px; height: 52px;
+      color: var(--stage-fg);
+    }
+    .prop svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    .spin { transform-origin: 32px 32px; animation: spin 7s linear infinite; }
+    .hand { transform-origin: 32px 32px; animation: spin 8s linear infinite; }
+    .spark { animation: flash 1.1s steps(2, end) infinite; }
+    .kicker {
+      margin: 18px 0 0;
+      font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+      opacity: .82;
+    }
+    h1 {
+      font-family: Outfit, Inter, sans-serif;
+      font-weight: 750;
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: -.03em;
+      line-height: 1.1;
+      margin: 8px 0 0;
+    }
+    .message { margin: 10px auto 0; max-width: 36rem; font-size: 17px; opacity: .92; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 22px; }
+    .chip {
+      appearance: none;
+      border: 2px solid color-mix(in srgb, var(--stage-fg) 50%, transparent);
+      background: transparent;
+      color: var(--stage-fg);
+      font: 750 14px/1 Outfit, Inter, sans-serif;
+      border-radius: 999px;
+      padding: 9px 14px;
+      cursor: pointer;
+    }
+    .chip[aria-pressed="true"] {
+      background: var(--stage-fg);
+      color: var(--on-chip);
+      border-color: var(--stage-fg);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 22px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      text-decoration: none; font-weight: 700; font-size: 15px;
+      border-radius: 999px; padding: 12px 18px; min-width: 128px;
+      border: 1.5px solid var(--ink); cursor: pointer; background: transparent; color: var(--ink);
+      font-family: inherit;
+    }
+    .btn-primary { background: var(--ink); color: var(--paper); }
+    .section { margin-top: 28px; }
+    .section h2 {
+      font-family: Outfit, Inter, sans-serif;
+      font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); font-weight: 750; margin: 0 0 12px;
+    }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .grid.help { grid-template-columns: repeat(3, 1fr); }
+    .card {
+      display: block; text-decoration: none; color: inherit;
+      border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px;
+      background: var(--paper); min-height: 92px;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover { transform: translate(-3px, -3px); box-shadow: 3px 3px 0 var(--ink); }
+    .card strong { display: block; font-size: 16px; }
+    .card span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .badge {
+      display: inline-block; margin-left: 6px; vertical-align: 1px;
+      background: var(--cobalt); color: #fff; border-radius: 999px;
+      font-size: 10px; font-weight: 800; letter-spacing: .05em; padding: 2px 6px;
+    }
+    footer { text-align: center; color: var(--muted); padding: 36px 0 48px; font-size: 13px; }
+    footer strong { color: var(--ink); letter-spacing: .04em; }
+    @keyframes pop { from { transform: translateY(16px) scale(.72); opacity: 0; } }
+    @keyframes drop { from { transform: translateY(-36px); opacity: 0; } }
+    @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.12); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes flash { 50% { opacity: .25; } }
+    @media (max-width: 720px) {
+      .grid, .grid.help { grid-template-columns: 1fr 1fr; }
+      header { padding-top: 14px; }
+      .stage { border-radius: 24px; padding: 32px 14px 22px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .digit.bump, .mascot.land, .eye, .spin, .hand, .spark { animation: none !important; }
+      .stage, .card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="https://quizzman.com/" aria-label="Quizzman">
+        <img class="logo" src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp" width="36" height="36" alt="">
+        <span class="brand-name">Quizzman</span>
+      </a>
+      <div class="spacer"></div>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="vi" aria-pressed="false">VI</button>
+      </div>
+      <a class="pill" id="header-play" href="https://play.quizzman.com/"><span class="full">Play Quiz</span></a>
+    </header>
+
+    <main class="stage" id="stage">
+      <div class="code" aria-hidden="true">
+        <span class="digit" id="d1">4</span>
+        <div class="mascot land" id="mascot">
+          <div class="tile">
+            <span class="qmark">Q</span>
+            <div class="face" id="face">
+              <div class="eyes"><span class="eye"><i></i></span><span class="eye"><i></i></span></div>
+              <i class="blush l"></i><i class="blush r"></i>
+              <div class="mouth"></div>
+            </div>
+          </div>
+          <div class="prop" id="prop"></div>
+        </div>
+        <span class="digit" id="d3">4</span>
+      </div>
+      <p class="kicker" id="kicker"></p>
+      <h1 id="title"></h1>
+      <p class="message" id="message" aria-live="polite"></p>
+      <div class="chips" id="chips" role="group"></div>
+    </main>
+
+    <div class="actions">
+      <a class="btn btn-primary" id="primary" href="https://quizzman.com/"></a>
+      <a class="btn" id="secondary" href="https://play.quizzman.com/"></a>
+    </div>
+
+    <section class="section" id="services">
+      <h2 id="services-label">Featured services</h2>
+      <div class="grid" id="service-grid"></div>
+    </section>
+    <section class="section" id="help" hidden>
+      <h2 id="help-label">Need a hand?</h2>
+      <div class="grid help" id="help-grid"></div>
+    </section>
+
+    <footer>
+      <strong>Mentis · Nexus · Lumen</strong>
+      <div>Trí tuệ · Kết nối · Ánh sáng</div>
+    </footer>
+  </div>
+  <script>
+    window.__QM_STATUS = <!--# echo var="status" default="0" -->;
+  </script>
+  <script>
+    const CODES = {
+      '400': { bg:'#e4570e', fg:'#fff', on:'#171717', prop:'scribble', mood:'confused', primary:'home', secondary:'play',
+        en:{ kicker:'Bad Request', title:'That request did not land', body:'Something in it was off. Try again, or head back home.' },
+        vi:{ kicker:'Yêu cầu không hợp lệ', title:'Yêu cầu này chưa đúng', body:'Có chi tiết chưa hợp lệ. Thử lại, hoặc về trang chủ.' } },
+      '401': { bg:'#0c8f86', fg:'#fff', on:'#171717', prop:'key', mood:'', primary:'signin', secondary:'home',
+        en:{ kicker:'Unauthorized', title:'Sign in to continue', body:'This page stays locked until we know it is you.' },
+        vi:{ kicker:'Chưa đăng nhập', title:'Đăng nhập để tiếp tục', body:'Trang này khóa cho đến khi chúng tôi biết đó là bạn.' } },
+      '403': { bg:'#d3262f', fg:'#fff', on:'#171717', prop:'lock', mood:'confused', primary:'home', secondary:'play',
+        en:{ kicker:'Forbidden', title:'You cannot open this', body:'Your account does not have access to this page.' },
+        vi:{ kicker:'Không có quyền', title:'Bạn không mở được trang này', body:'Tài khoản của bạn không có quyền vào đây.' } },
+      '404': { bg:'#1a4fd8', fg:'#fff', on:'#171717', prop:'glass', mood:'', primary:'home', secondary:'play',
+        en:{ kicker:'Not Found', title:'This page wandered off', body:'We looked everywhere. The link may be old, or the page moved.' },
+        vi:{ kicker:'Không tìm thấy', title:'Trang này đi lạc', body:'Chúng tôi đã tìm khắp nơi. Liên kết có thể cũ, hoặc trang đã chuyển chỗ.' } },
+      '408': { bg:'#f0c014', fg:'#171717', on:'#fff', prop:'hourglass', mood:'sleepy', primary:'retry', secondary:'home',
+        en:{ kicker:'Request Timeout', title:'That took too long', body:'The request timed out before we could finish it. Give it another try.' },
+        vi:{ kicker:'Hết thời gian chờ', title:'Chờ quá lâu rồi', body:'Yêu cầu hết hạn trước khi xử lý xong. Thử thêm một lần nữa.' } },
+      '429': { bg:'#5b21b6', fg:'#fff', on:'#171717', prop:'hourglass', mood:'sleepy', primary:'retry', secondary:'home',
+        en:{ kicker:'Too Many Requests', title:'Slow down a moment', body:'You sent too many requests in a short time. Wait about a minute, then try again.' },
+        vi:{ kicker:'Quá nhiều yêu cầu', title:'Hãy chậm lại một chút', body:'Bạn gửi quá nhiều yêu cầu trong thời gian ngắn. Đợi khoảng một phút rồi thử lại.' } },
+      '500': { bg:'#c81e1e', fg:'#fff', on:'#171717', prop:'gear', mood:'confused', primary:'retry', secondary:'status',
+        en:{ kicker:'Server Error', title:'Something broke on our side', body:'An unexpected error happened. It is not you — we are on it.' },
+        vi:{ kicker:'Lỗi máy chủ', title:'Phía chúng tôi vừa gặp lỗi', body:'Có sự cố bất ngờ. Không phải do bạn. Chúng tôi đang xử lý.' } },
+      '502': { bg:'#e4570e', fg:'#fff', on:'#171717', prop:'plug', mood:'confused', primary:'retry', secondary:'status',
+        en:{ kicker:'Bad Gateway', title:'The servers missed each other', body:'A connection between our servers failed. Try again in a moment.' },
+        vi:{ kicker:'Cổng kết nối lỗi', title:'Hai máy chủ không nối được', body:'Kết nối giữa các máy chủ vừa đứt. Thử lại sau một lát.' } },
+      '503': { bg:'#0c8f86', fg:'#fff', on:'#171717', prop:'cone', mood:'happy', primary:'status', secondary:'home',
+        en:{ kicker:'Service Unavailable', title:"We'll be right back", body:'Quizzman is briefly unavailable. Please check back soon.' },
+        vi:{ kicker:'Tạm ngưng phục vụ', title:'Chúng tôi sẽ quay lại ngay', body:'Quizzman đang tạm nghỉ một chút. Bạn quay lại sau nhé.' } },
+      '504': { bg:'#f0c014', fg:'#171717', on:'#fff', prop:'clock', mood:'sleepy', primary:'retry', secondary:'status',
+        en:{ kicker:'Gateway Timeout', title:'The server took too long', body:'A service behind us did not answer in time. Try again shortly.' },
+        vi:{ kicker:'Cổng chờ quá hạn', title:'Máy chủ phản hồi quá chậm', body:'Một dịch vụ phía sau không trả lời kịp. Thử lại sau ít phút.' } }
+    };
+
+    const LINKS = {
+      home:   { href:'https://quizzman.com/', en:'Go home', vi:'Về trang chủ' },
+      play:   { href:'https://play.quizzman.com/', en:'Play Quiz', vi:'Vào Quiz' },
+      signin: { href:'https://id.quizzman.com/login', en:'Sign in', vi:'Đăng nhập' },
+      retry:  { href:'#retry', en:'Try again', vi:'Thử lại' },
+      status: { href:'https://status.quizzman.com/', en:'System status', vi:'Trạng thái hệ thống' }
+    };
+
+    const SERVICES = [
+      { href:'https://astro.quizzman.com/', name:'Astro', en:'Charts and the sky', vi:'Bản đồ và bầu trời' },
+      { href:'https://lab.quizzman.com/zodiac-sign', name:'Zodiac', en:'Your sign, today', vi:'Cung hoàng đạo hôm nay' },
+      { href:'https://lab.quizzman.com/tarot', name:'Tarot', en:'Draw a card', vi:'Rút một lá bài' },
+      { href:'https://lab.quizzman.com/vedic', name:'Vedic', en:'Vedic astrology', vi:'Chiêm tinh Vệ Đà', badge:true }
+    ];
+
+    const HELP = [
+      { href:'https://status.quizzman.com/', enT:'Status', viT:'Trạng thái', en:'See what is up right now', vi:'Xem hệ thống đang thế nào' },
+      { href:'https://wiki.quizzman.com/', enT:'Help center', viT:'Trung tâm trợ giúp', en:'Guides and answers', vi:'Hướng dẫn và câu trả lời' },
+      { href:'mailto:support@quizzman.com', enT:'Report an issue', viT:'Báo sự cố', en:'Tell us what broke', vi:'Cho chúng tôi biết chỗ lỗi' }
+    ];
+
+    const PROPS = {
+      scribble: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M10 40c8-14 8 10 18 0s8-16 16-2 6 12 12 4"/><path d="M14 22c6 8 10-8 18-2s4 12 14 4"/><path d="M18 50c8-6 12 6 20 0"/></svg>',
+      key: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="22" cy="26" r="12"/><path d="M32 32l20 20M42 42v8M48 48v6"/></svg>',
+      lock: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5"><rect x="14" y="28" width="36" height="26" rx="6"/><path d="M22 28v-6a10 10 0 0 1 20 0v6" stroke-linecap="round"/><circle cx="32" cy="40" r="3" fill="currentColor" stroke="none"/></svg>',
+      glass: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="26" cy="26" r="14"/><path d="M36 36l16 16"/></svg>',
+      hourglass: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"><path d="M18 10h28M18 54h28M20 12c0 10 12 12 12 20s-12 10-12 20M44 12c0 10-12 12-12 20s12 10 12 20"/></svg>',
+      gear: '<svg viewBox="0 0 64 64"><g class="spin" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="32" cy="32" r="8"/><path d="M32 8v8M32 48v8M8 32h8M48 32h8M14 14l6 6M44 44l6 6M50 14l-6 6M20 44l-6 6"/></g></svg>',
+      plug: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M22 8v16M42 8v16"/><path d="M16 24h32v10a16 16 0 0 1-32 0V24z"/><path d="M32 50v8"/><path class="spark" d="M48 18l6-8M50 28l8 2"/></svg>',
+      cone: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"><path d="M32 8L14 54h36L32 8z"/><path d="M20 36h24M24 46h16"/></svg>',
+      clock: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="32" cy="32" r="20"/><path class="hand" d="M32 32V18"/><path d="M32 32l10 6" stroke-linecap="round"/></svg>'
+    };
+
+    const UI = {
+      en: { services:'Featured services', help:'Need a hand?', play:'Play Quiz', badge:'NEW' },
+      vi: { services:'Dịch vụ nổi bật', help:'Cần trợ giúp?', play:'Vào Quiz', badge:'MỚI' }
+    };
+
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stage = document.getElementById('stage');
+    const mascot = document.getElementById('mascot');
+    const face = document.getElementById('face');
+    let lang = localStorage.getItem('qm-error-lang') === 'vi' ? 'vi' : 'en';
+
+    function familyOf(code) { return String(code).startsWith('5') ? '5' : '4'; }
+
+    function initialCode() {
+      const status = String(window.__QM_STATUS || '');
+      const query = new URLSearchParams(location.search).get('code') || '';
+      const hash = (location.hash || '').replace('#', '');
+      const pathFamily = /50x/.test(location.pathname) ? '5' : /40x/.test(location.pathname) ? '4' : '';
+      if (CODES[status]) return status;
+      if (CODES[query] && (!pathFamily || familyOf(query) === pathFamily)) return query;
+      if (CODES[hash] && (!pathFamily || familyOf(hash) === pathFamily)) return hash;
+      return pathFamily === '5' ? '500' : '404';
+    }
+
+    function applyLang() {
+      document.documentElement.lang = lang === 'vi' ? 'vi' : 'en';
+      document.querySelectorAll('.lang button').forEach((btn) => {
+        btn.setAttribute('aria-pressed', String(btn.dataset.lang === lang));
+      });
+      document.getElementById('header-play').querySelector('.full').textContent = UI[lang].play;
+      document.getElementById('services-label').textContent = UI[lang].services;
+      document.getElementById('help-label').textContent = UI[lang].help;
+      renderLists();
+      render(current, false);
+    }
+
+    function renderLists() {
+      document.getElementById('service-grid').innerHTML = SERVICES.map((item) => {
+        const badge = item.badge ? `<i class="badge">${UI[lang].badge}</i>` : '';
+        return `<a class="card" href="${item.href}"><strong>${item.name}${badge}</strong><span>${item[lang]}</span></a>`;
+      }).join('');
+      document.getElementById('help-grid').innerHTML = HELP.map((item) => {
+        return `<a class="card" href="${item.href}"><strong>${lang === 'vi' ? item.viT : item.enT}</strong><span>${item[lang]}</span></a>`;
+      }).join('');
+    }
+
+    function paintChips(code) {
+      const list = familyOf(code) === '5' ? ['500','502','503','504'] : ['400','401','403','404','408','429'];
+      const box = document.getElementById('chips');
+      box.innerHTML = '';
+      list.forEach((id) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip';
+        btn.textContent = id;
+        btn.setAttribute('aria-pressed', String(id === code));
+        btn.addEventListener('click', () => render(id, true));
+        box.appendChild(btn);
+      });
+    }
+
+    let current = initialCode();
+
+    function render(code, fromClick) {
+      const meta = CODES[code];
+      if (!meta) return;
+      const prev = current;
+      current = code;
+      const copy = meta[lang];
+      stage.style.setProperty('--stage', meta.bg);
+      stage.style.background = meta.bg;
+      stage.style.setProperty('--stage-fg', meta.fg);
+      stage.style.color = meta.fg;
+      stage.style.setProperty('--on-chip', meta.on);
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', meta.bg);
+      document.getElementById('d1').textContent = code[0];
+      document.getElementById('d3').textContent = code[2];
+      document.getElementById('kicker').textContent = copy.kicker;
+      document.getElementById('title').textContent = copy.title;
+      document.getElementById('message').textContent = copy.body;
+      document.title = code + ' — Quizzman';
+      mascot.classList.remove('is-happy', 'is-confused', 'is-sleepy');
+      if (meta.mood) mascot.classList.add('is-' + meta.mood);
+      document.getElementById('prop').innerHTML = PROPS[meta.prop] || '';
+      const five = familyOf(code) === '5';
+      document.getElementById('services').hidden = five;
+      document.getElementById('help').hidden = !five;
+      const primary = LINKS[meta.primary];
+      const secondary = LINKS[meta.secondary];
+      const p = document.getElementById('primary');
+      const s = document.getElementById('secondary');
+      p.textContent = primary[lang];
+      s.textContent = secondary[lang];
+      p.href = primary.href;
+      s.href = secondary.href;
+      p.dataset.kind = meta.primary;
+      s.dataset.kind = meta.secondary;
+      paintChips(code);
+      if (fromClick && location.pathname.includes('errors')) {
+        history.replaceState(null, '', '#' + code);
+      }
+      if (!reduce && (fromClick || prev !== code)) {
+        const last = document.getElementById('d3');
+        last.classList.remove('bump');
+        void last.offsetWidth;
+        last.classList.add('bump');
+      }
+    }
+
+    document.querySelector('.lang').addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-lang]');
+      if (!btn) return;
+      lang = btn.dataset.lang;
+      localStorage.setItem('qm-error-lang', lang);
+      applyLang();
+    });
+
+    document.querySelector('.actions').addEventListener('click', (event) => {
+      const link = event.target.closest('a');
+      if (!link || link.dataset.kind !== 'retry') return;
+      event.preventDefault();
+      location.reload();
+    });
+
+    mascot.addEventListener('click', () => {
+      const list = familyOf(current) === '5' ? ['500','502','503','504'] : ['400','401','403','404','408','429'];
+      const next = list[(list.indexOf(current) + 1) % list.length];
+      render(next, true);
+    });
+
+    if (!reduce) {
+      window.addEventListener('pointermove', (event) => {
+        const rect = face.getBoundingClientRect();
+        const dx = event.clientX - (rect.left + rect.width / 2);
+        const dy = event.clientY - (rect.top + rect.height / 2);
+        const angle = Math.atan2(dy, dx);
+        const dist = Math.min(3.5, Math.hypot(dx, dy) / 50);
+        face.style.setProperty('--px', (Math.cos(angle) * dist).toFixed(2) + 'px');
+        face.style.setProperty('--py', (Math.sin(angle) * dist).toFixed(2) + 'px');
+      });
+    }
+
+    applyLang();
+    if (!reduce) {
+      document.getElementById('d1').classList.add('bump');
+      document.getElementById('d3').classList.add('bump');
+    }
+  </script>
+</body>
+</html>

@@ -176,6 +176,15 @@
     return null;
   }
 
+  function readThemeCookie() {
+    return normalizeTheme(readSharedCookie('qmf-theme'));
+  }
+
+  function writeThemeCookie(theme) {
+    if (!theme) return;
+    writeSharedCookie('qmf-theme', theme);
+  }
+
   function lsGet(key) {
     try { return localStorage.getItem(key); } catch (e) { return null; }
   }
@@ -196,7 +205,7 @@
   }
 
   function hasStoredTheme() {
-    return !!(normalizeTheme(lsGet('qmf-theme')) || normalizeTheme(lsGet('lab-theme')));
+    return !!(normalizeTheme(lsGet('qmf-theme')) || normalizeTheme(lsGet('lab-theme')) || readThemeCookie());
   }
 
   function hasStoredRegion() {
@@ -293,6 +302,7 @@
     if (prefs.theme) {
       lsSet('qmf-theme', prefs.theme);
       lsSet('lab-theme', prefs.theme);
+      writeThemeCookie(prefs.theme);
     }
     if (prefs.region) {
       lsSet('qmf-region', prefs.region);
@@ -350,7 +360,7 @@
   function readCurrent() {
     return {
       lang: readPreferredLang() || state.lang,
-      theme: normalizeTheme(lsGet('qmf-theme') || lsGet('lab-theme')) || state.theme,
+      theme: normalizeTheme(lsGet('qmf-theme') || lsGet('lab-theme')) || readThemeCookie() || state.theme,
       region: normalizeRegion(lsGet('qmf-region') || lsGet('qlib-region')) || state.region,
     };
   }
@@ -444,18 +454,30 @@
   }
 
   function reconcileFromCookie() {
-    var cookie = readLangCookie();
-    var ls = readLsLang();
-    if (!cookie) return false;
-    if (ls === 'auto') return false;
-    if (cookie === ls) return false;
-    var src = readLangSrcCookie() || 'local';
-    persist({ lang: cookie }, src === 'detect' ? 'stored' : src);
-    applyDom({ lang: cookie });
-    var now = readCurrent();
-    state.lang = now.lang;
-    if (cookie !== state.lang && now.lang) state.lang = now.lang;
-    return true;
+    var cookieLang = readLangCookie();
+    var lsLang = readLsLang();
+    var cookieTheme = readThemeCookie();
+    var lsTheme = normalizeTheme(lsGet('qmf-theme') || lsGet('lab-theme'));
+    var langChanged = false;
+    var themeChanged = false;
+
+    if (cookieLang && lsLang !== 'auto' && cookieLang !== lsLang) {
+      var src = readLangSrcCookie() || 'local';
+      persist({ lang: cookieLang }, src === 'detect' ? 'stored' : src);
+      applyDom({ lang: cookieLang });
+      state.lang = cookieLang;
+      langChanged = true;
+    }
+
+    if (cookieTheme && cookieTheme !== lsTheme && cookieTheme !== state.theme) {
+      persist({ theme: cookieTheme });
+      applyDom({ theme: cookieTheme });
+      state.theme = cookieTheme;
+      themeChanged = true;
+    }
+
+    if (!langChanged && !themeChanged) return null;
+    return { langChanged: langChanged, themeChanged: themeChanged };
   }
 
   function ensurePrefsChannel() {
@@ -503,10 +525,16 @@
     try {
       global.addEventListener('visibilitychange', function () {
         if (document.visibilityState !== 'visible') return;
-        if (reconcileFromCookie()) {
+        var res = reconcileFromCookie();
+        if (res) {
           var cur = readCurrent();
-          emit(cur, ['lang']);
-          requestLangReload('prefs:lang-cookie');
+          if (res.langChanged) {
+            emit(cur, ['lang']);
+            requestLangReload('prefs:lang-cookie');
+          }
+          if (res.themeChanged) {
+            emit(cur, ['theme']);
+          }
         }
       });
     } catch (e4) { /* ignore */ }

@@ -232,7 +232,12 @@ class QMFFramework {
   private detectTheme(): 'light' | 'dark' {
     if (typeof window === 'undefined') return 'light';
     try {
-      const stored = localStorage.getItem('qmf-theme');
+      const cookieMatch = typeof document !== 'undefined' && document.cookie ? document.cookie.match(/(?:^|;\s*)qmf-theme=([^;]+)/) : null;
+      if (cookieMatch) {
+        const val = decodeURIComponent(cookieMatch[1]).trim().toLowerCase();
+        if (val === 'dark' || val === 'light') return val;
+      }
+      const stored = localStorage.getItem('qmf-theme') || localStorage.getItem('qm-theme');
       if (stored === 'dark' || stored === 'light') return stored;
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
     } catch {

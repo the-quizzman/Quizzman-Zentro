@@ -461,6 +461,23 @@
       return src === 'local' || src === 'account' || src === 'detect' ? src : null;
     }
 
+    _writeThemeCookie(theme) {
+      if (!theme) return;
+      try {
+        const host = location.hostname || '';
+        const secure = location.protocol === 'https:' ? '; Secure' : '';
+        const maxAge = `; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax${secure}`;
+        const domain = (host === 'quizzman.com' || host.endsWith('.quizzman.com'))
+          ? '; domain=.quizzman.com'
+          : '';
+        document.cookie = `qmf-theme=${encodeURIComponent(theme)}${maxAge}${domain}`;
+      } catch (e) { /* ignore */ }
+    }
+
+    _readThemeCookie() {
+      return this.getCookie('qmf-theme');
+    }
+
     _paintLang(resolved, pref) {
       const applied = resolved || this.getLang();
       if (!applied) return;
@@ -511,8 +528,10 @@
       else if (lsLang === 'auto' || (lsLang && LABELS[lsLang])) lang = lsLang;
       else if (cookieLang === 'auto' || (cookieLang && LABELS[cookieLang])) lang = cookieLang;
 
+      const cookieTheme = this._readThemeCookie();
       const theme = localStorage.getItem('qmf-theme')
         || localStorage.getItem('lab-theme')
+        || (cookieTheme && THEMES.has(cookieTheme) ? cookieTheme : null)
         || document.documentElement.getAttribute('data-theme')
         || 'light';
 
@@ -2169,6 +2188,7 @@
           localStorage.setItem('qmf-theme', theme);
           localStorage.setItem('lab-theme', theme);
         } catch (e) { /* ignore */ }
+        this._writeThemeCookie(theme);
         document.documentElement.setAttribute('data-theme', theme);
         try { document.documentElement.style.colorScheme = theme; } catch (e) { /* ignore */ }
         changed = true;
@@ -2255,10 +2275,26 @@
         try {
           localStorage.setItem('qmf-theme', value);
           localStorage.setItem('lab-theme', value);
+          localStorage.setItem('qm-theme', value);
         } catch (e) { /* ignore */ }
+        this._writeThemeCookie(value);
         document.documentElement.setAttribute('data-theme', value);
         try { document.documentElement.style.colorScheme = value; } catch (e) { /* ignore */ }
-        window.dispatchEvent(new CustomEvent('qmf:themechange', { detail: { theme: value } }));
+        try {
+          let meta = document.querySelector('meta[name="theme-color"]');
+          if (!meta) {
+            meta = document.createElement('meta');
+            meta.setAttribute('name', 'theme-color');
+            document.head.appendChild(meta);
+          }
+          meta.setAttribute('content', value === 'dark' ? '#0f172a' : '#ffffff');
+        } catch (e) { /* ignore */ }
+        const detail = { theme: value, source: 'auth-widget' };
+        window.dispatchEvent(new CustomEvent('qmf:themechange', { detail }));
+        window.dispatchEvent(new CustomEvent('qmf:theme-change', { detail }));
+        document.dispatchEvent(new CustomEvent('qmf:themechange', { detail }));
+        document.dispatchEvent(new CustomEvent('qmf:theme-change', { detail }));
+        document.dispatchEvent(new CustomEvent('qmf-theme-change', { detail: value }));
         serverPatch.theme = value;
       }
 

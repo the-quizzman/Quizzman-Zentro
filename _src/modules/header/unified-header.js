@@ -8,7 +8,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.13.0';
+  const VERSION = '3.13.1';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   /* Same origin path as CDN_BASE — avoid dual modules/ vs modules-v3/ caches */
   const CDN_NAV_BASE = CDN_BASE;
@@ -1113,7 +1113,10 @@ const HEADER_I18N = {
       "nav.language": "Ngôn ngữ",
       "nav.settings": "Cài đặt",
       "nav.about": "Về Quizzman",
-      "nav.back": "Quay lại"
+      "nav.back": "Quay lại",
+      "nav.theme": "Giao diện",
+      "theme.light": "Sáng",
+      "theme.dark": "Tối"
     },
     en: {
       "nav.group.study": "Study Mandarin",
@@ -1122,7 +1125,10 @@ const HEADER_I18N = {
       "nav.language": "Language",
       "nav.settings": "Settings",
       "nav.about": "About Quizzman",
-      "nav.back": "Back"
+      "nav.back": "Back",
+      "nav.theme": "Theme",
+      "theme.light": "Light",
+      "theme.dark": "Dark"
     },
     zh: {
       "nav.group.study": "华语学习",
@@ -1131,7 +1137,10 @@ const HEADER_I18N = {
       "nav.language": "语言",
       "nav.settings": "设置",
       "nav.about": "关于 Quizzman",
-      "nav.back": "返回"
+      "nav.back": "返回",
+      "nav.theme": "外观",
+      "theme.light": "浅色",
+      "theme.dark": "深色"
     },
     zht: {
       "nav.group.study": "華語學習",
@@ -1140,7 +1149,10 @@ const HEADER_I18N = {
       "nav.language": "語言",
       "nav.settings": "設定",
       "nav.about": "關於 Quizzman",
-      "nav.back": "返回"
+      "nav.back": "返回",
+      "nav.theme": "外觀",
+      "theme.light": "淺色",
+      "theme.dark": "深色"
     },
     jp: {
       "nav.group.study": "中国語学習",
@@ -1149,7 +1161,10 @@ const HEADER_I18N = {
       "nav.language": "言語",
       "nav.settings": "設定",
       "nav.about": "Quizzman について",
-      "nav.back": "戻る"
+      "nav.back": "戻る",
+      "nav.theme": "テーマ",
+      "theme.light": "ライト",
+      "theme.dark": "ダーク"
     },
     kr: {
       "nav.group.study": "중국어 학습",
@@ -1158,7 +1173,10 @@ const HEADER_I18N = {
       "nav.language": "언어",
       "nav.settings": "설정",
       "nav.about": "Quizzman 정보",
-      "nav.back": "뒤로"
+      "nav.back": "뒤로",
+      "nav.theme": "테마",
+      "theme.light": "라이트",
+      "theme.dark": "다크"
     },
     fr: {
       "nav.group.study": "Study Mandarin",
@@ -1167,7 +1185,10 @@ const HEADER_I18N = {
       "nav.language": "Langue",
       "nav.settings": "Paramètres",
       "nav.about": "À propos de Quizzman",
-      "nav.back": "Retour"
+      "nav.back": "Retour",
+      "nav.theme": "Thème",
+      "theme.light": "Clair",
+      "theme.dark": "Sombre"
     },
     de: {
       "nav.group.study": "Study Mandarin",
@@ -1176,7 +1197,10 @@ const HEADER_I18N = {
       "nav.language": "Sprache",
       "nav.settings": "Einstellungen",
       "nav.about": "Über Quizzman",
-      "nav.back": "Zurück"
+      "nav.back": "Zurück",
+      "nav.theme": "Design",
+      "theme.light": "Hell",
+      "theme.dark": "Dunkel"
     },
     es: {
       "nav.group.study": "Study Mandarin",
@@ -1185,7 +1209,10 @@ const HEADER_I18N = {
       "nav.language": "Idioma",
       "nav.settings": "Configuración",
       "nav.about": "Acerca de Quizzman",
-      "nav.back": "Atrás"
+      "nav.back": "Atrás",
+      "nav.theme": "Tema",
+      "theme.light": "Claro",
+      "theme.dark": "Oscuro"
     },
     th: {
       "nav.group.study": "Study Mandarin",
@@ -1194,7 +1221,10 @@ const HEADER_I18N = {
       "nav.language": "ภาษา",
       "nav.settings": "การตั้งค่า",
       "nav.about": "เกี่ยวกับ Quizzman",
-      "nav.back": "ย้อนกลับ"
+      "nav.back": "ย้อนกลับ",
+      "nav.theme": "ธีม",
+      "theme.light": "สว่าง",
+      "theme.dark": "มืด"
     },
     pt: {
       "nav.group.study": "Study Mandarin",
@@ -1203,7 +1233,10 @@ const HEADER_I18N = {
       "nav.language": "Idioma",
       "nav.settings": "Configurações",
       "nav.about": "Sobre o Quizzman",
-      "nav.back": "Voltar"
+      "nav.back": "Voltar",
+      "nav.theme": "Tema",
+      "theme.light": "Claro",
+      "theme.dark": "Escuro"
     }
   };
   Object.keys(EXTRA_I18N).forEach((lang) => {
@@ -1242,26 +1275,212 @@ const HEADER_I18N = {
     return lang;
   }
 
+  function writeSharedCookie(name, value) {
+    if (!name || value == null || typeof document === 'undefined') return;
+    try {
+      const host = (location && location.hostname) || '';
+      let base = name + '=' + encodeURIComponent(value)
+        + '; path=/; max-age=' + (365 * 24 * 60 * 60)
+        + '; SameSite=Lax';
+      if (location.protocol === 'https:') base += '; Secure';
+      if (host === 'quizzman.com' || host.endsWith('.quizzman.com')) {
+        document.cookie = base + '; domain=.quizzman.com';
+      } else {
+        document.cookie = base;
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function readSharedCookie(name) {
+    if (!name || typeof document === 'undefined') return '';
+    try {
+      const parts = String(document.cookie || '').split(';');
+      const prefix = name + '=';
+      for (let i = 0; i < parts.length; i++) {
+        const p = parts[i].trim();
+        if (p.indexOf(prefix) === 0) return decodeURIComponent(p.slice(prefix.length));
+      }
+    } catch (e) { /* ignore */ }
+    return '';
+  }
+
+  const ACCOUNT_PREFS_URL = 'https://id.quizzman.com/api/account/update-profile';
+
+  function persistAccountPrefs(partial) {
+    if (window.QmfAccountPrefs && typeof window.QmfAccountPrefs.save === 'function') {
+      return window.QmfAccountPrefs.save(partial);
+    }
+    if (!partial || typeof partial !== 'object') return Promise.resolve(null);
+    let token = null;
+    try {
+      token = window.QuizzmanSSO?.getToken?.()
+        || window.QuizzmanAuth?.getToken?.()
+        || localStorage.getItem('jwt_token')
+        || localStorage.getItem('authToken');
+    } catch (e) { /* ignore */ }
+    const hasSession = !!(token || /(?:^|; )(?:jwt_token|authToken|session_id)=/.test(document.cookie || ''));
+    if (!hasSession) return Promise.resolve(null);
+    const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
+    if (token) headers.Authorization = 'Bearer ' + token;
+    return fetch(ACCOUNT_PREFS_URL, {
+      method: 'POST',
+      credentials: 'include',
+      headers,
+      body: JSON.stringify(partial),
+    }).then((res) => (res.ok ? res.json().catch(() => ({ success: true })) : null))
+      .catch(() => null);
+  }
+
+  function softReload(reason) {
+    if (window.QMFShell && typeof window.QMFShell.softReload === 'function') {
+      window.QMFShell.softReload(reason);
+      return;
+    }
+    try {
+      const u = new URL(window.location.href);
+      u.searchParams.set('_qmf', 'prefs');
+      u.searchParams.set('_qmf_why', String(reason || 'prefs').slice(0, 48));
+      u.searchParams.set('_t', String(Date.now()));
+      window.location.replace(u.toString());
+    } catch (e) {
+      window.location.reload();
+    }
+  }
+
+  function getHeaderTheme() {
+    try {
+      const cookieTheme = readSharedCookie('qmf-theme');
+      if (cookieTheme === 'dark' || cookieTheme === 'light') return cookieTheme;
+      const stored = localStorage.getItem('qmf-theme')
+        || localStorage.getItem('lab-theme')
+        || document.documentElement.getAttribute('data-theme');
+      if (stored === 'dark' || stored === 'light') return stored;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+    } catch (e) { /* ignore */ }
+    return 'light';
+  }
+
+  function setHeaderTheme(theme) {
+    const nextTheme = theme === 'dark' ? 'dark' : 'light';
+    try {
+      localStorage.setItem('qmf-theme', nextTheme);
+      localStorage.setItem('lab-theme', nextTheme);
+      localStorage.setItem('qm-theme', nextTheme);
+    } catch (e) { /* ignore */ }
+    writeSharedCookie('qmf-theme', nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    try { document.documentElement.style.colorScheme = nextTheme; } catch (e) { /* ignore */ }
+
+    // Update meta theme-color
+    try {
+      let meta = document.querySelector('meta[name="theme-color"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'theme-color');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', nextTheme === 'dark' ? '#0f172a' : '#ffffff');
+    } catch (e) { /* ignore */ }
+
+    const detail = { theme: nextTheme, source: 'header' };
+    try {
+      window.dispatchEvent(new CustomEvent('qmf:themechange', { detail }));
+      window.dispatchEvent(new CustomEvent('qmf:theme-change', { detail }));
+      document.dispatchEvent(new CustomEvent('qmf:themechange', { detail }));
+      document.dispatchEvent(new CustomEvent('qmf:theme-change', { detail }));
+      document.dispatchEvent(new CustomEvent('qmf-theme-change', { detail: nextTheme }));
+      window.dispatchEvent(new CustomEvent('qmf:prefs-change', { detail: { theme: nextTheme, source: 'local' } }));
+    } catch (e) { /* ignore */ }
+
+    // Sync QmfPrefsDetect broadcast if available
+    try {
+      if (window.QmfPrefsDetect && typeof window.QmfPrefsDetect.broadcast === 'function') {
+        window.QmfPrefsDetect.broadcast({ theme: nextTheme, source: 'local' });
+      }
+    } catch (e) { /* ignore */ }
+
+    // Sync QmfI18n if available
+    try {
+      if (window.QmfI18n && typeof window.QmfI18n.setTheme === 'function') {
+        window.QmfI18n.setTheme(nextTheme, { emit: false });
+      }
+    } catch (e) { /* ignore */ }
+
+    // Persist account prefs if logged in
+    try {
+      persistAccountPrefs({ theme: nextTheme });
+    } catch (e) { /* ignore */ }
+
+    return nextTheme;
+  }
+
+  function setHeaderLang(lang) {
+    if (!lang) return;
+    try {
+      localStorage.setItem('qmf-lang', lang);
+      localStorage.setItem('qm-lang', lang);
+      localStorage.setItem('qm_lang', lang);
+      localStorage.setItem('lab-lang', lang);
+      localStorage.setItem('lab-ui-lang', lang);
+      localStorage.setItem('qss_ui_lang', lang);
+      localStorage.setItem('preferred_language', lang);
+      localStorage.setItem('qmf-prefs-source', 'local');
+    } catch (e) { /* ignore */ }
+
+    writeSharedCookie('qmf-lang', lang);
+    writeSharedCookie('qm-lang', lang);
+    writeSharedCookie('qmf-lang-src', 'local');
+
+    document.documentElement.setAttribute('data-lang', lang);
+    const htmlLang = lang === 'zht' ? 'zh-Hant' : (lang === 'jp' ? 'ja' : (lang === 'kr' ? 'ko' : lang));
+    try { document.documentElement.lang = htmlLang; } catch (e) { /* ignore */ }
+
+    const detail = { lang, pref: lang, source: 'local' };
+    try {
+      window.dispatchEvent(new CustomEvent('qmf:langchange', { detail }));
+      window.dispatchEvent(new CustomEvent('qmf:lang-change', { detail }));
+      document.dispatchEvent(new CustomEvent('qmf:langchange', { detail }));
+      document.dispatchEvent(new CustomEvent('qmf:lang-change', { detail }));
+      window.dispatchEvent(new CustomEvent('qmf:prefs-change', { detail }));
+    } catch (e) { /* ignore */ }
+
+    // Sync QmfPrefsDetect broadcast
+    try {
+      if (window.QmfPrefsDetect && typeof window.QmfPrefsDetect.broadcast === 'function') {
+        window.QmfPrefsDetect.broadcast(detail);
+      }
+    } catch (e) { /* ignore */ }
+
+    // Sync labI18n / QmfI18n
+    try {
+      if (window.labI18n && typeof window.labI18n.setLang === 'function') {
+        window.labI18n.setLang(lang);
+      }
+      if (window.QmfI18n && typeof window.QmfI18n.setLanguage === 'function') {
+        window.QmfI18n.setLanguage(lang);
+      }
+    } catch (e) { /* ignore */ }
+
+    // Persist account prefs if signed in
+    try {
+      persistAccountPrefs({ language: lang });
+    } catch (e) { /* ignore */ }
+  }
+
   function getHeaderLang() {
     try {
-      const readCookie = (name) => {
-        try {
-          const parts = String(document.cookie || '').split(';');
-          const prefix = name + '=';
-          for (let i = 0; i < parts.length; i++) {
-            const p = parts[i].trim();
-            if (p.indexOf(prefix) === 0) return decodeURIComponent(p.slice(prefix.length));
-          }
-        } catch (e0) { /* ignore */ }
-        return '';
-      };
+      const cookieVal = readSharedCookie('qmf-lang');
+      const src = readSharedCookie('qmf-lang-src');
       let raw = localStorage.getItem('qmf-lang')
         || localStorage.getItem('lab-ui-lang')
         || localStorage.getItem('lab-lang')
         || '';
-      if (!raw || raw === 'auto') raw = readCookie('qmf-lang') || raw;
-      if (!raw || raw === 'auto') {
-        raw = document.documentElement.getAttribute('data-lang') || '';
+      if (src === 'local' && cookieVal && cookieVal !== 'auto') {
+        raw = cookieVal;
+      } else if (!raw || raw === 'auto') {
+        raw = cookieVal || document.documentElement.getAttribute('data-lang') || '';
       }
       let lang = String(raw).trim().toLowerCase().replace(/_/g, '-');
       if (HEADER_LANG_ALIAS[lang]) lang = HEADER_LANG_ALIAS[lang];
@@ -1326,6 +1545,9 @@ const HEADER_I18N = {
     'play':          '<rect width="20" height="12" x="2" y="6" rx="6"/><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/>',
     'class':         '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
     'editor':        '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+    'theme':         '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+    'sun':           '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+    'moon':          '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
     'language':      '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
     'globe':         '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
     'settings':      '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
@@ -1516,6 +1738,8 @@ const HEADER_I18N = {
     showNotification: true,
     showSearch: true,
     showJoinQuiz: true,
+    showThemeToggle: false,
+    showLangSwitch: false,
     showUserDropdown: false,
     searchPlaceholder: 'Search',
     joinQuizLabel: 'Join Quiz',
@@ -2211,6 +2435,7 @@ const HEADER_I18N = {
     init() {
       this.render();
       this.setupThemeAwareness();
+      this.setupDesktopPrefs();
       if (this.config.showGlobalNav) {
         this.setupNavigation();
       }
@@ -2313,6 +2538,33 @@ const HEADER_I18N = {
 
       const joinLbl = this.headerEl.querySelector('.lab-header__join-quiz-label');
       if (joinLbl) joinLbl.textContent = ht('join', joinLbl.textContent);
+
+      // Live update desktop language button & options
+      const curLang = getHeaderLang();
+      const langCurr = this.headerEl.querySelector('[data-header-lang-curr]');
+      if (langCurr) {
+        langCurr.textContent = LANG_SHORT_LABELS[curLang] || curLang.toUpperCase();
+      }
+      const langBtn = this.headerEl.querySelector('[data-header-lang-toggle]');
+      if (langBtn) {
+        const title = ht('nav.language', 'Language');
+        const nativeName = LANG_NATIVE_NAMES[curLang] || curLang;
+        langBtn.setAttribute('title', `${title}: ${nativeName}`);
+        langBtn.setAttribute('aria-label', `${title}: ${nativeName}`);
+      }
+      this.headerEl.querySelectorAll('[data-header-lang-select]').forEach((b) => {
+        const active = b.getAttribute('data-header-lang-select') === curLang;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-current', active ? 'true' : 'false');
+      });
+
+      // Live update desktop theme button
+      const desktopThemeBtn = this.headerEl.querySelector('[data-qmf-theme-toggle]');
+      if (desktopThemeBtn) {
+        const themeLabel = ht('nav.theme', 'Theme');
+        desktopThemeBtn.setAttribute('title', themeLabel);
+        desktopThemeBtn.setAttribute('aria-label', themeLabel);
+      }
     }
 
     mountLegatus() {
@@ -2356,22 +2608,107 @@ const HEADER_I18N = {
       const update = () => {
         const dark = document.documentElement.getAttribute('data-theme') === 'dark'
           || (!document.documentElement.getAttribute('data-theme')
+            && typeof window.matchMedia === 'function'
             && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-        if (this.config.logoSrc) return;
+        if (!this.config.logoSrc) {
+          this.container.querySelectorAll('img').forEach((logo) => {
+            if (dark && logo.src.includes('quizzman-logo.png') && !logo.src.includes('dark')) {
+              logo.src = logo.src.replace('quizzman-logo.png', 'quizzman-logo-dark.png');
+            } else if (!dark && logo.src.includes('quizzman-logo-dark.png')) {
+              logo.src = logo.src.replace('quizzman-logo-dark.png', 'quizzman-logo.png');
+            }
+          });
+        }
 
-        this.container.querySelectorAll('img').forEach((logo) => {
-          if (dark && logo.src.includes('quizzman-logo.png') && !logo.src.includes('dark')) {
-            logo.src = logo.src.replace('quizzman-logo.png', 'quizzman-logo-dark.png');
-          } else if (!dark && logo.src.includes('quizzman-logo-dark.png')) {
-            logo.src = logo.src.replace('quizzman-logo-dark.png', 'quizzman-logo.png');
+        // Update desktop theme toggle button
+        const desktopBtn = this.container.querySelector('[data-qmf-theme-toggle]');
+        if (desktopBtn) {
+          desktopBtn.setAttribute('data-theme-state', dark ? 'dark' : 'light');
+          const iconEl = desktopBtn.querySelector('[data-header-theme-icon]');
+          if (iconEl) {
+            iconEl.innerHTML = dark
+              ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'
+              : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
           }
-        });
+          const themeLabel = ht('nav.theme', 'Theme');
+          desktopBtn.setAttribute('title', themeLabel);
+          desktopBtn.setAttribute('aria-label', themeLabel);
+        }
+
+        // Update drawer theme toggle button
+        const drawerBtn = document.querySelector('[data-drawer-theme-toggle]');
+        if (drawerBtn) {
+          const drawerIcon = drawerBtn.querySelector('[data-drawer-theme-icon]');
+          if (drawerIcon) {
+            drawerIcon.innerHTML = mobileNavSVG(dark ? 'sun' : 'moon', 'mh-nav-icon');
+          }
+          const badge = drawerBtn.querySelector('[data-drawer-theme-badge]');
+          if (badge) {
+            badge.textContent = dark ? ht('theme.dark', 'Dark') : ht('theme.light', 'Light');
+          }
+        }
       };
 
       update();
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', update);
       new MutationObserver(update).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      window.addEventListener('qmf:themechange', update);
+      window.addEventListener('qmf:theme-change', update);
+      window.addEventListener('storage', (e) => {
+        if (e && (e.key === 'qmf-theme' || e.key === 'lab-theme')) update();
+      });
+    }
+
+    renderDesktopTheme() {
+      if (!this.config || this.config.showThemeToggle !== true) return '';
+      const currentTheme = getHeaderTheme();
+      const isDark = currentTheme === 'dark';
+      const label = ht('nav.theme', 'Theme');
+      return `
+        <button type="button" class="lab-header__btn lab-header__theme-btn" data-qmf-theme-toggle aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}" data-theme-state="${isDark ? 'dark' : 'light'}">
+          <span class="lab-header__theme-icon" data-header-theme-icon>
+            ${isDark
+              ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>'
+              : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>'
+            }
+          </span>
+        </button>
+      `;
+    }
+
+    renderDesktopLanguage() {
+      if (!this.config || this.config.showLangSwitch !== true) return '';
+      const currentLang = getHeaderLang();
+      const shortLabel = LANG_SHORT_LABELS[currentLang] || currentLang.toUpperCase();
+      const nativeName = LANG_NATIVE_NAMES[currentLang] || currentLang;
+      const title = ht('nav.language', 'Language');
+      const items = HEADER_LANGS.map((l) => {
+        const active = l === currentLang;
+        return `
+          <button type="button" class="lab-header__lang-opt${active ? ' is-active' : ''}" data-header-lang-select="${l}" role="menuitem" aria-current="${active ? 'true' : 'false'}">
+            <span class="lab-header__lang-opt-name">${escapeHtml(LANG_NATIVE_NAMES[l] || l)}</span>
+            <span class="lab-header__lang-opt-code">${escapeHtml(l.toUpperCase())}</span>
+          </button>
+        `;
+      }).join('');
+
+      return `
+        <div class="lab-header__lang-wrap" data-header-lang-wrap>
+          <button type="button" class="lab-header__btn lab-header__lang-btn" data-header-lang-toggle aria-haspopup="true" aria-expanded="false" aria-label="${escapeHtml(title)}: ${escapeHtml(nativeName)}" title="${escapeHtml(title)}: ${escapeHtml(nativeName)}">
+            <svg class="lab-header__lang-globe" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span class="lab-header__lang-curr" data-header-lang-curr>${escapeHtml(shortLabel)}</span>
+            <svg class="lab-header__lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="lab-header__lang-dropdown" data-header-lang-dropdown role="menu" aria-label="${escapeHtml(title)}" hidden>
+            ${items}
+          </div>
+        </div>
+      `;
     }
 
     render() {
@@ -2426,6 +2763,8 @@ const HEADER_I18N = {
 
       // Build mobile drawer HTML (Drill-Down model)
       const currentLang = getHeaderLang();
+      const currentTheme = getHeaderTheme();
+      const isDrawerDark = currentTheme === 'dark';
       const mobileCategoryRowsHtml = getMobileNavGroups().map(renderMobileCategoryItem).join('');
 
       const drawerUtilitySection = `
@@ -2434,6 +2773,11 @@ const HEADER_I18N = {
           <span class="lab-header__drawer-item-title"${i18nAttr('nav.language')}>${escapeHtml(ht('nav.language', 'Language'))}</span>
           <span class="lab-header__drawer-badge" data-drawer-lang-badge>${escapeHtml(LANG_SHORT_LABELS[currentLang] || currentLang.toUpperCase())}</span>
           ${mobileNavSVG('chevron-right', 'mh-nav-chevron')}
+        </button>
+        <button type="button" class="lab-header__drawer-item lab-header__drawer-theme-toggle" data-drawer-theme-toggle aria-label="${escapeHtml(ht('nav.theme', 'Theme'))}">
+          <span class="lab-header__drawer-theme-icon" data-drawer-theme-icon>${mobileNavSVG(isDrawerDark ? 'sun' : 'moon', 'mh-nav-icon')}</span>
+          <span class="lab-header__drawer-item-title"${i18nAttr('nav.theme')}>${escapeHtml(ht('nav.theme', 'Theme'))}</span>
+          <span class="lab-header__drawer-badge" data-drawer-theme-badge>${escapeHtml(isDrawerDark ? ht('theme.dark', 'Dark') : ht('theme.light', 'Light'))}</span>
         </button>
         <a href="${escapeHtml(this.config.settingsUrl || 'https://id.quizzman.com/account')}" class="lab-header__drawer-item">
           ${mobileNavSVG('settings', 'mh-nav-icon')}
@@ -2523,6 +2867,8 @@ const HEADER_I18N = {
             <div class="lab-header__spacer lab-header__spacer--end" aria-hidden="true"></div>
             ${renderSearch(this.config)}
             <div class="lab-header__actions">
+              ${this.renderDesktopLanguage()}
+              ${this.renderDesktopTheme()}
               ${renderJoinQuizButton(this.config)}
               ${this.config.showNotification !== false ? `<div class="lab-header__notification-slot" data-qmf-notification-slot aria-label="${escapeHtml(ht('notify', 'Notifications'))}" data-qmf-i18n="notify" title="${escapeHtml(ht('notify', 'Notifications'))}"></div>` : ''}
             </div>
@@ -3091,16 +3437,21 @@ const HEADER_I18N = {
           return;
         }
 
+        const themeBtn = e.target.closest('[data-drawer-theme-toggle]');
+        if (themeBtn) {
+          e.preventDefault();
+          const curTheme = getHeaderTheme();
+          const nextTheme = curTheme === 'dark' ? 'light' : 'dark';
+          setHeaderTheme(nextTheme);
+          return;
+        }
+
         const langBtn = e.target.closest('[data-drawer-lang-select]');
         if (langBtn) {
           e.preventDefault();
           const lang = langBtn.getAttribute('data-drawer-lang-select');
           if (lang) {
-            try {
-              localStorage.setItem('qmf-lang', lang);
-              document.cookie = `qmf-lang=${lang};path=/;max-age=31536000`;
-              document.documentElement.setAttribute('data-lang', lang);
-            } catch (err) { /* ignore */ }
+            setHeaderLang(lang);
 
             drawer.querySelectorAll('[data-drawer-lang-select]').forEach((b) => {
               const active = b.getAttribute('data-drawer-lang-select') === lang;
@@ -3119,8 +3470,8 @@ const HEADER_I18N = {
               badgeEl.textContent = LANG_SHORT_LABELS[lang] || lang.toUpperCase();
             }
 
-            window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang } }));
             this.applyI18n();
+            setTimeout(() => softReload('prefs:lang'), 80);
           }
           return;
         }
@@ -3135,9 +3486,6 @@ const HEADER_I18N = {
 
       backdrop?.addEventListener('click', closeDrawer);
 
-      document.addEventListener('click', this.boundDocClick);
-      document.addEventListener('keydown', this.boundKeydown);
-
       this.closeDrawer = closeDrawer;
       this.closeSubView = closeSubView;
       this.openSubView = openSubView;
@@ -3147,16 +3495,87 @@ const HEADER_I18N = {
       // Kept for backward compatibility; handled via delegated click on [data-drawer-lang-select]
     }
 
+    setupDesktopPrefs() {
+      if (!this.headerEl) return;
+
+      const themeBtn = this.headerEl.querySelector('[data-qmf-theme-toggle]');
+      if (themeBtn && !themeBtn._bound) {
+        themeBtn._bound = true;
+        themeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const current = getHeaderTheme();
+          const next = current === 'dark' ? 'light' : 'dark';
+          setHeaderTheme(next);
+        });
+      }
+
+      const langWrap = this.headerEl.querySelector('[data-header-lang-wrap]');
+      const langBtn = this.headerEl.querySelector('[data-header-lang-toggle]');
+      const langDropdown = this.headerEl.querySelector('[data-header-lang-dropdown]');
+
+      if (langBtn && langDropdown && !langBtn._bound) {
+        langBtn._bound = true;
+        langBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const isOpen = langWrap.classList.contains('is-open');
+          if (isOpen) {
+            langWrap.classList.remove('is-open');
+            langDropdown.setAttribute('hidden', '');
+            langBtn.setAttribute('aria-expanded', 'false');
+          } else {
+            this.closeAllDropdowns();
+            langWrap.classList.add('is-open');
+            langDropdown.removeAttribute('hidden');
+            langBtn.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        langDropdown.addEventListener('click', (e) => {
+          const opt = e.target.closest('[data-header-lang-select]');
+          if (!opt) return;
+          e.preventDefault();
+          const lang = opt.getAttribute('data-header-lang-select');
+          if (lang) {
+            setHeaderLang(lang);
+            this.applyI18n();
+            langWrap.classList.remove('is-open');
+            langDropdown.setAttribute('hidden', '');
+            langBtn.setAttribute('aria-expanded', 'false');
+            setTimeout(() => softReload('prefs:lang'), 80);
+          }
+        });
+      }
+
+      if (!this._globalDocBound) {
+        this._globalDocBound = true;
+        document.addEventListener('click', this.boundDocClick);
+        document.addEventListener('keydown', this.boundKeydown);
+      }
+    }
+
     closeAllDropdowns() {
       if (!this.headerEl) return;
       this.headerEl.querySelectorAll('.lab-header__nav-item--dropdown.is-open').forEach((item) => {
         item.classList.remove('is-open');
         item.querySelector('.lab-header__nav-trigger')?.setAttribute('aria-expanded', 'false');
       });
+      const langWrap = this.headerEl.querySelector('[data-header-lang-wrap]');
+      if (langWrap) {
+        langWrap.classList.remove('is-open');
+        langWrap.querySelector('[data-header-lang-dropdown]')?.setAttribute('hidden', '');
+        langWrap.querySelector('[data-header-lang-toggle]')?.setAttribute('aria-expanded', 'false');
+      }
       this.openDropdown = null;
     }
 
     handleDocumentClick(e) {
+      const langWrap = this.headerEl?.querySelector('[data-header-lang-wrap]');
+      if (langWrap && langWrap.classList.contains('is-open') && !langWrap.contains(e.target)) {
+        langWrap.classList.remove('is-open');
+        langWrap.querySelector('[data-header-lang-dropdown]')?.setAttribute('hidden', '');
+        langWrap.querySelector('[data-header-lang-toggle]')?.setAttribute('aria-expanded', 'false');
+      }
       if (!this.openDropdown) return;
       if (!this.openDropdown.contains(e.target)) this.closeAllDropdowns();
     }

@@ -4,8 +4,9 @@ import { createLogger, mountComponent, createElement } from '@qmf/utils';
 // src/index.ts
 var FooterConfigSchema = z.object({
   // Copyright
-  copyrightHolder: z.string().default("CTCP PTN & GDQT QUIZZMAN"),
-  copyrightStartYear: z.number().default(2022),
+  copyrightHolder: z.string().default("Quizzman"),
+  copyrightStartYear: z.number().default(2026),
+  copyrightText: z.string().optional(),
   // Links
   links: z.array(z.object({
     label: z.string(),
@@ -124,6 +125,11 @@ var QMFFooter = class {
     return info;
   }
   renderCopyright() {
+    if (this.config.copyrightText) {
+      return createElement("p", { className: "qmf-footer__copyright" }, [
+        this.config.copyrightText
+      ]);
+    }
     const year = (/* @__PURE__ */ new Date()).getFullYear();
     const yearRange = this.config.copyrightStartYear < year ? `${this.config.copyrightStartYear}\u2013${year}` : `${year}`;
     return createElement("p", { className: "qmf-footer__copyright" }, [

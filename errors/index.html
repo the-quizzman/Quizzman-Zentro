@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Error pages — Quizzman</title>
+  <link rel="icon" href="/qmf/assets/logo/favicon.ico">
+  <link rel="stylesheet" href="/qmf/assets/fonts/fonts.css">
+  <style>
+    :root { --ink:#171717; --paper:#fff; --muted:#5e5e5e; --line:#e4e4e4; color-scheme: light dark; }
+    @media (prefers-color-scheme: dark) {
+      :root { --ink:#f4f1ea; --paper:#101010; --muted:#b7b7b2; --line:#2e2e2e; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--paper); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    .wrap { width: min(720px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; font-family: Outfit, Inter, sans-serif; font-weight: 750; font-size: 20px; }
+    .logo { height: 36px; width: 36px; }
+    .logo-dark { display: none; }
+    @media (prefers-color-scheme: dark) { .logo-light { display: none; } .logo-dark { display: block; } }
+    h1 { font-family: Outfit, Inter, sans-serif; font-weight: 750; letter-spacing: -.03em; font-size: 36px; margin: 28px 0 8px; }
+    p { color: var(--muted); margin: 0 0 22px; }
+    .grid { display: grid; gap: 12px; }
+    a.card { display: block; text-decoration: none; color: inherit; border-radius: 24px; padding: 22px; }
+    a.card strong { display: block; font-family: Outfit, Inter, sans-serif; font-size: 28px; }
+    a.card span { display: block; margin-top: 6px; }
+    .c4 { background: #1a4fd8; color: #fff; }
+    .c5 { background: #c81e1e; color: #fff; }
+    footer { margin-top: 28px; color: var(--muted); font-size: 13px; }
+    footer strong { color: var(--ink); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brand" href="https://quizzman.com/"><img class="logo logo-light" src="/qmf/assets/logo/quizzman-logo-116.webp" alt="" width="116" height="116"><img class="logo logo-dark" src="/qmf/assets/logo/quizzman-logo-dark-116.webp" alt="" width="116" height="116">Quizzman</a>
+    <h1>Error pages</h1>
+    <p>Flat Quizzman pages for client and server errors. English first, with a Vietnamese switch on each page.</p>
+    <div class="grid">
+      <a class="card c4" href="/qmf/errors/40x.html"><strong>40x</strong><span>400, 401, 403, 404, 408</span></a>
+      <a class="card c5" href="/qmf/errors/50x.html"><strong>50x</strong><span>500, 502, 503, 504</span></a>
+    </div>
+    <footer><strong>Mentis · Nexus · Lumen</strong><div>Trí tuệ · Kết nối · Ánh sáng</div></footer>
+  </div>
+</body>
+</html>

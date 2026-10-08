@@ -149,12 +149,14 @@
       );
       var cookieLang = readLangCookie();
       var src = readLangSrcCookie();
+      var cookieTheme = readThemeCookie();
       if (lsLang === 'auto') lang = 'auto';
       else if (cookieLang && (src === 'local' || !lsLang || cookieLang !== lsLang)) lang = cookieLang;
       else lang = lsLang || cookieLang;
       theme = normalizeTheme(
         localStorage.getItem('qmf-theme')
         || localStorage.getItem('lab-theme')
+        || cookieTheme
         || document.documentElement.getAttribute('data-theme')
         || 'light'
       );
@@ -190,6 +192,11 @@
     writeSharedCookie('qmf-lang', lang);
   }
 
+  function writeThemeCookie(theme) {
+    if (!theme) return;
+    writeSharedCookie('qmf-theme', theme);
+  }
+
   function readSharedCookie(name) {
     if (!name || typeof document === 'undefined') return null;
     try {
@@ -207,6 +214,10 @@
 
   function readLangCookie() {
     return normalizeLang(readSharedCookie('qmf-lang'));
+  }
+
+  function readThemeCookie() {
+    return normalizeTheme(readSharedCookie('qmf-theme'));
   }
 
   function readLangSrcCookie() {
@@ -238,6 +249,8 @@
       if (theme) {
         localStorage.setItem('qmf-theme', theme);
         localStorage.setItem('lab-theme', theme);
+        localStorage.setItem('qm-theme', theme);
+        writeThemeCookie(theme);
         state.theme = theme;
       }
       if (region) {
@@ -392,7 +405,15 @@
     writePrefs({ theme: theme }, { applyLangChrome: false });
     if (opts.emit !== false) {
       try {
-        global.dispatchEvent(new CustomEvent('qmf:themechange', { detail: { theme: theme, source: 'i18n-dom' } }));
+        var detail = { theme: theme, source: 'i18n-dom' };
+        global.dispatchEvent(new CustomEvent('qmf:themechange', { detail: detail }));
+        global.dispatchEvent(new CustomEvent('qmf:theme-change', { detail: detail }));
+        if (typeof document !== 'undefined') {
+          document.dispatchEvent(new CustomEvent('qmf:themechange', { detail: detail }));
+          document.dispatchEvent(new CustomEvent('qmf:theme-change', { detail: detail }));
+          document.dispatchEvent(new CustomEvent('qmf-theme-change', { detail: theme }));
+        }
+        global.dispatchEvent(new CustomEvent('qmf:prefs-change', { detail: { theme: theme, source: 'local' } }));
       } catch (e) { /* ignore */ }
     }
     return theme;

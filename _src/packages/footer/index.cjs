@@ -6,8 +6,9 @@ var utils = require('@qmf/utils');
 // src/index.ts
 var FooterConfigSchema = core.z.object({
   // Copyright
-  copyrightHolder: core.z.string().default("CTCP PTN & GDQT QUIZZMAN"),
-  copyrightStartYear: core.z.number().default(2022),
+  copyrightHolder: core.z.string().default("Quizzman"),
+  copyrightStartYear: core.z.number().default(2026),
+  copyrightText: core.z.string().optional(),
   // Links
   links: core.z.array(core.z.object({
     label: core.z.string(),
@@ -126,6 +127,11 @@ var QMFFooter = class {
     return info;
   }
   renderCopyright() {
+    if (this.config.copyrightText) {
+      return utils.createElement("p", { className: "qmf-footer__copyright" }, [
+        this.config.copyrightText
+      ]);
+    }
     const year = (/* @__PURE__ */ new Date()).getFullYear();
     const yearRange = this.config.copyrightStartYear < year ? `${this.config.copyrightStartYear}\u2013${year}` : `${year}`;
     return utils.createElement("p", { className: "qmf-footer__copyright" }, [
