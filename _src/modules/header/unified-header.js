@@ -8,7 +8,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.13.1';
+  const VERSION = '3.13.11';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   /* Same origin path as CDN_BASE — avoid dual modules/ vs modules-v3/ caches */
   const CDN_NAV_BASE = CDN_BASE;
@@ -1279,15 +1279,16 @@ const HEADER_I18N = {
     if (!name || value == null || typeof document === 'undefined') return;
     try {
       const host = (location && location.hostname) || '';
-      let base = name + '=' + encodeURIComponent(value)
-        + '; path=/; max-age=' + (365 * 24 * 60 * 60)
-        + '; SameSite=Lax';
-      if (location.protocol === 'https:') base += '; Secure';
-      if (host === 'quizzman.com' || host.endsWith('.quizzman.com')) {
-        document.cookie = base + '; domain=.quizzman.com';
-      } else {
-        document.cookie = base;
+      const secure = location.protocol === 'https:' ? '; Secure' : '';
+      const maxAge = '; path=/; max-age=' + (365 * 24 * 60 * 60) + '; SameSite=Lax' + secure;
+      const isQuizzman = host === 'quizzman.com' || host.endsWith('.quizzman.com');
+      if (isQuizzman && host !== 'quizzman.com') {
+        document.cookie = name + '=; path=/; max-age=0' + secure;
       }
+      if (isQuizzman) {
+        document.cookie = name + '=' + encodeURIComponent(value) + maxAge + '; domain=.quizzman.com';
+      }
+      document.cookie = name + '=' + encodeURIComponent(value) + maxAge;
     } catch (e) { /* ignore */ }
   }
 
@@ -1311,22 +1312,44 @@ const HEADER_I18N = {
       return window.QmfAccountPrefs.save(partial);
     }
     if (!partial || typeof partial !== 'object') return Promise.resolve(null);
-    let token = null;
+    const sso = window.QuizzmanSSO || window.QuizzmanAuth || window.IdSysSSO;
+
+    const getHeaders = () => {
+      let t = null;
+      try {
+        t = sso?.getToken?.()
+          || (window.QMFShell && window.QMFShell.token)
+          || window.__QM_ACCESS_TOKEN__
+          || localStorage.getItem('jwt_token')
+          || localStorage.getItem('authToken');
+      } catch (e) { /* ignore */ }
+      const h = { 'Content-Type': 'application/json', Accept: 'application/json' };
+      if (t) h.Authorization = 'Bearer ' + t;
+      return h;
+    };
+
+    let initialToken = null;
     try {
-      token = window.QuizzmanSSO?.getToken?.()
-        || window.QuizzmanAuth?.getToken?.()
+      initialToken = sso?.getToken?.()
+        || (window.QMFShell && window.QMFShell.token)
+        || window.__QM_ACCESS_TOKEN__
         || localStorage.getItem('jwt_token')
         || localStorage.getItem('authToken');
     } catch (e) { /* ignore */ }
-    const hasSession = !!(token || /(?:^|; )(?:jwt_token|authToken|session_id)=/.test(document.cookie || ''));
+    const hasSession = !!(initialToken || /(?:^|; )(?:qm_id|id_at|jwt_token|authToken|session_id)=/.test(document.cookie || ''));
     if (!hasSession) return Promise.resolve(null);
-    const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
-    if (token) headers.Authorization = 'Bearer ' + token;
-    return fetch(ACCOUNT_PREFS_URL, {
+
+    const doFetch = () => fetch(ACCOUNT_PREFS_URL, {
       method: 'POST',
       credentials: 'include',
-      headers,
+      headers: getHeaders(),
       body: JSON.stringify(partial),
+    });
+    return doFetch().then((res) => {
+      if (res.status === 401 && sso && typeof sso.refreshAccessToken === 'function') {
+        return sso.refreshAccessToken().then((ok) => (ok ? doFetch() : res));
+      }
+      return res;
     }).then((res) => (res.ok ? res.json().catch(() => ({ success: true })) : null))
       .catch(() => null);
   }
@@ -1371,6 +1394,12 @@ const HEADER_I18N = {
     } catch (e) { /* ignore */ }
     writeSharedCookie('qmf-theme', nextTheme);
     document.documentElement.setAttribute('data-theme', nextTheme);
+    const isDark = nextTheme === 'dark';
+    document.documentElement.classList.toggle('dark', isDark);
+    if (document.body) {
+      document.body.classList.toggle('qmf-dark', isDark);
+      document.body.classList.toggle('qm-theme-light', !isDark);
+    }
     try { document.documentElement.style.colorScheme = nextTheme; } catch (e) { /* ignore */ }
 
     // Update meta theme-color
@@ -1514,11 +1543,12 @@ const HEADER_I18N = {
   const LEGATUS_BRIDGE = CDN_BASE + '/legatus-bridge.js?v=' + VERSION;
   const LEGATUS_ENDPOINT = 'https://legatus.quizzman.com';
   const NAV_ICON_BASE = 'https://ui.quizzman.com/qmf/assets/logo/nav';
-  const NAV_ICON_VER = '20261003';
+  const NAV_ICON_VER = '20261024-4';
   let joinOverlayLoader = null;
 
   function navIcon(name) {
-    const base = NAV_ICON_BASE + '/' + name;
+    const iconName = {"wiki": "wiki-20261024-6978f8b0df", "dictionary": "dictionary-20261024-88e90bbf6c", "jck": "jck-20261024-81e49dee08"}[name] || name;
+    const base = NAV_ICON_BASE + '/' + iconName;
     return {
       iconImg: base + '-40.png?v=' + NAV_ICON_VER,
       iconImg2x: base + '-80.png?v=' + NAV_ICON_VER,
@@ -1539,6 +1569,7 @@ const HEADER_I18N = {
    * Used by renderMobileNavRow() for the flat-row sidebar (Option 2).
    */
   const MOBILE_NAV_ICONS = {
+    'home':          '<path d="m3 10.8 9-7.3 9 7.3"/><path d="M5.5 9.5V21h13V9.5"/><path d="M9.5 21v-6h5v6"/>',
     'study':         '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
     'knowledge':     '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
     'insight':       '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>',
@@ -1605,6 +1636,13 @@ const HEADER_I18N = {
   function getQuizzmanNavItems() {
     return [
       {
+        id: 'home',
+        labelKey: 'nav.home',
+        label: ht('nav.home', 'Home'),
+        href: 'https://quizzman.com/',
+        compact: true,
+      },
+      {
         id: 'explore',
         labelKey: 'nav.explore',
         label: ht('nav.explore', 'Explore'),
@@ -1623,7 +1661,7 @@ const HEADER_I18N = {
           // Teach
           { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', groupKey: 'group.teach', label: ht('item.classroom'), description: ht('desc.classroom'), group: ht('group.teach'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
           { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', groupKey: 'group.teach', label: ht('item.lms'), description: ht('desc.lms'), group: ht('group.teach'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
-          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', groupKey: 'group.teach', label: ht('item.library'), description: ht('desc.library'), group: ht('group.teach'), href: 'https://lib.quizzman.com', icon: '馆' },
+          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', groupKey: 'group.teach', label: ht('item.library'), description: ht('desc.library'), group: ht('group.teach'), href: 'https://lib.quizzman.com', ...navIcon('library') },
           // Study
           { id: 'mandarin', labelKey: 'item.mandarin', descKey: 'desc.mandarin', groupKey: 'group.study', label: ht('item.mandarin'), description: ht('desc.mandarin'), group: ht('group.study'), href: 'https://study.quizzman.com', ...navIcon('mandarin') },
           { id: 'grammar', labelKey: 'item.grammar', descKey: 'desc.grammar', groupKey: 'group.study', label: ht('item.grammar'), description: ht('desc.grammar'), group: ht('group.study'), href: 'https://study.quizzman.com/grammar', icon: '文' },
@@ -1655,7 +1693,7 @@ const HEADER_I18N = {
           { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', groupKey: 'group.classes', label: ht('item.classroom'), description: ht('desc.classroom'), group: ht('group.classes'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
           { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', groupKey: 'group.classes', label: ht('item.lms'), description: ht('desc.lms'), group: ht('group.classes'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
           // Resources
-          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', groupKey: 'group.resources', label: ht('item.library'), description: ht('desc.library'), group: ht('group.resources'), href: 'https://lib.quizzman.com', icon: '馆' },
+          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', groupKey: 'group.resources', label: ht('item.library'), description: ht('desc.library'), group: ht('group.resources'), href: 'https://lib.quizzman.com', ...navIcon('library') },
         ],
       },
       {
@@ -1670,6 +1708,7 @@ const HEADER_I18N = {
         },
         children: [
           { id: 'wiki', labelKey: 'item.wiki', descKey: 'desc.wiki', label: ht('item.wiki'), description: ht('desc.wiki'), href: 'https://wiki.quizzman.com', ...navIcon('wiki') },
+          { id: 'books', labelKey: 'item.books', descKey: 'desc.books', label: ht('item.books', 'Books'), description: ht('desc.books', 'Tác phẩm kinh điển & cổ tịch'), href: 'https://books.quizzman.com', ...navIcon('books') },
           { id: 'dictionary', labelKey: 'item.dictionary', descKey: 'desc.dictionary', label: ht('item.dictionary'), description: ht('desc.dictionary'), href: 'https://dict.quizzman.com', ...navIcon('dictionary') },
           { id: 'paper', labelKey: 'item.paper', descKey: 'desc.paper', label: ht('item.paper'), description: ht('desc.paper'), href: 'https://paper.quizzman.com', ...navIcon('paper') },
           { id: 'zentro', labelKey: 'item.zentro', descKey: 'desc.zentro', label: ht('item.zentro'), description: ht('desc.zentro'), href: 'https://ui.quizzman.com', icon: 'Z' },
@@ -1809,9 +1848,54 @@ const HEADER_I18N = {
     return `
       <picture>
         <source srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-232.webp 2x" type="image/webp">
-        <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.png" srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.png 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo.png 2x" alt="${escapeHtml(brandName)}" class="lab-header__logo" width="116" height="63" loading="eager" decoding="async">
+        <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp" srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-232.webp 2x" alt="${escapeHtml(brandName)}" class="lab-header__logo" width="116" height="63" loading="eager" decoding="async">
       </picture>
     `;
+  }
+
+  /**
+   * Calculates the target URL to step back 1 level in the navigation hierarchy ("lùi về 1").
+   * Supports hash routing (#/a/b -> #/a), URL path (/a/b -> /a -> /), subdomain roots
+   * (sub.quizzman.com/ -> quizzman.com/), and query parameters.
+   */
+  function getStepBackUrl(configuredBrandHref) {
+    try {
+      const loc = window.location;
+
+      // 1. Hash routing: e.g. #/section/sub or #/quiz-editor/edit/123
+      if (loc.hash && loc.hash.length > 2) {
+        const hashClean = loc.hash.replace(/^#\/?/, '').replace(/\/+$/, '');
+        const segs = hashClean.split('/').filter(Boolean);
+        if (segs.length > 1) {
+          segs.pop();
+          return '#/' + segs.join('/');
+        }
+        if (segs.length === 1 && loc.hash.startsWith('#/')) {
+          return '#/';
+        }
+      }
+
+      // 2. Path hierarchy: e.g. /help/articles/123 -> /help/articles -> /help -> /
+      const pathClean = loc.pathname.replace(/\/+$/, '');
+      const parts = pathClean.split('/').filter(Boolean);
+      if (parts.length > 1) {
+        parts.pop();
+        return '/' + parts.join('/') + (loc.search || '');
+      }
+      if (parts.length === 1) {
+        return '/' + (loc.search || '');
+      }
+
+      // 3. Subdomain root: e.g. https://books.quizzman.com/ -> https://quizzman.com/
+      if (loc.hostname !== 'quizzman.com' && loc.hostname !== 'www.quizzman.com' && loc.hostname.endsWith('quizzman.com')) {
+        return 'https://quizzman.com/';
+      }
+    } catch (_) {}
+
+    if (configuredBrandHref && configuredBrandHref !== 'https://quizzman.com/' && configuredBrandHref !== 'https://quizzman.com') {
+      return configuredBrandHref;
+    }
+    return '/';
   }
 
   function detectActiveNavState() {
@@ -1819,6 +1903,9 @@ const HEADER_I18N = {
     const path = window.location.pathname;
 
     if (host === 'quizzman.com' || host === 'www.quizzman.com') {
+      if (path === '/' || path === '') {
+        return { section: 'home' };
+      }
       return { section: 'explore' };
     }
 
@@ -2074,6 +2161,7 @@ const HEADER_I18N = {
         icon: 'knowledge',
         children: [
           { id: 'wiki', labelKey: 'item.wiki', descKey: 'desc.wiki', label: ht('item.wiki', 'Wiki'), description: ht('desc.wiki'), href: 'https://wiki.quizzman.com', ...navIcon('wiki') },
+          { id: 'books', labelKey: 'item.books', descKey: 'desc.books', label: ht('item.books', 'Books'), description: ht('desc.books', 'Tác phẩm kinh điển & cổ tịch'), href: 'https://books.quizzman.com', ...navIcon('books') },
           { id: 'paper', labelKey: 'item.paper', descKey: 'desc.paper', label: ht('item.paper', 'Paper'), description: ht('desc.paper'), href: 'https://paper.quizzman.com', ...navIcon('paper') },
           { id: 'dictionary', labelKey: 'item.dictionary', descKey: 'desc.dictionary', label: ht('item.dictionary', 'Dictionary'), description: ht('desc.dictionary'), href: 'https://dict.quizzman.com', ...navIcon('dictionary') },
         ],
@@ -2118,7 +2206,7 @@ const HEADER_I18N = {
           { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', label: ht('item.classroom', 'Class'), description: ht('desc.classroom'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
           { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', label: ht('item.slide-studio', 'Slide Studio'), description: ht('desc.slide-studio'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
           { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', label: ht('item.lms', 'LMS'), description: ht('desc.lms'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
-          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', label: ht('item.library', 'Library'), description: ht('desc.library'), href: 'https://lib.quizzman.com', icon: '馆' },
+          { id: 'library', labelKey: 'item.library', descKey: 'desc.library', label: ht('item.library', 'Library'), description: ht('desc.library'), href: 'https://lib.quizzman.com', ...navIcon('library') },
           { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', label: ht('item.assignment', 'Assignment'), description: ht('desc.assignment'), href: 'https://class.quizzman.com/homework', ...navIcon('assignment') },
         ],
       },
@@ -2434,6 +2522,7 @@ const HEADER_I18N = {
 
     init() {
       this.render();
+      this.setupBrandBack();
       this.setupThemeAwareness();
       this.setupDesktopPrefs();
       if (this.config.showGlobalNav) {
@@ -2486,7 +2575,14 @@ const HEADER_I18N = {
       if (drawerEl && this.config.showGlobalNav) {
         const navList = drawerEl.querySelector('[data-drawer-nav-list]');
         if (navList) {
-          navList.innerHTML = getMobileNavGroups().map(renderMobileCategoryItem).join('');
+          const homeItemHtml = `
+            <a href="https://quizzman.com/" class="lab-header__drawer-item" data-drawer-nav="home">
+              ${mobileNavSVG('home', 'mh-nav-icon')}
+              <span class="lab-header__drawer-item-title"${i18nAttr('nav.home')}>${escapeHtml(ht('nav.home', 'Home'))}</span>
+              ${mobileNavSVG('chevron-right', 'mh-nav-chevron')}
+            </a>
+          `;
+          navList.innerHTML = homeItemHtml + getMobileNavGroups().map(renderMobileCategoryItem).join('');
         }
         const langBadge = drawerEl.querySelector('[data-drawer-lang-badge]');
         if (langBadge) {
@@ -2725,7 +2821,7 @@ const HEADER_I18N = {
         <a href="${escapeHtml(this.config.mainLogoLink || 'https://quizzman.com')}" class="lab-header__qm-group" title="Quizzman">
           <picture>
             <source srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-232.webp 2x" type="image/webp">
-            <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.png" srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.png 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo.png 2x" alt="Quizzman" class="lab-header__qm-logo" width="116" height="63" loading="eager" decoding="async">
+            <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp" srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-232.webp 2x" alt="Quizzman" class="lab-header__qm-logo" width="116" height="63" loading="eager" decoding="async">
           </picture>
           <div class="lab-header__qm-texts">
             <span class="lab-header__qm-name">${escapeHtml(appName)}</span>
@@ -2796,7 +2892,7 @@ const HEADER_I18N = {
         ? `<img src="${escapeHtml(this.config.logoSrc)}" alt="Quizzman" class="lab-header__drawer-title-logo" width="32" height="32" loading="eager">`
         : `<picture>
             <source srcset="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp 1x, https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-232.webp 2x" type="image/webp">
-            <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.png" alt="Quizzman" class="lab-header__drawer-title-logo" width="32" height="32" loading="eager" decoding="async">
+            <img src="https://ui.quizzman.com/qmf/assets/logo/quizzman-logo-116.webp" alt="Quizzman" class="lab-header__drawer-title-logo" width="32" height="32" loading="eager" decoding="async">
            </picture>`;
 
       const drawerHtml = showGlobalNav
@@ -2817,6 +2913,11 @@ const HEADER_I18N = {
                 </div>
                 <div class="lab-header__drawer-body">
                   <div class="lab-header__drawer-nav-list" data-drawer-nav-list>
+                    <a href="https://quizzman.com/" class="lab-header__drawer-item" data-drawer-nav="home">
+                      ${mobileNavSVG('home', 'mh-nav-icon')}
+                      <span class="lab-header__drawer-item-title"${i18nAttr('nav.home')}>${escapeHtml(ht('nav.home', 'Home'))}</span>
+                      ${mobileNavSVG('chevron-right', 'mh-nav-chevron')}
+                    </a>
                     ${mobileCategoryRowsHtml}
                   </div>
                   <div class="lab-header__drawer-sep"></div>
@@ -2846,7 +2947,7 @@ const HEADER_I18N = {
         : '';
 
       const inFlow = !!this.config.headerInFlow;
-      const brandHref = this.config.brandHref || '/';
+      const brandHref = getStepBackUrl(this.config.brandHref);
 
       this.container.innerHTML = `
         <header class="lab-header${showGlobalNav ? ' lab-header--has-nav' : ''}${inFlow ? ' lab-header--in-flow' : ''}" role="banner">
@@ -2883,6 +2984,72 @@ const HEADER_I18N = {
       if (inFlow) {
         document.body.classList.add('lab-header--in-flow');
       }
+    }
+
+    setupBrandBack() {
+      const brandEl = this.headerEl?.querySelector('.lab-header__brand');
+      if (!brandEl) return;
+
+      const updateBrandHref = () => {
+        const stepBackHref = getStepBackUrl(this.config.brandHref);
+        brandEl.setAttribute('href', stepBackHref);
+      };
+
+      this.boundUpdateBrandHref = updateBrandHref;
+      updateBrandHref();
+
+      window.addEventListener('popstate', this.boundUpdateBrandHref);
+      window.addEventListener('hashchange', this.boundUpdateBrandHref);
+
+      brandEl.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+        const loc = window.location;
+        const isRoot = (loc.hostname === 'quizzman.com' || loc.hostname === 'www.quizzman.com') &&
+                       (loc.pathname === '/' || loc.pathname === '') &&
+                       (!loc.hash || loc.hash === '#' || loc.hash === '#/');
+
+        if (isRoot) {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        e.preventDefault();
+
+        const sameOriginReferrer = (function () {
+          try {
+            if (!document.referrer) return false;
+            const ref = new URL(document.referrer);
+            return ref.hostname === loc.hostname || ref.hostname.endsWith('quizzman.com');
+          } catch (_) {
+            return false;
+          }
+        })();
+
+        if (window.history.length > 1 && sameOriginReferrer) {
+          const currentHref = loc.href;
+          window.history.back();
+          setTimeout(() => {
+            if (loc.href === currentHref) {
+              const fallback = getStepBackUrl(this.config.brandHref);
+              if (fallback.startsWith('#')) {
+                loc.hash = fallback;
+              } else {
+                loc.href = fallback;
+              }
+            }
+          }, 200);
+          return;
+        }
+
+        const targetUrl = getStepBackUrl(this.config.brandHref);
+        if (targetUrl.startsWith('#')) {
+          loc.hash = targetUrl;
+        } else {
+          loc.href = targetUrl;
+        }
+      });
     }
 
     setupJoinQuiz() {
@@ -3601,6 +3768,10 @@ const HEADER_I18N = {
     }
 
     destroy() {
+      if (this.boundUpdateBrandHref) {
+        window.removeEventListener('popstate', this.boundUpdateBrandHref);
+        window.removeEventListener('hashchange', this.boundUpdateBrandHref);
+      }
       document.removeEventListener('click', this.boundDocClick);
       document.removeEventListener('keydown', this.boundKeydown);
       const joinButton = this.headerEl?.querySelector('[data-qmf-header-join]');

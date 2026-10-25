@@ -16,7 +16,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '2.0.4';
+  const VERSION = '2.0.8';
   /* System UI stack — SF Pro on Apple, Segoe on Windows; no Inter-first */
   const FONT_STACK = 'var(--qmf-font-system, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, "Segoe UI", sans-serif)';
   const ID_SYS = 'https://id.quizzman.com';
@@ -28,18 +28,46 @@
     return null;
   }
 
-  /** Persist UI prefs to account (source of truth when logged in). localStorage is cache only. */
   function persistAccountPrefs(partial) {
     if (!partial || typeof partial !== 'object') return Promise.resolve(null);
-    if (location.hostname !== 'id.quizzman.com') return Promise.resolve(null);
-    const hasSession = /(?:^|; )(?:qm_id|id_at)=/.test(document.cookie || '');
+    const sso = window.QuizzmanSSO || window.QuizzmanAuth || window.IdSysSSO;
+
+    const getHeaders = () => {
+      let t = null;
+      try {
+        t = sso?.getToken?.()
+          || localStorage.getItem('jwt_token')
+          || localStorage.getItem('authToken');
+      } catch (e) { /* ignore */ }
+      const h = { 'Content-Type': 'application/json', Accept: 'application/json' };
+      if (t) h.Authorization = 'Bearer ' + t;
+      return h;
+    };
+
+    let initialToken = null;
+    try {
+      initialToken = sso?.getToken?.()
+        || localStorage.getItem('jwt_token')
+        || localStorage.getItem('authToken');
+    } catch (e) { /* ignore */ }
+    const hasSession = !!(initialToken || /(?:^|; )(?:qm_id|id_at|jwt_token|authToken|session_id)=/.test(document.cookie || ''));
     if (!hasSession) return Promise.resolve(null);
 
-    return fetch(ACCOUNT_PREFS_URL, {
+    const doFetch = () => fetch(ACCOUNT_PREFS_URL, {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: getHeaders(),
       body: JSON.stringify(partial),
+    });
+
+    return doFetch().then((res) => {
+      if (res.status === 401 && sso && typeof sso.refreshAccessToken === 'function') {
+        return sso.refreshAccessToken().then((ok) => {
+          if (ok) return doFetch();
+          return res;
+        });
+      }
+      return res;
     }).then((res) => {
       if (!res.ok) {
         console.warn('[QMF Auth] prefs save failed', res.status);
@@ -444,11 +472,20 @@
         const host = location.hostname || '';
         const secure = location.protocol === 'https:' ? '; Secure' : '';
         const maxAge = `; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax${secure}`;
-        const domain = (host === 'quizzman.com' || host.endsWith('.quizzman.com'))
-          ? '; domain=.quizzman.com'
-          : '';
-        document.cookie = `qmf-lang=${encodeURIComponent(lang)}${maxAge}${domain}`;
-        document.cookie = `qmf-lang-src=${encodeURIComponent(src || 'local')}${maxAge}${domain}`;
+        const isQuizzman = host === 'quizzman.com' || host.endsWith('.quizzman.com');
+
+        // Clear host-only cookie to prevent cookie shadowing if previously set without domain
+        if (isQuizzman && host !== 'quizzman.com') {
+          document.cookie = `qmf-lang=; path=/; max-age=0${secure}`;
+          document.cookie = `qmf-lang-src=; path=/; max-age=0${secure}`;
+        }
+
+        if (isQuizzman) {
+          document.cookie = `qmf-lang=${encodeURIComponent(lang)}${maxAge}; domain=.quizzman.com`;
+          document.cookie = `qmf-lang-src=${encodeURIComponent(src || 'local')}${maxAge}; domain=.quizzman.com`;
+        }
+        document.cookie = `qmf-lang=${encodeURIComponent(lang)}${maxAge}`;
+        document.cookie = `qmf-lang-src=${encodeURIComponent(src || 'local')}${maxAge}`;
       } catch (e) { /* ignore */ }
     }
 
@@ -467,10 +504,15 @@
         const host = location.hostname || '';
         const secure = location.protocol === 'https:' ? '; Secure' : '';
         const maxAge = `; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax${secure}`;
-        const domain = (host === 'quizzman.com' || host.endsWith('.quizzman.com'))
-          ? '; domain=.quizzman.com'
-          : '';
-        document.cookie = `qmf-theme=${encodeURIComponent(theme)}${maxAge}${domain}`;
+        const isQuizzman = host === 'quizzman.com' || host.endsWith('.quizzman.com');
+
+        if (isQuizzman && host !== 'quizzman.com') {
+          document.cookie = `qmf-theme=; path=/; max-age=0${secure}`;
+        }
+        if (isQuizzman) {
+          document.cookie = `qmf-theme=${encodeURIComponent(theme)}${maxAge}; domain=.quizzman.com`;
+        }
+        document.cookie = `qmf-theme=${encodeURIComponent(theme)}${maxAge}`;
       } catch (e) { /* ignore */ }
     }
 
@@ -488,9 +530,8 @@
         document.documentElement.setAttribute('data-lang', applied);
       } catch (e) { /* ignore */ }
       try {
-        if (window.labI18n && typeof window.labI18n.setLang === 'function'
-            && window.labI18n.lang !== applied) {
-          window.labI18n.setLang(applied, true);
+        if (window.labI18n && typeof window.labI18n.setLang === 'function') {
+          window.labI18n.setLang(applied, false);
         }
       } catch (e2) { /* ignore */ }
       try {
@@ -498,6 +539,12 @@
           window.QmfI18n.setLanguage(pref || applied, { emit: false });
         }
       } catch (e3) { /* ignore */ }
+      try {
+        const h = window.QMFHeader?.instance || (window.QMFShell && window.QMFShell.header);
+        if (h && typeof h.applyI18n === 'function') {
+          h.applyI18n();
+        }
+      } catch (e4) { /* ignore */ }
     }
 
     _broadcastPrefs(detail) {
@@ -529,9 +576,9 @@
       else if (cookieLang === 'auto' || (cookieLang && LABELS[cookieLang])) lang = cookieLang;
 
       const cookieTheme = this._readThemeCookie();
-      const theme = localStorage.getItem('qmf-theme')
+      const theme = (cookieTheme && THEMES.has(cookieTheme) ? cookieTheme : null)
+        || localStorage.getItem('qmf-theme')
         || localStorage.getItem('lab-theme')
-        || (cookieTheme && THEMES.has(cookieTheme) ? cookieTheme : null)
         || document.documentElement.getAttribute('data-theme')
         || 'light';
 
@@ -2155,8 +2202,13 @@
       const userChoseLang = src === 'local' || localLang === 'auto';
 
       if (lang === 'auto' || (lang && LABELS[lang])) {
-        if (userChoseLang && localLang && localLang !== lang) {
-          seed.language = localLang;
+        if (userChoseLang && localLang) {
+          this.prefs.lang = localLang;
+          const resolved = localLang === 'auto' ? detectLangFromBrowser() : localLang;
+          this._paintLang(resolved, localLang);
+          if (localLang !== lang) {
+            seed.language = localLang;
+          }
         } else if (!userChoseLang) {
           this.prefs.lang = lang;
           try {
@@ -2167,6 +2219,7 @@
             localStorage.setItem('qmf-prefs-source', 'account');
             this._writeLangCookie(lang === 'auto' ? detectLangFromBrowser() : lang, 'account');
           } catch (e) { /* ignore */ }
+          this._paintLang(lang === 'auto' ? detectLangFromBrowser() : lang, lang);
           changed = true;
         }
       } else if (this.prefs.lang === 'auto' || (this.prefs.lang && LABELS[this.prefs.lang])) {
@@ -2182,15 +2235,34 @@
         seed.region = this.prefs.region;
       }
 
-      if (theme && THEMES.has(theme)) {
-        this.prefs.theme = theme;
+      const localTheme = (function () {
         try {
-          localStorage.setItem('qmf-theme', theme);
-          localStorage.setItem('lab-theme', theme);
+          return localStorage.getItem('qmf-theme') || localStorage.getItem('lab-theme');
+        } catch (e) { return null; }
+      })();
+      const resolvedTheme = (localTheme && THEMES.has(localTheme))
+        ? localTheme
+        : (theme && THEMES.has(theme) ? theme : null);
+
+      if (resolvedTheme) {
+        if (theme && localTheme && THEMES.has(localTheme) && localTheme !== theme) {
+          seed.theme = localTheme;
+        }
+        this.prefs.theme = resolvedTheme;
+        try {
+          localStorage.setItem('qmf-theme', resolvedTheme);
+          localStorage.setItem('lab-theme', resolvedTheme);
+          localStorage.setItem('qm-theme', resolvedTheme);
         } catch (e) { /* ignore */ }
-        this._writeThemeCookie(theme);
-        document.documentElement.setAttribute('data-theme', theme);
-        try { document.documentElement.style.colorScheme = theme; } catch (e) { /* ignore */ }
+        this._writeThemeCookie(resolvedTheme);
+        document.documentElement.setAttribute('data-theme', resolvedTheme);
+        const isDark = resolvedTheme === 'dark';
+        document.documentElement.classList.toggle('dark', isDark);
+        if (document.body) {
+          document.body.classList.toggle('qmf-dark', isDark);
+          document.body.classList.toggle('qm-theme-light', !isDark);
+        }
+        try { document.documentElement.style.colorScheme = resolvedTheme; } catch (e) { /* ignore */ }
         changed = true;
       } else if (this.prefs.theme && THEMES.has(this.prefs.theme)) {
         seed.theme = this.prefs.theme;
@@ -2254,7 +2326,7 @@
           localStorage.setItem('qss_ui_lang', value);
           localStorage.setItem('preferred_language', value);
           localStorage.setItem('qmf-prefs-source', 'local');
-          this._writeLangCookie(resolved);
+          this._writeLangCookie(resolved, 'local');
         } catch (e) { /* ignore */ }
         this._paintLang(resolved, value);
         this._broadcastPrefs({
@@ -2264,10 +2336,13 @@
           region: this.prefs.region,
           source: 'local',
         });
-        window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: { lang: resolved, pref: value, source: 'local' } }));
-        window.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: { lang: resolved, pref: value, source: 'local' } }));
+        const langDetail = { lang: resolved, pref: value, source: 'local' };
+        window.dispatchEvent(new CustomEvent('qmf:langchange', { detail: langDetail }));
+        window.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: langDetail }));
+        document.dispatchEvent(new CustomEvent('qmf:langchange', { detail: langDetail }));
+        document.dispatchEvent(new CustomEvent('qmf:lang-change', { detail: langDetail }));
         serverPatch.language = value;
-        needsSoftReload = true;
+        needsSoftReload = false;
       }
 
       if (key === 'theme' && THEMES.has(value)) {
@@ -2279,6 +2354,12 @@
         } catch (e) { /* ignore */ }
         this._writeThemeCookie(value);
         document.documentElement.setAttribute('data-theme', value);
+        const isDark = value === 'dark';
+        document.documentElement.classList.toggle('dark', isDark);
+        if (document.body) {
+          document.body.classList.toggle('qmf-dark', isDark);
+          document.body.classList.toggle('qm-theme-light', !isDark);
+        }
         try { document.documentElement.style.colorScheme = value; } catch (e) { /* ignore */ }
         try {
           let meta = document.querySelector('meta[name="theme-color"]');
@@ -2296,6 +2377,7 @@
         document.dispatchEvent(new CustomEvent('qmf:theme-change', { detail }));
         document.dispatchEvent(new CustomEvent('qmf-theme-change', { detail: value }));
         serverPatch.theme = value;
+        // Theme updates DOM live; no page reload needed
       }
 
       if (key === 'region' && (value === 'auto' || REGION_CODES.has(String(value).toUpperCase()))) {
@@ -2346,8 +2428,27 @@
           const opt = LANG_OPTIONS.find((l) => l.id === value);
           const labelEl = root.querySelector('[data-lang-label]');
           const badgeEl = root.querySelector('[data-lang-badge]');
-          if (opt && labelEl) labelEl.textContent = opt.id === 'auto' ? this.labels().auto : opt.label;
+          const lbl = this.labels();
+          if (opt && labelEl) labelEl.textContent = opt.id === 'auto' ? lbl.auto : opt.label;
           if (opt && badgeEl) badgeEl.textContent = opt.id === 'auto' ? 'A' : opt.short;
+
+          const titleEl = root.querySelector('.qmf-auth-sheet__title');
+          if (titleEl) titleEl.textContent = lbl.prefsTitle;
+          const doneBtns = root.querySelectorAll('[data-sheet-dismiss]');
+          doneBtns.forEach((btn) => {
+            if (btn.classList.contains('qmf-auth-sheet__done')) btn.textContent = lbl.done;
+            else btn.setAttribute('aria-label', lbl.done);
+          });
+          const prefLabels = root.querySelectorAll('.qmf-auth-pref__label');
+          if (prefLabels[0]) prefLabels[0].textContent = lbl.appearance;
+          if (prefLabels[1]) prefLabels[1].textContent = lbl.language;
+          if (prefLabels[2]) prefLabels[2].textContent = lbl.region;
+          if (prefLabels[3]) prefLabels[3].textContent = lbl.role;
+          const segLight = root.querySelector('[data-pref="theme"][data-value="light"] span');
+          if (segLight) segLight.textContent = lbl.light;
+          const segDark = root.querySelector('[data-pref="theme"][data-value="dark"] span');
+          if (segDark) segDark.textContent = lbl.dark;
+          this.refreshMenuLabels();
         }
       }
 

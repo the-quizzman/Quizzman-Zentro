@@ -26,22 +26,40 @@
       return window.QmfAccountPrefs.save(partial);
     }
     if (!partial || typeof partial !== 'object') return Promise.resolve(null);
-    let token = null;
+    const sso = window.QuizzmanSSO || window.QuizzmanAuth || window.IdSysSSO;
+
+    const getHeaders = () => {
+      let t = null;
+      try {
+        t = sso?.getToken?.()
+          || localStorage.getItem('jwt_token')
+          || localStorage.getItem('authToken');
+      } catch (e) { /* ignore */ }
+      const h = { 'Content-Type': 'application/json', Accept: 'application/json' };
+      if (t) h.Authorization = 'Bearer ' + t;
+      return h;
+    };
+
+    let initialToken = null;
     try {
-      token = window.QuizzmanSSO?.getToken?.()
-        || window.QuizzmanAuth?.getToken?.()
+      initialToken = sso?.getToken?.()
         || localStorage.getItem('jwt_token')
         || localStorage.getItem('authToken');
     } catch (e) { /* ignore */ }
-    const hasSession = !!(token || /(?:^|; )(?:jwt_token|authToken|session_id)=/.test(document.cookie || ''));
+    const hasSession = !!(initialToken || /(?:^|; )(?:qm_id|id_at|jwt_token|authToken|session_id)=/.test(document.cookie || ''));
     if (!hasSession) return Promise.resolve(null);
-    const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
-    if (token) headers.Authorization = 'Bearer ' + token;
-    return fetch(ACCOUNT_PREFS_URL, {
+
+    const doFetch = () => fetch(ACCOUNT_PREFS_URL, {
       method: 'POST',
       credentials: 'include',
-      headers,
+      headers: getHeaders(),
       body: JSON.stringify(partial),
+    });
+    return doFetch().then((res) => {
+      if (res.status === 401 && sso && typeof sso.refreshAccessToken === 'function') {
+        return sso.refreshAccessToken().then((ok) => (ok ? doFetch() : res));
+      }
+      return res;
     }).then((res) => (res.ok ? res.json().catch(() => ({ success: true })) : null))
       .catch(() => null);
   }
@@ -97,15 +115,16 @@
     if (!name || value == null || typeof document === 'undefined') return;
     try {
       const host = (location && location.hostname) || '';
-      let base = name + '=' + encodeURIComponent(value)
-        + '; path=/; max-age=' + (365 * 24 * 60 * 60)
-        + '; SameSite=Lax';
-      if (location.protocol === 'https:') base += '; Secure';
-      if (host === 'quizzman.com' || host.slice(-13) === '.quizzman.com') {
-        document.cookie = base + '; domain=.quizzman.com';
-      } else {
-        document.cookie = base;
+      const secure = location.protocol === 'https:' ? '; Secure' : '';
+      const maxAge = '; path=/; max-age=' + (365 * 24 * 60 * 60) + '; SameSite=Lax' + secure;
+      const isQuizzman = host === 'quizzman.com' || host.slice(-13) === '.quizzman.com';
+      if (isQuizzman && host !== 'quizzman.com') {
+        document.cookie = name + '=; path=/; max-age=0' + secure;
       }
+      if (isQuizzman) {
+        document.cookie = name + '=' + encodeURIComponent(value) + maxAge + '; domain=.quizzman.com';
+      }
+      document.cookie = name + '=' + encodeURIComponent(value) + maxAge;
     } catch (e) { /* ignore */ }
   }
 
@@ -499,17 +518,7 @@
         detail: { lang, theme: this.config.theme, region: localStorage.getItem('qmf-region') || null, source: 'local' },
       }));
 
-      const save = persistAccountPrefs({ language: lang });
-
-      /* Principle: lang resync via QMFShell soft-reload — never hard-refresh. */
-      Promise.race([
-        save,
-        new Promise((resolve) => setTimeout(resolve, 1500)),
-      ]).finally(() => {
-        if (window.QMFShell && typeof window.QMFShell.softReload === 'function') {
-          window.QMFShell.softReload('prefs:lang');
-        }
-      });
+      persistAccountPrefs({ language: lang });
     }
 
     applyUiLabels(lang) {

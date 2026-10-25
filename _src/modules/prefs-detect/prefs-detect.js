@@ -133,15 +133,16 @@
     if (!name || value == null || typeof document === 'undefined') return;
     try {
       var host = (location && location.hostname) || '';
-      var base = name + '=' + encodeURIComponent(value)
-        + '; path=/; max-age=' + (365 * 24 * 60 * 60)
-        + '; SameSite=Lax';
-      if (location.protocol === 'https:') base += '; Secure';
-      if (host === 'quizzman.com' || host.slice(-13) === '.quizzman.com') {
-        document.cookie = base + '; domain=.quizzman.com';
-      } else {
-        document.cookie = base;
+      var secure = location.protocol === 'https:' ? '; Secure' : '';
+      var maxAge = '; path=/; max-age=' + (365 * 24 * 60 * 60) + '; SameSite=Lax' + secure;
+      var isQuizzman = host === 'quizzman.com' || host.slice(-13) === '.quizzman.com';
+      if (isQuizzman && host !== 'quizzman.com') {
+        document.cookie = name + '=; path=/; max-age=0' + secure;
       }
+      if (isQuizzman) {
+        document.cookie = name + '=' + encodeURIComponent(value) + maxAge + '; domain=.quizzman.com';
+      }
+      document.cookie = name + '=' + encodeURIComponent(value) + maxAge;
     } catch (e) { /* ignore */ }
   }
 
@@ -645,7 +646,7 @@
       patch.lang = lang;
       fields.push('lang');
     }
-    if (theme) { patch.theme = theme; fields.push('theme'); }
+    if (theme && !hasStoredTheme()) { patch.theme = theme; fields.push('theme'); }
     if (region) { patch.region = region; fields.push('region'); }
     if (!fields.length) return null;
 

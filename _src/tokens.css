@@ -127,7 +127,9 @@
   --qmf-z-max: 9999;
 
   /* ─── Typography ───────────────────────────── */
-  --qmf-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --qmf-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --qmf-font-serif: 'Noto Serif', 'Noto Serif TC', 'Source Han Serif TC', Georgia, 'Times New Roman', serif;
+  --qmf-font-family: var(--qmf-font-sans);
   --qmf-font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
 
   --qmf-text-xs: 0.75rem;

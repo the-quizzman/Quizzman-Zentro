@@ -12,14 +12,14 @@
   'use strict';
 
   var Runtime = {
-    shell: '2.2.72',
+    shell: '2.2.82',
     packages: {
-      header: '3.13.1',
-      auth: '2.0.4',
+      header: '3.13.11',
+      auth: '2.0.9',
       legatus: '1.3.11',
       sso: '20260906noloop',
       i18n: '1.0.6',
-      prefs: '1.0.3',
+      prefs: '1.0.5',
       analytics: '1.1.0',
       ads: '1.0.2',
     },
@@ -631,6 +631,7 @@
     mount: mount,
     version: version,
     user: user,
+    get token() { return state.token; },
     refresh: refresh,
     softReload: softReload,
     logout: logout,

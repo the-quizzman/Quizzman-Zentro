@@ -313,6 +313,16 @@
           "40": "nav/live-quiz-40.webp",
           "80": "nav/live-quiz-80.webp",
           "png40": "nav/live-quiz-40.png"
+        },
+        "library": {
+          "40": "nav/library-40.webp",
+          "80": "nav/library-80.webp",
+          "png40": "nav/library-40.png"
+        },
+        "books": {
+          "40": "nav/books-40.webp",
+          "80": "nav/books-80.webp",
+          "png40": "nav/books-40.png"
         }
       }
     },
@@ -347,6 +357,36 @@
         "192": "lab/lab-logo-192.png",
         "256": "lab/lab-logo-256.png",
         "512": "lab/lab-logo-512.png"
+      }
+    },
+    "library": {
+      "hasCustomLogo": true,
+      "logo": "library-logo.png",
+      "favicon": "library-favicon.ico",
+      "appleTouchIcon": "apple-touch-icon.png",
+      "sizes": {
+        "32": "library-logo-32.png",
+        "64": "library-logo-64.png",
+        "116": "library-logo-116.png",
+        "128": "library-logo-128.png",
+        "256": "library-logo-icon.png",
+        "512": "library-logo-512.png",
+        "1024": "library-logo.png"
+      }
+    },
+    "books": {
+      "hasCustomLogo": true,
+      "logo": "books-logo.png",
+      "favicon": "books-favicon.ico",
+      "appleTouchIcon": "apple-touch-icon.png",
+      "sizes": {
+        "32": "books-logo-32.png",
+        "64": "books-logo-64.png",
+        "116": "books-logo-116.png",
+        "128": "books-logo-128.png",
+        "256": "books-logo-icon.png",
+        "512": "books-logo-512.png",
+        "1024": "books-logo.png"
       }
     }
   },
