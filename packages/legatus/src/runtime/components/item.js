@@ -8,6 +8,7 @@ import {
   openNotificationLink,
   resolveNotificationUrl,
 } from "../core/deepLink.js";
+import { activityKind, activityLabel } from "../core/activity.js";
 
 const SPECIES_TINT = {
   panda: { soft: "#eef2ff", accent: "#4338ca" },
@@ -105,6 +106,11 @@ function faceSvg(avatarId, accent) {
   }
 }
 
+export function mascotHtml(species = "owl") {
+  const tint = SPECIES_TINT[species] || SPECIES_TINT.owl;
+  return `<span class="lg-mascot" aria-hidden="true" style="--lg-mascot-soft:${tint.soft}">${faceSvg(species, tint.accent)}</span>`;
+}
+
 /**
  * Overlapping mascot faces (+N).
  * @param {Array<{name:string,avatarId:string}>} actors
@@ -188,7 +194,8 @@ const expandedReceivers = new Set();
  */
 export function notificationItemHtml(it, i18n) {
   const actors = actorsFromItem(it);
-  const faces = facesHtml(actors);
+  const kind = activityKind(it);
+  const faces = facesHtml(actors) || mascotHtml(kind === "library" ? "fox" : kind === "learning" ? "panda" : "owl");
   const unread = !it.read_at;
   const hasFaces = Boolean(faces);
   const url = resolveNotificationUrl(it);
@@ -217,7 +224,7 @@ export function notificationItemHtml(it, i18n) {
         <p class="lg-item-title">${escapeHtml(it.title)}${linkHtml}</p>
         ${bodyHtml}
         ${expandHtml}
-        <div class="lg-item-meta">${escapeHtml(i18n.relativeTime(it.created_at))}</div>
+        <div class="lg-item-meta"><span class="lg-item-category">${escapeHtml(t(activityLabel[kind]))}</span><span>${escapeHtml(i18n.relativeTime(it.created_at))}</span></div>
       </span>
     </div>`;
 }

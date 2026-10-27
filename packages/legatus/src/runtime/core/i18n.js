@@ -1,6 +1,10 @@
 /** UI strings for Legatus chrome (not notification payloads — those come localized from API). */
 const STRINGS = {
   en: {
+    filterAll: "All", filterUnread: "Unread", groupLearning: "Quiz activity", groupLibrary: "Library", groupUpdates: "Updates",
+    filterNotifications: "Notification groups", pagination: "Notification pages", previousPage: "Previous", nextPage: "Next", loadMore: "Load older", page: "Page",
+    today: "Today", yesterday: "Yesterday", earlier: "Earlier", emptyFilter: "No notifications in this group", emptyLoaded: "No matches loaded yet. Load older notifications to continue.",
+    feedError: "Couldn't load notifications. Please try again.", retry: "Retry",
     brand: "Legatus",
     notifications: "Legatus",
     markAllRead: "Mark all read",
@@ -30,6 +34,10 @@ const STRINGS = {
     orbLabel: "Open Legatus",
   },
   vi: {
+    filterAll: "Tất cả", filterUnread: "Chưa đọc", groupLearning: "Bài làm", groupLibrary: "Thư viện", groupUpdates: "Cập nhật",
+    filterNotifications: "Nhóm thông báo", pagination: "Phân trang thông báo", previousPage: "Trước", nextPage: "Sau", loadMore: "Tải thêm", page: "Trang",
+    today: "Hôm nay", yesterday: "Hôm qua", earlier: "Trước đó", emptyFilter: "Chưa có thông báo trong nhóm này", emptyLoaded: "Chưa có mục phù hợp trong dữ liệu đã tải. Tải thêm để xem thông báo cũ hơn.",
+    feedError: "Không tải được thông báo. Vui lòng thử lại.", retry: "Thử lại",
     brand: "Legatus",
     notifications: "Legatus",
     markAllRead: "Đánh dấu đã đọc",

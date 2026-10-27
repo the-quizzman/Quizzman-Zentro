@@ -4,7 +4,8 @@
  */
 
 import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
-import { bindNotificationList, notificationItemHtml } from "./item.js";
+import { mascotHtml } from "./item.js";
+import { InboxView } from "./inbox.js";
 import { connectionBarHtml, paintConnection } from "../core/connection-ui.js";
 
 function escapeHtml(s) {
@@ -42,6 +43,7 @@ export function defineCenter(cssText, runtime) {
       this._mentis = [];
       this._unsub = null;
       this._unsubLocale = null;
+      this._inbox = new InboxView(runtime, () => this.paintActivity(runtime.store.get()), () => this.close());
       this._onKey = (e) => {
         if (e.key === "Escape" && this._open) this.close();
       };
@@ -95,7 +97,7 @@ export function defineCenter(cssText, runtime) {
           <div class="lg-center-dialog" role="dialog" aria-modal="true" aria-label="${escapeAttr(title)}">
             <div class="lg-panel-head">
               <div class="lg-panel-head-main">
-                <h3 class="lg-panel-title">${escapeHtml(title)}</h3>
+                <h3 class="lg-panel-title lg-title-with-mascot">${mascotHtml("owl")}${escapeHtml(title)}</h3>
                 ${connectionBarHtml(t)}
               </div>
               <div class="lg-center-actions">
@@ -111,6 +113,7 @@ export function defineCenter(cssText, runtime) {
             <div class="lg-hub-panels">
               <div class="lg-hub-panel" data-panel="activity" role="tabpanel">
                 <div class="lg-list" data-list></div>
+                <div class="lg-panel-foot"><a class="lg-open-legatus" href="https://legatus.quizzman.com/">${escapeHtml(t("viewAll"))} ↗</a></div>
               </div>
               <div class="lg-hub-panel" data-panel="mentis" role="tabpanel" hidden>
                 <div class="lg-mentis">
@@ -236,6 +239,7 @@ export function defineCenter(cssText, runtime) {
 
     /** @param {{ tab?: string }} [opts] */
     async open(opts = {}) {
+      this._inbox.reset();
       if (!this.shadowRoot) this.connectedCallback();
       const root = this.shadowRoot.querySelector(".lg-center-root");
       if (!root) return;
@@ -278,23 +282,7 @@ export function defineCenter(cssText, runtime) {
 
     paintActivity(state) {
       const list = this.shadowRoot?.querySelector("[data-list]");
-      if (!list) return;
-      const t = runtime.i18n.t.bind(runtime.i18n);
-      if (!state.items.length) {
-        list.innerHTML = state.loading
-          ? `<div class="lg-loading">${escapeHtml(t("loading"))}</div>`
-          : `<div class="lg-empty">${escapeHtml(t("emptyCenter"))}</div>`;
-        return;
-      }
-      list.innerHTML = state.items
-        .map((it) => notificationItemHtml(it, runtime.i18n))
-        .join("");
-      bindNotificationList(list, runtime, {
-        onActivate: () => {
-          this.close?.();
-          runtime.closeCenter?.();
-        },
-      });
+      this._inbox.paint(list, state);
     }
 
     paint(state) {

@@ -2,11 +2,11 @@
 import { applyTheme, ensureQuizFont, watchTheme } from "../core/theme.js";
 import { openNotificationLink, resolveNotificationUrl } from "../core/deepLink.js";
 import { connectionBarHtml, connectionStatusOf, paintConnection } from "../core/connection-ui.js";
+import { InboxView } from "./inbox.js";
 import {
-  bindNotificationList,
   bodyNeedsExpand,
   formatBodyHtml,
-  notificationItemHtml,
+  mascotHtml,
 } from "./item.js";
 
 const BELL_SVG = `
@@ -35,6 +35,7 @@ export function defineBell(cssText, runtime) {
       this._open = false;
       this._unsub = null;
       this._unsubLocale = null;
+      this._inbox = new InboxView(runtime, () => this._paintLists(runtime.store.get()), () => this.close());
       this._onDoc = (e) => {
         if (!this._open) return;
         const path = e.composedPath();
@@ -85,17 +86,17 @@ export function defineBell(cssText, runtime) {
             <span class="lg-badge" hidden part="badge">0</span>
             <span class="lg-conn-pip" aria-hidden="true"></span>
           </button>
-          <div class="lg-panel" part="panel" data-open="false" role="dialog" aria-label="${escapeAttr(label)}">
+          <div class="lg-panel" part="panel" data-open="false" aria-hidden="true" role="dialog" aria-label="${escapeAttr(label)}">
             <div class="lg-panel-head">
               <div class="lg-panel-head-main">
-                <h3 class="lg-panel-title">${escapeHtml(label)}</h3>
+                <h3 class="lg-panel-title lg-title-with-mascot">${mascotHtml("owl")}${escapeHtml(label)}</h3>
                 ${connectionBarHtml(t)}
               </div>
               <button class="lg-link" type="button" data-action="read-all">${escapeHtml(t("markAllRead"))}</button>
             </div>
             <div class="lg-list" data-list></div>
             <div class="lg-panel-foot">
-              <button type="button" data-action="open-center">${escapeHtml(t("viewAll"))}</button>
+              <a class="lg-open-legatus" href="https://legatus.quizzman.com/">${escapeHtml(t("viewAll"))} ↗</a>
             </div>
           </div>
           <div class="lg-sheet-backdrop" data-open="false" hidden aria-hidden="true"></div>
@@ -103,14 +104,14 @@ export function defineBell(cssText, runtime) {
             <div class="lg-sheet-handle"></div>
             <div class="lg-panel-head">
               <div class="lg-panel-head-main">
-                <h3 class="lg-panel-title">${escapeHtml(label)}</h3>
+                <h3 class="lg-panel-title lg-title-with-mascot">${mascotHtml("owl")}${escapeHtml(label)}</h3>
                 ${connectionBarHtml(t)}
               </div>
               <button class="lg-link" type="button" data-action="read-all">${escapeHtml(t("markAllRead"))}</button>
             </div>
             <div class="lg-list" data-list-mobile></div>
             <div class="lg-panel-foot">
-              <button type="button" data-action="open-center">${escapeHtml(t("viewAll"))}</button>
+              <a class="lg-open-legatus" href="https://legatus.quizzman.com/">${escapeHtml(t("viewAll"))} ↗</a>
             </div>
           </div>
         </div>
@@ -125,12 +126,6 @@ export function defineBell(cssText, runtime) {
       );
       root.querySelectorAll('[data-action="reconnect"]').forEach((el) =>
         el.addEventListener("click", () => runtime.client.reconnect().catch(() => {}))
-      );
-      root.querySelectorAll('[data-action="open-center"]').forEach((el) =>
-        el.addEventListener("click", () => {
-          this.close();
-          runtime.openCenter();
-        })
       );
     }
 
@@ -155,31 +150,10 @@ export function defineBell(cssText, runtime) {
     }
 
     _paintLists(state) {
-      const html = this._listHtml(state);
       const desk = this.shadowRoot.querySelector("[data-list]");
       const mob = this.shadowRoot.querySelector("[data-list-mobile]");
-      if (desk) desk.innerHTML = html;
-      if (mob) mob.innerHTML = html;
-      const onActivate = () => this.close();
-      if (desk) bindNotificationList(desk, runtime, { onActivate });
-      if (mob) bindNotificationList(mob, runtime, { onActivate });
-    }
-
-    _listHtml(state) {
-      const t = runtime.i18n.t.bind(runtime.i18n);
-      if (state.loading && !state.items.length) {
-        return `<div class="lg-loading">${escapeHtml(t("loading"))}</div>`;
-      }
-      if (state.error && !state.items.length) {
-        return `<div class="lg-error">${escapeHtml(state.error)}</div>`;
-      }
-      if (!state.items.length) {
-        return `<div class="lg-empty">${escapeHtml(t("empty"))}</div>`;
-      }
-      return state.items
-        .slice(0, 30)
-        .map((it) => notificationItemHtml(it, runtime.i18n))
-        .join("");
+      this._inbox.paint(desk, state);
+      this._inbox.paint(mob, state);
     }
 
     toggle() {
@@ -188,6 +162,7 @@ export function defineBell(cssText, runtime) {
     }
 
     async open() {
+      this._inbox.reset();
       this._open = true;
       this._syncTheme();
       const mobile = isMobile();
@@ -204,8 +179,10 @@ export function defineBell(cssText, runtime) {
         sheet.setAttribute("aria-hidden", "false");
         backdrop.setAttribute("aria-hidden", "false");
         this.shadowRoot.querySelector(".lg-panel").dataset.open = "false";
+        this.shadowRoot.querySelector(".lg-panel").setAttribute("aria-hidden", "true");
       } else {
         this.shadowRoot.querySelector(".lg-panel").dataset.open = "true";
+        this.shadowRoot.querySelector(".lg-panel").setAttribute("aria-hidden", "false");
         this.shadowRoot.querySelector(".lg-sheet").dataset.open = "false";
         this.shadowRoot.querySelector(".lg-sheet-backdrop").dataset.open = "false";
         this.shadowRoot.querySelector(".lg-sheet").hidden = true;
@@ -226,6 +203,7 @@ export function defineBell(cssText, runtime) {
       this._open = false;
       this.shadowRoot.querySelector(".lg-bell")?.setAttribute("aria-expanded", "false");
       this.shadowRoot.querySelector(".lg-panel").dataset.open = "false";
+      this.shadowRoot.querySelector(".lg-panel").setAttribute("aria-hidden", "true");
       const sheet = this.shadowRoot.querySelector(".lg-sheet");
       const backdrop = this.shadowRoot.querySelector(".lg-sheet-backdrop");
       if (!sheet || !backdrop) return;

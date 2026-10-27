@@ -99,7 +99,11 @@ export function resolveNotificationUrl(item) {
     data.action_url,
     data.actionUrl,
     data.result_url,
-    data.resultUrl
+    data.resultUrl,
+    data.deepLink,
+    data.deep_link,
+    data.canonical_url,
+    data.canonicalUrl
   );
   if (explicit) {
     const safe = sanitizeDeepLink(explicit);

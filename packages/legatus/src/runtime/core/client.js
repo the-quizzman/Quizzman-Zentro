@@ -126,16 +126,29 @@ export class LegatusClient {
     }
   }
 
-  async fetchNotifications({ cursor, limit = 20 } = {}) {
+  fetchNotifications(options = {}) {
+    // Bell and hub share one feed. Do not let overlapping pages overwrite its cursor.
+    if (this._feedPromise) return this._feedPromise;
+    this._feedPromise = this._fetchNotificationsPage(options).finally(() => { this._feedPromise = null; });
+    return this._feedPromise;
+  }
+
+  async _fetchNotificationsPage({ cursor, limit = 20 } = {}) {
     this.store.set({ loading: true, error: null });
     try {
       const q = new URLSearchParams({ limit: String(limit) });
       if (cursor) q.set("cursor", cursor);
       const data = await this.request(`/notifications?${q}`);
       if (cursor) {
-        this.store.setItems([...this.store.get().items, ...(data.items || [])], {
+        const items = [...this.store.get().items];
+        const seen = new Set(items.map((it) => String(it.notification_id || it.receiver_id)));
+        for (const item of data.items || []) {
+          const key = String(item.notification_id || item.receiver_id);
+          if (!seen.has(key)) { seen.add(key); items.push(item); }
+        }
+        this.store.setItems(items, {
           nextCursor: data.next_cursor || null,
-          hasMore: !!data.has_more,
+          hasMore: !!data.has_more && !!data.next_cursor && data.next_cursor !== cursor,
         });
       } else {
         this.store.setItems(data.items || [], {
@@ -153,11 +166,17 @@ export class LegatusClient {
   }
 
   async markRead(receiverId) {
-    await this.request(`/notifications/${receiverId}/read`, { method: "POST" });
-    this.store.markReadLocal(receiverId);
-    const unread = Math.max(0, this.store.get().unread - 1);
-    this.store.set({ unread });
-    this.bus.emit("read", { receiverId });
+    const item = this.store.get().items.find((it) => it.receiver_id === receiverId);
+    if (item?.read_at || this._reading?.has(receiverId)) return;
+    this._reading ||= new Set();
+    this._reading.add(receiverId);
+    try {
+      await this.request(`/notifications/${receiverId}/read`, { method: "POST" });
+      this.store.markReadLocal(receiverId);
+      const unread = Math.max(0, this.store.get().unread - 1);
+      this.store.set({ unread });
+      this.bus.emit("read", { receiverId });
+    } finally { this._reading.delete(receiverId); }
   }
 
   async markAllRead() {
@@ -548,9 +567,15 @@ export class LegatusClient {
 
     if (type === "notification") {
       const notificationId = msg.notification_id || msg.id;
+      const previous = this.store.get().items.find((it) =>
+        (msg.receiver_id && String(it.receiver_id) === String(msg.receiver_id)) ||
+        (notificationId && String(it.notification_id || it.receiver_id) === String(notificationId))
+      );
       const item = {
         receiver_id: msg.receiver_id || notificationId,
         notification_id: notificationId,
+        source: msg.source,
+        event_type: msg.event_type || msg.eventType,
         title: msg.title || "Notification",
         body: msg.body || "",
         data: msg.data || {},
@@ -559,7 +584,7 @@ export class LegatusClient {
         created_at: msg.created_at || new Date().toISOString(),
       };
       this.store.prepend(item);
-      this.store.set({ unread: this.store.get().unread + 1 });
+      this.store.set({ unread: this.store.get().unread + (previous && !previous.read_at ? 0 : 1) });
       this.bus.emit("notification", item);
       return;
     }

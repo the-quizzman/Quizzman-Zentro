@@ -6,16 +6,16 @@
   'use strict';
 
   var CDN = 'https://ui.quizzman.com/qmf/dist/legatus';
-  var VERSION = '1.3.9';
+  var VERSION = '1.3.12';
   var loading = null;
   var authWired = false;
 
   function expectedSdkUrl() {
-    return CDN + '/legatus.min.js?v=' + VERSION;
+    return CDN + '/' + VERSION + '/legatus.min.js';
   }
 
   function expectedCssUrl() {
-    return CDN + '/legatus.css?v=' + VERSION;
+    return CDN + '/' + VERSION + '/legatus.css';
   }
 
   function isCurrentSdk() {
