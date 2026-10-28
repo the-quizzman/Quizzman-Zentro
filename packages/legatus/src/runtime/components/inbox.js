@@ -30,7 +30,7 @@ export class InboxView {
     return state.items.filter((it) => this.filter === "all" || (this.filter === "unread" ? !it.read_at : activityKind(it) === this.filter));
   }
 
-  async next() {
+  async older() {
     if (this.pending) return;
     let state = this.runtime.store.get();
     if ((this.page + 1) * PAGE_SIZE < this.matching(state).length) {
@@ -59,7 +59,7 @@ export class InboxView {
     const start = this.page * PAGE_SIZE;
     const visible = matching.slice(start, start + PAGE_SIZE);
     const busy = state.loading || this.pending;
-    const cachedNext = start + PAGE_SIZE < matching.length;
+    const cachedOlder = start + PAGE_SIZE < matching.length;
     const canFetch = state.hasMore && state.nextCursor;
     const active = root.getRootNode().activeElement;
     const focus = active && root.contains(active) ? active.getAttribute("data-feed-action") : null;
@@ -80,15 +80,15 @@ export class InboxView {
       <div class="lg-feed-rows" aria-busy="${busy}">${rows || empty}</div>
       ${state.error ? `<div class="lg-feed-error" role="alert">${esc(t("feedError"))}<button type="button" data-feed-action="retry">${esc(t("retry"))}</button></div>` : ""}
       <nav class="lg-pagination" aria-label="${esc(t("pagination"))}">
-        <button type="button" data-feed-action="previous" ${this.page === 0 || busy ? "disabled" : ""}>‹ ${esc(t("previousPage"))}</button>
+        <button type="button" data-feed-action="previous" ${(!cachedOlder && !canFetch) || busy ? "disabled" : ""}>‹ ${esc(t(busy ? "loading" : "previousPage"))}</button>
         <span role="status" aria-live="polite">${esc(t("page"))} ${this.page + 1}<small>${matching.length ? `${start + 1}–${Math.min(start + PAGE_SIZE, matching.length)} / ${matching.length}${state.hasMore ? "+" : ""}` : "0"}</small></span>
-        <button type="button" data-feed-action="next" ${(!cachedNext && !canFetch) || busy ? "disabled" : ""}>${esc(t(busy ? "loading" : cachedNext ? "nextPage" : canFetch ? "loadMore" : "nextPage"))} ›</button>
+        <button type="button" data-feed-action="next" ${this.page === 0 || busy ? "disabled" : ""}>${esc(t("nextPage"))} ›</button>
       </nav>`;
     root.querySelectorAll("[data-feed-action]").forEach((button) => button.addEventListener("click", async () => {
       const action = button.dataset.feedAction;
       if (FILTERS.includes(action)) { this.filter = action; this.page = 0; this.onChange(); }
-      else if (action === "previous") { this.page = Math.max(0, this.page - 1); this.onChange(); }
-      else if (action === "next") await this.next();
+      else if (action === "previous") await this.older();
+      else if (action === "next") { this.page = Math.max(0, this.page - 1); this.onChange(); }
       else if (action === "retry" && !this.runtime.store.get().loading) {
         try {
           const current = this.runtime.store.get();

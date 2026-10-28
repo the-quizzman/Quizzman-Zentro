@@ -104,7 +104,7 @@ function createRuntime(options) {
           /* anonymous / offline */
         }
         if (options.autoConnect !== false) {
-          await client.connect();
+          await client.connect().catch(() => {});
         }
       })();
       return startPromise;

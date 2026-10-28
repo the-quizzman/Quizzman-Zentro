@@ -12,7 +12,7 @@
 (function (global) {
   'use strict';
 
-  var REV = '2.2.83';
+  var REV = '2.2.84';
   var pending = [];
   var loading = false;
   var revWatchStarted = false;

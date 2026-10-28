@@ -1,3 +1,5 @@
+import { sharedTransport } from "./shared-transport.js";
+
 /**
  * REST + live-push client for Legatus.
  *
@@ -19,6 +21,7 @@ export class LegatusClient {
    */
   constructor({ endpoint, getToken, bus, store, transport = "auto", realtime = false, pauseHiddenMs = 15000 }) {
     this.endpoint = endpoint.replace(/\/$/, "");
+    this.shared = sharedTransport(this.endpoint);
     this.getToken = getToken;
     this.bus = bus;
     this.store = store;
@@ -33,6 +36,8 @@ export class LegatusClient {
     this._hiddenTimer = null;
     this._sseAbort = null;
     this._closed = true;
+    this.shared?.clients.delete(this);
+    this.shared?.state();
     this._retries = 0;
     this._generation = 0;
     this._connectPromise = null;
@@ -67,6 +72,7 @@ export class LegatusClient {
   }
 
   async request(path, options = {}) {
+    if (this.shared) return this.shared.request(this, path, options);
     const execute = async (forceRefresh = false) => {
       const authHeaders = await this.headers(forceRefresh);
       return fetch(this.apiUrl(path), {
@@ -172,8 +178,9 @@ export class LegatusClient {
     this._reading.add(receiverId);
     try {
       await this.request(`/notifications/${receiverId}/read`, { method: "POST" });
+      const current = this.store.get().items.find((it) => it.receiver_id === receiverId);
       this.store.markReadLocal(receiverId);
-      const unread = Math.max(0, this.store.get().unread - 1);
+      const unread = Math.max(0, this.store.get().unread - (current?.read_at ? 0 : 1));
       this.store.set({ unread });
       this.bus.emit("read", { receiverId });
     } finally { this._reading.delete(receiverId); }
@@ -189,12 +196,19 @@ export class LegatusClient {
   /** Open the live channel (SSE by default). Idempotent. */
   async connect() {
     this._closed = false;
+    if (this.shared) return this.shared.attach(this);
     this._bindLifecycle();
     return this._ensureLive();
   }
 
   /** User-initiated reconnect: reset backoff and open a single socket. */
   async reconnect() {
+    if (this.shared) {
+      this._closed = false;
+      await this.shared.attach(this);
+      this.shared.port?.postMessage({ type: "reconnect" });
+      return;
+    }
     this._retries = 0;
     this._closed = false;
     this._bindLifecycle();
@@ -442,8 +456,10 @@ export class LegatusClient {
   }
 
   async _connectWs() {
+    const gen = this._generation;
     let token = await this.getToken();
     if (!token) token = await this.getToken({ forceRefresh: true });
+    if (this._closed || gen !== this._generation || documentHidden()) return;
     if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
       return;
     }
@@ -461,10 +477,11 @@ export class LegatusClient {
       this._startHeartbeat();
     };
 
-    ws.onmessage = (ev) => {
+    ws.onmessage = async (ev) => {
       let msg;
       try {
-        msg = JSON.parse(ev.data);
+        const raw = ev.data instanceof Blob ? await ev.data.text() : ev.data;
+        msg = JSON.parse(raw);
       } catch {
         return;
       }

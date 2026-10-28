@@ -1,0 +1,15 @@
+{
+  "name": "qmf-legatus-regression-tests",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test *.test.mjs"
+  },
+  "devDependencies": {
+    "css-tree": "3.2.1",
+    "jsdom": "26.1.0"
+  }
+}

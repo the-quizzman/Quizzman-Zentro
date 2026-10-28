@@ -12,11 +12,11 @@
   'use strict';
 
   var Runtime = {
-    shell: '2.2.83',
+    shell: '2.2.84',
     packages: {
       header: '3.13.11',
       auth: '2.0.9',
-      legatus: '1.3.12',
+      legatus: '1.4.0',
       sso: '20260906noloop',
       i18n: '1.0.6',
       prefs: '1.0.5',

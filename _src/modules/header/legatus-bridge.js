@@ -6,7 +6,7 @@
   'use strict';
 
   var CDN = 'https://ui.quizzman.com/qmf/dist/legatus';
-  var VERSION = '1.3.12';
+  var VERSION = '1.4.0';
   var loading = null;
   var authWired = false;
 
@@ -48,22 +48,16 @@
   function loadJs() {
     if (isCurrentSdk()) return Promise.resolve();
 
-    // Stale custom elements cannot be redefined — one soft reload upgrades the page.
-    if (
-      global.Legatus &&
-      typeof global.Legatus.mount === 'function' &&
-      String(global.Legatus.version || '') !== VERSION &&
-      customElements.get('legatus-bell')
-    ) {
-      try {
-        var key = 'qmf-legatus-upgrade:' + VERSION;
-        if (!sessionStorage.getItem(key)) {
-          sessionStorage.setItem(key, '1');
-          console.warn('[QMF Legatus] upgrading SDK →', VERSION);
-          global.location.reload();
-          return new Promise(function () { /* pending reload */ });
-        }
-      } catch (e) { /* private mode — fall through and load anyway */ }
+    // Upgrade the existing client in place: custom elements retain their runtime,
+    // and an open editor never loses unsaved work to a transport upgrade.
+    if (global.Legatus && global.Legatus.client && customElements.get('legatus-bell')) {
+      return new Promise(function (resolve, reject) {
+        var upgrade = document.createElement('script');
+        upgrade.src = CDN + '/' + VERSION + '/upgrade.min.js';
+        upgrade.onload = function () { isCurrentSdk() ? resolve() : reject(new Error('Legatus upgrade failed')); };
+        upgrade.onerror = function () { reject(new Error('Legatus upgrade unavailable')); };
+        document.head.appendChild(upgrade);
+      });
     }
 
     var src = expectedSdkUrl();
