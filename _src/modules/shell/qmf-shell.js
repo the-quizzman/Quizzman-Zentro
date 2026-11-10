@@ -59,7 +59,7 @@
 
   /**
    * Consent Mode v2 defaults — sync, before any Google script (gtag / AdSense).
-   * Regulated regions (EEA/UK/CH) denied until Google CMP updates.
+   * All regions denied until a separate explicit optional-processing choice.
    */
   function ensureConsentDefaults() {
     if (global.__QMF_CONSENT_DEFAULT__) return;
@@ -71,30 +71,13 @@
         global.gtag = function () { global.dataLayer.push(arguments); };
       }
       var wait = typeof global.QMF_CONSENT_WAIT === 'number' ? global.QMF_CONSENT_WAIT : 500;
-      var granted = {
-        ad_storage: 'granted',
-        ad_user_data: 'granted',
-        ad_personalization: 'granted',
-        analytics_storage: 'granted',
+      var denied = {
+        ad_storage: 'denied', ad_user_data: 'denied',
+        ad_personalization: 'denied', analytics_storage: 'denied',
         wait_for_update: wait,
       };
-      var denied = {
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        analytics_storage: 'denied',
-        region: [
-          'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR',
-          'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK',
-          'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH',
-        ],
-      };
-      if (global.QMF_CONSENT_DEFAULT && typeof global.QMF_CONSENT_DEFAULT === 'object') {
-        global.gtag('consent', 'default', Object.assign({ wait_for_update: wait }, global.QMF_CONSENT_DEFAULT));
-      } else {
-        global.gtag('consent', 'default', granted);
-        global.gtag('consent', 'default', denied);
-      }
+      global.__QMF_CONSENT_STATE__ = global.__QMF_CONSENT_STATE__ || Object.assign({}, denied);
+      global.gtag('consent', 'default', denied);
       if (global.QMF_CONSENT_URL_PASSTHROUGH !== false) {
         global.gtag('set', 'url_passthrough', true);
       }
@@ -118,7 +101,7 @@
       var s = document.createElement('script');
       s.id = 'qmf-analytics-gtag';
       s.async = true;
-      s.src = base() + '/qmf/dist/modules/analytics/gtag.js?v=1.1.0';
+      s.src = base() + '/qmf/dist/modules/analytics/gtag.js?v=1.1.1';
       (document.head || document.documentElement).appendChild(s);
     } catch (e) { /* ignore */ }
   }
@@ -139,7 +122,7 @@
       var s = document.createElement('script');
       s.id = 'qmf-ads-runtime';
       s.async = true;
-      s.src = base() + '/qmf/dist/modules/ads/ads.js?v=1.0.2';
+      s.src = base() + '/qmf/dist/modules/ads/ads.js?v=1.0.3';
       (document.head || document.documentElement).appendChild(s);
     } catch (e) { /* ignore */ }
   }

@@ -8,7 +8,7 @@
 (function() {
   'use strict';
 
-  const VERSION = '3.13.11';
+  const VERSION = '3.14.3';
   const CDN_BASE = 'https://ui.quizzman.com/qmf/dist/modules/header';
   /* Same origin path as CDN_BASE — avoid dual modules/ vs modules-v3/ caches */
   const CDN_NAV_BASE = CDN_BASE;
@@ -39,11 +39,11 @@ const HEADER_I18N = {
     "group.interactive": "Tương tác",
     "group.games": "Trò chơi",
     "group.platform": "Nền tảng",
-    "footer.exploreAll": "Xem tất cả ứng dụng Quizzman →",
-    "footer.startLearning": "Bắt đầu học ngay →",
-    "footer.exploreKnowledge": "Khám phá kho tri thức →",
-    "footer.exploreInsight": "Khám phá toàn bộ Insight →",
-    "footer.explorePlay": "Khám phá Play Center →",
+    "footer.exploreAll": "Xem tất cả ứng dụng Quizzman",
+    "footer.startLearning": "Bắt đầu học ngay",
+    "footer.exploreKnowledge": "Khám phá kho tri thức",
+    "footer.exploreInsight": "Khám phá toàn bộ Insight",
+    "footer.explorePlay": "Khám phá Play Center",
     "search.placeholder": "Tìm app, tri thức…",
     "search.aria": "Tìm app, wiki, docs, quiz…",
     "search.open": "Tìm kiếm",
@@ -135,7 +135,9 @@ const HEADER_I18N = {
     "item.grammar": "Grammar",
     "desc.grammar": "Sổ tay ngữ pháp Hán ngữ",
     "item.library": "Library",
-    "desc.library": "Thư viện học liệu & đề thi"
+    "desc.library": "Thư viện học liệu & đề thi",
+    "item.present": "Trình chiếu",
+    "desc.present": "Trình chiếu slide và tương tác trực tiếp"
   },
   "en": {
     "nav.home": "Home",
@@ -158,11 +160,11 @@ const HEADER_I18N = {
     "group.interactive": "Interactive",
     "group.games": "Games",
     "group.platform": "Platform",
-    "footer.exploreAll": "View all Quizzman apps →",
-    "footer.startLearning": "Start learning →",
-    "footer.exploreKnowledge": "Explore Knowledge →",
-    "footer.exploreInsight": "Explore all Insight →",
-    "footer.explorePlay": "Explore Play →",
+    "footer.exploreAll": "View all Quizzman apps",
+    "footer.startLearning": "Start learning",
+    "footer.exploreKnowledge": "Explore Knowledge",
+    "footer.exploreInsight": "Explore all Insight",
+    "footer.explorePlay": "Explore Play",
     "search.placeholder": "Search apps, knowledge…",
     "search.aria": "Search apps, wiki, docs, quizzes…",
     "search.open": "Search",
@@ -254,7 +256,9 @@ const HEADER_I18N = {
     "item.grammar": "Grammar",
     "desc.grammar": "Chinese grammar reference",
     "item.library": "Library",
-    "desc.library": "Shared learning resources"
+    "desc.library": "Shared learning resources",
+    "item.present": "Present",
+    "desc.present": "Present slides and interact live"
   },
   "zh": {
     "nav.home": "首页",
@@ -277,11 +281,11 @@ const HEADER_I18N = {
     "group.interactive": "实时互动",
     "group.games": "趣味游戏",
     "group.platform": "平台",
-    "footer.exploreAll": "查看全部 Quizzman 应用程序 →",
-    "footer.startLearning": "开启学习之旅 →",
-    "footer.exploreKnowledge": "探索知识殿堂 →",
-    "footer.exploreInsight": "探索全部洞察系统 →",
-    "footer.explorePlay": "探索 Play 互动中心 →",
+    "footer.exploreAll": "查看全部 Quizzman 应用程序",
+    "footer.startLearning": "开启学习之旅",
+    "footer.exploreKnowledge": "探索知识殿堂",
+    "footer.exploreInsight": "探索全部洞察系统",
+    "footer.explorePlay": "探索 Play 互动中心",
     "search.placeholder": "搜索应用、知识…",
     "search.aria": "搜索应用、百科、文档、测验…",
     "search.open": "搜索",
@@ -373,7 +377,9 @@ const HEADER_I18N = {
     "item.grammar": "语法精讲",
     "desc.grammar": "中文语法要点与指南",
     "item.library": "资料馆",
-    "desc.library": "共享教案与学习资源"
+    "desc.library": "共享教案与学习资源",
+    "item.present": "演示",
+    "desc.present": "演示幻灯片并实时互动"
   },
   "zht": {
     "nav.home": "首頁",
@@ -396,11 +402,11 @@ const HEADER_I18N = {
     "group.interactive": "即時互動",
     "group.games": "趣味遊戲",
     "group.platform": "平台",
-    "footer.exploreAll": "查看全部 Quizzman 應用程式 →",
-    "footer.startLearning": "開啟學習之旅 →",
-    "footer.exploreKnowledge": "探索知識殿堂 →",
-    "footer.exploreInsight": "探索全部洞察系統 →",
-    "footer.explorePlay": "探索 Play 互動中心 →",
+    "footer.exploreAll": "查看全部 Quizzman 應用程式",
+    "footer.startLearning": "開啟學習之旅",
+    "footer.exploreKnowledge": "探索知識殿堂",
+    "footer.exploreInsight": "探索全部洞察系統",
+    "footer.explorePlay": "探索 Play 互動中心",
     "search.placeholder": "搜尋應用、知識…",
     "search.aria": "搜尋應用、百科、文件、測驗…",
     "search.open": "搜尋",
@@ -492,7 +498,9 @@ const HEADER_I18N = {
     "item.grammar": "語法精講",
     "desc.grammar": "中文語法要點與指南",
     "item.library": "資料館",
-    "desc.library": "共享教案與學習資源"
+    "desc.library": "共享教案與學習資源",
+    "item.present": "簡報",
+    "desc.present": "展示投影片並即時互動"
   },
   "jp": {
     "nav.home": "ホーム",
@@ -579,7 +587,9 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "知識街区を築き、サイコロで対戦",
     "item.vault": "The Vault",
-    "desc.vault": "宝箱を開け、賭けて部屋を出し抜け"
+    "desc.vault": "宝箱を開け、賭けて部屋を出し抜け",
+    "item.present": "プレゼンテーション",
+    "desc.present": "スライドを表示してリアルタイムで交流"
   },
   "kr": {
     "nav.home": "홈",
@@ -666,7 +676,9 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "지식 구역을 짓고 주사위로 대결",
     "item.vault": "The Vault",
-    "desc.vault": "상자를 열고 판돈을 걸어 방을 제압"
+    "desc.vault": "상자를 열고 판돈을 걸어 방을 제압",
+    "item.present": "프레젠테이션",
+    "desc.present": "슬라이드 발표 및 실시간 참여"
   },
   "fr": {
     "nav.home": "Accueil",
@@ -753,7 +765,9 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "Construisez des quartiers, lancez le dé, quizez vos rivaux",
     "item.vault": "The Vault",
-    "desc.vault": "Ouvrez les coffres, misez, déjouez la salle"
+    "desc.vault": "Ouvrez les coffres, misez, déjouez la salle",
+    "item.present": "Présentation",
+    "desc.present": "Présenter des diapositives et interagir en direct"
   },
   "de": {
     "nav.home": "Start",
@@ -840,7 +854,9 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "Bezirke bauen, würfeln, Rivalen quizen",
     "item.vault": "The Vault",
-    "desc.vault": "Truhen knacken, Einsatz setzen, den Raum überlisten"
+    "desc.vault": "Truhen knacken, Einsatz setzen, den Raum überlisten",
+    "item.present": "Präsentieren",
+    "desc.present": "Folien präsentieren und live interagieren"
   },
   "es": {
     "nav.home": "Inicio",
@@ -927,7 +943,9 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "Construye distritos, lanza el dado, reta a rivales",
     "item.vault": "The Vault",
-    "desc.vault": "Abre cofres, apuesta y supera a la sala"
+    "desc.vault": "Abre cofres, apuesta y supera a la sala",
+    "item.present": "Presentación",
+    "desc.present": "Presentar diapositivas e interactuar en directo"
   },
   "th": {
     "nav.home": "หน้าแรก",
@@ -1014,7 +1032,9 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "สร้างย่านความรู้ ทอยลูกเต๋า แข่งควิซ",
     "item.vault": "The Vault",
-    "desc.vault": "เปิดหีบ วางเดิมพัน เอาชนะห้อง"
+    "desc.vault": "เปิดหีบ วางเดิมพัน เอาชนะห้อง",
+    "item.present": "นำเสนอ",
+    "desc.present": "นำเสนอสไลด์และโต้ตอบแบบสด"
   },
   "pt": {
     "nav.home": "Início",
@@ -1101,7 +1121,9 @@ const HEADER_I18N = {
     "item.tycoon": "Tycoon",
     "desc.tycoon": "Construa distritos, role o dado, desafie rivais",
     "item.vault": "The Vault",
-    "desc.vault": "Abra baús, aposte e supere a sala"
+    "desc.vault": "Abra baús, aposte e supere a sala",
+    "item.present": "Apresentação",
+    "desc.present": "Apresentar slides e interagir ao vivo"
   }
 };
 
@@ -1657,10 +1679,9 @@ const HEADER_I18N = {
           // Create
           { id: 'quiz-editor', labelKey: 'item.quiz-editor', descKey: 'desc.quiz-editor', groupKey: 'group.create', label: ht('item.quiz-editor'), description: ht('desc.quiz-editor'), group: ht('group.create'), href: 'https://app.quizzman.com/quiz-editor/', ...navIcon('quiz-editor') },
           { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', groupKey: 'group.create', label: ht('item.slide-studio'), description: ht('desc.slide-studio'), group: ht('group.create'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
-          { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', groupKey: 'group.create', label: ht('item.assignment'), description: ht('desc.assignment'), group: ht('group.create'), href: 'https://class.quizzman.com/homework', ...navIcon('assignment') },
+          { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', groupKey: 'group.create', label: ht('item.assignment'), description: ht('desc.assignment'), group: ht('group.create'), href: 'https://app.quizzman.com/assignment/', ...navIcon('assignment') },
           // Teach
           { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', groupKey: 'group.teach', label: ht('item.classroom'), description: ht('desc.classroom'), group: ht('group.teach'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
-          { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', groupKey: 'group.teach', label: ht('item.lms'), description: ht('desc.lms'), group: ht('group.teach'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
           { id: 'library', labelKey: 'item.library', descKey: 'desc.library', groupKey: 'group.teach', label: ht('item.library'), description: ht('desc.library'), group: ht('group.teach'), href: 'https://lib.quizzman.com', ...navIcon('library') },
           // Study
           { id: 'mandarin', labelKey: 'item.mandarin', descKey: 'desc.mandarin', groupKey: 'group.study', label: ht('item.mandarin'), description: ht('desc.mandarin'), group: ht('group.study'), href: 'https://study.quizzman.com', ...navIcon('mandarin') },
@@ -1691,7 +1712,6 @@ const HEADER_I18N = {
           { id: 'chinese-number', labelKey: 'item.chinese-number', descKey: 'desc.chinese-number', groupKey: 'group.study', label: ht('item.chinese-number'), description: ht('desc.chinese-number'), group: ht('group.study'), href: 'https://study.quizzman.com/tool/chinese-number', icon: '数' },
           // Classes
           { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', groupKey: 'group.classes', label: ht('item.classroom'), description: ht('desc.classroom'), group: ht('group.classes'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
-          { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', groupKey: 'group.classes', label: ht('item.lms'), description: ht('desc.lms'), group: ht('group.classes'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
           // Resources
           { id: 'library', labelKey: 'item.library', descKey: 'desc.library', groupKey: 'group.resources', label: ht('item.library'), description: ht('desc.library'), group: ht('group.resources'), href: 'https://lib.quizzman.com', ...navIcon('library') },
         ],
@@ -2205,9 +2225,8 @@ const HEADER_I18N = {
         children: [
           { id: 'classroom', labelKey: 'item.classroom', descKey: 'desc.classroom', label: ht('item.classroom', 'Class'), description: ht('desc.classroom'), href: 'https://class.quizzman.com', ...navIcon('classroom') },
           { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', label: ht('item.slide-studio', 'Slide Studio'), description: ht('desc.slide-studio'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
-          { id: 'lms', labelKey: 'item.lms', descKey: 'desc.lms', label: ht('item.lms', 'LMS'), description: ht('desc.lms'), href: 'https://lms.quizzman.com', ...navIcon('lms') },
           { id: 'library', labelKey: 'item.library', descKey: 'desc.library', label: ht('item.library', 'Library'), description: ht('desc.library'), href: 'https://lib.quizzman.com', ...navIcon('library') },
-          { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', label: ht('item.assignment', 'Assignment'), description: ht('desc.assignment'), href: 'https://class.quizzman.com/homework', ...navIcon('assignment') },
+          { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', label: ht('item.assignment', 'Assignment'), description: ht('desc.assignment'), href: 'https://app.quizzman.com/assignment/', ...navIcon('assignment') },
         ],
       },
       {
@@ -2218,7 +2237,7 @@ const HEADER_I18N = {
         children: [
           { id: 'slide-studio', labelKey: 'item.slide-studio', descKey: 'desc.slide-studio', label: ht('item.slide-studio', 'Slide Studio'), description: ht('desc.slide-studio'), href: 'https://app.quizzman.com/slide-studio/', ...navIcon('slide-studio') },
           { id: 'quiz-editor', labelKey: 'item.quiz-editor', descKey: 'desc.quiz-editor', label: ht('item.quiz-editor', 'Quiz Editor'), description: ht('desc.quiz-editor'), href: 'https://app.quizzman.com/quiz-editor/', ...navIcon('quiz-editor') },
-          { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', label: ht('item.assignment', 'Assignment'), description: ht('desc.assignment'), href: 'https://class.quizzman.com/homework', ...navIcon('assignment') },
+          { id: 'assignment', labelKey: 'item.assignment', descKey: 'desc.assignment', label: ht('item.assignment', 'Assignment'), description: ht('desc.assignment'), href: 'https://app.quizzman.com/assignment/', ...navIcon('assignment') },
         ],
       },
     ];

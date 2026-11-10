@@ -1,0 +1,569 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "create",
+      "title": {
+        "en": "Create & teach",
+        "vi": "Soạn & giảng dạy",
+        "zh": "创作与教学",
+        "zht": "創作與教學"
+      }
+    },
+    {
+      "id": "learn",
+      "title": {
+        "en": "Learn & read",
+        "vi": "Học & tra cứu",
+        "zh": "学习与查阅",
+        "zht": "學習與查閱"
+      }
+    },
+    {
+      "id": "explore",
+      "title": {
+        "en": "Explore & research",
+        "vi": "Khám phá & nghiên cứu",
+        "zh": "探索与研究",
+        "zht": "探索與研究"
+      }
+    },
+    {
+      "id": "account",
+      "title": {
+        "en": "Your account",
+        "vi": "Tài khoản của bạn",
+        "zh": "您的账户",
+        "zht": "您的帳戶"
+      }
+    }
+  ],
+  "services": [
+    {
+      "id": "app",
+      "name": "App",
+      "category": "create",
+      "url": "https://app.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/quiz-editor-80.webp",
+      "title": {
+        "en": "Create learning materials",
+        "vi": "Soạn học liệu",
+        "zh": "创建教学资源",
+        "zht": "建立教學資源"
+      },
+      "description": {
+        "en": "Create quizzes, slides and assignments; manage your own content.",
+        "vi": "Soạn quiz, slide, bài giao và quản lý nội dung của bạn.",
+        "zh": "编写题目、幻灯片和作业，管理自己的内容。",
+        "zht": "編寫題目、投影片與作業，管理自己的內容。"
+      },
+      "links": [
+        {
+          "id": "quiz-editor",
+          "url": "https://app.quizzman.com/quiz-editor/",
+          "label": {
+            "en": "Quiz Editor",
+            "vi": "Quiz Editor",
+            "zh": "题目编辑器",
+            "zht": "題目編輯器"
+          }
+        },
+        {
+          "id": "slide-studio",
+          "url": "https://app.quizzman.com/slide-studio/",
+          "label": {
+            "en": "Slide Studio",
+            "vi": "Slide Studio",
+            "zh": "幻灯片工作室",
+            "zht": "投影片工作室"
+          }
+        },
+        {
+          "id": "assignment",
+          "url": "https://app.quizzman.com/assignment/",
+          "label": {
+            "en": "Assignments",
+            "vi": "Bài giao",
+            "zh": "作业",
+            "zht": "作業"
+          }
+        }
+      ]
+    },
+    {
+      "id": "play",
+      "name": "Play",
+      "category": "create",
+      "url": "https://play.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/live-quiz-80.webp",
+      "title": {
+        "en": "Join a quiz or presentation",
+        "vi": "Tham gia quiz & trình chiếu",
+        "zh": "加入问答与演示",
+        "zht": "加入問答與簡報"
+      },
+      "description": {
+        "en": "Enter a room code, join live quizzes, presentations and assigned activities.",
+        "vi": "Nhập mã phòng để vào quiz trực tiếp, trình chiếu và hoạt động được giao.",
+        "zh": "输入房间码，参加实时问答、演示和分配的活动。",
+        "zht": "輸入房間碼，參加即時問答、簡報與指派的活動。"
+      },
+      "links": [
+        {
+          "id": "live-quiz",
+          "url": "https://play.quizzman.com/quiz/",
+          "label": {
+            "en": "Live Quiz",
+            "vi": "Live Quiz",
+            "zh": "实时问答",
+            "zht": "即時問答"
+          }
+        },
+        {
+          "id": "present",
+          "url": "https://play.quizzman.com/slide/",
+          "label": {
+            "en": "Present",
+            "vi": "Trình chiếu",
+            "zh": "演示",
+            "zht": "簡報"
+          }
+        },
+        {
+          "id": "tycoon",
+          "url": "https://play.quizzman.com/tycoon/",
+          "label": {
+            "en": "Tycoon",
+            "vi": "Tycoon",
+            "zh": "Tycoon",
+            "zht": "Tycoon"
+          },
+          "secondary": true
+        },
+        {
+          "id": "vault",
+          "url": "https://play.quizzman.com/arena/",
+          "label": {
+            "en": "The Vault",
+            "vi": "The Vault",
+            "zh": "The Vault",
+            "zht": "The Vault"
+          },
+          "secondary": true
+        },
+        {
+          "id": "pikahans",
+          "url": "https://play.quizzman.com/pikahans",
+          "label": {
+            "en": "Pikahans",
+            "vi": "Pikahans",
+            "zh": "Pikahans",
+            "zht": "Pikahans"
+          },
+          "secondary": true
+        },
+        {
+          "id": "idiom-king",
+          "url": "https://play.quizzman.com/idiom-king",
+          "label": {
+            "en": "Idiom King",
+            "vi": "Idiom King",
+            "zh": "Idiom King",
+            "zht": "Idiom King"
+          },
+          "secondary": true
+        }
+      ]
+    },
+    {
+      "id": "study",
+      "name": "Study",
+      "category": "learn",
+      "url": "https://study.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/mandarin-80.webp",
+      "title": {
+        "en": "Study Mandarin",
+        "vi": "Học tiếng Trung",
+        "zh": "学习中文",
+        "zht": "學習中文"
+      },
+      "description": {
+        "en": "HSK practice, vocabulary flashcards, grammar and reading comprehension.",
+        "vi": "Thi thử HSK, ôn từ vựng, ngữ pháp và luyện đọc hiểu.",
+        "zh": "HSK 模拟考试、词汇卡片、语法和阅读练习。",
+        "zht": "HSK 模擬考試、詞彙卡片、語法與閱讀練習。"
+      },
+      "links": [
+        {
+          "id": "hsk",
+          "url": "https://study.quizzman.com/exam-list",
+          "label": {
+            "en": "HSK practice",
+            "vi": "Thi thử HSK",
+            "zh": "HSK 模考",
+            "zht": "HSK 模考"
+          }
+        },
+        {
+          "id": "flashcards",
+          "url": "https://study.quizzman.com/flashcard",
+          "label": {
+            "en": "Vocabulary",
+            "vi": "Từ vựng",
+            "zh": "词汇",
+            "zht": "詞彙"
+          }
+        },
+        {
+          "id": "grammar",
+          "url": "https://study.quizzman.com/grammar",
+          "label": {
+            "en": "Grammar",
+            "vi": "Ngữ pháp",
+            "zh": "语法",
+            "zht": "語法"
+          }
+        },
+        {
+          "id": "reading",
+          "url": "https://study.quizzman.com/reading-list",
+          "label": {
+            "en": "Reading",
+            "vi": "Đọc hiểu",
+            "zh": "阅读",
+            "zht": "閱讀"
+          },
+          "secondary": true
+        },
+        {
+          "id": "chinese-number",
+          "url": "https://study.quizzman.com/tool/chinese-number",
+          "label": {
+            "en": "Chinese numbers",
+            "vi": "Số tiếng Trung",
+            "zh": "中文数字",
+            "zht": "中文數字"
+          },
+          "secondary": true
+        }
+      ]
+    },
+    {
+      "id": "library",
+      "name": "Library",
+      "category": "create",
+      "url": "https://lib.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/library-80.webp",
+      "title": {
+        "en": "Discover learning materials",
+        "vi": "Khám phá học liệu",
+        "zh": "发现学习资源",
+        "zht": "探索學習資源"
+      },
+      "description": {
+        "en": "Find quizzes and slides, organize collections and assign learning activities.",
+        "vi": "Tìm quiz, slide, quản lý bộ sưu tập và giao hoạt động học tập.",
+        "zh": "查找题目和幻灯片，整理收藏并分配学习活动。",
+        "zht": "尋找題目與投影片，整理收藏並指派學習活動。"
+      },
+      "links": [
+        {
+          "id": "catalog",
+          "url": "https://lib.quizzman.com/catalog",
+          "label": {
+            "en": "Explore",
+            "vi": "Khám phá",
+            "zh": "探索",
+            "zht": "探索"
+          }
+        },
+        {
+          "id": "collections",
+          "url": "https://lib.quizzman.com/collections",
+          "label": {
+            "en": "Collections",
+            "vi": "Bộ sưu tập",
+            "zh": "收藏",
+            "zht": "收藏"
+          }
+        }
+      ]
+    },
+    {
+      "id": "classroom",
+      "name": "Classroom",
+      "category": "create",
+      "url": "https://class.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/classroom-80.webp",
+      "title": {
+        "en": "Manage your classes",
+        "vi": "Quản lý lớp học",
+        "zh": "管理班级",
+        "zht": "管理班級"
+      },
+      "description": {
+        "en": "Class feeds, learning resources, assignments and classroom discussions.",
+        "vi": "Bảng tin lớp, học liệu, bài giao và trao đổi trong lớp học.",
+        "zh": "班级动态、教学资源、作业和课堂交流。",
+        "zht": "班級動態、教學資源、作業與課堂交流。"
+      },
+      "links": []
+    },
+    {
+      "id": "dictionary",
+      "name": "Dictionary",
+      "category": "learn",
+      "url": "https://dict.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/dictionary-20261024-88e90bbf6c-80.webp",
+      "title": {
+        "en": "Explore Han–Nom and language",
+        "vi": "Tra cứu Hán Nôm & ngôn ngữ",
+        "zh": "汉喃字与语言查询",
+        "zht": "漢喃字與語言查詢"
+      },
+      "description": {
+        "en": "Look up characters, Sino-Vietnamese readings, Nom data and linguistic sources.",
+        "vi": "Tra chữ, âm Hán Việt, dữ liệu chữ Nôm và nguồn ngữ liệu.",
+        "zh": "查询汉字、汉越音、喃字数据及语言学资料。",
+        "zht": "查詢漢字、漢越音、喃字資料及語言學來源。"
+      },
+      "links": [
+        {
+          "id": "jck",
+          "url": "https://dict.quizzman.com/jck/",
+          "label": {
+            "en": "JCK · glyph tools",
+            "vi": "JCK · Công cụ chữ",
+            "zh": "JCK 字形工具",
+            "zht": "JCK 字形工具"
+          }
+        },
+        {
+          "id": "history",
+          "url": "https://dict.quizzman.com/history",
+          "label": {
+            "en": "Lookup history",
+            "vi": "Lịch sử tra cứu",
+            "zh": "查询历史",
+            "zht": "查詢歷史"
+          },
+          "secondary": true
+        }
+      ]
+    },
+    {
+      "id": "wiki",
+      "name": "Wiki",
+      "category": "learn",
+      "url": "https://wiki.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/wiki-20261024-6978f8b0df-80.webp",
+      "title": {
+        "en": "Read and share knowledge",
+        "vi": "Đọc & chia sẻ tri thức",
+        "zh": "阅读与分享知识",
+        "zht": "閱讀與分享知識"
+      },
+      "description": {
+        "en": "Explore articles, specialist topics and community-contributed knowledge.",
+        "vi": "Khám phá bài viết, chuyên đề và tri thức do cộng đồng chia sẻ.",
+        "zh": "探索文章、专题和社区分享的知识。",
+        "zht": "探索文章、專題與社群分享的知識。"
+      },
+      "links": []
+    },
+    {
+      "id": "books",
+      "name": "Books",
+      "category": "learn",
+      "url": "https://books.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/books-80.webp",
+      "title": {
+        "en": "Read classic texts",
+        "vi": "Đọc sách & cổ tịch",
+        "zh": "阅读经典与古籍",
+        "zht": "閱讀經典與古籍"
+      },
+      "description": {
+        "en": "Read classic works and explore their chapters and original texts.",
+        "vi": "Đọc tác phẩm kinh điển, các chương sách và nguyên văn cổ tịch.",
+        "zh": "阅读经典作品，浏览章节与古籍原文。",
+        "zht": "閱讀經典作品，瀏覽章節與古籍原文。"
+      },
+      "links": []
+    },
+    {
+      "id": "insight",
+      "name": "Insight",
+      "category": "explore",
+      "url": "https://insight.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/eastern-lab-80.webp",
+      "title": {
+        "en": "Explore calendars and traditions",
+        "vi": "Khám phá lịch pháp & văn hóa",
+        "zh": "探索历法与传统文化",
+        "zht": "探索曆法與傳統文化"
+      },
+      "description": {
+        "en": "Calendar conversion, I Ching, Zi Wei, Ba Zi, astrology and Tarot tools.",
+        "vi": "Lịch pháp, Kinh Dịch, Tử Vi, Bát Tự, chiêm tinh và Tarot.",
+        "zh": "历法转换、易经、紫微、八字、占星与塔罗工具。",
+        "zht": "曆法轉換、易經、紫微、八字、占星與塔羅工具。"
+      },
+      "links": [
+        {
+          "id": "calendar",
+          "url": "https://insight.quizzman.com/tool/calendar-converter",
+          "label": {
+            "en": "Calendar",
+            "vi": "Lịch pháp",
+            "zh": "历法",
+            "zht": "曆法"
+          }
+        },
+        {
+          "id": "iching",
+          "url": "https://insight.quizzman.com/tool/iching-divination",
+          "label": {
+            "en": "I Ching",
+            "vi": "Kinh Dịch",
+            "zh": "易经",
+            "zht": "易經"
+          }
+        },
+        {
+          "id": "bazi",
+          "url": "https://insight.quizzman.com/bazi-chart",
+          "label": {
+            "en": "Ba Zi",
+            "vi": "Bát Tự",
+            "zh": "八字",
+            "zht": "八字"
+          }
+        }
+      ]
+    },
+    {
+      "id": "astro",
+      "name": "Astro",
+      "category": "explore",
+      "url": "https://astro.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/astro-80.webp",
+      "title": {
+        "en": "Explore the sky",
+        "vi": "Khám phá bầu trời",
+        "zh": "探索星空",
+        "zht": "探索星空"
+      },
+      "description": {
+        "en": "Sky maps, celestial objects and astronomical reference tools.",
+        "vi": "Bản đồ bầu trời, thiên thể và các công cụ tra cứu thiên văn.",
+        "zh": "星图、天体与天文查询工具。",
+        "zht": "星圖、天體與天文查詢工具。"
+      },
+      "links": [
+        {
+          "id": "sky",
+          "url": "https://astro.quizzman.com/sky-viewer",
+          "label": {
+            "en": "Sky Viewer",
+            "vi": "Sky Viewer",
+            "zh": "星空查看器",
+            "zht": "星空檢視器"
+          }
+        }
+      ]
+    },
+    {
+      "id": "paper",
+      "name": "Paper",
+      "category": "explore",
+      "url": "https://paper.quizzman.com/",
+      "icon": "https://ui.quizzman.com/qmf/assets/logo/nav/paper-80.webp",
+      "title": {
+        "en": "Browse research and audits",
+        "vi": "Đọc nghiên cứu & kiểm định",
+        "zh": "查阅研究与审查记录",
+        "zht": "查閱研究與審查紀錄"
+      },
+      "description": {
+        "en": "Research papers, technical documentation and published audit records.",
+        "vi": "Bài nghiên cứu, tài liệu kỹ thuật và hồ sơ kiểm định được công bố.",
+        "zh": "研究论文、技术文档和已发布的审查记录。",
+        "zht": "研究論文、技術文件與已發布的審查紀錄。"
+      },
+      "links": [
+        {
+          "id": "papers",
+          "url": "https://paper.quizzman.com/papers/",
+          "label": {
+            "en": "Papers",
+            "vi": "Nghiên cứu",
+            "zh": "论文",
+            "zht": "論文"
+          }
+        },
+        {
+          "id": "audits",
+          "url": "https://paper.quizzman.com/audits/",
+          "label": {
+            "en": "Audits",
+            "vi": "Kiểm định",
+            "zh": "审查",
+            "zht": "審查"
+          }
+        }
+      ]
+    },
+    {
+      "id": "legatus",
+      "name": "Legatus",
+      "category": "account",
+      "url": "https://legatus.quizzman.com/",
+      "icon": "",
+      "title": {
+        "en": "Follow your updates",
+        "vi": "Theo dõi thông báo",
+        "zh": "查看通知",
+        "zht": "查看通知"
+      },
+      "description": {
+        "en": "Notifications from your apps, learning activities and policy updates.",
+        "vi": "Thông báo từ các phân hệ, hoạt động học tập và cập nhật chính sách.",
+        "zh": "来自应用、学习活动及政策更新的通知。",
+        "zht": "來自應用、學習活動及政策更新的通知。"
+      },
+      "links": []
+    },
+    {
+      "id": "account",
+      "name": "Quizzman ID",
+      "category": "account",
+      "url": "https://id.quizzman.com/account",
+      "icon": "",
+      "title": {
+        "en": "Manage your account",
+        "vi": "Quản lý tài khoản",
+        "zh": "管理账户",
+        "zht": "管理帳戶"
+      },
+      "description": {
+        "en": "Profile, security, sessions, data and policy confirmations.",
+        "vi": "Hồ sơ, bảo mật, phiên đăng nhập, dữ liệu và xác nhận chính sách.",
+        "zh": "个人资料、安全、登录会话、数据及政策确认。",
+        "zht": "個人資料、安全、登入工作階段、資料及政策確認。"
+      },
+      "links": [
+        {
+          "id": "policy-updates",
+          "url": "https://id.quizzman.com/policy-updates",
+          "label": {
+            "en": "Policy updates",
+            "vi": "Cập nhật chính sách",
+            "zh": "政策更新",
+            "zht": "政策更新"
+          }
+        }
+      ]
+    }
+  ]
+}

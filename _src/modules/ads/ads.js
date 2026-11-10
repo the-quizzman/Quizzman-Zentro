@@ -1,6 +1,6 @@
 /**
  * QMF Ads — AdSense loader, entitlement gating, QMFAdSlot
- * @version 1.0.2
+ * @version 1.0.3
  *
  * Auto-loaded by qmf-shell.js. Applications only use QMFAdSlot:
  *   <qmf-ad-slot type="in-content"></qmf-ad-slot>
@@ -14,7 +14,7 @@
 (function (global) {
   'use strict';
 
-  var VERSION = '1.0.2';
+  var VERSION = '1.0.3';
   var ADSENSE_PUBLISHER_ID = 'ca-pub-9878200690154577';
   var SCRIPT_ID = 'qmf-adsense-js';
   var SCRIPT_SRC =
@@ -114,6 +114,7 @@
   }
 
   function adsRuntimeAllowed() {
+    if (!global.__QMF_CONSENT_STATE__ || global.__QMF_CONSENT_STATE__.ad_storage !== 'granted') return false;
     if (isDeniedSurface()) return false;
     if (global.QMF_DISABLE_ADS === true || global.QMF_ADS === false) return false;
     if (global.QMF_ADS === true) return true;
@@ -302,6 +303,11 @@
     global.__QMF_ADS_LOADER__ = true;
     return true;
   }
+
+  if (global.addEventListener) global.addEventListener('qmf:consent', function () {
+    ensurePublisherSnippet();
+    syncAllSlots();
+  });
 
   function ensureAdSenseLoader() {
     return ensurePublisherSnippet();

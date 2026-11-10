@@ -1,14 +1,12 @@
 /**
  * QMF Google Analytics 4 (gtag.js) — shared across *.quizzman.com
- * @version 1.1.0
+ * @version 1.1.1
  *
  * Auto-loaded by qmf-shell.js. Standalone for legacy pages:
  *   <script src="https://ui.quizzman.com/qmf/dist/modules/analytics/gtag.js"></script>
  *
- * Consent Mode v2 (EEA / UK / CH):
- *   Defaults denied in regulated regions until Google CMP updates consent.
- *   Elsewhere granted by default (no banner). Shell also sets defaults
- *   synchronously before ads/gtag network loads.
+ * Optional tracking is denied everywhere until an explicit consent update.
+ * Loading the local module or accepting account terms never grants consent.
  *
  * Opt-out:  window.QMF_GTAG = false  (or QMF_DISABLE_ANALYTICS = true)
  * Force:    window.QMF_GTAG = true   (enable on localhost)
@@ -18,7 +16,7 @@
 (function (global) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.1.1';
   var DEFAULT_ID = 'G-KBKFY8LX2F';
   var SCRIPT_ID = 'qmf-gtag-js';
 
@@ -49,6 +47,7 @@
   }
 
   function shouldTrack() {
+    if (!global.__QMF_CONSENT_STATE__ || global.__QMF_CONSENT_STATE__.analytics_storage !== 'granted') return false;
     if (global.QMF_DISABLE_ANALYTICS === true || global.QMF_GTAG === false) return false;
     if (global.QMF_GTAG === true) return true;
     try {
@@ -81,20 +80,9 @@
 
     var gtag = ensureGtagFn();
     var wait = typeof global.QMF_CONSENT_WAIT === 'number' ? global.QMF_CONSENT_WAIT : 500;
-    var custom = global.QMF_CONSENT_DEFAULT;
-    if (custom && typeof custom === 'object') {
-      gtag('consent', 'default', Object.assign({ wait_for_update: wait }, custom));
-      return true;
-    }
-
-    // Rest of world: granted (no CMP banner).
-    gtag('consent', 'default', Object.assign({}, CONSENT_GRANTED, {
-      wait_for_update: wait,
-    }));
-    // EEA / UK / CH: denied until Google CMP (Privacy & Messaging) updates.
-    gtag('consent', 'default', Object.assign({}, CONSENT_DENIED, {
-      region: CONSENT_REGIONS.slice(),
-    }));
+    // Optional processing stays denied in every region until an explicit choice.
+    global.__QMF_CONSENT_STATE__ = global.__QMF_CONSENT_STATE__ || Object.assign({}, CONSENT_DENIED);
+    gtag('consent', 'default', Object.assign({}, CONSENT_DENIED, { wait_for_update: wait }));
 
     if (global.QMF_CONSENT_URL_PASSTHROUGH !== false) {
       gtag('set', 'url_passthrough', true);
@@ -140,10 +128,13 @@
 
   /** CMP / custom UI → gtag('consent', 'update', …) */
   function updateConsent(partial) {
+    applyConsentDefaults();
     var gtag = ensureGtagFn();
     var payload = normalizeConsent(partial);
     if (!Object.keys(payload).length) return false;
+    global.__QMF_CONSENT_STATE__ = Object.assign({}, global.__QMF_CONSENT_STATE__ || CONSENT_DENIED, payload);
     gtag('consent', 'update', payload);
+    if (payload.analytics_storage === 'granted') init();
     try {
       global.dispatchEvent(new CustomEvent('qmf:consent', { detail: payload }));
     } catch (e) { /* ignore */ }
@@ -164,6 +155,7 @@
    */
   function init(opts) {
     opts = opts || {};
+    if (!global.__QMF_CONSENT_STATE__ || global.__QMF_CONSENT_STATE__.analytics_storage !== 'granted') return false;
     if (global.__QMF_GTAG_INIT__) return true;
     if (!shouldTrack() && opts.force !== true) return false;
 
@@ -181,6 +173,7 @@
 
   /** Manual page_view (SPA / soft navigations that do not reload). */
   function pageview(path, title) {
+    if (!shouldTrack()) return false;
     if (!global.__QMF_GTAG_INIT__ && !init()) return false;
     var gtag = ensureGtagFn();
     var payload = {
@@ -192,6 +185,7 @@
   }
 
   function event(name, params) {
+    if (!shouldTrack()) return false;
     if (!name) return false;
     if (!global.__QMF_GTAG_INIT__ && !init()) return false;
     ensureGtagFn()('event', name, params || {});
