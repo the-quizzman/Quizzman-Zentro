@@ -145,7 +145,10 @@ export function defineCenter(cssText, runtime) {
         ?.addEventListener("click", () => runtime.client.markAllRead().catch(() => {}));
       this.shadowRoot
         .querySelector('[data-action="reconnect"]')
-        ?.addEventListener("click", () => runtime.client.reconnect().catch(() => {}));
+        ?.addEventListener("click", () => {
+          runtime.client.reconnect().catch(() => {});
+          runtime.client.fetchNotifications({ limit: 20 }).catch(() => {});
+        });
       this.shadowRoot.querySelectorAll(".lg-hub-tab").forEach((tab) => {
         tab.addEventListener("click", () => this._setTab(tab.getAttribute("data-tab")));
       });

@@ -125,7 +125,10 @@ export function defineBell(cssText, runtime) {
         el.addEventListener("click", () => runtime.client.markAllRead().catch(() => {}))
       );
       root.querySelectorAll('[data-action="reconnect"]').forEach((el) =>
-        el.addEventListener("click", () => runtime.client.reconnect().catch(() => {}))
+        el.addEventListener("click", () => {
+          runtime.client.reconnect().catch(() => {});
+          runtime.client.fetchNotifications({ limit: 20 }).catch(() => {});
+        })
       );
     }
 

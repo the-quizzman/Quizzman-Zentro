@@ -203,6 +203,7 @@ export class LegatusClient {
 
   /** User-initiated reconnect: reset backoff and open a single socket. */
   async reconnect() {
+    this.store.set({ error: null });
     if (this.shared) {
       this._closed = false;
       await this.shared.attach(this);
